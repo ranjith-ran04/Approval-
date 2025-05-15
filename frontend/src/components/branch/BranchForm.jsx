@@ -1,5 +1,5 @@
 import "./form.css";
-import NavigationBar from "../../widgets/NavigationBar";
+import NavigationBar from "../../widgets/navigationBar/NavigationBar";
 
 function BranchForm({
   heading,
