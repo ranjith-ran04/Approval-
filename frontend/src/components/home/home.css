@@ -9,15 +9,14 @@ body{
     padding-top:15px ;
     background-color: darkblue;
     width: 280px;
-    height: 85vh;
+    height: 87vh;
     display: flex;
     flex-direction: column;
     align-items: center;
-    color: rgb(221, 221, 221);
+    color: rgb(163, 163, 163);
     gap: 5px;
 }
 .menuItems{
-    font-weight: bold;
     height: 35px;
     width: 200px;
     display: flex;
@@ -27,11 +26,77 @@ body{
 }
 .menuItems:hover{
     cursor: pointer;
-    background-color: rgba(0, 0, 0, 0.3);
+    color: white;
+    
 }
-#center-body{
-    margin: 10px;
-    width: 100%;
+#center-b{
     box-shadow: 5px 5px 10px 5px rgba(0,0,0,0.2) ;
     padding: 1em;
+    margin: 10px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
 }
+.minimized-icon {
+  position: fixed;
+  right: 1px;
+  top: 60px;
+  width: 40px;
+  height: 40px;
+  background: darkblue;
+  border-radius: 50%;
+  box-shadow: 0 0 5px rgba(0,0,0,0.3);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  z-index: 1000;
+}
+#center-body{
+    display: flex;
+    justify-content: center;
+    font-weight: bold;
+}
+#wrap{
+    display: flex;
+    flex-direction: column;
+    gap:20px;
+    margin-left: 40px;
+}
+.one{
+    display: flex;
+}
+#first-body{
+    display: flex;
+    flex-direction: column;
+    gap:10px;
+}
+#second-body{
+    display: flex;
+    flex-direction: column;
+    gap:5px;
+}
+#o{
+    gap: 70px;
+}
+#p{
+    gap: 127px;
+}
+#q{
+    gap:113px;
+}
+#r{
+    gap:108px;
+}
+#y{
+    gap: 93px;
+}
+#u{
+    gap: 53px;
+}
+#i{
+    gap:20px;
+}
+
+
