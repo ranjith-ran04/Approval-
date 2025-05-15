@@ -1,6 +1,6 @@
 import './home.css'
-import NavigationBar from '../widgets/NavigationBar';
-import Button from '../widgets/Button'
+import NavigationBar from '../../widgets/NavigationBar';
+import Button from '../../widgets/Button'
 
 function Home() {
     return(

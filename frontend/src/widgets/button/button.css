@@ -1,0 +1,31 @@
+#button{
+    font-weight: bold;
+    height: 35px;
+    width: 160px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 20px;
+    background-color: white;
+    color: black;
+    overflow: hidden;
+}
+#button:hover{
+    cursor: pointer;
+}
+.ripple {
+  height: 13px;
+  width: 50px;
+  position: absolute;
+  border-radius: 50%;
+  background-color: rgba(0, 0, 0, 0.3);
+  animation: ripple-effect 500ms linear;
+  transform: scale(0);
+}
+
+@keyframes ripple-effect {
+  to {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
