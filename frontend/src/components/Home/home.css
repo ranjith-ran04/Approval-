@@ -17,7 +17,6 @@ body{
     gap: 5px;
 }
 .menuItems{
-    font-weight: bold;
     height: 35px;
     width: 200px;
     display: flex;
@@ -34,4 +33,19 @@ body{
     width: 100%;
     box-shadow: 5px 5px 10px 5px rgba(0,0,0,0.2) ;
     padding: 1em;
+}
+.minimized-icon {
+  position: fixed;
+  right: 1px;
+  top: 60px;
+  width: 40px;
+  height: 40px;
+  background: darkblue;
+  border-radius: 50%;
+  box-shadow: 0 0 5px rgba(0,0,0,0.3);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  z-index: 1000;
 }

@@ -1,10 +1,30 @@
 import './home.css'
-import NavigationBar from '../widgets/NavigationBar';
-import Button from '../widgets/Button'
+import NavigationBar from '../../widgets/NavigationBar';
+import Button from '../../widgets/Button'
+import Notes from '../../widgets/Notes'
+import { useState } from 'react';
 
 function Home() {
+    const [open,setOpen] = useState(true)
+    const [minimized,setMinimized] = useState(false)
+
+    const handleClick = (para) =>{
+        if(!para){
+        setMinimized(true);
+        setTimeout(() => setOpen(false), 0);
+        }else{
+        setOpen(para)
+        setTimeout(() => setMinimized(false), 0);
+    }
+    }
     return(
         <div id = "container">
+        {open && <Notes handleClick={handleClick} minimized = {minimized} />}
+        {minimized && (
+  <div className="minimized-icon" onClick={() => handleClick(true)}>
+    📝
+  </div>
+)}
         <NavigationBar text = {'DIRECTORATE OF TECHNICAL EDUCATION \nTAMILNADU LATERAL ENTRY B.E/B.TECH ADMISSIONS-2025 \nAPPROVAL PROCESS'} profile = {true}/>
         <div id='body'>
         <div id='sidebar'>
