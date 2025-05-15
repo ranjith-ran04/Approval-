@@ -1,12 +1,18 @@
 // import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import "./branch.css";
+import { useNavigate } from 'react-router-dom';
+import NavigationBar from '../../widgets/NavigationBar';
 
 function Branch() {
+  const navigate = useNavigate();
   return (
+    <div>
+    <NavigationBar text = {'DIRECTORATE OF TECHNICAL EDUCATION \nTAMILNADU LATERAL ENTRY B.E/B.TECH ADMISSIONS-2025 \nAPPROVAL PROCESS'} profile = {true}/>
     <div id="box">
+      
       <div className="first">
         <h2 className="heading">BRANCH DETAILS</h2>
-        <button className="addBranch-btn">Add Branch</button>
+        <button className="addBranch-btn" onClick={() => navigate('/branch/add')} >Add Branch</button>
       </div>
       <div className="table">
         <div className="table-header">
@@ -28,7 +34,9 @@ function Branch() {
         {branchData.map((branch, index) => (
           <div className="table-row" key={index}>
             <div>
-              <button className="edit-btn">Edit</button>
+              <button className="edit-btn" onClick={() => navigate('/branch/edit/${index}', { state: branch })}>
+                Edit
+              </button>
             </div>
             <div>{branch.code}</div>
             <div>{branch.name}</div>
@@ -47,6 +55,7 @@ function Branch() {
           </div>
         ))}
       </div>
+    </div>
     </div>
   );
 }

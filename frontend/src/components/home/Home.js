@@ -1,8 +1,12 @@
 import './home.css'
 import NavigationBar from '../../widgets/NavigationBar';
 import Button from '../../widgets/Button'
+import { useNavigate } from 'react-router-dom';
+
+
 
 function Home() {
+    const navigate = useNavigate();
     return(
         <div id = "container">
         <NavigationBar text = {'DIRECTORATE OF TECHNICAL EDUCATION \nTAMILNADU LATERAL ENTRY B.E/B.TECH ADMISSIONS-2025 \nAPPROVAL PROCESS'} profile = {true}/>
@@ -14,8 +18,8 @@ function Home() {
         <div className='menuItems'>
             College Details   
         </div>
-        <div className='menuItems'>
-            Branchwise Details   
+        <div className='menuItems' onClick={() => navigate('/branch')}>
+            Branchwise Details
         </div>
         <div className='menuItems'>
             Student Details   
