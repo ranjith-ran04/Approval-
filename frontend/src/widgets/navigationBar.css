@@ -41,7 +41,7 @@ nav{
     position: absolute;
     height: 40px;
     width: 40px;
-    background-color: blue;
+    background-color: darkblue;
     background-image: url('../assets/profile.png');
     background-size: 30px 30px;
     border-radius: 50%;
@@ -57,7 +57,7 @@ nav{
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background-color: rgba(0, 0, 0, 0.3);
+    background-color: lightgrey;
     height: 70px;
     width:150px;
     border-radius: 20px;
