@@ -217,12 +217,15 @@ export const CollegeInfo = () => {
 
 
             <div className='field-block'>
+            <div class="radio-group">
 
             <label htmlFor="transport">Transport</label>
             <input type="radio" id="transport" name="transport" />Optional
             <input type="radio" id="transport" name="transport" />Compulsory
             </div>
             </div>
+            </div>
+
 
             <div className='field-row'>
             <div className='field-block'>
