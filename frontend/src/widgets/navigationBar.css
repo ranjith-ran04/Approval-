@@ -1,0 +1,78 @@
+nav{
+    display: flex;
+    box-shadow: 2px 0px 10px 0 rgba(0,0,0,0.3);
+    height: 90px;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    gap: 80px;
+}
+#logo{
+    height: 60px;
+    width: 60px;
+    background-image: url('../assets/logo.png');
+    border-radius: 50%;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+}
+#center{
+    display: flex;
+    justify-content: center;
+    color:black;
+    width: 600px;
+    
+}
+.text{
+    display: flex;
+    justify-content: center;
+}
+#person{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width:200px;
+    height: 80px;
+}
+#person-icon{
+    margin-left: 4%;
+    position: absolute;
+    height: 40px;
+    width: 40px;
+    background-color: darkblue;
+    background-image: url('../assets/profile.png');
+    background-size: 30px 30px;
+    border-radius: 50%;
+    background-repeat: no-repeat;
+    background-position: center;
+
+}
+#person-icon:hover{
+    cursor: pointer;
+}
+#list{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: lightgrey;
+    height: 70px;
+    width:150px;
+    border-radius: 20px;
+    position: relative;
+    top: 60px;
+    left: 10px;
+}
+.item{
+    font-size: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 30px;
+    width: 130px;
+}
+.item:hover{
+    cursor: pointer;
+    background-color:  rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}

@@ -1,11 +1,14 @@
-import React from 'react'
 import { useState } from 'react'
 import './CollegeInfo.css'
+import NavigationBar from '../../widgets/NavigationBar';
+import Button from '../../widgets/Button';
+
 
 export const CollegeInfo = () => {
   const [selectedSection,setSelectedSection]=useState('All')
   return (
     <div>
+    <NavigationBar text = {'DIRECTORATE OF TECHNICAL EDUCATION \nTAMILNADU LATERAL ENTRY B.E/B.TECH ADMISSIONS-2025 \nAPPROVAL PROCESS'} profile = {true}/>
       <div className='dropdown'>
       <label>Options</label>
         <select onChange={(e)=>setSelectedSection(e.target.value)} value={selectedSection}>
@@ -407,9 +410,8 @@ export const CollegeInfo = () => {
             </>
         )}
         <div>
-          <button type="submit">Submit</button>
-          <button type="reset">cancel</button>
-
+          <Button name={"SUBMIT"}/>
+          <Button name={"CANCEL"}/>
         </div>
 
 
