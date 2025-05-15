@@ -1,12 +1,14 @@
 #box {
   margin: 10px;
   margin-right: 10px;
-  width: 100%;
+  width: 99%;
   box-shadow: 5px 5px 10px 5px rgba(0, 0, 0, 0.2);
   padding: 1em;
   box-sizing: border-box;
 }
 .heading {
+  flex: 1;
+  font-size: 28px;
   text-align: center;
 }
 .branch-container {
@@ -22,7 +24,14 @@
 .table-header {
   display: contents;
   font-weight: bold;
-  background-color: #e2e8f0;
+  background-color: #87909c;
+}
+
+.table-header > div {
+  background-color: #d6e2ee; /* Light gray */
+  font-weight: bold;
+  padding: 10px;
+  border: 1px solid #000000;
 }
 
 .table-row {
@@ -51,4 +60,21 @@
   padding: 6px 12px;
   cursor: pointer;
   border-radius: 4px;
+}
+
+.addBranch-btn {
+  background-color: #3c11f9;
+  color: white;
+  border: none;
+  padding: 12px 18px;
+  font-size: 17.5px;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 4px;
+}
+.first {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
 }
