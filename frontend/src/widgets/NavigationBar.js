@@ -4,32 +4,35 @@ import './navigationBar.css'
 function NavigationBar({text,profile}){
     const [visible,setVisible] = useState(false)
 
-    const handleClick = () =>{
+    const handleClicks = () =>{
         setVisible(!visible)
+    }
+    const handleClicksoverlay = () =>{
+        setVisible(false)
     }
     return(
         <nav>
             <div id='logo'>
             </div>
             <div id='center'>
-            <h3>{text.split('\n').map((line, index) => (
+            <div>{text.split('\n').map((line, index) => (
         <div className='text' key={index}>
           {line}
           <br />
         </div>
-      ))}</h3>
+      ))}</div>
             </div>
-            <div id='person'>
             {profile &&
-            <div id='person-icon' onClick={handleClick}>
+            <div id='person-icon' onClick={handleClicks}>
             </div>}
             {visible && 
-            <div id='list'>
+            <div id='overlay' onClick={handleClicksoverlay}>
+            <div id='list'  >
                 <div className='item'>Change Password</div>
                 <div className='item'>Logout</div>
             </div>
-            }
             </div>
+            }
         </nav>
     )
 }
