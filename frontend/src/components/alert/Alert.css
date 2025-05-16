@@ -23,13 +23,13 @@
   width: 320px;
 }
 
-.tick-container {
+.icon-container {
   display: flex;
   justify-content: center;
   margin-bottom: 15px;
 }
 
-.tick {
+.icon{
   width: 60px;
   height: 60px;
   stroke-dasharray: 50;
