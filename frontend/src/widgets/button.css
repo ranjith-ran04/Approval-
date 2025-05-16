@@ -6,19 +6,20 @@
     align-items: center;
     justify-content: center;
     border-radius: 20px;
-    background-color: white;
+    background-color: rgb(163, 163, 163);
     color: black;
     overflow: hidden;
 }
 #button:hover{
     cursor: pointer;
+    background-color: white;
 }
 .ripple {
   height: 13px;
   width: 50px;
   position: absolute;
   border-radius: 50%;
-  background-color: rgba(0, 0, 0, 0.3);
+  background-color: rgba(109, 109, 109, 0.3);
   animation: ripple-effect 500ms linear;
   transform: scale(0);
 }
