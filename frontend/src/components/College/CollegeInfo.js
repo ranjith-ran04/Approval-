@@ -171,7 +171,7 @@ export const CollegeInfo = () => {
             </div>
             <div className='field-row'>
             <div className='field-block'>
-            <div class="radio-group">
+            <div className="radio-group">
             <label htmlFor="minoritystatus">Minority Status</label>
             <input type="radio" id="minoritystatus" name="minoritystatus" />Yes
             <input type="radio" id="minoritystatus" name="minoritystatus" />No
@@ -179,7 +179,7 @@ export const CollegeInfo = () => {
             </div>
 
             <div className='field-block'>
-            <div class="radio-group">
+            <div className="radio-group">
             <label htmlFor="autonomousstatus">Autonomous Status</label>
             <input type="radio" id="autonomousstatus" name="autonomousstatus" />Yes
             <input type="radio" id="autonomousstatus" name="autonomousstatus" />No
@@ -219,7 +219,7 @@ export const CollegeInfo = () => {
             
             <div className='field-row'>
             <div className='field-block'>
-            <div class="radio-group">
+            <div className="radio-group">
             <label htmlFor="transportfacility">Transport Facility</label>
             <input type="radio" id="transportfacility" name="transportfacility" />Yes
             <input type="radio" id="transportfacility" name="transportfacility" />No
@@ -228,7 +228,7 @@ export const CollegeInfo = () => {
 
 
             <div className='field-block'>
-            <div class="radio-group">
+            <div className="radio-group">
 
             <label htmlFor="transport">Transport</label>
             <input type="radio" id="transport" name="transport" />Optional
@@ -265,7 +265,7 @@ export const CollegeInfo = () => {
             <legend>Hostel Facilities for Boys</legend>
             <div className='field-row'>
             <div className='field-block'>
-            <div class="radio-group">
+            <div className="radio-group">
 
             <label htmlFor="accomodationavailableboys">Accommodation Available</label>
             <input type="radio" id="accomodationavailableboys" name="accomodationavailableboys" />Yes
@@ -275,7 +275,7 @@ export const CollegeInfo = () => {
 
 
             <div className='field-block'>
-            <div class="radio-group">
+            <div className="radio-group">
 
             <label htmlFor="hostelstaytypeboys">Hostel Stay Type</label>
             <input type="radio" id="hostelstaytypeboys" name="hostelstaytypeboys" />Permanent
@@ -287,7 +287,7 @@ export const CollegeInfo = () => {
             <div className='field-row'>
 
             <div className='field-block'>
-            <div class="radio-group">
+            <div className="radio-group">
             <label htmlFor="typeofmessboys">Type of Mess</label>
             <input type="radio" id="typeofmessboys" name="typeofmessboys" />Veg
             <input type="radio" id="typeofmessboys" name="typeofmessboys" />Non Veg
@@ -351,7 +351,7 @@ export const CollegeInfo = () => {
             <div className='field-row'>
             <div className='field-block'>
 
-            <div class="radio-group">
+            <div className="radio-group">
 
             <label htmlFor="accomodationavailablegirls">Accomodation Available</label>
             <input type="radio" id="accomodationavailablegirls" name="accomodationavailablegirls" />Yes
@@ -360,7 +360,7 @@ export const CollegeInfo = () => {
             </div>
 
             <div className='field-block'>
-            <div class="radio-group">
+            <div className="radio-group">
 
             <label htmlFor="hostelstaytypegirls">Hostel Stay Type</label>
             <input type="radio" id="hostelstaytypegirls" name="hostelstaytypegirls" />Permanent
@@ -371,7 +371,7 @@ export const CollegeInfo = () => {
 
             <div className='field-row'>
             <div className='field-block'>
-            <div class="radio-group">
+            <div className="radio-group">
 
             <label htmlFor="typeofmessgirls">Type of Mess</label>
             <input type="radio" id="typeofmessgirls" name="typeofmessgirls" />Veg
@@ -425,18 +425,23 @@ export const CollegeInfo = () => {
         )}
         <div >
           <Button name={"SUBMIT"} onClick={handleSubmit}/>
-          <Alert
-          message="Form submitted successfully!"
-          show={showAlert}
-          close={handleCloseAlert}/>
-          <Button name={"CANCEL"} onClick={handleSubmit}/>
-          <Alert
-          message="Form failed!"
-          show={showAlert}
-          close={handleCloseAlert}/>
-          
-          
+         <Alert
+        type="success"
+        message="Logged in successfully"
+        show={showAlert}
+        close={handleCloseAlert}
+        />
+
         </div>  
+        <div>
+          <Button name={"CANCEL"} />
+          {/* <Alert
+        type="error"
+        message="Something went wrong!"
+        show={showAlert}
+        close={handleCloseAlert} /> */}
+          
+        </div>
     </div>
   )
 }
