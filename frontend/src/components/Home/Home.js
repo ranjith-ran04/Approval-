@@ -1,12 +1,18 @@
 import './home.css'
-import NavigationBar from '../../widgets/NavigationBar';
+import NavigationBar from '../../widgets/NavigationBar'
 import Button from '../../widgets/Button'
 import Notes from '../../widgets/Notes'
-import { useState } from 'react';
+import { useState } from 'react'
+import {useNavigate} from 'react-router-dom'
 
 function Home() {
     const [open,setOpen] = useState(true)
     const [minimized,setMinimized] = useState(false)
+    const navigate = useNavigate()
+
+    const handleNavigation = () => {
+        navigate('/collegeDetails')
+    }
 
     const handleClick = (para) =>{
         if(!para){
@@ -44,7 +50,7 @@ function Home() {
         <div className='menuItems'>
             Home
         </div>
-        <div className='menuItems'>
+        <div className='menuItems' onClick={handleNavigation}>
             College Details   
         </div>
         <div className='menuItems'>
