@@ -1,10 +1,15 @@
 import Home from './components/Home/Home.js'
+import { BrowserRouter as Router,Routes,Route} from 'react-router-dom'
+import { CollegeInfo } from './components/College/CollegeInfo.js';
 
 function App() {
   return (
-    <div>
-    <Home/>
-     </div>
+    <Router>
+      <Routes>
+        <Route path='/' element={<Home/>} />
+        <Route path='/collegeDetails' element={<CollegeInfo/>} />
+      </Routes>
+    </Router>
   );
 }
 
