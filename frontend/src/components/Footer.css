@@ -1,0 +1,27 @@
+.alt-footer {
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-start;
+  padding: 10px 20px;  /* Reduced from 30px */
+  background-color: #b30000; /* Red shade you’re using */
+  color: #fff;
+  flex-wrap: wrap;
+  font-size: 14px;
+  margin-top: 30px;
+}
+
+.footer-section {
+  flex: 1;
+  min-width: 200px;
+  margin: 5px 10px; /* Reduced margin */
+}
+
+.footer-section h4 {
+  margin-bottom: 5px; /* Reduced spacing */
+  font-size: 15px;
+  color: #ffd700;
+}
+
+.footer-section p {
+  margin: 2px 0;  /* Reduced vertical spacing */
+}
