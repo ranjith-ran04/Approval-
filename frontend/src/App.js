@@ -1,6 +1,9 @@
 import Home from './components/Home/Home.js'
 import { BrowserRouter as Router,Routes,Route} from 'react-router-dom'
 import { CollegeInfo } from './components/College/CollegeInfo.js';
+import Branch from './components/branch/Branch';
+import EditBranch from './components/branch/EditBranch';
+import AddBranch from './components/branch/AddBranch';
 
 function App() {
   return (
@@ -8,6 +11,9 @@ function App() {
       <Routes>
         <Route path='/' element={<Home/>} />
         <Route path='/collegeDetails' element={<CollegeInfo/>} />
+        <Route path="/branch" element={<Branch />} />
+        <Route path="/branch/edit/:id" element={<EditBranch />} />
+        <Route path="/branch/add" element={<AddBranch />} />
       </Routes>
     </Router>
   );

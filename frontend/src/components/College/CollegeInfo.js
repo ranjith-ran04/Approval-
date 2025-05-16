@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import './CollegeInfo.css'
-import NavigationBar from '../../widgets/NavigationBar';
-import Button from '../../widgets/Button';
+import NavigationBar from '../../widgets/navigationBar/NavigationBar';
+import Button from '../../widgets/button/Button';
 
 
 export const CollegeInfo = () => {
