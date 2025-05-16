@@ -1,7 +1,7 @@
 import './home.css'
-import NavigationBar from '../../widgets/NavigationBar'
-import Button from '../../widgets/Button'
-import Notes from '../../widgets/Notes'
+import NavigationBar from '../../widgets/navigationBar/NavigationBar'
+import Button from '../../widgets/button/Button'
+import Notes from '../../widgets/notes/Notes'
 import { useState } from 'react'
 import {useNavigate} from 'react-router-dom'
 
@@ -53,7 +53,7 @@ function Home() {
         <div className='menuItems' onClick={handleNavigation}>
             College Details   
         </div>
-        <div className='menuItems'>
+        <div className='menuItems' onClick={() => navigate("/branch")}>
             Branchwise Details   
         </div>
         <div className='menuItems'>
