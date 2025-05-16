@@ -1,7 +1,7 @@
 import './button.css'
 import { useRef } from 'react';
 
-function Button ({name}){
+function Button ({name,onClick}){
     const buttonRef = useRef(null)
 
     const createRipple = (event) => {
@@ -26,6 +26,9 @@ function Button ({name}){
 
     const handleClick = (e) => {
         createRipple(e)
+        if(onClick){
+            onClick(e)
+        }
     }
     return(
         <div ref={buttonRef} id='button' onClick={handleClick}>

@@ -22,8 +22,7 @@
     text-align: left;
 }
 #close-button {
-    margin-top: 2%;
-    margin-left: 90%;
+    margin-left: 85%;
     background: none;
     border: none;
     font-size: 2rem;
@@ -32,6 +31,9 @@
     height: 40px;
     width: 40px;
     border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 #close-button:hover{
     background-color: rgb(194, 194, 194);

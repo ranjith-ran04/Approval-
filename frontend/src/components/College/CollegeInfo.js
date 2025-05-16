@@ -2,10 +2,21 @@ import { useState } from 'react'
 import './CollegeInfo.css'
 import NavigationBar from '../../widgets/NavigationBar';
 import Button from '../../widgets/Button';
+import Alert from '../Alert';
 
 
 export const CollegeInfo = () => {
   const [selectedSection,setSelectedSection]=useState('All')
+  const [showAlert, setShowAlert] = useState(false);
+
+  const handleCloseAlert = () => {
+    setShowAlert(false);
+  };
+
+  const handleSubmit = () => {
+  setShowAlert(true); 
+  };
+
   return (
     <div>
     <NavigationBar text = {'DIRECTORATE OF TECHNICAL EDUCATION \nTAMILNADU LATERAL ENTRY B.E/B.TECH ADMISSIONS-2025 \nAPPROVAL PROCESS'} profile = {true}/>
@@ -412,17 +423,20 @@ export const CollegeInfo = () => {
             </fieldset>
             </>
         )}
-        <div>
-          <Button name={"SUBMIT"}/>
-          <Button name={"CANCEL"}/>
-        </div>
-
-
-
-
-
-
-
+        <div >
+          <Button name={"SUBMIT"} onClick={handleSubmit}/>
+          <Alert
+          message="Form submitted successfully!"
+          show={showAlert}
+          close={handleCloseAlert}/>
+          <Button name={"CANCEL"} onClick={handleSubmit}/>
+          <Alert
+          message="Form failed!"
+          show={showAlert}
+          close={handleCloseAlert}/>
+          
+          
+        </div>  
     </div>
   )
 }
