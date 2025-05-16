@@ -9,7 +9,7 @@ nav{
 #logo{
     height: 60px;
     width: 60px;
-    background-image: url('../assets/logo.png');
+    background-image: url('../../assets/logo.png');
     border-radius: 50%;
     background-repeat: no-repeat;
     background-size: cover;
@@ -38,7 +38,7 @@ nav{
     height: 40px;
     width: 40px;
     background-color: darkblue;
-    background-image: url('../assets/profile.png');
+    background-image: url('../../assets/profile.png');
     background-size: 30px 30px;
     border-radius: 50%;
     background-repeat: no-repeat;
