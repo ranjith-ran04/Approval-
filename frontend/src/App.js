@@ -10,6 +10,7 @@ function App() {
     <Router>
       <Routes>
         <Route path='/' element={<Home/>} />
+        <Route path='/home' element={<Home/>} />
         <Route path='/collegeDetails' element={<CollegeInfo/>} />
         <Route path="/branch" element={<Branch />} />
         <Route path="/branch/edit/:id" element={<EditBranch />} />

@@ -19,7 +19,7 @@
   width: 50px;
   position: absolute;
   border-radius: 50%;
-  background-color: rgba(109, 109, 109, 0.3);
+  background-color: rgba(0, 0, 0, 0.3);
   animation: ripple-effect 500ms linear;
   transform: scale(0);
 }

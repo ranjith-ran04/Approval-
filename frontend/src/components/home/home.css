@@ -4,12 +4,13 @@ body{
 }
 #body{
     display: flex;
+    margin-top: 60px;
 }
 #sidebar{
     padding-top:15px ;
     background-color: darkblue;
     width: 280px;
-    height: 87vh;
+    height: 89vh;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -27,11 +28,11 @@ body{
 }
 .menuItems:hover{
     cursor: pointer;
-    background-color: rgba(0,0,0,0.2);
+    background-color: rgba(0,0,0,0.3);
     
 }
 #center-b{
-    box-shadow: 5px 5px 10px 5px rgba(0,0,0,0.2) ;
+    box-shadow: 5px 5px 10px 5px rgba(0,0,0,0.3) ;
     padding: 1em;
     margin: 10px;
     width: 100%;

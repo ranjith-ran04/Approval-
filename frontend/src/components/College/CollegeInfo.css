@@ -1,3 +1,23 @@
+#cont{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.container-college{
+  margin-top: 70px;
+  width: 99%;
+  box-shadow: 5px 5px 10px 5px rgba(0,0,0,0.3);
+  transition: transform 0.3s ease;
+}
+.container-college.shift{
+  max-width: 81%;
+  align-items: center;
+  margin-left:240px;
+  transition: margin-left 0.3s;  
+}
+
+
 fieldset {
   margin-bottom: 30px;
   border: 2px solid #ccc;

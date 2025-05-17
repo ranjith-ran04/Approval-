@@ -1,9 +1,22 @@
-#box1 {
+#main{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.box1 {
   margin: 10px;
-  width: 99%;
+  width: 98%;
   box-shadow: 5px 5px 10px 5px rgba(0, 0, 0, 0.2);
   padding: 1em;
   box-sizing: border-box;
+  margin-top: 70px;
+}
+.box1.shift{
+  max-width: 81%;
+  align-items: center;
+  margin-left:240px;
+  transition: margin-left 0.3s;  
 }
 
 .form-container {

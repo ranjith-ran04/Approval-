@@ -1,10 +1,23 @@
-#box {
+#mainB{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.box {
   margin: 10px;
   margin-right: 10px;
-  width: 99%;
-  box-shadow: 5px 5px 10px 5px rgba(0, 0, 0, 0.2);
+  width: 98%;
+  box-shadow: 5px 5px 10px 5px rgba(0, 0, 0, 0.3);
   padding: 1em;
   box-sizing: border-box;
+  margin-top: 70px;
+  overflow: scroll;
+}
+.box.shift{
+  max-width: 81%;
+  margin-left:240px;
+  transition: margin-left 0.3s; 
 }
 .heading {
   flex: 1;
@@ -13,12 +26,14 @@
 }
 .branch-container {
   padding: 2rem;
+  margin-top: 70px;
 }
 
 .table {
   display: grid;
   grid-template-columns: repeat(13, auto); /* 13 columns */
   border: 1px solid #ddd;
+
 }
 
 .table-header {
