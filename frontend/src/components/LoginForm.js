@@ -3,13 +3,7 @@ import './LoginForm.css';
 import NavigationBar from './../widgets/navigationBar/NavigationBar'; 
 
 const LoginForm = () => {
-  const [code, setCode] = useState('');
-  const [password, setPassword] = useState('');
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    alert(`Logging in with ${code}`);
-  };
+  const [focusedField, setFocusedField] = useState(null);
 
   return (
     <div className="login-container">
@@ -19,26 +13,29 @@ TAMILNADU LATERAL ENTRY B.E/B.TECH ADMISSIONS-2025
 APPROVAL PROCESS`}
         profile={true}
       />
-      <div className="login-box">
-        <h3>Login Form</h3>
-        <form onSubmit={handleSubmit}>
+      <div className='login-box'>
+        <div className={`input-group ${focusedField === 'register' ? 'focused' : ''}`}>
+          <span className="icon user-icon" />
           <input
             type="text"
-            placeholder="Counselling Code"
-            value={code}
-            onChange={(e) => setCode(e.target.value)}
-            required
-          /><br />
+            placeholder="Register Number"
+            onFocus={() => setFocusedField('register')}
+            onBlur={() => setFocusedField(null)}
+          />
+        </div>
+
+        <div className={`input-group ${focusedField === 'password' ? 'focused' : ''}`}>
+          <span className="icon lock-icon" />
           <input
             type="password"
             placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          /><br />
-          <button type="submit">Log In</button>
-        </form>
-      </div>
+            onFocus={() => setFocusedField('password')}
+            onBlur={() => setFocusedField(null)}
+          />
+        </div>
+
+      <button className="login-button">LOGIN</button>
+    </div>
     </div>
   );
 };

@@ -5,6 +5,11 @@ nav{
     justify-content: center;
     align-items: center;
     gap: 80px;
+    margin-bottom: 50px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    
 }
 #logo{
     height: 60px;
