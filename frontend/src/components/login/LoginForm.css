@@ -1,15 +1,23 @@
 .login-container {
     text-align: center;
+    margin-top: 140px;
+    position: fixed;
+    width: 100%;
+    
   }
   
   .login-box {
     border: 1px solid #ccc;
     border-radius: 10px;
     width: 300px;
-    margin: 0 auto;
     padding: 20px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    margin-top: 3;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+    
+  }
+  #login{
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
   
   .login-box h3 {
@@ -25,7 +33,7 @@
   }
   
   .login-box button {
-    background-color: #007bff;
+    background-color: darkblue;
     color: white;
     padding: 8px 16px;
     border: none;

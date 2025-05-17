@@ -2,11 +2,12 @@ import './home.css'
 import NavigationBar from '../../widgets/navigationBar/NavigationBar'
 import Button from '../../widgets/button/Button'
 import Notes from '../../widgets/notes/Notes'
-import { useState } from 'react'
+import { useState,useEffect } from 'react'
 import {useNavigate} from 'react-router-dom'
+const NOTE_KEY = "hasseen"
 
 function Home() {
-    const [open,setOpen] = useState(true)
+    const [open,setOpen] = useState(false)
     const [minimized,setMinimized] = useState(false)
     const navigate = useNavigate()
 
@@ -14,13 +15,25 @@ function Home() {
         navigate('/collegeDetails')
     }
 
+    useEffect(() => {
+        const has = localStorage.getItem(NOTE_KEY) === "true"
+        
+        if(!has){
+            setOpen(true)
+            localStorage.setItem(NOTE_KEY,'true')
+        }
+        else{
+            setMinimized(true)
+        }
+   }, [])
+
     const handleClick = (para) =>{
         if(!para){
         setMinimized(true);
-        setTimeout(() => setOpen(false), 0);
+        setOpen(false)
         }else{
         setOpen(para)
-        setTimeout(() => setMinimized(false), 0);
+        setMinimized(false);
     }
     }
 
@@ -47,7 +60,7 @@ function Home() {
         <NavigationBar text = {'DIRECTORATE OF TECHNICAL EDUCATION \nTAMILNADU LATERAL ENTRY B.E/B.TECH ADMISSIONS-2025 \nAPPROVAL PROCESS'} profile = {true}/>
         <div id='body'>
         <div id='sidebar'>
-        <div className='menuItems'>
+        <div className='menuItems' onClick={() => navigate('/home')}>
             Home
         </div>
         <div className='menuItems' onClick={handleNavigation}>
@@ -79,9 +92,6 @@ function Home() {
         </div>
         <div className='menuItems'>
             Form LEA2025
-        </div>
-        <div className='menuItems'>
-            Change Password
         </div>
         <div>
         <Button name={"SUBMIT"}/>

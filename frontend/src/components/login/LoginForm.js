@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './LoginForm.css';
-import NavigationBar from './../widgets/navigationBar/NavigationBar'; 
-
+import NavigationBar from '../../widgets/navigationBar/NavigationBar'; 
+import Footer from './Footer'
 const LoginForm = () => {
   const [code, setCode] = useState('');
   const [password, setPassword] = useState('');
@@ -17,8 +17,9 @@ const LoginForm = () => {
         text={`DIRECTORATE OF TECHNICAL EDUCATION 
 TAMILNADU LATERAL ENTRY B.E/B.TECH ADMISSIONS-2025 
 APPROVAL PROCESS`}
-        profile={true}
+        profile={false}
       />
+      <div id='login'>
       <div className="login-box">
         <h3>Login Form</h3>
         <form onSubmit={handleSubmit}>
@@ -39,6 +40,8 @@ APPROVAL PROCESS`}
           <button type="submit">Log In</button>
         </form>
       </div>
+      </div>
+      <Footer/>
     </div>
   );
 };
