@@ -1,13 +1,17 @@
-import React from 'react';
-import LoginForm from './components/LoginForm';
-import Footer from './components/Footer';
+import Login from './components/login/LoginForm.js'
 
-const App = () => {
+function App() {
   return (
-    <div>
-      <LoginForm />
-      <Footer />
-    </div>
+    <Router>
+      <Routes>
+        <Route path='/' element={<Login/>} />
+        <Route path='/home' element={<Home/>} />
+        <Route path='/collegeDetails' element={<CollegeInfo/>} />
+        <Route path="/branch" element={<Branch />} />
+        <Route path="/branch/edit/:id" element={<EditBranch />} />
+        <Route path="/branch/add" element={<AddBranch />} />
+      </Routes>
+    </Router>
   );
 };
 

@@ -3,11 +3,13 @@ import './CollegeInfo.css'
 import NavigationBar from '../../widgets/navigationBar/NavigationBar';
 import Button from '../../widgets/button/Button';
 import Alert from '../alert/Alert';
+import MenuIcon from '../../widgets/menuicon/MenuIcon';
 
 
 export const CollegeInfo = () => {
   const [selectedSection,setSelectedSection]=useState('All')
   const [showAlert, setShowAlert] = useState(false);
+  const [bool , setBool] = useState(false)
 
   const handleCloseAlert = () => {
     setShowAlert(false);
@@ -19,7 +21,10 @@ export const CollegeInfo = () => {
 
   return (
     <div>
+      <MenuIcon bool = {bool} setBool = {setBool}/>
+    <div id='cont'>
     <NavigationBar text = {'DIRECTORATE OF TECHNICAL EDUCATION \nTAMILNADU LATERAL ENTRY B.E/B.TECH ADMISSIONS-2025 \nAPPROVAL PROCESS'} profile = {true}/>
+    <div className = {`container-college ${bool ? 'shift' : ''}`}>
       <div className='dropdown'>
       <label>Options</label>
         <select onChange={(e)=>setSelectedSection(e.target.value)} value={selectedSection}>
@@ -442,6 +447,8 @@ export const CollegeInfo = () => {
         close={handleCloseAlert} /> */}
           
         </div>
+        </div>
+    </div>
     </div>
   )
 }

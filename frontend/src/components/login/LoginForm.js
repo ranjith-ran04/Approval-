@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './LoginForm.css';
-import NavigationBar from './../widgets/navigationBar/NavigationBar'; 
-
+import NavigationBar from '../../widgets/navigationBar/NavigationBar'; 
+import Footer from './Footer'
 const LoginForm = () => {
   const [focusedField, setFocusedField] = useState(null);
 
@@ -11,11 +11,15 @@ const LoginForm = () => {
         text={`DIRECTORATE OF TECHNICAL EDUCATION 
 TAMILNADU LATERAL ENTRY B.E/B.TECH ADMISSIONS-2025 
 APPROVAL PROCESS`}
-        profile={true}
+        profile={false}
       />
       <div className='login-box'>
         <div className={`input-group ${focusedField === 'register' ? 'focused' : ''}`}>
           <span className="icon user-icon" />
+      <div id='login'>
+      <div className="login-box">
+        <h3>Login Form</h3>
+        <form onSubmit={handleSubmit}>
           <input
             type="text"
             placeholder="Register Number"

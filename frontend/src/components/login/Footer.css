@@ -7,10 +7,17 @@
   color: #fff;
   flex-wrap: wrap;
   font-size: 14px;
+<<<<<<< HEAD:frontend/src/components/Footer.css
   margin-top: 150px;
   position: relative;
   bottom: 0;
   
+=======
+  margin-top: 30px;
+  position: fixed;
+  width: 100%;
+  bottom: 0;
+>>>>>>> b91c6f5e023cf541f4c6ddef2ea53939abf5d505:frontend/src/components/login/Footer.css
 }
 
 .footer-section {

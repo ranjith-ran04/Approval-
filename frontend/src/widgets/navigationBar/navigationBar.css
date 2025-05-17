@@ -1,15 +1,21 @@
 nav{
     display: flex;
-    box-shadow: 2px 0px 10px 0 rgba(0,0,0,0.3);
+    box-shadow: 5px 0px 10px 0 rgba(0,0,0,0.4);
     width: 100%;
     justify-content: center;
     align-items: center;
     gap: 80px;
+
     margin-bottom: 50px;
     position: fixed;
     top: 0;
     left: 0;
-    
+    position: fixed;
+    top:0;
+    left:0;
+    z-index: 1;
+    background-color: white;
+    height: 70px;
 }
 #logo{
     height: 60px;
@@ -32,13 +38,6 @@ nav{
     justify-content: center;
     font-weight: bold;
 }
-/* #person{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    width:200px;
-    height: 80px;
-} */
 #person-icon{
     height: 40px;
     width: 40px;
@@ -59,7 +58,7 @@ nav{
     justify-content: center;
     align-items: center;
     background-color: white;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
     height: 70px;
     width:150px;
     border-radius: 20px;
@@ -76,7 +75,7 @@ nav{
 }
 .item:hover{
     cursor: pointer;
-    background-color:  rgba(0, 0, 0, 0.1);
+    background-color:  rgba(0, 0, 0, 0.3);
     border-radius: 10px;
 }
 #overlay{

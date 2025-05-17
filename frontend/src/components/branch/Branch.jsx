@@ -2,18 +2,23 @@
 import "./branch.css";
 import { useNavigate } from "react-router-dom";
 import NavigationBar from "../../widgets/navigationBar/NavigationBar";
+import MenuIcon from "../../widgets/menuicon/MenuIcon";
+import {useState} from 'react'
 
 function Branch() {
   const navigate = useNavigate();
+  const [bool , setBool] = useState(false);
   return (
     <div>
+    <MenuIcon bool = {bool} setBool = {setBool}/>
+    <div id="mainB">
       <NavigationBar
         text={
           "DIRECTORATE OF TECHNICAL EDUCATION \nTAMILNADU LATERAL ENTRY B.E/B.TECH ADMISSIONS-2025 \nAPPROVAL PROCESS"
         }
         profile={true}
       />
-      <div id="box">
+      <div className={`box ${bool ? 'shift' : '' }`}>
         <div className="first">
           <h2 className="heading">BRANCH DETAILS</h2>
           <button
@@ -70,6 +75,7 @@ function Branch() {
           ))}
         </div>
       </div>
+    </div>
     </div>
   );
 }

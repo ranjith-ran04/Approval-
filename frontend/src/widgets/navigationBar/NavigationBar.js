@@ -1,12 +1,16 @@
 import {useState} from 'react'
 import './navigationBar.css'
+import {useNavigate} from 'react-router-dom'
 
 function NavigationBar({text,profile}){
     const [visible,setVisible] = useState(false)
 
+    const Navigate = useNavigate()
+
     const handleClicks = () =>{
         setVisible(!visible)
     }
+
     const handleClicksoverlay = () =>{
         setVisible(false)
     }
@@ -29,7 +33,7 @@ function NavigationBar({text,profile}){
             <div id='overlay' onClick={handleClicksoverlay}>
             <div id='list'  >
                 <div className='item'>Change Password</div>
-                <div className='item'>Logout</div>
+                <div className='item' onClick={() => Navigate('/')}>Logout</div>
             </div>
             </div>
             }
