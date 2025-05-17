@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import './LoginForm.css';
-import profile from '../assets/profile.png';
-import NavigationBar from '../widgets/NavigationBar'; // ✅ Import directly
+import NavigationBar from './../widgets/navigationBar/NavigationBar'; // ✅ Impor
 
 const LoginForm = () => {
   const [code, setCode] = useState('');
@@ -20,7 +19,6 @@ TAMILNADU LATERAL ENTRY B.E/B.TECH ADMISSIONS-2025
 APPROVAL PROCESS`}
         profile={true}
       />
-
       <div className="login-box">
         <h3>Login Form</h3>
         <form onSubmit={handleSubmit}>

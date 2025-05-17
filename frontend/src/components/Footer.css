@@ -3,7 +3,7 @@
   justify-content: space-around;
   align-items: flex-start;
   padding: 10px 20px;  /* Reduced from 30px */
-  background-color: #b30000; /* Red shade you’re using */
+  background-color: darkblue; /* Red shade you’re using */
   color: #fff;
   flex-wrap: wrap;
   font-size: 14px;
