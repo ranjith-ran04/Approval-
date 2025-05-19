@@ -1,17 +1,12 @@
-import Login from './components/login/LoginForm.js'
+import LoginForm from './components/login/LoginForm.js'
+import Footer from './components/login/Footer.js'
+import Home from './widgets/NavigationBar.js'
 
 function App() {
   return (
-    <Router>
-      <Routes>
-        <Route path='/' element={<Login/>} />
-        <Route path='/home' element={<Home/>} />
-        <Route path='/collegeDetails' element={<CollegeInfo/>} />
-        <Route path="/branch" element={<Branch />} />
-        <Route path="/branch/edit/:id" element={<EditBranch />} />
-        <Route path="/branch/add" element={<AddBranch />} />
-      </Routes>
-    </Router>
+    <Home>
+    <LoginForm>
+    <Footer>
   );
 };
 
