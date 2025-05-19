@@ -1,56 +1,20 @@
 .login-container {
-  padding: 20px;
   max-width: 350px;
   margin: auto;
-  font-family: 'Segoe UI', sans-serif;
   text-align: center;
+  margin-top: 105px;
+  position: fixed;
+  display: flex;
+  align-items: center;
+ 
 }
-
-.login-box {
-    text-align: center;
-    margin-top: 140px;
-    position: fixed;
-    width: 100%;
-    
-  }
-  
-  .login-box {
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    width: 300px;
-    padding: 20px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    margin-top: 200px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
-    
-  }
-  #login{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  .login-box h3 {
-    margin-bottom: 20px;
-  }
-  
-  .login-box input {
-    width: 100%;
-    margin: 10px 0;
-    padding: 8px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-  }
-  
-  .login-box button {
-    background-color: darkblue;
-    color: white;
-    padding: 8px 16px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-
+.login-box{
+  border: 1px solid #ccc;
+  padding: 25px;
+  border-radius: 10px;
+  box-shadow: 0 0 20px rbga(0,0,0,0.3);
+  margin-left: 450px;
+}
 
 .input-group {
   display: flex;
@@ -59,13 +23,13 @@
   border-radius: 30px;
   padding: 10px 20px;
   margin-bottom: 20px;
+  transition: box-shadow 0.3s;
 }
 
 .input-group input {
   border: none;
-  background: transparent;
-  flex: 1;
-  padding: 10px;
+  background: transparent;  
+  padding: 4px;
   font-size: 16px;
   outline: none;
 }
@@ -76,7 +40,7 @@
   margin-right: 10px;
   background-size: contain;
   background-repeat: no-repeat;
-  transition: filter 0.3s;
+  transition: background-image 0.3s;
 }
 
 .user-icon {
@@ -87,11 +51,11 @@
   background-image: url('data:image/svg+xml;utf8,<svg fill="%23888" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 17a2 2 0 0 1-2-2h2v-3h-2v-1c0-.55.45-1 1-1s1 .45 1 1h2c0-1.65-1.35-3-3-3s-3 1.35-3 3v1H6v10h12V12h-4v3h2a2 2 0 0 1-2 2z"/></svg>');
 }
 
-.focused .user-icon {
+.input-group.focused .user-icon {
   background-image: url('data:image/svg+xml;utf8,<svg fill="%23002b5c" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 5 2.3 5 5 5zm0 2c-3.3 0-10 1.7-10 5v3h20v-3c0-3.3-6.7-5-10-5z"/></svg>');
 }
 
-.focused .lock-icon {
+.input-group.focused .lock-icon {
   background-image: url('data:image/svg+xml;utf8,<svg fill="%23002b5c" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 17a2 2 0 0 1-2-2h2v-3h-2v-1c0-.55.45-1 1-1s1 .45 1 1h2c0-1.65-1.35-3-3-3s-3 1.35-3 3v1H6v10h12V12h-4v3h2a2 2 0 0 1-2 2z"/></svg>');
 }
 
@@ -102,7 +66,12 @@
   border-radius: 30px;
   font-weight: bold;
   font-size: 16px;
-  color: #fff;
+  color: white;
   cursor: pointer;
   margin-top: 10px;
+  transition: background-color 0.3s;
+}
+
+.login-button:hover {
+  background-color: rgb(164, 164, 255);
 }
