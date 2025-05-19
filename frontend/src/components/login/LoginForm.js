@@ -13,7 +13,7 @@ TAMILNADU LATERAL ENTRY B.E/B.TECH ADMISSIONS-2025
 APPROVAL PROCESS`}
         profile={false}
       />
-      <div className='login-box'>
+      <div>
         <div className={`input-group ${focusedField === 'register' ? 'focused' : ''}`}>
           <span className="icon user-icon" />
       <div id='login'>
@@ -26,7 +26,7 @@ APPROVAL PROCESS`}
             onFocus={() => setFocusedField('register')}
             onBlur={() => setFocusedField(null)}
           />
-        </div>
+        
 
         <div className={`input-group ${focusedField === 'password' ? 'focused' : ''}`}>
           <span className="icon lock-icon" />
@@ -39,6 +39,10 @@ APPROVAL PROCESS`}
         </div>
 
       <button className="login-button">LOGIN</button>
+      </form>
+      </div>
+    </div>
+    </div>
     </div>
     </div>
   );
