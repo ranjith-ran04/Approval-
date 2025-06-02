@@ -11,6 +11,7 @@ export const CollegeInfo = () => {
   const [showAlert, setShowAlert] = useState(false);
   const [bool , setBool] = useState(false)
 
+
   const handleCloseAlert = () => {
     setShowAlert(false);
   };
