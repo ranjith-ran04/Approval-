@@ -1,0 +1,8 @@
+#dashboard-body{
+    display: flex;
+    margin-top: 70px;
+    margin-left: 280px;
+    height:89vh;
+    width: 79%;
+    position: fixed;
+}

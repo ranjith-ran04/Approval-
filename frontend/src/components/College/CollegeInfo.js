@@ -1,9 +1,7 @@
 import { useState } from 'react'
 import './CollegeInfo.css'
-import NavigationBar from '../../widgets/navigationBar/NavigationBar';
 import Button from '../../widgets/button/Button';
 import Alert from '../alert/Alert';
-import MenuIcon from '../../widgets/menuicon/MenuIcon';
 
 
 export const CollegeInfo = () => {
@@ -20,11 +18,8 @@ export const CollegeInfo = () => {
   };
 
   return (
-    <div>
-      <MenuIcon bool = {bool} setBool = {setBool}/>
     <div id='cont'>
-    <NavigationBar text = {'DIRECTORATE OF TECHNICAL EDUCATION \nTAMILNADU LATERAL ENTRY B.E/B.TECH ADMISSIONS-2025 \nAPPROVAL PROCESS'} profile = {true}/>
-    <div className = {`container-college ${bool ? 'shift' : ''}`}>
+    <div className = "container-college">
       <div className='dropdown'>
       <label>Options</label>
         <select onChange={(e)=>setSelectedSection(e.target.value)} value={selectedSection}>
@@ -439,16 +434,15 @@ export const CollegeInfo = () => {
 
         </div>  
         <div>
-          <Button name={"CANCEL"} />
-          {/* <Alert
+          <Button name={"CANCEL"} onClick={handleSubmit}/>
+          <Alert
         type="error"
         message="Something went wrong!"
         show={showAlert}
-        close={handleCloseAlert} /> */}
+        close={handleCloseAlert} />
           
         </div>
         </div>
-    </div>
     </div>
   )
 }

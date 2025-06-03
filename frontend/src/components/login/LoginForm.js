@@ -1,24 +1,30 @@
-import React, { useState } from 'react';
+import { useState,useEffect } from 'react';
 import './LoginForm.css';
-import NavigationBar from '../../widgets/navigationBar/NavigationBar'; 
 import Footer from './Footer'
 import {useNavigate} from 'react-router-dom'
+import NavigationBar from '../../widgets/navigationBar/NavigationBar';
 
 const LoginForm = () => {
   const [focusedField, setFocusedField] = useState(null);
   const navigate = useNavigate()
 
-  const handleSubmit = () => {
-    navigate('/home')
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    navigate('/dashboard')
+    // window.location.href = '/'
   }
+useEffect(()=>{
+  localStorage.setItem('value',true)
+},[])
+  
 
   return (
     <div className="login-container">
-      <NavigationBar
+              <NavigationBar
         text={`DIRECTORATE OF TECHNICAL EDUCATION 
 TAMILNADU LATERAL ENTRY B.E/B.TECH ADMISSIONS-2025 
 APPROVAL PROCESS`}
-        profile={false}
+        profile={true}
       />
       <div className="login-box">
         <h3>Login Form</h3>
@@ -43,7 +49,7 @@ APPROVAL PROCESS`}
           />
         </div>
 
-      <button className="login-button">LOGIN</button>
+      <button type='submit' className="login-button">LOGIN</button>
       </form>
       
     </div>

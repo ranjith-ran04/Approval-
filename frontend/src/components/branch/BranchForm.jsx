@@ -1,7 +1,4 @@
 import "./form.css";
-import NavigationBar from "../../widgets/navigationBar/NavigationBar";
-import MenuIcon from "../../widgets/menuicon/MenuIcon";
-import {useState} from 'react'
 
 function BranchForm({
   heading,
@@ -10,19 +7,9 @@ function BranchForm({
   buttonText,
   isEditMode = false,
 }) {
-  const [bool , setBool] = useState(false)
-
   return (
-    <div>
-    <MenuIcon bool={bool} setBool={setBool}/>
     <div id='main'>
-      <NavigationBar
-        text={
-          "DIRECTORATE OF TECHNICAL EDUCATION \nTAMILNADU LATERAL ENTRY B.E/B.TECH ADMISSIONS-2025 \nAPPROVAL PROCESS"
-        }
-        profile={true}
-      />
-      <div className={`box1 ${bool ? 'shift' : ''}`}>
+      <div className={"box1"}>
         <div className="form-container" style={{ paddingTop: "10px" }}>
           <h2 className="head">{heading}</h2>
           <form className="form-grid" onSubmit={onSubmit}>
@@ -130,7 +117,6 @@ function BranchForm({
           </form>
         </div>
       </div>
-    </div>
     </div>
   );
 }

@@ -1,38 +1,14 @@
-body{
-    margin:0;
-    padding: 0;
+#container{
+    width: 78%;
+    height:87vh;
+    position: fixed;
+    box-shadow: 5px 5px 10px 5px rgba(0,0,0,0.3);
+    margin-left: 5px;
 }
 #body{
     display: flex;
-    margin-top: 70px;
-}
-#sidebar{
-    padding-top:15px ;
-    background-color: darkblue;
-    width: 280px;
-    height: 89vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    color: white;
-    gap: 5px;
-}
-.menuItems{
-    height: 35px;
-    width: 200px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 20px;
-    font-weight: bold;
-}
-.menuItems:hover{
-    cursor: pointer;
-    background-color: rgba(0,0,0,0.3);
-    
 }
 #center-b{
-    box-shadow: 5px 5px 10px 5px rgba(0,0,0,0.3) ;
     padding: 1em;
     margin: 10px;
     width: 100%;

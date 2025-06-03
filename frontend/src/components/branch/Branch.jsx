@@ -1,29 +1,15 @@
-// import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import "./branch.css";
-import { useNavigate } from "react-router-dom";
-import NavigationBar from "../../widgets/navigationBar/NavigationBar";
-import MenuIcon from "../../widgets/menuicon/MenuIcon";
-import {useState} from 'react'
+import EditBranch from "./EditBranch";
 
-function Branch() {
-  const navigate = useNavigate();
-  const [bool , setBool] = useState(false);
+function Branch({setCurrent,setState}) {
   return (
-    <div>
-    <MenuIcon bool = {bool} setBool = {setBool}/>
     <div id="mainB">
-      <NavigationBar
-        text={
-          "DIRECTORATE OF TECHNICAL EDUCATION \nTAMILNADU LATERAL ENTRY B.E/B.TECH ADMISSIONS-2025 \nAPPROVAL PROCESS"
-        }
-        profile={true}
-      />
-      <div className={`box ${bool ? 'shift' : '' }`}>
+      <div className= "box">
         <div className="first">
           <h2 className="heading">BRANCH DETAILS</h2>
           <button
             className="addBranch-btn"
-            onClick={() => navigate("/branch/add")}
+            onClick={() => setCurrent(3)}
           >
             Add Branch
           </button>
@@ -50,9 +36,7 @@ function Branch() {
               <div>
                 <button
                   className="edit-btn"
-                  onClick={() =>
-                    navigate("/branch/edit/${index}", { state: branch })
-                  }
+                  onClick={() => {setCurrent(4);setState({code:branch.code,name:branch.name})}}
                 >
                   Edit
                 </button>
@@ -75,7 +59,6 @@ function Branch() {
           ))}
         </div>
       </div>
-    </div>
     </div>
   );
 }

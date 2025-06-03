@@ -3,14 +3,18 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+    height:87vh;
+  width: 99%;
+  margin-left: 5px;
+  box-shadow: 5px 5px 10px 5px rgba(0, 0, 0, 0.3);
+  overflow: scroll;
 }
 .box1 {
+  height: 95vh;
   margin: 10px;
-  width: 98%;
-  box-shadow: 5px 5px 10px 5px rgba(0, 0, 0, 0.2);
   padding: 1em;
   box-sizing: border-box;
-  margin-top: 80px;
+  margin-top: 60px;
 }
 .box1.shift{
   max-width: 81%;

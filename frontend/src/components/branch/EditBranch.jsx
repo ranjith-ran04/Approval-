@@ -1,12 +1,8 @@
-import { useLocation } from 'react-router-dom';
 import BranchForm from './BranchForm';
 
-function EditBranch() {
-  const { state } = useLocation();
-
+function EditBranch({state}) {
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Handle saving updates here
     alert('Changes Saved!');
   };
 
