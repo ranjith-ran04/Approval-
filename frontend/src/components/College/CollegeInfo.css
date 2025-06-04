@@ -1,13 +1,7 @@
-#cont{
-  width: 99%;
-  height:87vh;
-  overflow: scroll;
-  box-shadow: 5px 5px 10px 5px rgba(0,0,0,0.3);
-  margin-left: 5px;
-
-}
 .container-college{
     width: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 fieldset {
@@ -59,22 +53,6 @@ textarea {
   min-height: 60px;
 }
 
-button {
-  margin-right: 15px;
-  padding: 10px 20px;
-  font-size: 1rem;
-  border-radius: 6px;
-  border: none;
-  cursor: pointer;
-  background-color: #3f51b5;
-  color: white;
-  margin:20px;
-  
-}
-
-button[type="reset"] {
-  background-color: #f44336;
-}
 
 .radio-group {
   display: flex;

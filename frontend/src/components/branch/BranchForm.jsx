@@ -8,114 +8,111 @@ function BranchForm({
   isEditMode = false,
 }) {
   return (
-    <div id='main'>
-      <div className={"box1"}>
-        <div className="form-container" style={{ paddingTop: "10px" }}>
-          <h2 className="head">{heading}</h2>
-          <form className="form-grid" onSubmit={onSubmit}>
-            <div className="form-col">
-              <label className="form-label">Branch Code</label>
-              <input
-                name="code"
-                placeholder="Branch Code"
-                defaultValue={values.code}
-                required
-                disabled={isEditMode}
-              />
+    <div className={"box1"}>
+      <div className="form-container" style={{ paddingTop: "10px" }}>
+        <h2 className="head">{heading}</h2>
+        <form className="form-grid" onSubmit={onSubmit}>
+          <div className="form-col">
+            <label className="form-label">Branch Code</label>
+            <input className="branchforminput"
+              name="code"
+              placeholder="Branch Code"
+              defaultValue={values.code}
+              required
+              disabled={isEditMode}
+            />
 
-              <label className="form-label">Branch Name</label>
-              <input
-                name="name"
-                placeholder="Branch Name"
-                defaultValue={values.name}
-                required
-                disabled={isEditMode}
-              />
+            <label className="form-label">Branch Name</label>
+            <input className="branchforminput"
+              name="name"
+              placeholder="Branch Name"
+              defaultValue={values.name}
+              required
+              disabled={isEditMode}
+            />
 
-              <label className="form-label">Approved Intake</label>
-              <input
-                name="approvedIntake"
-                placeholder="Approved Intake"
-                defaultValue={values.approvedIntake}
-              />
+            <label className="form-label">Approved Intake</label>
+            <input className="branchforminput"
+              name="approvedIntake"
+              placeholder="Approved Intake"
+              defaultValue={values.approvedIntake}
+            />
 
-              <label className="form-label">First Year Admitted</label>
-              <input
-                name="firstYearAdmitted"
-                placeholder="First Year Admitted"
-                defaultValue={values.firstYearAdmitted}
-              />
+            <label className="form-label">First Year Admitted</label>
+            <input className="branchforminput"
+              name="firstYearAdmitted"
+              placeholder="First Year Admitted"
+              defaultValue={values.firstYearAdmitted}
+            />
 
-              <label className="form-label">Discontinued</label>
-              <input
-                name="discontinued"
-                placeholder="Discontinued"
-                defaultValue={values.discontinued}
-              />
+            <label className="form-label">Discontinued</label>
+            <input className="branchforminput"
+              name="discontinued"
+              placeholder="Discontinued"
+              defaultValue={values.discontinued}
+            />
 
-              <label className="form-label">Transferred From</label>
-              <input
-                name="transferredFrom"
-                placeholder="Transferred From"
-                defaultValue={values.transferredFrom}
-              />
+            <label className="form-label">Transferred From</label>
+            <input className="branchforminput"
+              name="transferredFrom"
+              placeholder="Transferred From"
+              defaultValue={values.transferredFrom}
+            />
+          </div>
+
+          <div className="form-col">
+            <label className="form-label">Transferred To</label>
+            <input className="branchforminput"
+              name="transferredTo"
+              placeholder="Transferred To"
+              defaultValue={values.transferredTo}
+            />
+
+            <label className="form-label">LAP</label>
+            <input className="branchforminput" name="lap" placeholder="LAP" defaultValue={values.lap} />
+
+            <label className="form-label">Year of Start</label>
+            <input className="branchforminput"
+              name="yearStart"
+              placeholder="Year of Start"
+              defaultValue={values.yearStart}
+            />
+
+            <label className="form-label">Accreditation Upto</label>
+            <input className="branchforminput"
+              name="accUpto"
+              placeholder="Accreditation Upto"
+              defaultValue={values.accUpto}
+            />
+
+            <label className="form-label">NBA Status</label>
+            <div className="radio-group">
+              <label>
+                <input className="branchforminput"
+                  type="radio"
+                  name="nba"
+                  value="Yes"
+                  defaultChecked={values.nba === "Yes"}
+                  required
+                />{" "}
+                Yes
+              </label>
+              <label style={{ marginLeft: "20px" }}>
+                <input className="branchforminput"
+                  type="radio"
+                  name="nba"
+                  value="No"
+                  defaultChecked={values.nba === "No"}
+                />{" "}
+                No
+              </label>
             </div>
 
-            <div className="form-col">
-              <label className="form-label">Transferred To</label>
-              <input
-                name="transferredTo"
-                placeholder="Transferred To"
-                defaultValue={values.transferredTo}
-              />
-
-              <label className="form-label">LAP</label>
-              <input name="lap" placeholder="LAP" defaultValue={values.lap} />
-
-              <label className="form-label">Year of Start</label>
-              <input
-                name="yearStart"
-                placeholder="Year of Start"
-                defaultValue={values.yearStart}
-              />
-
-              <label className="form-label">Accreditation Upto</label>
-              <input
-                name="accUpto"
-                placeholder="Accreditation Upto"
-                defaultValue={values.accUpto}
-              />
-
-              <label className="form-label">NBA Status</label>
-              <div className="radio-group">
-                <label>
-                  <input
-                    type="radio"
-                    name="nba"
-                    value="Yes"
-                    defaultChecked={values.nba === "Yes"}
-                    required
-                  />{" "}
-                  Yes
-                </label>
-                <label style={{ marginLeft: "20px" }}>
-                  <input
-                    type="radio"
-                    name="nba"
-                    value="No"
-                    defaultChecked={values.nba === "No"}
-                  />{" "}
-                  No
-                </label>
-              </div>
-
-              <label className="spcllabel"></label>
-              <button type="submit" className="submit-btn">
-                {buttonText}
-              </button>
-            </div>
-          </form>
-        </div>
+            <button type="submit" className="submit-btn">
+              {buttonText}
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   );

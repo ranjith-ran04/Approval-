@@ -1,9 +1,12 @@
 #container{
-    width: 78%;
-    height:87vh;
+    width: 84.2%;
+    height: 650px;
     position: fixed;
-    box-shadow: 5px 5px 10px 5px rgba(0,0,0,0.3);
-    margin-left: 5px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    margin-left: 2px;
+    background-color: #f4f9f9;
+    border: 1px solid #ddd;
+    margin-top: 80px; 
 }
 #body{
     display: flex;

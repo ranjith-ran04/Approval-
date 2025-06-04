@@ -30,7 +30,7 @@ export const Alert = ({ type = 'success', message, show, close }) => {
       );
     } else if (type === 'warning') {
       return (
-        <svg className='icon' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52" width="80" height="80">
+        <svg className='icon1' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52" width="80" height="80">
           <circle cx="26" cy="26" r="25" fill="none" stroke="#FF9800" strokeWidth="2" />
           <line x1="26" y1="14" x2="26" y2="30" stroke="#FF9800" strokeWidth="5" />
           <circle cx="26" cy="38" r="2" fill="#FF9800" />

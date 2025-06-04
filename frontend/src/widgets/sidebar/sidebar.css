@@ -1,14 +1,15 @@
 #sidebar{
-    background-color: darkblue;
-    width: 280px;
-    height: 89vh;
+    background-color: #f4f9f9;
+    width: 15dvw;
+    height: 1000px;;
     display: flex;
     flex-direction: column;
     align-items: center;
-    color: white;
-    gap: 4px;
+    color: rgb(0, 0, 0);
+    gap: 5px;
     position: fixed;
-    margin-top: 63px;
+    padding-top: 55px;   
+    box-shadow: 1.95px 1.95px 2.6px #00000026 ;
 }
 .menuItems{
     height: 35px;

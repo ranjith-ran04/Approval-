@@ -1,31 +1,13 @@
-#main{
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-    height:87vh;
-  width: 99%;
-  margin-left: 5px;
-  box-shadow: 5px 5px 10px 5px rgba(0, 0, 0, 0.3);
-  overflow: scroll;
-}
 .box1 {
   height: 95vh;
-  margin: 10px;
   padding: 1em;
-  box-sizing: border-box;
-  margin-top: 60px;
-}
-.box1.shift{
-  max-width: 81%;
-  align-items: center;
-  margin-left:240px;
-  transition: margin-left 0.3s;  
+  height: 89vh;
+  width: 99%;
 }
 
 .form-container {
-    margin: 0;
   padding: 2rem;
+  padding-top: 0rem;
   font-family: Arial, sans-serif;
 }
 
@@ -41,12 +23,13 @@
   gap: 1rem;
 }
 
-input {
+.branchforminput {
   padding: 0.5rem;
   font-size: 1rem;
 }
 
 .submit-btn {
+  margin-top: 3.3rem;
   padding: 0.6rem;
   background-color: #2a59b8;
   color: white;
@@ -65,6 +48,7 @@ input {
 }
 
 .head {
+  margin-top: 5px;
   font-weight: bold;
   font-size: 18px;
   padding-bottom: 20px;
@@ -72,8 +56,8 @@ input {
   text-align: center;
 }
 
-.spcllabel{
-    padding: 20px;
+.spcllabel {
+  padding: 20px;
 }
 
 .radio-group {

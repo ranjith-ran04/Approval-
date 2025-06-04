@@ -1,8 +1,24 @@
-#dashboard-body{
+*{
+    padding: 0;
+    margin:0;
+    box-sizing: border-box;
+}
+#dashboard-body {
+  display: flex;
+  /* height: 300px; */
+  width: 90%;
+  position: fixed;
+  margin-top: 500px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+  
+}
+
+.dashone {
     display: flex;
-    margin-top: 70px;
-    margin-left: 280px;
-    height:89vh;
-    width: 79%;
-    position: fixed;
+    flex-direction: column;
+    /* margin-top: 200px; */
+    width: calc(100% - 235px);
+    height: 80vh;
+    margin-left: 235px;
+    gap: 5px;
 }

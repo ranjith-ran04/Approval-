@@ -1,33 +1,20 @@
-#mainB{
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  height:87vh;
-  width: 99%;
-  margin-left: 5px;
-  box-shadow: 5px 5px 10px 5px rgba(0, 0, 0, 0.3);
-
-}
 .box {
-  width: 98%;
+  width: 98.5%;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
-}
-.heading {
-  font-size: 20px;
 }
 
 .table {
   display: grid;
-  grid-template-columns: repeat(13, auto); /* 13 columns */
+  grid-template-columns: repeat(13, auto);
   border: 1px solid #ddd;
-    overflow: scroll;
-    height:68vh;
-    width: 98%;
-
+  overflow-x: hidden;
+  overflow-y: auto;
+  height: 73vh;
+  width: 100%;
+  margin-left: 1rem;
 }
 
 .table-header {
@@ -37,9 +24,8 @@
 }
 
 .table-header > div {
-  background-color: #d6e2ee; /* Light gray */
+  background-color: #d6e2ee;
   font-weight: bold;
-  padding: 10px;
   border: 1px solid #000000;
 }
 
@@ -71,6 +57,20 @@
   border-radius: 4px;
 }
 
+.first {
+  display: flex;
+  justify-content: center; 
+  align-items: center;
+  position: relative;
+  height: 60px;
+  margin-bottom: 5px;
+}
+
+.heading {
+  font-size: 20px;
+  margin: 0;
+}
+
 .addBranch-btn {
   background-color: #3c11f9;
   color: white;
@@ -80,10 +80,7 @@
   font-weight: bold;
   cursor: pointer;
   border-radius: 4px;
+  position: absolute;
+  margin-right: -1000px;
 }
-.first {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 5px;
-}
+
