@@ -50,8 +50,6 @@ function Home() {
           📝
         </div>
       )}
-      <div id="body">
-        <div id="center-b">
           <div id="center-body">1.UNIVERSITY COLLEGE OF ENGINEERING</div>
           <div id="wrap">
             <div id="first-body">
@@ -91,8 +89,6 @@ function Home() {
             </div>
           </div>
         </div>
-      </div>
-    </div>
   );
 }
 

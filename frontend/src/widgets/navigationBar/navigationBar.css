@@ -7,7 +7,7 @@ nav{
     gap: 80px;
     position: fixed;
     top:0;
-    z-index: 1;
+    z-index: 0;
     background-color: white;
     height: 70px;
     /* margin-left: 17.85rem; */

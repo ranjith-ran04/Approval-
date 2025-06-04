@@ -1,28 +1,18 @@
 #container{
-    width: 84.2%;
-    height: 650px;
-    position: fixed;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    margin: 15px;
+    /* box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); */
     margin-left: 2px;
-    background-color: #f4f9f9;
-    border: 1px solid #ddd;
-    margin-top: 80px; 
-}
-#body{
-    display: flex;
-}
-#center-b{
-    padding: 1em;
-    margin: 10px;
-    width: 100%;
+    /* border: 1px solid #ddd; */
+    /* margin-top: 80px;  */
     display: flex;
     flex-direction: column;
     gap: 40px;
+    width: 100%;
 }
 .minimized-icon {
   position: fixed;
   right: 1px;
-  top: 60px;
+  top: 80px;
   width: 40px;
   height: 40px;
   background: darkblue;
@@ -32,7 +22,7 @@
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  z-index: 1000;
+  z-index: 2000;
 }
 #center-body{
     display: flex;
@@ -41,8 +31,7 @@
 }
 #wrap{
     display: flex;
-    flex-direction: column;
-    gap:20px;
+    gap:300px;
     margin-left: 40px;
 }
 .one{
@@ -56,7 +45,7 @@
 #second-body{
     display: flex;
     flex-direction: column;
-    gap:5px;
+    gap:10px;
 }
 #o{
     gap: 70px;
