@@ -8,7 +8,7 @@ const Inputfield=({eltname,type,label,id,htmlfor,classname,radiolabel,options=[]
                 {options.map((option,index)=>(
                     <label id="collegelabel2">
                         <input key={index} type={type} name={eltname} value={option.value} />{option.label}
-                        
+    
                     </label>
                 ))}
                 </div>
