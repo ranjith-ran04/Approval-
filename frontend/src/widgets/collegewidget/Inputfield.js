@@ -1,5 +1,5 @@
 import '../../components/College/CollegeInfo.css';
-const Inputfield=({eltname,type,label,id,htmlfor,classname,value,radiolabel,options=[],})=>{
+const Inputfield=({eltname,type,label,id,htmlfor,classname,radiolabel,options=[],})=>{
     if(type==="radio"){
         return(
             <div className={classname}>
@@ -8,13 +8,13 @@ const Inputfield=({eltname,type,label,id,htmlfor,classname,value,radiolabel,opti
                 {options.map((option,index)=>(
                     <label id="collegelabel2">
                         <input key={index} type={type} name={eltname} value={option.value} />{option.label}
+                        
                     </label>
                 ))}
                 </div>
         </div>
 
         )
-       
     }
     // else if(type==="text"){
     //     <div className={classname}>
@@ -31,6 +31,7 @@ const Inputfield=({eltname,type,label,id,htmlfor,classname,value,radiolabel,opti
             <label id="collegelabel" htmlFor={htmlfor}>{label}</label>
             <input type={type} id={id} name={eltname}  />
         </div>
+
         </div>
 
     )

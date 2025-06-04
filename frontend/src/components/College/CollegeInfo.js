@@ -12,6 +12,7 @@ const CollegeInfo = () => {
   const[alertType,setAlertType]=useState('');
   const[alertMessage,setAlertMessage]=useState('');
   const [bool , setBool] = useState(false)
+  const[error,setError]=useState()
 
   const handleCloseAlert = () => {
     setShowAlert(false);
@@ -26,7 +27,6 @@ const CollegeInfo = () => {
     setShowAlert(true);
     setAlertMessage("Something went wrong");
     setAlertType('warning');
-
   }
 
   return (
@@ -68,7 +68,6 @@ const CollegeInfo = () => {
             </fieldset>
             </>
             
-
         )}
 
         {(selectedSection==='All' || selectedSection==='addressinfo') && (
@@ -97,7 +96,7 @@ const CollegeInfo = () => {
           <Inputfield eltname={"websitecollege"} type={"text"} label={"Website"} id={"website"} htmlfor={"website"} classname={"field-block"} />
           </div>
 
-          <div className='field-row'>
+          <div className='field-row-single'>
           <Inputfield eltname={"antiraggingNo"} type={"text"} label={"Anti-Ragging Contact No"} id={"antiragging"} htmlfor={"antiragging"} classname={"field-block"} />
           </div>
           </fieldset>
@@ -108,7 +107,7 @@ const CollegeInfo = () => {
          {(selectedSection==='All' || selectedSection==='basicinfo') && (
             <>
             <fieldset className="collegefieldset">
-            <legend className="collegelegend">Basic Info</legend>
+            <legend className="collegelegend">Bank Info</legend>
            <div className='field-row'>
               <Inputfield eltname="bankaccountno" type="text" label="Bank Account No" id="bankaccountNo" htmlfor="bankaccountno" classname="field-block" />
               <Inputfield eltname="bankname" type="text" label="Bank Name" id="bankname" htmlfor="bankname" classname="field-block" />
@@ -122,8 +121,9 @@ const CollegeInfo = () => {
                 <Inputfield eltname="distance" type="text" label="Distance in KM's" id="distance" htmlfor="distance" classname="field-block" />
                 <Inputfield eltname="nearestrailway" type="text" label="Nearest Railway Station" id="nearestrailway" htmlfor="nearestrailway" classname="field-block" />
             </div>
-
+            <div className="field-row-single">
               <Inputfield eltname="distancefromrailway" type="text" label="Distance in KM's from Railway Station" id="distancefromrailway" htmlfor="distancefromrailway" classname="field-block" />
+              </div>
             </fieldset>
             </>
         )}
@@ -168,9 +168,9 @@ const CollegeInfo = () => {
             <Inputfield eltname={"cautiondepositboys"} type={"text"} label={"Caution Deposit (Rs)"} id={"cautiondepositboys"} htmlfor={"cautiondepositboys"} classname={"field-block"} />
             <Inputfield eltname={"establishmentboys"} type={"text"} label={"Establishment Charges (Rs/Year)"} id={"establishmentboys"} htmlfor={"establishmentboys"} classname={"field-block"} />
             </div>
-
+            <div className="field-row-single">
             <Inputfield eltname={"admissionfeesboys"} type={"text"} label={"Admission Fees (Rs/Year)"} id={"admissionfeesboys"} htmlfor={"admissionfeesboys"} classname={"field-block"} />
-
+            </div>
             </fieldset>
 
             </>
@@ -200,31 +200,32 @@ const CollegeInfo = () => {
             <Inputfield eltname={"cautiondepositgirls"} type={"text"} label={"Caution Deposit (Rs)"} id={"cautiondepositgirls"} htmlfor={"cautiondepositgirls"} classname={"field-block"} />
             <Inputfield eltname={"establishmentgirls"} type={"text"} label={"Establishment Charges (Rs/Year)"} id={"establishmentgirls"} htmlfor={"establishmentgirls"} classname={"field-block"} />
             </div>
+            <div className="field-row-single">
             <Inputfield eltname={"admissionfeesgirls"} type={"text"} label={"Admission Fees (Rs/Year)"} id={"admissionfeesgirls"} htmlfor={"admissionfeesgirls"} classname={"field-block"} />
-
+            </div>
 
             </fieldset>
             </>
         )}
-        <div >
+        <div id="collegebutton">
           <Button name={"SUBMIT"} onClick={handleSubmit} />
-         <Alert
-        type={alertType}
+         <Alert type={alertType}
         message={alertMessage}
         show={showAlert}
         close={handleCloseAlert}
         />
-
-        </div>  
-        <div>
+         <div>
           <Button name={"CANCEL"} onClick={handleCancel} />
           <Alert
         type={alertType}
         message={alertMessage}
         show={showAlert}
         close={handleCloseAlert} />
-          
         </div>
+         
+        </div>  
+       
+       
         </div>
     </div>
     </div>

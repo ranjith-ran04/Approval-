@@ -25,6 +25,7 @@
   border-radius: 10px;
   border-color: black;
   margin:30px;
+  /* border-spacing: 30px; */
 
 }
 
@@ -60,7 +61,7 @@
  {
   padding: 8px;
   border: 1px solid #aaa;
-  border-radius: 5px;
+  border-radius: 15px;
   font-size: 0.95rem;
   width: 100%;
   box-sizing: border-box;
@@ -96,7 +97,9 @@
 
 .dropdown {
   display: flex;
-  flex-direction: column;
+  /* flex-direction: column; */
+  align-items: center;
+  gap:10px;
   margin-bottom: 20px;
   width: 100%;
   max-width: 400px;
@@ -107,7 +110,7 @@
 .dropdown label {
   font-weight: 600;
   margin-bottom: 8px;
-  font-size: 1rem;
+  font-size: 1.5rem;
   color: #333;
 }
 
@@ -116,7 +119,7 @@
   border: 1px solid #ccc;
   border-radius: 6px;
   background-color: #fff;
-  font-size: 0.95rem;
+  font-size: 1rem;
   color: #333;
 }
 
@@ -127,4 +130,28 @@
 }
 input[type='text']:focus{
   border-color: rgb(89, 89, 161);
+}
+#collegebutton{
+  margin-bottom: 10px;
+  display:flex;
+  /* flex-direction: column; */
+  /* justify-content:center; */
+  align-items: center;
+  justify-content: center;
+  gap:10px;
+}
+.collegeinput input:focus{
+   border-color: #3f51b5;
+   background-color:lightgrey;
+}
+.field-row-single input{
+  display: flex;
+  justify-content: space-between;
+
+  margin-bottom: 15px;
+  gap: 20px; 
+  width:678px;
+  
+  
+
 }
