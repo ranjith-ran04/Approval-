@@ -18,9 +18,9 @@
     display: flex;
     flex-direction: column;
     /* margin-top: 200px; */
-    width: calc(100% - 215px);
-    height: 100vh;
-    margin-left: 215px;
-    gap: 5px;
+    width: calc(100% - 245px);
+    height: 700px;
+    margin-left: 240px;
+    gap: 0px;
 
 }
