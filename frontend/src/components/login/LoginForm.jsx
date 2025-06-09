@@ -23,13 +23,13 @@ const LoginForm = () => {
         text={`DIRECTORATE OF TECHNICAL EDUCATION 
 TAMILNADU LATERAL ENTRY B.E/B.TECH ADMISSIONS-2025 
 APPROVAL PROCESS`}
-        profile={false}
+        profile={true}
       />
 
       <div className="login-container">
         <div className="login-box">
           <h3>Login Form</h3>
-          <form onSubmit={handleSubmit}>
+          <form className="loginform" onSubmit={handleSubmit}>
             <div className={`input-group ${focusedField === 'register' ? 'focused' : ''}`}>
               <span className="icon user-icon" />
               <input className="logininput"

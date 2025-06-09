@@ -1,9 +1,6 @@
 #container{
     margin: 15px;
-    /* box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); */
     margin-left: 2px;
-    /* border: 1px solid #ddd; */
-    /* margin-top: 80px;  */
     display: flex;
     flex-direction: column;
     gap: 40px;
