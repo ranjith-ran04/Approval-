@@ -19,7 +19,7 @@
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  z-index: 2000;
+  z-index: 2;
 }
 #center-body{
     display: flex;

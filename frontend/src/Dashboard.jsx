@@ -17,10 +17,12 @@ function Dashboard() {
       <div className="dashone">
         {/* <div className="dashboard-body"> */}
         <NavigationBar
-          text={`DIRECTORATE OF TECHNICAL EDUCATION 
-TAMILNADU LATERAL ENTRY B.E/B.TECH ADMISSIONS-2025 
-APPROVAL PROCESS`}
+          text={`GOVERNMENT OF TAMILNADU
+DIRECTORATE OF TECHNICAL EDUCATION
+Tamilnadu Lateral Entry Direct Second Year B.E/B.Tech.,Approval-2025`}
           profile={true}
+          bool={false}
+          setCurrent={setCurrent}
         />
         {/* </div> */}
 

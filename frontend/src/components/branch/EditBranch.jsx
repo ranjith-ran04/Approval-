@@ -6,6 +6,6 @@ function EditBranch({state}) {
     alert('Changes Saved!');
   };
 
-  return <BranchForm heading="EDIT BRANCH" values={state} onSubmit={handleSubmit} buttonText="Save" isEditMode={true}/>;
+  return <BranchForm heading="EDIT BRANCH" values={state} onSubmit={handleSubmit} buttonText="Save" isEditMode={true} msg="Branch Edited Successfully"/>;
 }
 export default EditBranch

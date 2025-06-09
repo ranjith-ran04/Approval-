@@ -7,10 +7,9 @@ nav{
     gap: 80px;
     position: fixed;
     top:0;
-    z-index: 0;
+    z-index: 500;
     background-color: white;
     height: 70px;
-    /* margin-left: 17.85rem; */
 }
 #logo{
     height: 60px;
@@ -21,6 +20,7 @@ nav{
     background-size: cover;
     background-position: center;
     margin-left: 13rem;
+    cursor: pointer;
 }
 #center{
     display: flex;
@@ -58,8 +58,9 @@ nav{
     height: 70px;
     width:150px;
     border-radius: 20px;
-    margin-left: 80%;
+    margin-left: 83%;
     margin-top: 4%;
+    z-index: 1000;
 }
 .item{
     font-size: 15px;

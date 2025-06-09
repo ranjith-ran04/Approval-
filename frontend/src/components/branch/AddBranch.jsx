@@ -6,6 +6,6 @@ function AddBranch() {
     
     alert('Branch Added!');
   };
-  return <BranchForm heading="ADD BRANCH" onSubmit={handleSubmit} buttonText="Add Branch" isEditMode={false} />;
+  return <BranchForm heading="ADD BRANCH" onSubmit={handleSubmit} buttonText="Add Branch" isEditMode={false} msg="Branch Added Successfully" />;
 }
 export default AddBranch

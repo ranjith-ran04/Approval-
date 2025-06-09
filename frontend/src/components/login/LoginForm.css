@@ -76,10 +76,6 @@
   transition: background-color 0.3s;
 }
 
-.login-button:hover {
-  background-color: rgb(164, 164, 255);
-}
-
 .loginform {
   display: flex;
   justify-content: center;

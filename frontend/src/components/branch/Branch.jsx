@@ -1,6 +1,20 @@
 import "./branch.css";
+import Alert from "../../widgets/alert/Alert";
+import React, { useState } from "react";
+
 
 function Branch({ setCurrent, setState }) {
+    const [showAlert, setShowAlert] = useState(false);
+    const [alertType, setAlertType] = useState("");
+    const [alertMessage, setAlertMessage] = useState("");
+    const handleCancel=()=>{
+    setShowAlert(true);
+    setAlertMessage("Confirm to Delete");
+    setAlertType('warning');
+  }
+   const handleCloseAlert = () => {
+    setShowAlert(false);
+  };
   return (
     <div className="box">
       <div className="first">
@@ -9,6 +23,7 @@ function Branch({ setCurrent, setState }) {
           Add Branch
         </button>
       </div>
+      
       <div className="table">
         <div className="table-header">
           <div>Edit</div>
@@ -25,6 +40,7 @@ function Branch({ setCurrent, setState }) {
           <div>NBA Status</div>
           <div>Delete</div>
         </div>
+        
 
         {branchData.map((branch, index) => (
           <div className="table-row" key={index}>
@@ -33,7 +49,7 @@ function Branch({ setCurrent, setState }) {
                 className="edit-btn"
                 onClick={() => {
                   setCurrent(4);
-                  setState({ code: branch.code, name: branch.name });
+                  setState(branch);
                 }}
               >
                 Edit
@@ -51,7 +67,12 @@ function Branch({ setCurrent, setState }) {
             <div>{branch.accUpto}</div>
             <div>{branch.nba}</div>
             <div>
-              <button className="delete-btn">Delete</button>
+              <button className="delete-btn" onClick={handleCancel}>Delete</button>
+               <Alert
+                      type={alertType}
+                      message={alertMessage}
+                      show={showAlert}
+                      close={handleCloseAlert} />
             </div>
           </div>
         ))}
