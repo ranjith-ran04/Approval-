@@ -11,6 +11,7 @@
   position: fixed;
   margin-top: 5%;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+  z-index:-2000;
   
 }
 
@@ -21,4 +22,27 @@
     margin-left: 15.5%;
     gap: 0px;
 
+}
+
+.minimized-icon {
+  position: fixed;
+  right: -5%;
+  bottom: -7%;
+  width: 150px;
+  height: 150px;
+  background: darkblue;
+  border-radius: 50%;
+  box-shadow: 0 0 5px rgba(0,0,0,0.3);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  z-index:2000;
+}
+.icon-dashboard{
+  background-image: url("data:image/svg+xml;utf8,<svg fill='%23007BFF' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M3 3v18h18V8.83L15.17 3H3zm16 16H5V5h9v5h5v9zm-7-2l4.88-4.88-1.41-1.41L11 15.17V17h1zm-5-1h3v-1.41L16.59 8 15 6.41 8.41 13H7v3z'/></svg>");
+   width: 50px;
+  height: 50px;
+  margin-right: 37px;
+  margin-bottom: 20px;
 }

@@ -9,7 +9,7 @@ function BranchForm({
   onSubmit,
   buttonText,
   isEditMode = false,
-  msg
+  msg,
 }) {
   const [showAlert, setShowAlert] = useState(false);
   const [alertType, setAlertType] = useState("");
@@ -20,11 +20,11 @@ function BranchForm({
     setAlertType("success");
     setAlertMessage(msg);
   };
-    const handleCancel=()=>{
+  const handleCancel = () => {
     setShowAlert(true);
     setAlertMessage("Confirm to Cancel");
-    setAlertType('warning');
-  }
+    setAlertType("warning");
+  };
 
   const handleCloseAlert = () => {
     setShowAlert(false);
@@ -147,33 +147,24 @@ function BranchForm({
               </label>
             </div>
 
-            {/* <div id="branchbutton" >
-              <Button name={buttonText || "SUBMIT"} onClick={handleSubmit}/>
+            <div id="branchbutton">
+              <div>
+                <Button name={"CANCEL"} onClick={handleCancel} />
+                <Alert
+                  type={alertType}
+                  message={alertMessage}
+                  show={showAlert}
+                  close={handleCloseAlert}
+                />
+              </div>
+              <Button name={buttonText} onClick={handleSubmit} />
               <Alert
                 type={alertType}
                 message={alertMessage}
                 show={showAlert}
                 close={handleCloseAlert}
               />
-            </div> */}
-           <div id="branchbutton">
-            <div>
-          <Button name={"CANCEL"} onClick={handleCancel} />
-          <Alert
-        type={alertType}
-        message={alertMessage}
-        show={showAlert}
-        close={handleCloseAlert} />
-        </div>
-          <Button name={buttonText} onClick={handleSubmit} />
-         <Alert type={alertType}
-        message={alertMessage}
-        show={showAlert}
-        close={handleCloseAlert}
-        />
-         
-         
-        </div>  
+            </div>
           </div>
         </form>
       </div>
