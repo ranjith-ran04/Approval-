@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import "./form.css";
 import Button from "../../widgets/button/Button";
 import Alert from "../../widgets/alert/Alert";
@@ -9,17 +9,11 @@ function BranchForm({
   onSubmit,
   buttonText,
   isEditMode = false,
-  msg,
 }) {
   const [showAlert, setShowAlert] = useState(false);
   const [alertType, setAlertType] = useState("");
   const [alertMessage, setAlertMessage] = useState("");
 
-  const handleSubmit = () => {
-    setShowAlert(true);
-    setAlertType("success");
-    setAlertMessage(msg);
-  };
   const handleCancel = () => {
     setShowAlert(true);
     setAlertMessage("Confirm to Cancel");
@@ -30,11 +24,21 @@ function BranchForm({
     setShowAlert(false);
   };
 
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    const data = Object.fromEntries(formData.entries());
+    onSubmit(data);
+    setAlertType("success");
+    setAlertMessage(isEditMode ? "Branch Edited Successfully" : "Branch Added Successfully");
+    setShowAlert(true);
+  };
+
   return (
     <div className="box1">
       <div className="form-container" style={{ paddingTop: "10px" }}>
         <h2 className="head">{heading}</h2>
-        <form className="form-grid" onSubmit={onSubmit}>
+        <form className="form-grid" onSubmit={handleFormSubmit}>
           <div className="form-col">
             <label className="form-label">Branch Code</label>
             <input
@@ -148,16 +152,8 @@ function BranchForm({
             </div>
 
             <div id="branchbutton">
-              <div>
-                <Button name={"CANCEL"} onClick={handleCancel} />
-                <Alert
-                  type={alertType}
-                  message={alertMessage}
-                  show={showAlert}
-                  close={handleCloseAlert}
-                />
-              </div>
-              <Button name={buttonText} onClick={handleSubmit} />
+              <Button name={"CANCEL"} onClick={handleCancel} type="button" />
+              <Button name={buttonText} type="submit" />
               <Alert
                 type={alertType}
                 message={alertMessage}
