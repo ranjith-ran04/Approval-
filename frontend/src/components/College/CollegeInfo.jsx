@@ -2,7 +2,7 @@ import { useState } from 'react'
 import './CollegeInfo.css'
 import Button from '../../widgets/button/Button';
 import Alert from '../../widgets/alert/Alert';
-import Inputfield from '../../widgets/collegewidget/Inputfield';
+import Inputfield from '../../widgets/college/Inputfield';
 
 const CollegeInfo = () => {
   const [selectedSection,setSelectedSection]=useState('All')

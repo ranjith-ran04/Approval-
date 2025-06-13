@@ -9,6 +9,7 @@ function BranchForm({
   onSubmit,
   buttonText,
   isEditMode = false,
+  setCurrent 
 }) {
   const [showAlert, setShowAlert] = useState(false);
   const [alertType, setAlertType] = useState("");
@@ -22,6 +23,7 @@ function BranchForm({
 
   const handleCloseAlert = () => {
     setShowAlert(false);
+    setCurrent(2)
   };
 
   const handleFormSubmit = (e) => {

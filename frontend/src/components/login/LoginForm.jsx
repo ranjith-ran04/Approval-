@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState} from "react";
 import "./LoginForm.css";
 import Footer from "./Footer";
 import { useNavigate } from "react-router-dom";
@@ -26,10 +26,6 @@ const LoginForm = () => {
       navigate('/dashboard');
     }
   };
-
-  useEffect(() => {
-    localStorage.setItem("value", true);
-  }, []);
 
   return (
     <div className="login-page">
