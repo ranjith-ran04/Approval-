@@ -33,7 +33,7 @@ function Branch({ setCurrent, setState }) {
                 className="edit-btn"
                 onClick={() => {
                   setCurrent(4);
-                  setState({ code: branch.code, name: branch.name });
+                  setState(branch);
                 }}
               >
                 Edit
