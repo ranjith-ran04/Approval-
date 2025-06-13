@@ -1,14 +1,42 @@
-import './notes.css'
+import "./notes.css";
+import { useEffect, useState } from "react";
 
-function Notes ({handleClick}) {
-    return (
-        <div id='notes-container' onClick ={() => {handleClick(false)}}>
-        <div id='content'>
-        <button id="close-button" onClick={() => {handleClick(false)}}>×</button>
-        <div id='para'>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat...</div>
+function Notes() {
+  const [isOpen, setIsOpen] = useState(false);
+
+  useEffect(() => {
+    // First login — open only once per session
+    const firstVisit = sessionStorage.getItem("notesShown");
+    if (!firstVisit) {
+      setIsOpen(true);
+      sessionStorage.setItem("notesShown", "true");
+    }
+  }, []);
+
+  const toggleOpen = (e) => {
+    e.stopPropagation(); // Prevent bubbling to parent div
+    setIsOpen(!isOpen);
+  };
+
+  return (
+    <div id="notes-container" className={isOpen ? "open" : ""}>
+      <div id="notes-icon" onClick={toggleOpen}>
+        📝
+      </div>
+
+      {isOpen && (
+        <div id="content">
+          <button id="close-button" onClick={() => setIsOpen(false)}>
+            ×
+          </button>
+          <div id="para">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+            eiusmod tempor incididunt ut labore et dolore magna aliqua...
+          </div>
         </div>
-        </div>
-    )
+      )}
+    </div>
+  );
 }
 
 export default Notes;

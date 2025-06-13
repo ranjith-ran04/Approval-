@@ -6,21 +6,6 @@
     gap: 40px;
     width: 100%;
 }
-.minimized-icon {
-  position: fixed;
-  right: 1px;
-  top: 80px;
-  width: 40px;
-  height: 40px;
-  background: darkblue;
-  border-radius: 50%;
-  box-shadow: 0 0 5px rgba(0,0,0,0.3);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-  z-index: 2000;
-}
 #center-body{
     display: flex;
     justify-content: center;

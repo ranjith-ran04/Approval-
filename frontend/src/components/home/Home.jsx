@@ -1,34 +1,6 @@
 import "./home.css";
-import Notes from "../../widgets/notes/Notes";
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-const NOTE_KEY = "hasseen";
 
 function Home() {
-  const [open, setOpen] = useState(false);
-  const [minimized, setMinimized] = useState(false);
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    const has = localStorage.getItem(NOTE_KEY) === "true";
-    if (!has) {
-      setOpen(true);
-      localStorage.setItem(NOTE_KEY, "true");
-    } else {
-      setMinimized(true);
-    }
-    localStorage.setItem("value", false);
-  }, []);
-
-  const handleClick = (para) => {
-    if (!para) {
-      setMinimized(true);
-      setOpen(false);
-    } else {
-      setOpen(para);
-      setMinimized(false);
-    }
-  };
 
   const details = {
     Taluk: "Mambam",
@@ -44,12 +16,6 @@ function Home() {
   };
   return (
     <div id="container">
-      {open && <Notes handleClick={handleClick} minimized={minimized} />}
-      {minimized && (
-        <div className="minimized-icon" onClick={() => handleClick(true)}>
-          📝
-        </div>
-      )}
           <div id="center-body">1.UNIVERSITY COLLEGE OF ENGINEERING</div>
           <div id="wrap">
             <div id="first-body">

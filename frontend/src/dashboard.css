@@ -2,23 +2,26 @@
     padding: 0;
     margin:0;
 }
+.dashboard{
+     z-index:-1;
+}
 .dashboard-body {
   display: flex;
-  height: 88vh;
-  width: 84%;
+  height: 87.8vh;
+  width: 99.35%;
   justify-content: center;
-  overflow: hidden;
-  position: fixed;
-  margin-top: 5%;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+ 
   
 }
 
 .dashone {
     display: flex;
     flex-direction: column;
-    width: calc(100% - 15%);
+    width: calc(100% - 15.5%);
     margin-left: 15.5%;
-    gap: 0px;
+    gap: 7px;
 
 }
+
+

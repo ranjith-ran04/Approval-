@@ -28,15 +28,17 @@
   font-size: 1rem;
 }
 
-.submit-btn {
-  margin-top: 3.3rem;
-  padding: 0.6rem;
-  background-color: #2a59b8;
-  color: white;
+#branchbutton {
+  margin-top: 55px;
+  display:flex;
+  align-items: center;
+  justify-content: center;
+  color: black;
   font-weight: bold;
   border: none;
   cursor: pointer;
   border-radius: 4px;
+  gap:50px;
 }
 
 .form-label {
