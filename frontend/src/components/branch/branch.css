@@ -10,7 +10,7 @@
   display: grid;
   grid-template-columns: repeat(13, auto);
   border: 1px solid #ddd;
-  overflow-x: hidden;
+  overflow-x: auto;
   overflow-y: auto;
   height: 73vh;
   width: 100%;
