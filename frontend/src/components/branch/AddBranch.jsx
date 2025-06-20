@@ -1,11 +1,9 @@
 import BranchForm from './BranchForm';
 
-function AddBranch() {
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Get form values, add branch to list (optional logic for now)
-    alert('Branch Added!');
+function AddBranch({setCurrent}) {
+  const handleSubmit = (data) => {
+    console.log(data);
   };
-  return <BranchForm heading="ADD BRANCH" onSubmit={handleSubmit} buttonText="Add Branch" isEditMode={false} />;
+  return <BranchForm heading="ADD BRANCH" onSubmit={handleSubmit} buttonText="Add Branch" isEditMode={false} setCurrent={setCurrent}/>;
 }
 export default AddBranch
