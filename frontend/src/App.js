@@ -1,10 +1,10 @@
 import { BrowserRouter as Router,Routes,Route} from 'react-router-dom'
-import Home from './components/Home/Home.js'
+import Home from './components/Home/Home.jsx'
 import CollegeInfo from './components/College/CollegeInfo.js'
 import Branch from './components/branch/Branch';
 import EditBranch from './components/branch/EditBranch';
 import AddBranch from './components/branch/AddBranch';
-import Login from './components/login/LoginForm.js'
+import Login from './components/login/LoginForm.jsx'
 
 function App() {
   return (

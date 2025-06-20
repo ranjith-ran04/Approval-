@@ -1,7 +1,6 @@
 import "./home.css";
 
 function Home() {
-
   const details = {
     Taluk: "Mambam",
     Contituency: "Mylapore",
@@ -10,51 +9,46 @@ function Home() {
   };
 
   const contactDetails = {
-    Chairman: "Vishnu (ph.no:9897969594)",
-    Principal: "Dr.K.S.EASWARAKUMAR (ph.no:04422358491)",
-    College: "4422358491",
+    Chairman: "Vishnu (ph.no: 9897969594)",
+    Principal: "Dr.K.S.EASWARAKUMAR (ph.no: 04422358491)",
+    College: "044-22358491",
   };
+
   return (
-    <div id="container">
-          <div id="center-body">1.UNIVERSITY COLLEGE OF ENGINEERING</div>
-          <div id="wrap">
-            <div id="first-body">
-              <div className="one" id="p">
-                <strong>Taluk</strong>
-                <div>: {details.Taluk}</div>
-              </div>
-              <div className="one" id="o">
-                <strong>Constituency </strong>
-                <div>: {details.Contituency}</div>
-              </div>
-              <div className="one" id="q">
-                <strong>District </strong>
-                <div>: {details.District}</div>
-              </div>
-              <div className="one" id="r">
-                <strong>Pincode </strong>
-                <div>: {details.Pincode}</div>
-              </div>
+    <div className="container">
+      <h2 className="heading">1. UNIVERSITY COLLEGE OF ENGINEERING</h2>
+      <div className="content-box">
+        <div className="section">
+          <h3>Location Details</h3>
+          {Object.entries(details).map(([label, value]) => (
+            <div className="row" key={label}>
+              <span className="label">{label}</span>
+              <span className="separator">:</span>
+              <span className="value">{value}</span>
             </div>
-            <div id="second-body">
-              <div className="one">
-                <strong>CONTACT</strong>
-              </div>
-              <div className="one" id="y">
-                <strong>Chairman </strong>
-                <div>: {contactDetails.Chairman}</div>
-              </div>
-              <div className="one" id="u">
-                <strong>Principal/Dean </strong>
-                <div>: {contactDetails.Principal}</div>
-              </div>
-              <div className="one" id="i">
-                <strong>College Contact No </strong>
-                <div>: {contactDetails.College}</div>
-              </div>
-            </div>
+          ))}
+        </div>
+
+        <div className="section">
+          <h3>Contact Details</h3>
+          <div className="row">
+            <span className="label">Chairman</span>
+            <span className="separator">:</span>
+            <span className="value">{contactDetails.Chairman}</span>
+          </div>
+          <div className="row">
+            <span className="label">Principal/Dean</span>
+            <span className="separator">:</span>
+            <span className="value">{contactDetails.Principal}</span>
+          </div>
+          <div className="row">
+            <span className="label">College Contact No</span>
+            <span className="separator">:</span>
+            <span className="value">{contactDetails.College}</span>
           </div>
         </div>
+      </div>
+    </div>
   );
 }
 

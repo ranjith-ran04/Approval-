@@ -2,7 +2,7 @@
   import './CollegeInfo.css'
   import NavigationBar from '../../widgets/navigationBar/NavigationBar';
   import Button from '../../widgets/button/Button';
-  import Alert from '../alert/Alert';
+  import Alert from '../../widgets/alert/Alert';
   import MenuIcon from '../../widgets/menuicon/MenuIcon';
   import Inputfield from '../../widgets/collegewidget/Inputfield';
   // import { useActionData } from 'react-router-dom';
