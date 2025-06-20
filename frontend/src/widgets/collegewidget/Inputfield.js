@@ -1,5 +1,5 @@
 import '../../components/College/CollegeInfo.css';
-const Inputfield=({eltname,type,label,id,htmlfor,classname,radiolabel,options=[],})=>{
+const Inputfield=({eltname,type,label,id,htmlfor,classname,radiolabel,onchange,options=[],error})=>{
     if(type==="radio"){
         return(
             <div className={classname}>
@@ -7,7 +7,8 @@ const Inputfield=({eltname,type,label,id,htmlfor,classname,radiolabel,options=[]
             <label>{radiolabel}</label>
                 {options.map((option,index)=>(
                     <label id="collegelabel2">
-                        <input key={index} type={type} name={eltname} value={option.value} />{option.label}
+                        <input key={index} type={type} name={eltname} value={option.value} onchange={onchange}/>{option.label}
+                        {/* {error && <span className="error">{error}</span>} */}
     
                     </label>
                 ))}

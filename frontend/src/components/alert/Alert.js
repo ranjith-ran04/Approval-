@@ -1,6 +1,6 @@
 import './Alert.css';
 
-export const Alert = ({ type="success", message, show, close }) => {
+export const Alert = ({ type="success", message, show, close,okbutton,cancelbutton}) => {
   const renderIcon = () => {
     if (type === 'success') {
       return (
@@ -51,7 +51,8 @@ export const Alert = ({ type="success", message, show, close }) => {
               {renderIcon()}
             </div>
             <p className='message'>{message}</p>
-            <button className='button' onClick={close}>OK</button>
+            <button className='button' onClick={okbutton}>OK</button>
+            <button className='button' onClick={cancelbutton}>Cancel</button>
           </div>
         </>
       )}
