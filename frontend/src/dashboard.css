@@ -11,6 +11,7 @@
   width: 99.35%;
   justify-content: center;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+  overflow-y: auto;
  
   
 }
@@ -20,6 +21,7 @@
     flex-direction: column;
     width: calc(100% - 15.5%);
     margin-left: 15.5%;
+    /* height: 80vh; */
     gap: 7px;
 
 }

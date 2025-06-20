@@ -4,7 +4,7 @@
     display: flex;
     flex-direction: column;
     gap: 40px;
-    width: 100%;
+    /* width: 100%; */
 }
 #center-body{
     display: flex;
