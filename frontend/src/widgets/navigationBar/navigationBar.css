@@ -75,10 +75,6 @@ nav{
     border-radius: 10px;
 }
 #overlay1{
-<<<<<<< HEAD
-    position: fixed;
-=======
->>>>>>> 2671dcd01a810d2691dd49ec88c92022c40e77ec
     width: 100%;
     height: 100%;
     display: flex;
