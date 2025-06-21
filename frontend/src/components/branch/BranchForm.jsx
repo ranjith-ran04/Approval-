@@ -27,6 +27,8 @@ function BranchForm({
   };
 
   const handleFormSubmit = (e) => {
+    console.log('clicked');
+    
     e.preventDefault();
     const formData = new FormData(e.target);
     const data = Object.fromEntries(formData.entries());
