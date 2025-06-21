@@ -1,11 +1,16 @@
-import Home from './components/Home.js'
+import React from 'react';
+import Header from './components/Header';
+import LoginForm from './components/LoginForm';
+import Footer from './components/Footer';
 
-function App() {
+const App = () => {
   return (
     <div>
-    <Home/>
+      <Header />
+      <LoginForm />
+      <Footer />
     </div>
   );
-}
+};
 
 export default App;
