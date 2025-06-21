@@ -36,7 +36,7 @@ nav{
     height: 40px;
     width: 40px;
     background-color: darkblue;
-    background-image: url('../../assets/profile.png');
+    background-image: url('../../../public/assets/logo.png');
     background-size: 30px 30px;
     border-radius: 50%;
     background-repeat: no-repeat;
