@@ -1,0 +1,36 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+.dashboard {
+    z-index: -1;
+    display: flex;
+}
+
+.dashboard-body {
+    display: flex;
+    flex-wrap: wrap;
+    width: 99.35%;
+    height: 87.5vh;
+    justify-content: center;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+    gap: 10px;
+    padding: 10px;
+    overflow-y: auto;
+    overflow-x: auto;
+}
+
+.dashone {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    flex-basis: 0;
+    min-width: 300px;
+    width: 84%;
+    margin-left: 16%;
+    gap: 7px;
+    position: fixed;
+
+}

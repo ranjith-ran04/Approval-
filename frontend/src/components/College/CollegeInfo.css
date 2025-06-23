@@ -1,0 +1,137 @@
+.collegewholediv{
+  width:100%; 
+
+}
+.collegefieldset {
+  margin-top: 30px;
+  border: 2px solid #ccc;
+  padding: 20px;
+  border-radius: 10px;
+  border-color: black;
+  margin:30px;
+  /* border-spacing: 30px; */
+
+}
+
+.collegelegend {
+  font-size: 1.2rem;
+  font-weight: bold;
+  padding: 0 10px;
+}
+
+.field-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+  gap: 20px;
+}
+
+.field-block {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.collegelabel {
+  margin-bottom: 5px;
+  font-weight: 500;
+}
+.collegelabel1{
+   margin-bottom: 5px;
+  font-weight: 500;
+}
+
+.collegeinput input
+ {
+  margin-top: 6px;
+  padding: 8px;
+  border: 1px solid #aaa;
+  border-radius: 15px;
+  font-size: 0.95rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+#Address{
+  padding: 8px;
+  border: 1px solid #aaa;
+  border-radius: 5px;
+  font-size: 0.95rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+#Address {
+  resize: vertical;
+  min-height: 60px;
+}
+
+.radio-group {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  margin-top: 5px;
+}
+
+.radio-group label {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-weight: normal;
+  margin-right: 20px;
+}
+
+.dropdown {
+  display: flex;
+  /* flex-direction: column; */
+  align-items: center;
+  gap:10px;
+  margin-bottom: 20px;
+  width: 100%;
+  max-width: 400px;
+  margin-left:500px;
+  margin-top: 20px;
+}
+
+.dropdown label {
+  font-weight: 600;
+  margin-bottom: 8px;
+  font-size: 1.5rem;
+  color: #333;
+}
+
+.dropdown select {
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background-color: #fff;
+  font-size: 1rem;
+  color: #333;
+}
+
+.dropdown select:focus {
+  border-color: #3f51b5;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(63, 81, 181, 0.1);
+}
+input[type='text']:focus{
+  border-color: rgb(89, 89, 161);
+}
+#collegebutton{
+  margin-bottom: 10px;
+  display:flex;
+  align-items: center;
+  justify-content: center;
+  gap:10px;
+}
+.collegeinput input:focus{
+   border-color: #3f51b5;
+   background-color:lightgrey;
+}
+.field-row-single input{
+  display: flex;
+  justify-content: space-between;
+
+  margin-bottom: 15px;
+  gap: 20px; 
+  width:calc(50%-10px);
+}

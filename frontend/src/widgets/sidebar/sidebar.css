@@ -1,0 +1,32 @@
+#sidebar{
+    background-color: #f4f9f9;
+    /* width: 15dvw; */
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    color: rgb(0, 0, 0);
+    gap: 5px;
+    width: 15%;
+    position: fixed;
+    padding: 10px;   
+    box-shadow: 1.95px 1.95px 2.6px #00000026 ;
+}
+.menuItems{
+    height: 6vh;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 20px;
+    font-weight: bold;
+    /* font-size: 2vh; */
+    margin-top: 8px;
+}
+.menuItems:hover{
+    cursor: pointer;
+    background-color: rgba(0,0,0,0.3);
+    
+}

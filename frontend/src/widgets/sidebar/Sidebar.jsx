@@ -1,20 +1,16 @@
-import './home.css'
-import NavigationBar from '../widgets/NavigationBar';
-import Button from '../widgets/Button'
+import './sidebar.css'
+import Button from '../button/Button'
 
-function Home() {
+function Sidebar({setCurrent}){
     return(
-        <div id = "container">
-        <NavigationBar text = {'DIRECTORATE OF TECHNICAL EDUCATION \nTAMILNADU LATERAL ENTRY B.E/B.TECH ADMISSIONS-2025 \nAPPROVAL PROCESS'} profile = {true}/>
-        <div id='body'>
         <div id='sidebar'>
-        <div className='menuItems'>
+        <div className='menuItems' onClick={()=>setCurrent(0)} >
             Home
         </div>
-        <div className='menuItems'>
+        <div className='menuItems' onClick={()=>setCurrent(1)} >
             College Details   
         </div>
-        <div className='menuItems'>
+        <div className='menuItems' onClick={()=>setCurrent(2)} >
             Branchwise Details   
         </div>
         <div className='menuItems'>
@@ -41,19 +37,12 @@ function Home() {
         <div className='menuItems'>
             Form LEA2025
         </div>
-        <div className='menuItems'>
-            Change Password
-        </div>
         <div>
         <Button name={"SUBMIT"}/>
         </div>
         </div>
-        <div id='center-body'>
-            1.UNIVERSITY COLLEGE OF ENGINEERING
-        </div>
-        </div>
-        </div>
+
     )
 }
 
-export default Home;
+export default Sidebar

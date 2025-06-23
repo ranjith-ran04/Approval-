@@ -1,0 +1,31 @@
+.alt-footer {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 10px 20px; 
+  background-color: darkblue; 
+  color: #fff;
+  flex-wrap: wrap;
+  font-size: 14px;
+  margin-top: 30px;
+  position: fixed;
+  width: 100%;
+  bottom: 0;
+  padding-left: 115px;
+}
+
+.footer-section {
+  flex: 1;
+  min-width: 200px;
+  margin: 5px 10px; 
+}
+
+.footer-section h4 {
+  margin-bottom: 5px; 
+  font-size: 15px;
+  color: #ffd700;
+}
+
+.footer-section p {
+  margin: 2px 0;  
+}

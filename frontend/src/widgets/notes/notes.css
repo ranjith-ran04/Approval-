@@ -1,0 +1,67 @@
+#notes-container {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 80px;
+  height: 80px;
+  background-color: #001f9c;
+  border-top-left-radius: 100%;
+  border-bottom-left-radius: 0;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  transition: all 0.5s ease;
+  z-index: 1000;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+/* Expanded arc shape */
+#notes-container.open {
+  width: 400px;
+  height: 400px;
+  border-top-left-radius: 30% 30%;
+  border-top-right-radius: 5% 5%;
+  border-bottom-left-radius: 5% 5%;
+}
+
+/* Notes icon always visible */
+#notes-icon {
+  color: white;
+  font-size: 28px;
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+  cursor: pointer;
+  z-index: 1010;
+}
+
+/* Content hidden initially */
+#content {
+  opacity: 0;
+  transition: opacity 0.4s ease 0.2s;
+  color: white;
+  padding: 20px;
+  font-family: sans-serif;
+}
+
+/* Content visible when open */
+#notes-container.open #content {
+  opacity: 1;
+}
+
+#close-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  color: white;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+#para {
+  margin-top: 40px;
+  font-size: 1rem;
+  line-height: 1.6;
+}
