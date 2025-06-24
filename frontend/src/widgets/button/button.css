@@ -6,13 +6,12 @@
     align-items: center;
     justify-content: center;
     border-radius: 20px;
-    background-color: rgb(163, 163, 163);
-    color: black;
+    background-color: darkblue;
+    color: white;
     overflow: hidden;
 }
 #button:hover{
     cursor: pointer;
-    background-color: white;
 }
 .ripple {
   height: 13px;
