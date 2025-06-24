@@ -23,7 +23,7 @@ function Branch({ setCurrent, setState }) {
           Add Branch
         </button>
       </div>
-      
+
       <div className="table">
         <div className="table-header">
           <div>Edit</div>
@@ -51,7 +51,7 @@ function Branch({ setCurrent, setState }) {
                   setCurrent(4);
                   setState(branch);
                 }}
-              >
+                >
                 Edit
               </button>
             </div>

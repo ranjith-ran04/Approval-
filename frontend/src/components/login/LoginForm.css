@@ -36,33 +36,38 @@
   border: none;
   background: transparent;
   padding: 4px;
-  font-size: 16px;
+  font-size:0px;
   outline: none;
-  flex: 1;
+  /* flex: 1; */
 }
 
-.icon {
-  width: 20px;
-  height: 20px;
+.icon-user-icon {
+  display: inline-block; 
+  width: 24px;
+  height: 24px;
   margin-right: 10px;
-  background-size: contain;
+  background-size: 100% 100%;
   background-repeat: no-repeat;
-  transition: background-image 0.3s;
-}
-
-.user-icon {
+  background-position: center;
   background-image: url("data:image/svg+xml;utf8,<svg fill='%23888' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 5 2.3 5 5 5zm0 2c-3.3 0-10 1.7-10 5v3h20v-3c0-3.3-6.7-5-10-5z'/></svg>");
 }
 
-.lock-icon {
+.icon-lock-icon{
+  display: inline-block; 
+  width: 24px;
+  height: 24px;
+  margin-right: 10px;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: center;
   background-image: url("data:image/svg+xml;utf8,<svg fill='%23888' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M12 17a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zm6-7h-1V7a5 5 0 0 0-10 0v3H6c-1.1 0-2 .9-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8c0-1.1-.9-2-2-2zm-8-3a3 3 0 0 1 6 0v3h-6V7z'/></svg>");
 }
 
-.input-group.focused .user-icon {
+.input-group.focused .icon-user-icon {
   background-image: url("data:image/svg+xml;utf8,<svg fill='%23002b5c' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 5 2.3 5 5 5zm0 2c-3.3 0-10 1.7-10 5v3h20v-3c0-3.3-6.7-5-10-5z'/></svg>");
 }
 
-.input-group.focused .lock-icon {
+.input-group.focused .icon-lock-icon {
   background-image: url("data:image/svg+xml;utf8,<svg fill='%23002b5c' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M12 17a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zm6-7h-1V7a5 5 0 0 0-10 0v3H6c-1.1 0-2 .9-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8c0-1.1-.9-2-2-2zm-8-3a3 3 0 0 1 6 0v3h-6V7z'/></svg>");
 }
 
@@ -76,7 +81,6 @@
   color: white;
   cursor: pointer;
   margin-top: 10px;
-  transition: background-color 0.3s;
 }
 
 .loginform {

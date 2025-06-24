@@ -50,7 +50,7 @@ Tamilnadu Lateral Entry Direct Second Year B.E/B.Tech.,Approval-2025`}
                 focusedField === "register" ? "focused" : ""
               }`}
             >
-              <span className="icon user-icon" />
+              <div className="icon-user-icon" ></div>
               <input
                 className="logininput"
                 type="text"
@@ -65,7 +65,7 @@ Tamilnadu Lateral Entry Direct Second Year B.E/B.Tech.,Approval-2025`}
                 focusedField === "password" ? "focused" : ""
               }`}
             >
-              <span className="icon lock-icon" />
+              <div className="icon-lock-icon"></div>
               <input
                 className="logininput"
                 type="password"

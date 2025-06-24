@@ -1,4 +1,4 @@
-.box {
+/* .box {
   width: 98.5%;
   display: flex;
   align-items: center;
@@ -18,6 +18,9 @@
 }
 
 .table-header {
+  position: sticky;
+  top:0;
+  z-index: 0.9;
   display: contents;
   font-weight: bold;
   background-color: #87909c;
@@ -82,7 +85,123 @@
   cursor: pointer;
   border-radius: 4px;
   position: absolute;
-  /* margin-right: -1000px; */
   margin-left: 85%;
 }
+ */
 
+ .box {
+  width: 98.5%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.table {
+  display: grid;
+  grid-template-columns:
+    7%  /* Edit */
+    7%  /* Branch Code */
+    150px  /* Branch Name */
+    100px  /* Approved In Take */
+    100px  /* First Year Admitted */
+    117px  /* Discontinued */
+    120px  /* Transferred Students From Your College */
+    110px  /* Transferred Students To Your College */
+    58px  /* LAP */
+    90px  /* Year of Starting the Course */
+    108px  /* Accreditation Valid Upto */
+    60px  /* NBA Status */
+    90px; /* Delete */
+  border: 1px solid #ddd;
+  overflow-y: auto;
+  overflow-x: auto;
+  height: 73vh;
+  width: 100%;
+  margin-left: 0.2rem;
+}
+
+.table-header {
+  display: contents;
+}
+
+.table-row {
+  display: contents;
+}
+
+.table-header > div {
+  position: sticky;
+  top: 0;
+  z-index: 0.9;
+  background-color: #d6e2ee;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 12px;
+  border: 1px solid #7d7d7d;
+  text-align: center;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  line-height: 1.2;
+}
+
+.table-row > div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 12px;
+  border: 1px solid #7d7d7d;
+  font-weight: bold;
+  text-align: center;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  white-space: normal;
+}
+
+/* Buttons */
+.edit-btn {
+  background-color: #38a169;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.delete-btn {
+  background-color: #e53e3e;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.first {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  position: relative;
+  height: 60px;
+  margin-bottom: 5px;
+}
+
+.heading {
+  font-size: 20px;
+  margin: 0;
+}
+
+.addBranch-btn {
+  background-color: darkblue;
+  color: white;
+  border: none;
+  padding: 12px 18px;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 4px;
+  position: absolute;
+  margin-left: 85%;
+}
