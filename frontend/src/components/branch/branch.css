@@ -100,19 +100,19 @@
 .table {
   display: grid;
   grid-template-columns:
-    7%  /* Edit */
-    7%  /* Branch Code */
-    150px  /* Branch Name */
-    100px  /* Approved In Take */
-    100px  /* First Year Admitted */
-    117px  /* Discontinued */
-    120px  /* Transferred Students From Your College */
-    110px  /* Transferred Students To Your College */
-    58px  /* LAP */
-    90px  /* Year of Starting the Course */
-    108px  /* Accreditation Valid Upto */
-    60px  /* NBA Status */
-    90px; /* Delete */
+    5.8%  /* Edit */
+    6.1%  /* Branch Code */
+    12.5%  /* Branch Name */
+    7.5%  /* Approved In Take */
+    7.5%  /* First Year Admitted */
+    9.2%  /* Discontinued */
+    8.8%  /* Transferred Students From Your College */
+    8.8%  /* Transferred Students To Your College */
+    5.1%  /* LAP */
+    7.2%  /* Year of Starting the Course */
+    8.8%  /* Accreditation Valid Upto */
+    5.5%  /* NBA Status */
+    7.2%; /* Delete */
   border: 1px solid #ddd;
   overflow-y: auto;
   overflow-x: auto;
