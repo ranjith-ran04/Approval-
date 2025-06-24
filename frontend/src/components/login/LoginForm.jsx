@@ -33,7 +33,6 @@ const LoginForm = () => {
         text={`GOVERNMENT OF TAMILNADU
 Tamilnadu Lateral Entry Direct Second Year B.E/B.Tech.,Approval-2025`}
         profile={true}
-        style={{ marginLeft: "350px" }}
         bool={true}
       />
 

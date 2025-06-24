@@ -17,6 +17,7 @@
 }
 
 .dashone {
+  position: fixed;
     display: flex;
     flex-direction: column;
     width: calc(100% - 15.5%);
