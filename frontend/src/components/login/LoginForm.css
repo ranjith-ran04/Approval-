@@ -1,3 +1,8 @@
+.login-page{
+  position: fixed;
+  width: 100%;
+}
+
 .login-container {
   /* min-height: 100vh; */
   display: flex;
@@ -18,7 +23,14 @@
   text-align: center;
   display: flex;
   flex-direction: column;
-  gap:25px
+  gap: 25px;
+  font-size: 14px;
+}
+
+.error{
+  color: red;
+  /* margin: 4px 0 12px; */
+  min-height: 18px;
 }
 
 .input-group {
@@ -30,9 +42,13 @@
   padding: 10px 20px;
   margin-bottom: 20px;
   transition: box-shadow 0.3s;
+  font-size: 14px;
+  color: red;
+  margin: 4px 0 12px;
+  min-height: 18px;
 }
 
-.logininput{
+.logininput {
   border: none;
   background: transparent;
   padding: 4px;
