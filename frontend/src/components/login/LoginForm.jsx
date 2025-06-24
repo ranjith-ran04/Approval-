@@ -100,58 +100,55 @@ Tamilnadu Lateral Entry Direct Second Year B.E/B.Tech.,Approval-2025`}
         bool={true}
       />
 
-      <div className="login-container">
-        <div className="login-box">
-          <h3>Login Form</h3>
-          <form className="loginform" onSubmit={handleSubmit}>
-            <div
-              className={`input-group ${focusedField === "register" ? "focused" : ""}`}
-            >
-              <span className="icon user-icon" />
-              <input
-                className="logininput"
-                type="text"
-                name="regNo"
-                placeholder="Councelling Code"
-                value={formData.regNo}
-                onChange={handleChange}
-                // onFocus={() => setFocusedField("register")}
-                // onBlur={() => setFocusedField(null)}
-              />
-            </div>
-            {errors.regNo && <p className="error">{errors.regNo}</p>}
-
-            <div
-              className={`input-group ${focusedField === "password" ? "focused" : ""}`}
-            >
-              <span className="icon lock-icon" />
-              <input
-                className="logininput"
-                type="password"
-                name="pwd"
-                placeholder="Password"
-                value={formData.pwd}
-                onChange={handleChange}
-                onFocus={() => setFocusedField("password")}
-                onBlur={() => setFocusedField(null)}
-              />
-            </div>
-            {errors.pwd && <p className="error">{errors.pwd}</p>}
-
-            <div>
-              <button type="submit" className="login-button">
-                LOGIN
-              </button>
-              <Alert
-                type={alertType}
-                message={alertMessage}
-                show={showAlert}
-                close={handleCloseAlert}
-              />
-            </div>
-          </form>
+      <div className="login-page">
+  <div className="login-container">
+    <div className="login-box">
+      <h3>Login Form</h3>
+      <form className="loginform" onSubmit={handleSubmit}>
+        <div className={`input-group ${focusedField === "register" ? "focused" : ""}`}>
+          <span className="icon user-icon" />
+          <input
+            className="logininput"
+            type="text"
+            name="regNo"
+            placeholder="Counselling Code"
+            value={formData.regNo}
+            onChange={handleChange}
+            onFocus={() => setFocusedField("register")}
+            onBlur={() => setFocusedField(null)}
+          />
         </div>
-      </div>
+        {errors.regNo && <p className="error">{errors.regNo}</p>}
+
+        <div className={`input-group ${focusedField === "password" ? "focused" : ""}`}>
+          <span className="icon lock-icon" />
+          <input
+            className="logininput"
+            type="password"
+            name="pwd"
+            placeholder="Password"
+            value={formData.pwd}
+            onChange={handleChange}
+            onFocus={() => setFocusedField("password")}
+            onBlur={() => setFocusedField(null)}
+          />
+        </div>
+        {errors.pwd && <p className="error">{errors.pwd}</p>}
+
+        <div>
+          <button type="submit" className="login-button">LOGIN</button>
+          <Alert
+            type={alertType}
+            message={alertMessage}
+            show={showAlert}
+            close={handleCloseAlert}
+          />
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
 
       <Footer />
     </div>

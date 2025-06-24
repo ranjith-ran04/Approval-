@@ -1,10 +1,13 @@
-.login-page{
+* {
+  box-sizing: border-box;
+}
+
+.login-page {
   position: fixed;
   width: 100%;
 }
 
 .login-container {
-  /* min-height: 100vh; */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -17,7 +20,6 @@
   padding: 25px;
   border-radius: 10px;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
-  /* margin; */
   background-color: white;
   width: 25%;
   text-align: center;
@@ -27,25 +29,25 @@
   font-size: 14px;
 }
 
-.error{
+.error {
   color: red;
-  /* margin: 4px 0 12px; */
   min-height: 18px;
+  margin: 4px 0 12px;
 }
 
 .input-group {
-  width: 70%;
+  width: 100%;
   display: flex;
   align-items: center;
   background: #f0f0f0;
   border-radius: 30px;
-  padding: 10px 20px;
-  margin-bottom: 20px;
-  transition: box-shadow 0.3s;
-  font-size: 14px;
-  color: red;
+  padding: 8px 12px;
   margin: 4px 0 12px;
-  min-height: 18px;
+  transition: box-shadow 0.3s;
+}
+
+.input-group.focused {
+  box-shadow: 0 0 5px rgba(0, 43, 92, 0.5);
 }
 
 .logininput {
@@ -55,6 +57,7 @@
   font-size: 16px;
   outline: none;
   flex: 1;
+  min-width: 0;
 }
 
 .icon {
@@ -63,7 +66,7 @@
   margin-right: 10px;
   background-size: contain;
   background-repeat: no-repeat;
-  transition: background-image 0.3s;
+  display: inline-block;
 }
 
 .user-icon {
