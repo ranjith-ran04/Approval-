@@ -6,7 +6,7 @@ function Button({ name, onClick, type = "button" }) {
 
   const createRipple = (event) => {
     const button = buttonRef.current;
-    const circle = document.createElement('span');
+    const circle = document.createElement('div');
     circle.classList.add('ripple');
 
     const ripple = document.getElementsByClassName('ripple')[0];
