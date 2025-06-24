@@ -11,7 +11,7 @@
     gap: 5px;
     width: 15%;
     position: fixed;
-    padding: 10px;   
+    /* padding: 20px;    */
     box-shadow: 1.95px 1.95px 2.6px #00000026 ;
 }
 .menuItems{
@@ -23,7 +23,7 @@
     border-radius: 20px;
     font-weight: bold;
     /* font-size: 2vh; */
-    margin-top: 8px;
+    /* margin-top: 8px; */
 }
 .menuItems:hover{
     cursor: pointer;
