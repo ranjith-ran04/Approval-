@@ -3,19 +3,19 @@ nav{
     box-shadow: 5px 0px 10px 0 rgba(0,0,0,0.4);
     width: 100%;
     align-items: center;
+    justify-content: center;
     gap: 80px;
     background-color: white;
-    height: 70px;
+    height: 75px;
 }
 #logo{
     height: 60px;
     width: 60px;
-    background-image: url('../../assets/logo.png');
+    background-image: url('../../../public/assets/logo.png');
     border-radius: 50%;
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
-    margin-left: 13rem;
     cursor: pointer;
 }
 #center{
@@ -29,12 +29,13 @@ nav{
     display: flex;
     justify-content: center;
     font-weight: bold;
+    font-size: 18px;
 }
 #person-icon{
     height: 40px;
     width: 40px;
     background-color: darkblue;
-    background-image: url('../../assets/profile.png');
+    background-image: url('../../../public/assets/profile.png');
     background-size: 30px 30px;
     border-radius: 50%;
     background-repeat: no-repeat;

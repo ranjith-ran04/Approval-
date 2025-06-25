@@ -24,7 +24,7 @@ function NavigationBar({ text, profile, style,bool,setCurrent }) {
   };
   return (
     <nav>
-      <div id="logo" style={style} onClick={()=>{setCurrent(0)}}></div>
+      <div id="logo"  onClick={()=>{setCurrent(0)}}></div>
       <div id="center">
         <div>
           {text.split("\n").map((line, index) => (
