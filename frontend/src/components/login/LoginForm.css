@@ -103,16 +103,18 @@
 }
 
 #login-logo{
-    position: relative;
-    left:9.5rem;  
-    height: 100px;
-    width: 100px;
+    height: 90px;
+    width: 90px;
     background-image: url('../../../public/assets/login-avatar.svg');
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
 }
-
+#icon-container{
+  display: flex;
+  width: 100%;
+  justify-content: center;
+}
 .error {
   display: block;
   width: 80%;          

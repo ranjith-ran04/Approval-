@@ -103,7 +103,8 @@ Tamilnadu Lateral Entry Direct Second Year B.E/B.Tech.,Approval-2025`}
       <div className="login-page">
   <div className="login-container">
     <div className="login-box">
-      <div id="login-logo"></div>
+    <div id="icon-container">
+      <div id="login-logo"></div></div>
       <form className="loginform" onSubmit={handleSubmit}>
         <div className={`input-group ${focusedField === "register" ? "focused" : ""}`}>
           <span className="icon user-icon" />
