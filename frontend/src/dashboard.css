@@ -7,6 +7,7 @@
 
 .dashboard {
     z-index: -1;
+    display: flex;
 }
 
 .dashboard-body {
@@ -18,8 +19,8 @@
   overflow-y: auto;
     display: flex;
     flex-wrap: wrap;
-    height: 87.6vh;
     width: 99.35%;
+    height: 87.5vh;
     justify-content: center;
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
     gap: 10px;
@@ -34,9 +35,8 @@
     flex-grow: 1;
     flex-basis: 0;
     min-width: 300px;
-    width: calc(100% - 15.5%);
-    margin-left: 15.5%;
-    /* height: 80vh; */
+    width: 84%;
+    margin-left: 16%;
     gap: 7px;
     position: fixed;
 
