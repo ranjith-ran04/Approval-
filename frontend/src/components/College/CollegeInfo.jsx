@@ -139,7 +139,7 @@ const handleChange =(e)=>{
       if(numericFields.includes(name) && isNaN(value)) {
         isValid = false;
       }
-      if (name === "collegecode" && !(value.length === 1 || value.length === 4)) {
+      else if (name === "collegecode" && !(value.length === 1 || value.length === 4)) {
         isValid = false;
       }
 
@@ -166,7 +166,7 @@ const handleChange =(e)=>{
     };
     const handleSubmit = (e) => {
       console.log("Entered handlesubmit")
-      e.preventDefault();
+      // e.preventDefault();
       const isValid=validateFields()
       if(isValid){
         setShowAlert(true);

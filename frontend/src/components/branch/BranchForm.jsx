@@ -27,6 +27,8 @@ function BranchForm({
   };
 
   const handleFormSubmit = (e) => {
+    console.log('clicked');
+    
     e.preventDefault();
     const formData = new FormData(e.target);
     const data = Object.fromEntries(formData.entries());
@@ -38,7 +40,7 @@ function BranchForm({
 
   return (
     <div className="box1">
-      <div className="form-container" style={{ paddingTop: "10px" }}>
+      <div className="form-container" >
         <h2 className="head">{heading}</h2>
         <form className="form-grid" onSubmit={handleFormSubmit}>
           <div className="form-col">

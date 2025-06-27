@@ -12,6 +12,7 @@
   width: 100%;
   bottom: 0;
   padding-left: 115px;
+  z-index: -1;
 }
 
 .footer-section {

@@ -5,19 +5,22 @@ const Alert = ({ type = 'success', message, show,cancelbutton, okbutton }) => {
       if (type === 'success') {
       return (
         <svg className='alerticon' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52" width="80" height="80">
+          <circle cx="26" cy="26" r="25" fill="none" stroke="#4CAF50" strokeWidth="2" />
+         
           <circle cx="26" cy="26" r="25" fill="none" stroke="#4CAF50" strokeWidth="2.5" />
           <path 
             fill="none"
             stroke="#4CAF50"
-            strokeWidth="3.5"
+            strokeWidth="5"
             d="M14 27 L22 35 L38 19"
             strokeDasharray="30"
             strokeDashoffset="30"
             strokeLinecap="round"
             strokeLinejoin="round"
           >
+          
           <animate attributeName='stroke-dashoffset' from="50" to="0" dur="0.8s" fill="freeze" />
-          </path>
+            </path>
         </svg>
       );
     } else if (type === 'error') {

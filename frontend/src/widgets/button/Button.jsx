@@ -6,7 +6,7 @@ function Button({ name, onClick, type = "button" }) {
 
   const createRipple = (event) => {
     const button = buttonRef.current;
-    const circle = document.createElement('span');
+    const circle = document.createElement('div');
     circle.classList.add('ripple');
 
     const ripple = document.getElementsByClassName('ripple')[0];
@@ -19,10 +19,11 @@ function Button({ name, onClick, type = "button" }) {
 
   const handleClick = (e) => {
     createRipple(e);
-
+    
     if (onClick && type !== "submit") {
-      onClick(e); // e is valid here
-    }
+      console.log('buttn cliced');
+      onClick();
+    } 
   };
 
   return (
@@ -32,7 +33,7 @@ function Button({ name, onClick, type = "button" }) {
       className="submit-btn"
       onClick={handleClick}
       type={type}
-    >
+      >
       {name}
     </button>
   );
