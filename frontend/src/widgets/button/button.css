@@ -12,7 +12,6 @@
 }
 #button:hover{
     cursor: pointer;
-    /* background-color:rgb(108, 108, 121); */
 }
 .ripple {
   height: 13px;
