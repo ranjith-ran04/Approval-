@@ -3,7 +3,9 @@
   top: 0;
   left: 0;
   width: 100%;
-  height: 100vh;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  z-index: 999;
   backdrop-filter: blur(5px);
 }
 
@@ -12,53 +14,111 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-<<<<<<< HEAD
-  background-color: #ffffff;
-=======
   background: #fff;
   width: 350px;
->>>>>>> 90ecb3a (dvdf)
-  padding: 55px 50px;
+  padding: 30px 20px;
   border-radius: 12px;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+  z-index: 5000;
   text-align: center;
-  width: 380px;
+}
+
+.alerticon {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 10px;
 }
 
 .icon-container {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 15px;
+  position: relative;
+  width: 80px;
+  height: 80px;
+  margin: 0 auto;
 }
 
-.alerticon{
-  width: 70px;
-  height: 70px;
-  stroke-dasharray: 50;
-  stroke-dashoffset: 50;
-  animation: dash 0.5s ease-out forwards;
+circle {
+  stroke-dasharray: 163.36;
+  stroke-dashoffset: 163.36;
+  animation: drawCircle 0.8s ease-out forwards;
 }
 
-@keyframes dash {
+/* .symbol-animate {
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+  opacity: 0;
+  animation: drawSymbol 1s ease-out 1s forwards;
+} */
+
+@keyframes drawCircle {
   to {
     stroke-dashoffset: 0;
   }
 }
-.message {
-  font-size: 18px;
-  font-weight: bold;
-  margin-bottom: 15px;
-}
-.button {
-  padding: 8px 20px;
-  background-color: #4CAF50;
-  color: #fff;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 16px;
+
+@keyframes drawSymbol {
+  to {
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
 }
 
-.button:hover {
+.message {
+  font-size: 16px;
+  margin: 10px 0;
+}
+
+.buttons {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.okbutton,
+.cancelbutton {
+  padding: 8px 20px;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.okbutton {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.cancelbutton {
+  background-color: #F44336;
+  color: white;
+}
+
+.okbutton:hover {
   background-color: #45a049;
+}
+
+.cancelbutton:hover {
+  background-color: #d32f2f;
+}
+.symbol-animate {
+  stroke-dasharray: 50; 
+  stroke-dashoffset: 50;
+  animation: drawSymbol 2s ease-out forwards;
+}
+@keyframes drawSymbol {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}
+
+.dot-delay-show {
+  opacity: 0;
+  animation: fadeIn 0.3s ease forwards;
+  animation-delay: 0.8s;
 }
