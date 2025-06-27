@@ -12,7 +12,12 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+<<<<<<< HEAD
   background-color: #ffffff;
+=======
+  background: #fff;
+  width: 350px;
+>>>>>>> 90ecb3a (dvdf)
   padding: 55px 50px;
   border-radius: 12px;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
