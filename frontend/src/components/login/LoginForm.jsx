@@ -50,17 +50,17 @@ const LoginForm = () => {
 
     if (touched.regNo || forceTouch) {
       if (!formData.regNo.trim()) {
-        newErrors.regNo = 'Councelling code is required';
+        newErrors.regNo = '*Councelling code is required';
       } else if (!/^[0-9]+$/.test(formData.regNo.trim())) {
-        newErrors.regNo = 'Councelling code can only contain numbers';
+        newErrors.regNo = '*Councelling code can only contain numbers';
       }
     }
 
     if (touched.pwd || forceTouch) {
       if (!formData.pwd) {
-        newErrors.pwd = 'Password is required';
+        newErrors.pwd = '*Password is required';
       } else if (formData.pwd.length < 6) {
-        newErrors.pwd = 'Password must be at least 6 characters';
+        newErrors.pwd = '*Password must be at least 6 characters';
       }
     }
 
@@ -104,7 +104,8 @@ Tamilnadu Lateral Entry Direct Second Year B.E/B.Tech.,Approval-2025`}
       <div className="login-page">
   <div className="login-container">
     <div className="login-box">
-      <h3>Login Form</h3>
+    <div id="icon-container">
+      <div id="login-logo"></div></div>
       <form className="loginform" onSubmit={handleSubmit}>
         <div className={`input-group ${focusedField === "register" ? "focused" : ""}`}>
           <span className="icon user-icon" />
