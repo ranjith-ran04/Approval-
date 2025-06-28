@@ -3,8 +3,8 @@ const db = require("../config/db");
 const path = require("path");
 const arialBold = path.join(__dirname, "../fonts/G_ari_bd.TTF");
 const arial = path.join(__dirname, "../fonts/arial.ttf");
-const college = require("../json/college");
-const branch = require("../json/branch");
+const branchCode = require("../json/branch");
+const {header} = require('./pageFrame');
 
 function formb(req, res) {
   const { collegeCode } = req.body;
@@ -16,66 +16,53 @@ function formb(req, res) {
     }
     res.setHeader("Content-Type", "application/pdf");
     res.setHeader("Content-Disposition", 'inline; filename="formb.pdf"');
-    console.log(result);
+    // console.log(result);
     const doc = new PDFDocument({
       size: "A4",
       layout: "landscape",
-      margin: 10,
+      margin: 8,
     });
-    const collegeName =
-      college.get(collegeCode.toString()) || "Unknown College";
     doc.pipe(res);
     doc.registerFont("Arial-Bold", arialBold);
     doc.registerFont("Arial", arial);
-    header("B",doc,collegeCode,collegeName);
+    header("B", doc, collegeCode);
     const studentsByBranch = result.reduce((acc, student) => {
       const branch = student.branch;
       if (!acc[branch]) acc[branch] = [];
       acc[branch].push(student);
       return acc;
     }, {});
-    console.log(studentsByBranch);
+    // console.log(studentsByBranch);
+
+    const columnWidths = {
+      SNO: 25,
+      APP_NO: 40,
+      REG_NO: 47,
+      QUOTA: 37,
+      NAME: 96,
+      NAT: 33,
+      COM: 28,
+      BOARD: 40,
+      SEM: 50,
+      PERCENT: 20,
+      FG: 20,
+      AFW: 25,
+    };
+
+    const sems = [
+      "SEM_1",
+      "SEM_2",
+      "SEM_3",
+      "SEM_4",
+      "SEM_5",
+      "SEM_6",
+      "SEM_7",
+      "SEM_8",
+    ];
 
     function tableheader() {
       let y = doc.y;
-      let x = 18;
-
-      const columnWidths = {
-        SNO: 25,
-        APP_NO: 49,
-        REG_NO: 49,
-        QUOTA: 38,
-        NAME: 88,
-        NAT: 28,
-        COM: 28,
-        BOARD: 40,
-        SEM: 50,
-        PERCENT: 20,
-        FG: 20,
-        AFW: 25,
-      };
-
-      const sems = [
-        "SEM_1",
-        "SEM_2",
-        "SEM_3",
-        "SEM_4",
-        "SEM_5",
-        "SEM_6",
-        "SEM_7",
-        "SEM_8",
-      ];
-
-      function drawCell(text, x, y, width, height) {
-        doc.rect(x, y, width, height).stroke();
-        doc.fontSize(9).text(text, x + 2, y + 5, {
-          width: width - 4,
-          height: height - 4,
-          align: "center",
-        });
-      }
-
-      x = 16;
+      let x = 16;
       let headerHeight = 20;
 
       [
@@ -132,9 +119,21 @@ function formb(req, res) {
       });
     }
 
-    function drawStudentRow(student, y, index) {
-      let x = 20;
-      const rowHeight = 20;
+    function drawStudentRow(student, index) {
+      let x = 16;
+      const rowHeight = doc.heightOfString(student.name.toString(), {
+            width: columnWidths.NAME - 4,
+            align: "center",
+          })+10;
+
+      if (doc.y + rowHeight > doc.page.height - doc.page.margins.bottom - 25) {
+        doc.addPage();
+        header("B", doc, collegeCode);
+        doc.moveDown();
+        tableheader();
+      }
+
+      const y = doc.y;
 
       const fields = [
         { key: "SNO", value: index + 1 },
@@ -166,7 +165,7 @@ function formb(req, res) {
         x += columnWidths.SEM;
       });
 
-      drawCell(String(student.percent), x, y, columnWidths.PERCENT, rowHeight);
+      drawCell(String(student.average), x, y, columnWidths.PERCENT, rowHeight);
       x += columnWidths.PERCENT;
 
       drawCell(student.fg ? "Y" : "N", x, y, columnWidths.FG, rowHeight);
@@ -174,41 +173,38 @@ function formb(req, res) {
 
       drawCell(student.afw ? "Y" : "N", x, y, columnWidths.AFW, rowHeight);
     }
+    function drawCell(text, x, y, width, height) {
+      doc.rect(x, y, width, height).stroke();
+      doc.fontSize(8).text(text, x + 2, y+5, {
+        width: width - 4,
+        height: height - 10,
+        align: "center",
+      });
+      doc.moveDown();
+    }
 
-    Object.entries(studentsByBranch).forEach((branch) => {
-      const students = studentsByBranch[branch];
-      // const branchName = branch.get(branch) || "unknown";
-
-      let y = doc.y;
-      doc.font("Arial-Bold").fontSize(10).text("CS");
+    Object.entries(studentsByBranch).forEach(([branchCodeKey, students]) => {
+      const branchName = branchCode.get(branchCodeKey) || "Unknown Branch";
+      if (doc.y + doc.heightOfString(branchName) > doc.page.height - doc.page.margins.bottom - 25) {
+        doc.addPage();
+        header("B", doc, collegeCode);
+        doc.moveDown();
+      }
+      doc.moveDown();
+      doc
+        .font("Arial-Bold")
+        .fontSize(13)
+        .text(`${branchCodeKey} - ${branchName}`, 16);
+      doc.moveDown();
+      tableheader();
+      students.forEach((student, index) => {
+        drawStudentRow(student, index);
+      });
+      doc.moveDown();
     });
+
     doc.end();
   });
 }
-function header(c,doc,collegeCode,collegeName) {
-  doc
-    .rect(
-      doc.page.margins.left,
-      doc.page.margins.top,
-      doc.page.width - doc.page.margins.left - doc.page.margins.right,
-      doc.page.height - doc.page.margins.top - doc.page.margins.bottom
-    )
-    .stroke();
-  doc.moveDown();
-  doc.font("Arial-Bold").fontSize(15).text("FORM-B", { align: "center" });
-  let y = doc.y;
-  doc.moveDown();
-  doc
-    .moveTo(390, 45)
-    .lineTo(390 + doc.widthOfString(`FORM-${c}`), 45)
-    .stroke();
-  doc.fontSize(14).text(`${collegeCode} - ${collegeName}`, {
-    align: "center",
-    width: doc.page.width - doc.page.margins.left - doc.page.margins.right,
-  });
-  doc.moveDown();
-  doc.font("Arial").fontSize(13).text("Second Year : 2024-2025", 30);
-  doc.moveDown();
-}
 
-module.exports = { formb, header };
+module.exports = formb;
