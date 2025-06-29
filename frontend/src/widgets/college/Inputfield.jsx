@@ -1,4 +1,4 @@
-import '../../components/College/CollegeInfo.css';
+import '../../components/college/CollegeInfo.css';
 const Inputfield=({eltname,type,label,id,htmlfor,classname,radiolabel,options=[],error,onchange})=>{
     if(type==="radio"){
         return(
