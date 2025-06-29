@@ -9,182 +9,21 @@ const CollegeInfo = () => {
   const [showAlert, setShowAlert] = useState(false);
   const[alertType,setAlertType]=useState('');
   const[alertMessage,setAlertMessage]=useState('');
-const[formdata,setFormdata]=useState({})
-const[error,setError]=useState({})
-const[alertStage,setAlertStage]=useState('');
 
-const requiredFields = ["collegecode","collegenameWithdistrict","chairman","chairman's contact","principal's name","principal's contact","address","taluk","district","constituency",
-  "pincode",
-  "collegephone",
-  "collegeemail",
-  "websitecollege",
-  "antiraggingNo",
-  "bankaccountno",
-  "bankname",
-  "minoritystatus",
-  "autonomousstatus",
-  "distance",
-  "nearestrailway",
-  "distancefromrailway",
-  "transportfacility",
-  "transport",
-  "mintransportcharge",
-  "maxtransportcharge",
-  "accomodationavailableboys",
-  "hostelstaytypeboys",
-  "typeofmessboys",
-  "messbillboys",
-  "roomrentboys",
-  "electricityboys",
-  "cautiondepositboys",
-  "establishmentboys",
-  "admissionfeesboys",
-  "accomodationavailablegirls",
-  "hostelstaytypegirls",
-  "typeofmessgirls",
-  "messbillgirls",
-  "roomrentgirls",
-  "electricitygirls",
-  "cautiondepositgirls",
-  "establishmentgirls",
-  "admissionfeesgirls"
-];
-const validateFields = () => {
-  const newErrors = {};
-  requiredFields.forEach((field) => {
-    const value = formdata[field];
-
-    if (!value || value.trim() === "") {
-      newErrors[field] = "This field is required";
-      return; 
-    }
-
-    if (["collegenameWithdistrict", "chairman", "principal's name", "district", "taluk", "constituency", "nearestrailway"].includes(field) &&/\d/.test(value)) {
-      newErrors[field] = "Only letters are allowed";
-    }
-    const telephone=["chairman's contact", "principal's contact", "collegephone", "antiraggingNo"];
-    if(telephone.includes(field)&&isNaN(value)){
-      newErrors[field]="Only numbers are allowed";
-    }
-    else if(telephone.includes(field) &&!/^\d{10}$/.test(value)) {
-      newErrors[field] = "Enter a valid 10-digit phone number";
-    }
-    if (field === "collegeemail" && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
-      newErrors[field] = "Invalid email format";
-    }
-
-    if (field === "pincode" && !/^\d{6}$/.test(value)) {
-      newErrors[field] = "Enter a valid 6-digit pincode";
-    }
-
-    const numericFields = [
-      "collegecode","bankaccountno", "distance", "distancefromrailway",
-      "mintransportcharge", "maxtransportcharge",
-      "messbillboys", "roomrentboys", "electricityboys", "cautiondepositboys", "establishmentboys", "admissionfeesboys",
-      "messbillgirls", "roomrentgirls", "electricitygirls", "cautiondepositgirls", "establishmentgirls", "admissionfeesgirls"];
-    if (numericFields.includes(field) && isNaN(value)) {
-      newErrors[field] = "Only numbers are allowed";
-      console.log(value)
-    }
-    else if(field==="collegecode" && value.length!==1&&value.length!==4){
-      newErrors[field]="College code must be 1 or 4";
-    }
-  });
-
-  setError(newErrors);
-  if(Object.keys(newErrors).length === 0){
-    return true;
-  }
-  else{
-    return false;
-  }
-};
-const handleChange =(e)=>{
-      const{name,value,type}=e.target;
-      console.log(`Field:${name},Value:${value},type:${type}`)
-      setFormdata((prev)=>({
-        ...prev,
-        [name]:value,
-      }));
-      setError((prevErrors) => {
-    const updatedErrors = { ...prevErrors };
-
-    if (updatedErrors[name]) {
-      let isValid = true;
-      if (value.trim() === "") {
-        isValid = false;
-      }
-      if(["collegenameWithdistrict", "chairman", "principal's name", "district", "taluk", "constituency", "nearestrailway"].includes(name) &&/\d/.test(value)){
-        isValid = false;
-      }
-      const telephone = ["chairman's contact", "principal's contact", "collegephone", "antiraggingNo"];
-      if (telephone.includes(name)) {
-        if (isNaN(value) || !/^\d{10}$/.test(value)) {
-          isValid = false;
-        }
-      }
-      if (name === "collegeemail" && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
-        isValid = false;
-      }
-      if (name === "pincode" && !/^\d{6}$/.test(value)) {
-        isValid = false;
-      }
-      const numericFields = [
-        "collegecode", "bankaccountno", "distance", "distancefromrailway",
-        "mintransportcharge", "maxtransportcharge",
-        "messbillboys", "roomrentboys", "electricityboys", "cautiondepositboys", "establishmentboys", "admissionfeesboys",
-        "messbillgirls", "roomrentgirls", "electricitygirls", "cautiondepositgirls", "establishmentgirls", "admissionfeesgirls"
-      ];
-      if(numericFields.includes(name) && isNaN(value)) {
-        isValid = false;
-      }
-      else if (name === "collegecode" && !(value.length === 1 || value.length === 4)) {
-        isValid = false;
-      }
-
-      if (isValid) {
-        delete updatedErrors[name]; 
-      }
-    }
-
-    return updatedErrors;
-  });
+  const handleCloseAlert = () => {
+    setShowAlert(false);
   };
-    const handleCloseAlert = () => {
-      setShowAlert(false);
-      setAlertStage('')
-    };
-    const handleconfirmAlert=()=>{
-      setShowAlert(false);
-      setTimeout(()=>{
-        setShowAlert(true);
-        setAlertStage('success');
-        setAlertMessage('Your Details are saved');
-        setAlertType('success');
-      },100);
-    };
-    const handleSubmit = (e) => {
-      console.log("Entered handlesubmit")
-      // e.preventDefault();
-      const isValid=validateFields()
-      if(isValid){
-        setShowAlert(true);
-        setAlertMessage("Are you sure to submit");
-        setAlertType('warning');
-        setAlertStage('confirm')
-      }
-      else{
-        setShowAlert(true);
-        setAlertMessage("Please Fill All Fields!");
-        setAlertType('warning');
-        setAlertStage('validation')
-      }
-    };
-  // const handleCancel=()=>{
-  //   setShowAlert(true);
-  //   setAlertMessage("Something went wrong");
-  //   setAlertType('error');
-  // }
+
+  const handleSubmit = () => {
+  setShowAlert(true);
+  setAlertType('success')
+  setAlertMessage("Logged in successfully")
+  };
+  const handleCancel=()=>{
+    setShowAlert(true);
+    setAlertMessage("Something went wrong");
+    setAlertType('error');
+  }
 
   return (
     <div className="collegewholediv">
