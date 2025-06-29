@@ -1,17 +1,209 @@
-const pdf = require("pdfkit");
+const PDFDocument = require("pdfkit");
 const db = require("../config/db");
+const path = require("path");
+const arialBold = path.join(__dirname, "../fonts/G_ari_bd.TTF");
+const arial = path.join(__dirname, "../fonts/arial.ttf");
+const branchCode = require("../json/branch");
+const {header} = require('./pageFrame');
 
 function formb(req, res) {
   const { collegeCode } = req.body;
-  const query = "select * from total_allotted where allot_coll_code=?";
+  const query = `SELECT ta.avg AS average, si.b_code AS branch, si.a_no AS appln_no, si.univ_reg_no AS reg_no, si.name AS name, si.nationality AS nat, si.community AS com, si.name_of_board AS board, si.obt_1, si.max_1, si.obt_2, si.max_2, si.obt_3, si.max_3, si.obt_4, si.max_4, si.obt_5, si.max_5, si.obt_6, si.max_6, si.obt_7, si.max_7, si.obt_8, si.max_8, si.fg AS fg, si.aicte_tfw AS afw FROM total_allotted ta JOIN student_info si ON ta.reg_no = si.a_no WHERE si.c_code = ? ORDER BY ta.avg;`;
+
   db.query(query, [collegeCode], (err, result) => {
     if (err) {
-      res.status(500).json({ msg: "error in query" });
-    } else {
-      console.log(result);
-      res.send(result[0]);
-      const doc = pdf.document();
+      return res.status(500).json({ msg: "Error in query" });
     }
+    res.setHeader("Content-Type", "application/pdf");
+    res.setHeader("Content-Disposition", 'inline; filename="formb.pdf"');
+    // console.log(result);
+    const doc = new PDFDocument({
+      size: "A4",
+      layout: "landscape",
+      margin: 8,
+    });
+    doc.pipe(res);
+    doc.registerFont("Arial-Bold", arialBold);
+    doc.registerFont("Arial", arial);
+    header("B", doc, collegeCode);
+    const studentsByBranch = result.reduce((acc, student) => {
+      const branch = student.branch;
+      if (!acc[branch]) acc[branch] = [];
+      acc[branch].push(student);
+      return acc;
+    }, {});
+    // console.log(studentsByBranch);
+
+    const columnWidths = {
+      SNO: 25,
+      APP_NO: 40,
+      REG_NO: 47,
+      QUOTA: 37,
+      NAME: 96,
+      NAT: 33,
+      COM: 28,
+      BOARD: 40,
+      SEM: 50,
+      PERCENT: 20,
+      FG: 20,
+      AFW: 25,
+    };
+
+    const sems = [
+      "SEM_1",
+      "SEM_2",
+      "SEM_3",
+      "SEM_4",
+      "SEM_5",
+      "SEM_6",
+      "SEM_7",
+      "SEM_8",
+    ];
+
+    function tableheader() {
+      let y = doc.y;
+      let x = 16;
+      let headerHeight = 20;
+
+      [
+        { label: "S.No", width: columnWidths.SNO },
+        { label: "APP_NO", width: columnWidths.APP_NO },
+        { label: "REG_NO", width: columnWidths.REG_NO },
+        { label: "QUOTA", width: columnWidths.QUOTA },
+        { label: "NAME", width: columnWidths.NAME },
+        { label: "NAT", width: columnWidths.NAT },
+        { label: "COM", width: columnWidths.COM },
+        { label: "BOARD", width: columnWidths.BOARD },
+      ].forEach((item) => {
+        drawCell(item.label, x, y, item.width, headerHeight * 2);
+        x += item.width;
+      });
+
+      sems.forEach((sem) => {
+        drawCell(sem, x, y, columnWidths.SEM, headerHeight);
+        x += columnWidths.SEM;
+      });
+
+      [
+        { label: "%", width: columnWidths.PERCENT },
+        { label: "FG", width: columnWidths.FG },
+        { label: "AFW", width: columnWidths.AFW },
+      ].forEach((item) => {
+        drawCell(item.label, x, y, item.width, headerHeight * 2);
+        x += item.width;
+      });
+
+      x =
+        15.9 +
+        columnWidths.SNO +
+        columnWidths.APP_NO +
+        columnWidths.REG_NO +
+        columnWidths.QUOTA +
+        columnWidths.NAME +
+        columnWidths.NAT +
+        columnWidths.COM +
+        columnWidths.BOARD;
+
+      let semY = y + headerHeight;
+
+      sems.forEach(() => {
+        drawCell("obt", x, semY, columnWidths.SEM / 2, headerHeight);
+        drawCell(
+          "max",
+          x + columnWidths.SEM / 2,
+          semY,
+          columnWidths.SEM / 2,
+          headerHeight
+        );
+        x += columnWidths.SEM;
+      });
+    }
+
+    function drawStudentRow(student, index) {
+      let x = 16;
+      const rowHeight = doc.heightOfString(student.name.toString(), {
+            width: columnWidths.NAME - 4,
+            align: "center",
+          })+10;
+
+      if (doc.y + rowHeight > doc.page.height - doc.page.margins.bottom - 25) {
+        doc.addPage();
+        header("B", doc, collegeCode);
+        doc.moveDown();
+        tableheader();
+      }
+
+      const y = doc.y;
+
+      const fields = [
+        { key: "SNO", value: index + 1 },
+        { key: "APP_NO", value: student.appln_no },
+        { key: "REG_NO", value: student.reg_no },
+        { key: "QUOTA", value: "GOVT" },
+        { key: "NAME", value: student.name },
+        { key: "NAT", value: student.nat },
+        { key: "COM", value: student.com },
+        { key: "BOARD", value: student.board },
+      ];
+
+      fields.forEach((item) => {
+        drawCell(String(item.value), x, y, columnWidths[item.key], rowHeight);
+        x += columnWidths[item.key];
+      });
+
+      sems.forEach((sem, i) => {
+        const obt = student[`obt_${i + 1}`] ?? 0;
+        const max = student[`max_${i + 1}`] ?? 0;
+        drawCell(String(obt), x, y, columnWidths.SEM / 2, rowHeight);
+        drawCell(
+          String(max),
+          x + columnWidths.SEM / 2,
+          y,
+          columnWidths.SEM / 2,
+          rowHeight
+        );
+        x += columnWidths.SEM;
+      });
+
+      drawCell(String(student.average), x, y, columnWidths.PERCENT, rowHeight);
+      x += columnWidths.PERCENT;
+
+      drawCell(student.fg ? "Y" : "N", x, y, columnWidths.FG, rowHeight);
+      x += columnWidths.FG;
+
+      drawCell(student.afw ? "Y" : "N", x, y, columnWidths.AFW, rowHeight);
+    }
+    function drawCell(text, x, y, width, height) {
+      doc.rect(x, y, width, height).stroke();
+      doc.fontSize(8).text(text, x + 2, y+5, {
+        width: width - 4,
+        height: height - 10,
+        align: "center",
+      });
+      doc.moveDown();
+    }
+
+    Object.entries(studentsByBranch).forEach(([branchCodeKey, students]) => {
+      const branchName = branchCode.get(branchCodeKey) || "Unknown Branch";
+      if (doc.y + doc.heightOfString(branchName) > doc.page.height - doc.page.margins.bottom - 25) {
+        doc.addPage();
+        header("B", doc, collegeCode);
+        doc.moveDown();
+      }
+      doc.moveDown();
+      doc
+        .font("Arial-Bold")
+        .fontSize(13)
+        .text(`${branchCodeKey} - ${branchName}`, 16);
+      doc.moveDown();
+      tableheader();
+      students.forEach((student, index) => {
+        drawStudentRow(student, index);
+      });
+      doc.moveDown();
+    });
+
+    doc.end();
   });
 }
 
