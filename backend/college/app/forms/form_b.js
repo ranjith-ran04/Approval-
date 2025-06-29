@@ -46,14 +46,14 @@ function formb(req, res) {
       AFW: 25,
     };
     const sems = [
-      "SEM_1",
-      "SEM_2",
-      "SEM_3",
-      "SEM_4",
-      "SEM_5",
-      "SEM_6",
-      "SEM_7",
-      "SEM_8",
+      "SEM-1",
+      "SEM-2",
+      "SEM-3",
+      "SEM-4",
+      "SEM-5",
+      "SEM-6",
+      "SEM-7",
+      "SEM-8",
     ];
 
     function tableheader() {
@@ -115,16 +115,16 @@ function formb(req, res) {
       });
     }
     function drawCell(text, x, y, width, height) {
-      let textHeight = doc.heightOfString(text,{
-        width: width-4,
+      let textHeight = doc.heightOfString(text, {
+        width: width - 4,
         align: "center",
-      })
+      });
       let yOffset = y + (height - textHeight) / 2;
-        if (text === "S.NO") {
-    yOffset += 12;
-  }
+      if (text === "S.NO") {
+        yOffset += 12;
+      }
       doc.rect(x, y, width, height).stroke();
-      doc.fontSize(8).text(text, x + 2, yOffset,{
+      doc.fontSize(8).text(text, x + 2, yOffset, {
         width: width - 4,
         height: height - 10,
         align: "center",
@@ -135,7 +135,15 @@ function formb(req, res) {
       const branchName = branchCode.get(branchCodeKey) || "Unknown Branch";
       if (
         doc.y + doc.heightOfString(branchName) >
-        doc.page.height - doc.page.margins.bottom - 25
+          doc.page.height - doc.page.margins.bottom - 30 ||
+        doc.y +
+          doc.heightOfString(branchName) +
+          50 +
+          doc.heightOfString(students[0].name.toString(), {
+            width: columnWidths.NAME - 4,
+            align: "center",
+          }) >
+          doc.page.height - doc.page.margins.bottom - 30
       ) {
         doc.addPage();
         header("B", doc, collegeCode);
@@ -150,68 +158,72 @@ function formb(req, res) {
       tableheader();
       let y = doc.y + 5;
       students.forEach((student, index) => {
-        const rowHeight = doc.heightOfString("Thamarai Nagasamy Kumar".toString(), {
-      width: columnWidths.NAME - 4,
-      align: "center",
-    })+10;
-        drawStudentRow(student, index,rowHeight,y);
-        y+=rowHeight;
+        const rowHeight =
+          doc.heightOfString(student.name.toString(), {
+            width: columnWidths.NAME - 4,
+            align: "center",
+          }) + 10;
+        drawStudentRow(student, index, rowHeight, y);
+        y += rowHeight;
       });
       doc.moveDown();
-      function drawStudentRow(student, index ,rowHeight) {
-      let x = 16;
-      if (doc.y + rowHeight > doc.page.height - doc.page.margins.bottom - 25) {
-        doc.addPage();
-        header("B", doc, collegeCode);
-        doc.moveDown();
-        tableheader();
-        y=doc.y+5; 
-      }
+      function drawStudentRow(student, index, rowHeight) {
+        let x = 16;
+        if (
+          doc.y + rowHeight >
+          doc.page.height - doc.page.margins.bottom - 30
+        ) {
+          doc.addPage();
+          header("B", doc, collegeCode);
+          doc.moveDown();
+          tableheader();
+          y = doc.y + 5;
+        }
 
-      const fields = [
-        { key: "SNO", value: index + 1 },
-        { key: "APP_NO", value: student.appln_no },
-        { key: "REG_NO", value: student.reg_no },
-        { key: "QUOTA", value: "GOVT" },
-        { key: "NAME", value: "Thamarai Nagasamy Kumar" },
-        { key: "NAT", value: student.nat },
-        { key: "COM", value: student.com },
-        { key: "BOARD", value: student.board },
-      ];
+        const fields = [
+          { key: "SNO", value: index + 1 },
+          { key: "APP_NO", value: student.appln_no },
+          { key: "REG_NO", value: student.reg_no },
+          { key: "QUOTA", value: "GOVT" },
+          { key: "NAME", value: student.name },
+          { key: "NAT", value: student.nat },
+          { key: "COM", value: student.com },
+          { key: "BOARD", value: student.board },
+        ];
 
-      fields.forEach((item) => {
-        drawCell(String(item.value), x, y, columnWidths[item.key], rowHeight);
-        x += columnWidths[item.key];
-      });
+        fields.forEach((item) => {
+          drawCell(String(item.value), x, y, columnWidths[item.key], rowHeight);
+          x += columnWidths[item.key];
+        });
 
-      sems.forEach((sem, i) => {
-        const obt = student[`obt_${i + 1}`] ?? 0;
-        const max = student[`max_${i + 1}`] ?? 0;
-        drawCell(String(obt), x, y, columnWidths.SEM / 2, rowHeight);
+        sems.forEach((sem, i) => {
+          const obt = student[`obt_${i + 1}`] ?? 0;
+          const max = student[`max_${i + 1}`] ?? 0;
+          drawCell(String(obt), x, y, columnWidths.SEM / 2, rowHeight);
+          drawCell(
+            String(max),
+            x + columnWidths.SEM / 2,
+            y,
+            columnWidths.SEM / 2,
+            rowHeight
+          );
+          x += columnWidths.SEM;
+        });
+
         drawCell(
-          String(max),
-          x + columnWidths.SEM / 2,
+          String(student.average.slice(0, 4)),
+          x,
           y,
-          columnWidths.SEM / 2,
+          columnWidths.PERCENT,
           rowHeight
         );
-        x += columnWidths.SEM;
-      });
+        x += columnWidths.PERCENT;
 
-      drawCell(
-        String(student.average.slice(0, 4)),
-        x,
-        y,
-        columnWidths.PERCENT,
-        rowHeight
-      );
-      x += columnWidths.PERCENT;
+        drawCell(student.fg ? "Y" : "N", x, y, columnWidths.FG, rowHeight);
+        x += columnWidths.FG;
 
-      drawCell(student.fg ? "Y" : "N", x, y, columnWidths.FG, rowHeight);
-      x += columnWidths.FG;
-
-      drawCell(student.afw ? "Y" : "N", x, y, columnWidths.AFW, rowHeight);
-    }
+        drawCell(student.afw ? "Y" : "N", x, y, columnWidths.AFW, rowHeight);
+      }
     });
 
     doc.end();
