@@ -9,182 +9,21 @@ const CollegeInfo = () => {
   const [showAlert, setShowAlert] = useState(false);
   const[alertType,setAlertType]=useState('');
   const[alertMessage,setAlertMessage]=useState('');
-const[formdata,setFormdata]=useState({})
-const[error,setError]=useState({})
-const[alertStage,setAlertStage]=useState('');
 
-const requiredFields = ["collegecode","collegenameWithdistrict","chairman","chairman's contact","principal's name","principal's contact","address","taluk","district","constituency",
-  "pincode",
-  "collegephone",
-  "collegeemail",
-  "websitecollege",
-  "antiraggingNo",
-  "bankaccountno",
-  "bankname",
-  "minoritystatus",
-  "autonomousstatus",
-  "distance",
-  "nearestrailway",
-  "distancefromrailway",
-  "transportfacility",
-  "transport",
-  "mintransportcharge",
-  "maxtransportcharge",
-  "accomodationavailableboys",
-  "hostelstaytypeboys",
-  "typeofmessboys",
-  "messbillboys",
-  "roomrentboys",
-  "electricityboys",
-  "cautiondepositboys",
-  "establishmentboys",
-  "admissionfeesboys",
-  "accomodationavailablegirls",
-  "hostelstaytypegirls",
-  "typeofmessgirls",
-  "messbillgirls",
-  "roomrentgirls",
-  "electricitygirls",
-  "cautiondepositgirls",
-  "establishmentgirls",
-  "admissionfeesgirls"
-];
-const validateFields = () => {
-  const newErrors = {};
-  requiredFields.forEach((field) => {
-    const value = formdata[field];
-
-    if (!value || value.trim() === "") {
-      newErrors[field] = "This field is required";
-      return; 
-    }
-
-    if (["collegenameWithdistrict", "chairman", "principal's name", "district", "taluk", "constituency", "nearestrailway"].includes(field) &&/\d/.test(value)) {
-      newErrors[field] = "Only letters are allowed";
-    }
-    const telephone=["chairman's contact", "principal's contact", "collegephone", "antiraggingNo"];
-    if(telephone.includes(field)&&isNaN(value)){
-      newErrors[field]="Only numbers are allowed";
-    }
-    else if(telephone.includes(field) &&!/^\d{10}$/.test(value)) {
-      newErrors[field] = "Enter a valid 10-digit phone number";
-    }
-    if (field === "collegeemail" && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
-      newErrors[field] = "Invalid email format";
-    }
-
-    if (field === "pincode" && !/^\d{6}$/.test(value)) {
-      newErrors[field] = "Enter a valid 6-digit pincode";
-    }
-
-    const numericFields = [
-      "collegecode","bankaccountno", "distance", "distancefromrailway",
-      "mintransportcharge", "maxtransportcharge",
-      "messbillboys", "roomrentboys", "electricityboys", "cautiondepositboys", "establishmentboys", "admissionfeesboys",
-      "messbillgirls", "roomrentgirls", "electricitygirls", "cautiondepositgirls", "establishmentgirls", "admissionfeesgirls"];
-    if (numericFields.includes(field) && isNaN(value)) {
-      newErrors[field] = "Only numbers are allowed";
-      console.log(value)
-    }
-    else if(field==="collegecode" && value.length!==1&&value.length!==4){
-      newErrors[field]="College code must be 1 or 4";
-    }
-  });
-
-  setError(newErrors);
-  if(Object.keys(newErrors).length === 0){
-    return true;
-  }
-  else{
-    return false;
-  }
-};
-const handleChange =(e)=>{
-      const{name,value,type}=e.target;
-      console.log(`Field:${name},Value:${value},type:${type}`)
-      setFormdata((prev)=>({
-        ...prev,
-        [name]:value,
-      }));
-      setError((prevErrors) => {
-    const updatedErrors = { ...prevErrors };
-
-    if (updatedErrors[name]) {
-      let isValid = true;
-      if (value.trim() === "") {
-        isValid = false;
-      }
-      if(["collegenameWithdistrict", "chairman", "principal's name", "district", "taluk", "constituency", "nearestrailway"].includes(name) &&/\d/.test(value)){
-        isValid = false;
-      }
-      const telephone = ["chairman's contact", "principal's contact", "collegephone", "antiraggingNo"];
-      if (telephone.includes(name)) {
-        if (isNaN(value) || !/^\d{10}$/.test(value)) {
-          isValid = false;
-        }
-      }
-      if (name === "collegeemail" && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
-        isValid = false;
-      }
-      if (name === "pincode" && !/^\d{6}$/.test(value)) {
-        isValid = false;
-      }
-      const numericFields = [
-        "collegecode", "bankaccountno", "distance", "distancefromrailway",
-        "mintransportcharge", "maxtransportcharge",
-        "messbillboys", "roomrentboys", "electricityboys", "cautiondepositboys", "establishmentboys", "admissionfeesboys",
-        "messbillgirls", "roomrentgirls", "electricitygirls", "cautiondepositgirls", "establishmentgirls", "admissionfeesgirls"
-      ];
-      if(numericFields.includes(name) && isNaN(value)) {
-        isValid = false;
-      }
-      else if (name === "collegecode" && !(value.length === 1 || value.length === 4)) {
-        isValid = false;
-      }
-
-      if (isValid) {
-        delete updatedErrors[name]; 
-      }
-    }
-
-    return updatedErrors;
-  });
+  const handleCloseAlert = () => {
+    setShowAlert(false);
   };
-    const handleCloseAlert = () => {
-      setShowAlert(false);
-      setAlertStage('')
-    };
-    const handleconfirmAlert=()=>{
-      setShowAlert(false);
-      setTimeout(()=>{
-        setShowAlert(true);
-        setAlertStage('success');
-        setAlertMessage('Your Details are saved');
-        setAlertType('success');
-      },100);
-    };
-    const handleSubmit = (e) => {
-      console.log("Entered handlesubmit")
-      // e.preventDefault();
-      const isValid=validateFields()
-      if(isValid){
-        setShowAlert(true);
-        setAlertMessage("Are you sure to submit");
-        setAlertType('warning');
-        setAlertStage('confirm')
-      }
-      else{
-        setShowAlert(true);
-        setAlertMessage("Please Fill All Fields!");
-        setAlertType('warning');
-        setAlertStage('validation')
-      }
-    };
-  // const handleCancel=()=>{
-  //   setShowAlert(true);
-  //   setAlertMessage("Something went wrong");
-  //   setAlertType('error');
-  // }
+
+  const handleSubmit = () => {
+  setShowAlert(true);
+  setAlertType('success')
+  setAlertMessage("Logged in successfully")
+  };
+  const handleCancel=()=>{
+    setShowAlert(true);
+    setAlertMessage("Something went wrong");
+    setAlertType('error');
+  }
 
   return (
     <div className="collegewholediv">
@@ -200,175 +39,185 @@ const handleChange =(e)=>{
             <option value="girlshostel">Hostel Facilities for Girls</option>
 
         </select>
-         </div>
+        </div>
 
-          {(selectedSection==='All' || selectedSection==='collegeinfo') && (
-              <>
-              <fieldset className="collegefieldset">
-              <legend className="collegelegend">College info</legend>
-                <div className="field-row">
-                <Inputfield eltname={"collegecode"} type={"text"} label={"College Code"} id={"collegecode"} htmlfor={"collegecode"} classname={"field-block"} onchange={handleChange} error={error["collegecode"]}/>
-                <Inputfield eltname={"collegenameWithdistrict"} type={"text"} label={"College name With district"} id={"cnwd"} htmlfor={"cwnd"} classname={"field-block"} onchange={handleChange} error={error["collegenameWithdistrict"]} />
-                </div>
-                <div className="field-row">
-                <Inputfield eltname={"chairman"} type={"text"} label={"Name of the Chairman"} id={"chairman"} htmlfor={"chairman"}  classname={"field-block"} onchange={handleChange} error={error["chairman"]} />
-                <Inputfield eltname={"chairman's contact"} type={"text"} label={"chairman's contact"} id={"chairmancontact"} htmlfor={"chairmancontact"}  classname={"field-block"} error={error["chairman's contact"]} onchange={handleChange}/>
-                </div>
-              <div className='field-row'>
-                <Inputfield eltname={"principal's name"} type={"text"} label={"Name of the principal"} id={"principal"} htmlfor={"principal"}  classname={"field-block"} error={error["principal's name"]} onchange={handleChange}/>
-                <Inputfield eltname={"principal's contact"} type={"text"} label={"Principal Contact Number"} id={"principalcontact"} htmlfor={"principalcontact"}  classname={"field-block"} error={error["principal's contact"]} onchange={handleChange}/>
+        {(selectedSection==='All' || selectedSection==='collegeinfo') && (
+            <>
+            <fieldset className="collegefieldset">
+            <legend className="collegelegend">College info</legend>
+              <div className="field-row">
+              <Inputfield eltname={"collegecode"} type={"text"} label={"College Code"} id={"collegecode"} htmlfor={"collegecode"} classname={"field-block"} />
+              <Inputfield eltname={"college name With district"} type={"text"} label={"College-name-With-district"} id={"cnwd"} htmlfor={"cwnd"} classname={"field-block"} />
               </div>
-              </fieldset>
-              </>
-              
-          )}
-
-          {(selectedSection==='All' || selectedSection==='addressinfo') && (
-              <>
-              <fieldset className="collegefieldset">
-              <legend className="collegelegend">Address Details</legend>
-              <div className='field-row'>
-              <div className='field-block'>
-                <label htmlFor="Address">Address (Enter address only)</label>
-                <textarea  name="address" id="Address" onChange={handleChange}></textarea>
-                {error["address"] && <p className="error-message">{error["address"]}</p>}
+              <div className="field-row">
+              <Inputfield eltname={"chairman"} type={"text"} label={"Name of the Chairman"} id={"chairman"} htmlfor={"chairman"}  classname={"field-block"} />
+              <Inputfield eltname={"chairman's contact"} type={"text"} label={"chairman's contact"} id={"chairmancontact"} htmlfor={"chairmancontact"}  classname={"field-block"} />
               </div>
-            <Inputfield eltname={"taluk"} type={"text"} label={"Taluk"} id={"taluk"} htmlfor={"taluk"} classname={"field-block"} error={error["taluk"]} onchange={handleChange}/>
+             <div className='field-row'>
+              <Inputfield eltname={"principal's name"} type={"text"} label={"Name of the principal"} id={"principal"} htmlfor={"principal"}  classname={"field-block"} />
+              <Inputfield eltname={"principal's contact"} type={"text"} label={"Principal Contact Number"} id={"principalcontact"} htmlfor={"principalcontact"}  classname={"field-block"} />
+            </div>
+            </fieldset>
+            </>
+            
+        )}
+
+        {(selectedSection==='All' || selectedSection==='addressinfo') && (
+            <>
+            <fieldset className="collegefieldset">
+            <legend className="collegelegend">Address Details</legend>
+            <div className='field-row'>
+            <div className='field-block'>
+              <label htmlFor="Address">Address (Enter address only)</label>
+              <textarea  name="address" id="Address"></textarea>
+            </div>
+          <Inputfield eltname={"taluk"} type={"text"} label={"Taluk"} id={"taluk"} htmlfor={"taluk"} classname={"field-block"} />
+          </div>
+
+          <div className='field-row'>
+          <Inputfield eltname={"district"} type={"text"} label={"District"} id={"district"} htmlfor={"district"} classname={"field-block"} />
+          <Inputfield eltname={"constituency"} type={"text"} label={"Constituency"} id={"constituency"} htmlfor={"constituency"} classname={"field-block"} />
+          </div>
+          <div className='field-row'>
+          <Inputfield eltname={"pincode"} type={"text"} label={"Pincode"} id={"pincode"} htmlfor={"pincode"} classname={"field-block"} />
+          <Inputfield eltname={"collegephone"} type={"text"} label={"College Phone/Fax"} id={"collegephone"} htmlfor={"collegephone"} classname={"field-block"} />
+          </div>
+
+          <div className='field-row'>
+         <Inputfield eltname={"collegeemaii"} type={"email"} label={"Email ID"} id={"email"} htmlfor={"email"} classname={"field-block"} />
+          <Inputfield eltname={"websitecollege"} type={"text"} label={"Website"} id={"website"} htmlfor={"website"} classname={"field-block"} />
+          </div>
+
+          <div className='field-row-single'>
+          <Inputfield eltname={"antiraggingNo"} type={"text"} label={"Anti-Ragging Contact No"} id={"antiragging"} htmlfor={"antiragging"} classname={"field-block"} />
+          </div>
+          </fieldset>
+
+            </>
+        )}
+
+         {(selectedSection==='All' || selectedSection==='basicinfo') && (
+            <>
+            <fieldset className="collegefieldset">
+            <legend className="collegelegend">Bank Info</legend>
+           <div className='field-row'>
+              <Inputfield eltname="bankaccountno" type="text" label="Bank Account No" id="bankaccountNo" htmlfor="bankaccountno" classname="field-block" />
+              <Inputfield eltname="bankname" type="text" label="Bank Name" id="bankname" htmlfor="bankname" classname="field-block" />
+            </div>
+            <div className='field-row'>
+            <Inputfield eltname={"minoritystatus"} type={"radio"} radiolabel={"Minority Status"} classname={"field-block"}  options={[{label:"Yes",value:"Yes"},{label:"No",value:"No"}]}/>
+            <Inputfield eltname={"autonomousstatus"} type={"radio"} radiolabel={"Autonomous Status"} classname={"field-block"}  options={[{label:"Yes",value:"Yes"},{label:"No",value:"No"}]}/>
             </div>
 
             <div className='field-row'>
-            <Inputfield eltname={"district"} type={"text"} label={"District"} id={"district"} htmlfor={"district"} classname={"field-block"} error={error["district"]} onchange={handleChange}/>
-            <Inputfield eltname={"constituency"} type={"text"} label={"Constituency"} id={"constituency"} htmlfor={"constituency"} classname={"field-block"} error={error["constituency"]} onchange={handleChange}/>
+                <Inputfield eltname="distance" type="text" label="Distance in KM's" id="distance" htmlfor="distance" classname="field-block" />
+                <Inputfield eltname="nearestrailway" type="text" label="Nearest Railway Station" id="nearestrailway" htmlfor="nearestrailway" classname="field-block" />
             </div>
+            <div className="field-row-single">
+              <Inputfield eltname="distancefromrailway" type="text" label="Distance in KM's from Railway Station" id="distancefromrailway" htmlfor="distancefromrailway" classname="field-block" />
+              </div>
+            </fieldset>
+            </>
+        )}
+
+        {(selectedSection==='All' || selectedSection==='transportfacility') && (
+            <>
+            <fieldset className="collegefieldset">
+            <legend className="collegelegend">Transport Facility</legend>
             <div className='field-row'>
-            <Inputfield eltname={"pincode"} type={"text"} label={"Pincode"} id={"pincode"} htmlfor={"pincode"} classname={"field-block"} error={error["pincode"]} onchange={handleChange}/>
-            <Inputfield eltname={"collegephone"} type={"text"} label={"College Phone/Fax"} id={"collegephone"} htmlfor={"collegephone"} classname={"field-block"} error={error["collegephone"]} onchange={handleChange}/>
+              <Inputfield eltname={"transportfacility"} type={"radio"} radiolabel={"Transport Facility"} classname={"field-block"} options={[{ label: "Yes", value: "Yes" }, { label: "No", value: "No" }]} />
+              <Inputfield eltname={"transport"} type={"radio"} radiolabel={"Transport"} classname={"field-block"} options={[{ label: "Optional", value: "Optional" }, { label: "Compulsory", value: "Compulsory" }]} />
+              </div>
+
+            <div className='field-row'>
+
+                <Inputfield eltname={"mintransportcharge"} type={"text"} label={"Min Transport Charge (Rs/Year)"} id={"mintransportcharge"} htmlfor={"mintransportcharge"} classname={"field-block"}  />
+                <Inputfield eltname={"maxtransportcharge"} type={"text"} label={"Max Transport Charge (Rs/Year)"} id={"maxtransportcharge"} htmlfor={"maxtransportcharge"} classname={"field-block"} />
+                </div>
+
+            </fieldset>
+            </>
+        )}
+
+        {(selectedSection==='All' || selectedSection==='boyshostel') && (
+            <>
+            <fieldset className="collegefieldset">
+            <legend className="collegelegend">Hostel Facilities for Boys</legend>
+            <div className='field-row'>
+            <Inputfield eltname={"accomodationavailableboys"} type={"radio"} radiolabel={"Accommodation Available"} classname={"field-block"} options={[{ label: "Yes", value: "Yes" }, { label: "No", value: "No" }]} />
+            <Inputfield eltname={"hostelstaytypeboys"} type={"radio"} radiolabel={"Hostel Stay Type"} classname={"field-block"} options={[{ label: "Permanent", value: "Permanent" }, { label: "Rental", value: "Rental" }]} />
             </div>
 
             <div className='field-row'>
-          <Inputfield eltname={"collegeemail"} type={"email"} label={"Email ID"} id={"email"} htmlfor={"email"} classname={"field-block"} error={error["collegeemail"]} onchange={handleChange}/>
-            <Inputfield eltname={"websitecollege"} type={"text"} label={"Website"} id={"website"} htmlfor={"website"} classname={"field-block"} error={error["websitecollege"]} onchange={handleChange}/>
+            <Inputfield eltname={"typeofmessboys"} type={"radio"} radiolabel={"Type of Mess"} classname={"field-block"} options={[{ label: "Veg", value: "Veg" }, { label: "Non Veg", value: "Non Veg" }, { label: "Both", value: "Both" }]} />
+            <Inputfield eltname={"messbillboys"} type={"text"} radiolabel={"Mess Bill (Rs/Month)"} id={"messbillboys"} htmlfor={"messbillboys"} classname={"field-block"} />
             </div>
-
-            <div className='field-row-single'>
-            <Inputfield eltname={"antiraggingNo"} type={"text"} label={"Anti-Ragging Contact No"} id={"antiragging"} htmlfor={"antiragging"} classname={"field-block"} error={error["antiraggingNo"]} onchange={handleChange}/>
+            <div className='field-row'>
+            <Inputfield eltname={"roomrentboys"} type={"text"} label={"Room Rent (Rs/Month)"} id={"roomrentboys"} htmlfor={"roomrentboys"} classname={"field-block"} />
+            <Inputfield eltname={"electricityboys"} type={"text"} label={"Electricity Charges (Rs/Month)"} id={"electricityboys"} htmlfor={"electricityboys"} classname={"field-block"} />
+            </div>
+            <div className='field-row'>
+            <Inputfield eltname={"cautiondepositboys"} type={"text"} label={"Caution Deposit (Rs)"} id={"cautiondepositboys"} htmlfor={"cautiondepositboys"} classname={"field-block"} />
+            <Inputfield eltname={"establishmentboys"} type={"text"} label={"Establishment Charges (Rs/Year)"} id={"establishmentboys"} htmlfor={"establishmentboys"} classname={"field-block"} />
+            </div>
+            <div className="field-row-single">
+            <Inputfield eltname={"admissionfeesboys"} type={"text"} label={"Admission Fees (Rs/Year)"} id={"admissionfeesboys"} htmlfor={"admissionfeesboys"} classname={"field-block"} />
             </div>
             </fieldset>
 
-              </>
-          )}
+            </>
+        )}
 
-          {(selectedSection==='All' || selectedSection==='basicinfo') && (
-              <>
-              <fieldset className="collegefieldset">
-              <legend className="collegelegend">Bank Info</legend>
+        
+        {(selectedSection==='All' || selectedSection==='girlshostel') && (
+            <>
+            <fieldset className="collegefieldset">
+            <legend className="collegelegend">Hostel Facilities for Girls</legend>
             <div className='field-row'>
-                <Inputfield eltname={"bankaccountno"} type={"text"} label={"Bank Account No"} id={"bankaccountNo"} htmlfor={"bankaccountno"} classname={"field-block"} error={error["bankaccountno"]} onchange={handleChange}/>
-                <Inputfield eltname={"bankname"} type={"text"} label={"Bank Name"} id={"bankname"} htmlfor={"bankname"} classname={"field-block"} error={error["bankname"]} onchange={handleChange} />
-              </div>
-              <div className='field-row'>
-              <Inputfield eltname={"minoritystatus"} type={"radio"} radiolabel={"Minority Status"} classname={"field-block"} options={[{label:"Yes",value:"Yes"},{label:"No",value:"No"}]} error={error["minoritystatus"]} onchange={handleChange}/>
-              <Inputfield eltname={"autonomousstatus"} type={"radio"} radiolabel={"Autonomous Status"} classname={"field-block"} options={[{label:"Yes",value:"Yes"},{label:"No",value:"No"}]} error={error["autonomousstatus"]} onchange={handleChange}/>
-              </div>
-              <div className='field-row'>
-                  <Inputfield eltname={"distance"} type={"text"} label={"Distance in KM's"} id={"distance"} htmlfor={"distance"} classname={"field-block"} error={error["distance"]} onchange={handleChange}/>
-                  <Inputfield eltname={"nearestrailway"} type={"text"} label={"Nearest Railway Station"} id={"nearestrailway"} htmlfor={"nearestrailway"} classname={"field-block"} error={error["nearestrailway"]} onchange={handleChange}/>
-              </div>
-              <div className="field-row-single">
-                <Inputfield eltname={"distancefromrailway"} type={"text"} label={"Distance in KM's from Railway Station"} id={"distancefromrailway"} htmlfor={"distancefromrailway"} classname={"field-block"} error={error["distancefromrailway"]} onchange={handleChange}/>
-                </div>
-              </fieldset>
-              </>
-          )}
+            <Inputfield eltname={"accomodationavailablegirls"} type={"radio"} radiolabel={"Accommodation Available"} classname={"field-block"} options={[{ label: "Yes", value: "Yes" }, { label: "No", value: "No" }]} />
+            <Inputfield eltname={"hostelstaytypegirls"} type={"radio"} radiolabel={"Hostel Stay Type"} classname={"field-block"} options={[{ label: "Permanent", value: "Permanent" }, { label: "Rental", value: "Rental" }]} />
+            </div>
 
-          {(selectedSection==='All' || selectedSection==='transportfacility') && (
-              <>
-              <fieldset className="collegefieldset">
-              <legend className="collegelegend">Transport Facility</legend>
-              <div className='field-row'>
-                <Inputfield eltname={"transportfacility"} type={"radio"} radiolabel={"Transport Facility"} classname={"field-block"} options={[{ label: "Yes", value: "Yes" }, { label: "No", value: "No" }]} error={error["transportfacility"]} onchange={handleChange}/>
-                <Inputfield eltname={"transport"} type={"radio"} radiolabel={"Transport"} classname={"field-block"} options={[{ label: "Optional", value: "Optional" }, { label: "Compulsory", value: "Compulsory" }]} error={error["transport"]} onchange={handleChange}/>
-                </div>
+            <div className='field-row'>
+            <Inputfield eltname={"typeofmessgirls"} type={"radio"} radiolabel={"Type of Mess"} classname={"field-block"} options={[{ label: "Veg", value: "Veg" }, { label: "Non Veg", value: "Non Veg" }, { label: "Both", value: "Both" }]} />
+            <Inputfield eltname={"messbillgirls"} type={"text"} radiolabel={"Mess Bill (Rs/Month)"} id={"messbillgirls"} htmlfor={"messbillgirls"} classname={"field-block"} />
+            </div>
 
-              <div className='field-row'>
-                  <Inputfield eltname={"mintransportcharge"} type={"text"} label={"Min Transport Charge (Rs/Year)"} id={"mintransportcharge"} htmlfor={"mintransportcharge"} classname={"field-block"} error={error["mintransportcharge"]} onchange={handleChange}/>
-                  <Inputfield eltname={"maxtransportcharge"} type={"text"} label={"Max Transport Charge (Rs/Year)"} id={"maxtransportcharge"} htmlfor={"maxtransportcharge"} classname={"field-block"} error={error["maxtransportcharge"]} onchange={handleChange}/>
-                  </div>
+            <div className='field-row'>
+            <Inputfield eltname={"roomrentgirls"} type={"text"} label={"Room Rent (Rs/Month)"} id={"roomrentgirls"} htmlfor={"roomrentgirls"} classname={"field-block"} />
+            <Inputfield eltname={"electricitygirls"} type={"text"} label={"Electricity Charges (Rs/Month)"} id={"electricitygirls"} htmlfor={"electricitygirls"} classname={"field-block"} />
+            </div>
 
-              </fieldset>
-              </>
-          )}
+            <div className='field-row'>
+            <Inputfield eltname={"cautiondepositgirls"} type={"text"} label={"Caution Deposit (Rs)"} id={"cautiondepositgirls"} htmlfor={"cautiondepositgirls"} classname={"field-block"} />
+            <Inputfield eltname={"establishmentgirls"} type={"text"} label={"Establishment Charges (Rs/Year)"} id={"establishmentgirls"} htmlfor={"establishmentgirls"} classname={"field-block"} />
+            </div>
+            <div className="field-row-single">
+            <Inputfield eltname={"admissionfeesgirls"} type={"text"} label={"Admission Fees (Rs/Year)"} id={"admissionfeesgirls"} htmlfor={"admissionfeesgirls"} classname={"field-block"} />
+            </div>
 
-          {(selectedSection==='All' || selectedSection==='boyshostel') && (
-              <>
-              <fieldset className="collegefieldset">
-              <legend className="collegelegend">Hostel Facilities for Boys</legend>
-              <div className='field-row'>
-              <Inputfield eltname={"accomodationavailableboys"} type={"radio"} radiolabel={"Accommodation Available"} classname={"field-block"} options={[{ label: "Yes", value: "Yes" }, { label: "No", value: "No" }]} error={error["accomodationavailableboys"]} onchange={handleChange}/>
-              <Inputfield eltname={"hostelstaytypeboys"} type={"radio"} radiolabel={"Hostel Stay Type"} classname={"field-block"} options={[{ label: "Permanent", value: "Permanent" }, { label: "Rental", value: "Rental" }]} error={error["hostelstaytypeboys"]} onchange={handleChange}/>
-              </div>
-
-              <div className='field-row'>
-              <Inputfield eltname={"typeofmessboys"} type={"radio"} radiolabel={"Type of Mess"} classname={"field-block"} options={[{ label: "Veg", value: "Veg" }, { label: "Non Veg", value: "Non Veg" }, { label: "Both", value: "Both" }]} error={error["typeofmessboys"]} onchange={handleChange}/>
-              <Inputfield eltname={"messbillboys"} type={"text"} label={"Mess Bill (Rs/Month)"} id={"messbillboys"} htmlfor={"messbillboys"} classname={"field-block"} error={error["messbillboys"]} onchange={handleChange}/>
-              </div>
-              <div className='field-row'>
-              <Inputfield eltname={"roomrentboys"} type={"text"} label={"Room Rent (Rs/Month)"} id={"roomrentboys"} htmlfor={"roomrentboys"} classname={"field-block"} error={error["roomrentboys"]} onchange={handleChange}/>
-              <Inputfield eltname={"electricityboys"} type={"text"} label={"Electricity Charges (Rs/Month)"} id={"electricityboys"} htmlfor={"electricityboys"} classname={"field-block"} error={error["electricityboys"]} onchange={handleChange}/>
-              </div>
-              <div className='field-row'>
-              <Inputfield eltname={"cautiondepositboys"} type={"text"} label={"Caution Deposit (Rs)"} id={"cautiondepositboys"} htmlfor={"cautiondepositboys"} classname={"field-block"} error={error["cautiondepositboys"]} onchange={handleChange}/>
-              <Inputfield eltname={"establishmentboys"} type={"text"} label={"Establishment Charges (Rs/Year)"} id={"establishmentboys"} htmlfor={"establishmentboys"} classname={"field-block"} error={error["establishmentboys"]} onchange={handleChange}/>
-              </div>
-              <div className="field-row-single">
-              <Inputfield eltname={"admissionfeesboys"} type={"text"} label={"Admission Fees (Rs/Year)"} id={"admissionfeesboys"} htmlfor={"admissionfeesboys"} classname={"field-block"} error={error["admissionfeesboys"]} onchange={handleChange}/>
-              </div>
-              </fieldset>
-
-              </>
-          )}
-
-          
-          {(selectedSection==='All' || selectedSection==='girlshostel') && (
-              <>
-              <fieldset className="collegefieldset">
-              <legend className="collegelegend">Hostel Facilities for Girls</legend>
-              <div className='field-row'>
-              <Inputfield eltname={"accomodationavailablegirls"} type={"radio"} radiolabel={"Accommodation Available"} classname={"field-block"} options={[{ label: "Yes", value: "Yes" }, { label: "No", value: "No" }]} error={error["accomodationavailablegirls"]} onchange={handleChange}/>
-              <Inputfield eltname={"hostelstaytypegirls"} type={"radio"} radiolabel={"Hostel Stay Type"} classname={"field-block"} options={[{ label: "Permanent", value: "Permanent" }, { label: "Rental", value: "Rental" }]} error={error["hostelstaytypegirls"]} onchange={handleChange}/>
-              </div>
-
-              <div className='field-row'>
-              <Inputfield eltname={"typeofmessgirls"} type={"radio"} radiolabel={"Type of Mess"} classname={"field-block"} options={[{ label: "Veg", value: "Veg" }, { label: "Non Veg", value: "Non Veg" }, { label: "Both", value: "Both" }]} error={error["typeofmessgirls"]} onchange={handleChange}/>
-              <Inputfield eltname={"messbillgirls"} type={"text"} radiolabel={"Mess Bill (Rs/Month)"} id={"messbillgirls"} htmlfor={"messbillgirls"} classname={"field-block"} error={error["messbillgirls"]} onchange={handleChange}/>
-              </div>
-
-              <div className='field-row'>
-              <Inputfield eltname={"roomrentgirls"} type={"text"} label={"Room Rent (Rs/Month)"} id={"roomrentgirls"} htmlfor={"roomrentgirls"} classname={"field-block"} error={error["roomrentgirls"]} onchange={handleChange}/>
-              <Inputfield eltname={"electricitygirls"} type={"text"} label={"Electricity Charges (Rs/Month)"} id={"electricitygirls"} htmlfor={"electricitygirls"} classname={"field-block"} error={error["electricitygirls"]} onchange={handleChange}/>
-              </div>
-              <div className='field-row'>
-              <Inputfield eltname={"cautiondepositgirls"} type={"text"} label={"Caution Deposit (Rs)"} id={"cautiondepositgirls"} htmlfor={"cautiondepositgirls"} classname={"field-block"} error={error["cautiondepositgirls"]} onchange={handleChange}/>
-              <Inputfield eltname={"establishmentgirls"} type={"text"} label={"Establishment Charges (Rs/Year)"} id={"establishmentgirls"} htmlfor={"establishmentgirls"} classname={"field-block"} error={error["establishmentgirls"]} onchange={handleChange}/>
-              </div>
-              <div className="field-row-single">
-              <Inputfield eltname={"admissionfeesgirls"} type={"text"} label={"Admission Fees (Rs/Year)"} id={"admissionfeesgirls"} htmlfor={"admissionfeesgirls"} classname={"field-block"} error={error["admissionfeesgirls"]} onchange={handleChange}/>
-              </div>
-
-              </fieldset>
-              </>
-          )}
-
-          <div id="collegebutton">
-            <Button name={"SUBMIT"} onClick={handleSubmit}  />
+            </fieldset>
+            </>
+        )}
+        <div id="collegebutton">
+          <Button name={"SUBMIT"} onClick={handleSubmit} />
+         <Alert type={alertType}
+        message={alertMessage}
+        show={showAlert}
+        close={handleCloseAlert}
+        />
+         <div>
+          <Button name={"CANCEL"} onClick={handleCancel} />
           <Alert
-          type={alertType}
-          message={alertMessage}
-          show={showAlert}
-          okbutton={alertStage==='confirm'? handleconfirmAlert : (alertStage==='success'||alertStage==='validation')? handleCloseAlert:null}
-          cancelbutton={alertStage==='confirm'?handleCloseAlert:null}
-          />
-          </div>   
+        type={alertType}
+        message={alertMessage}
+        show={showAlert}
+        close={handleCloseAlert} />
+        </div>
+         
+        </div>  
+       
+       
         </div>
   )
 }

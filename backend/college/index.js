@@ -11,10 +11,7 @@ app.use(
     credentials: true,
   })
 );
-app.use(express.urlencoded({ extended: true }));
+
 app.use("/api", appRouter);
-app.get("/test",(req,res)=>{console.log("test postman")
-  res.send("postman testing");
-});
 
 app.listen(PORT, () => console.log(`server is running on ${PORT}......`));

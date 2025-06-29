@@ -2,7 +2,6 @@
   width:100%; 
 
 }
-
 .collegefieldset {
   margin-top: 30px;
   border: 2px solid #ccc;
@@ -51,7 +50,6 @@
   font-size: 0.95rem;
   width: 100%;
   box-sizing: border-box;
-  padding:10px;
 }
 #Address{
   padding: 8px;
@@ -115,14 +113,12 @@
   outline: none;
   box-shadow: 0 0 0 3px rgba(63, 81, 181, 0.1);
 }
-/* input[type='text']:focus{
+input[type='text']:focus{
   border-color: rgb(89, 89, 161);
-} */
+}
 #collegebutton{
   margin-bottom: 10px;
   display:flex;
-  /* flex-direction: column; */
-  /* justify-content:center; */
   align-items: center;
   justify-content: center;
   gap:10px;
@@ -134,11 +130,8 @@
 .field-row-single input{
   display: flex;
   justify-content: space-between;
+
   margin-bottom: 15px;
   gap: 20px; 
-  width:560px;
-  /* width:calc(100%-200px); */
-}
-.error-message{
-  color:red;
+  width:calc(50%-10px);
 }
