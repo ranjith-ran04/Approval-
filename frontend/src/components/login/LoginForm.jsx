@@ -142,7 +142,7 @@ Tamilnadu Lateral Entry Direct Second Year B.E/B.Tech.,Approval-2025`}
             type={alertType}
             message={alertMessage}
             show={showAlert}
-            close={handleCloseAlert}
+            okbutton={handleCloseAlert}
           />
         </div>
       </form>
