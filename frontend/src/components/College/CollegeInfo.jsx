@@ -13,8 +13,7 @@ const[formdata,setFormdata]=useState({})
 const[error,setError]=useState({})
 const[alertStage,setAlertStage]=useState('');
 
-const requiredFields = ["collegecode","collegenameWithdistrict","chairman","chairman's contact","principal's name","principal's contact","address","taluk","district",
-  "constituency",
+const requiredFields = ["collegecode","collegenameWithdistrict","chairman","chairman's contact","principal's name","principal's contact","address","taluk","district","constituency",
   "pincode",
   "collegephone",
   "collegeemail",
@@ -160,7 +159,7 @@ const handleChange =(e)=>{
       setTimeout(()=>{
         setShowAlert(true);
         setAlertStage('success');
-        setAlertMessage('Your Details aren saved');
+        setAlertMessage('Your Details are saved');
         setAlertType('success');
       },100);
     };
