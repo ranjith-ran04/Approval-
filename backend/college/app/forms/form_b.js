@@ -4,7 +4,7 @@ const path = require("path");
 const arialBold = path.join(__dirname, "../fonts/G_ari_bd.TTF");
 const arial = path.join(__dirname, "../fonts/arial.ttf");
 const branchCode = require("../json/branch");
-const { header } = require("./pageFrame");
+const { header,footer } = require("./pageFrame");
 
 function formb(req, res) {
   const { collegeCode } = req.body;
@@ -20,6 +20,7 @@ function formb(req, res) {
       size: "A4",
       layout: "landscape",
       margin: 8,
+      bufferPages:true
     });
     doc.pipe(res);
     doc.registerFont("Arial-Bold", arialBold);
@@ -225,6 +226,13 @@ function formb(req, res) {
         drawCell(student.afw ? "Y" : "N", x, y, columnWidths.AFW, rowHeight);
       }
     });
+    const remainingHeight = doc.page.height - doc.y - doc.page.margins.bottom;
+    const extraSpaceNeeded = 150;
+    if (remainingHeight < extraSpaceNeeded) {
+      doc.addPage();
+      header("B", doc, collegeCode);
+    }
+    footer(doc);
 
     doc.end();
   });
