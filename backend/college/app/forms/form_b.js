@@ -4,7 +4,7 @@ const path = require("path");
 const arialBold = path.join(__dirname, "../fonts/G_ari_bd.TTF");
 const arial = path.join(__dirname, "../fonts/arial.ttf");
 const branchCode = require("../json/branch");
-const {header} = require('./pageFrame');
+const { header } = require("./pageFrame");
 
 function formb(req, res) {
   const { collegeCode } = req.body;
@@ -16,7 +16,6 @@ function formb(req, res) {
     }
     res.setHeader("Content-Type", "application/pdf");
     res.setHeader("Content-Disposition", 'inline; filename="formb.pdf"');
-    // console.log(result);
     const doc = new PDFDocument({
       size: "A4",
       layout: "landscape",
@@ -32,10 +31,8 @@ function formb(req, res) {
       acc[branch].push(student);
       return acc;
     }, {});
-    // console.log(studentsByBranch);
-
     const columnWidths = {
-      SNO: 25,
+      SNO: 26,
       APP_NO: 40,
       REG_NO: 47,
       QUOTA: 37,
@@ -48,7 +45,6 @@ function formb(req, res) {
       FG: 20,
       AFW: 25,
     };
-
     const sems = [
       "SEM_1",
       "SEM_2",
@@ -66,7 +62,7 @@ function formb(req, res) {
       let headerHeight = 20;
 
       [
-        { label: "S.No", width: columnWidths.SNO },
+        { label: "S.NO", width: columnWidths.SNO },
         { label: "APP_NO", width: columnWidths.APP_NO },
         { label: "REG_NO", width: columnWidths.REG_NO },
         { label: "QUOTA", width: columnWidths.QUOTA },
@@ -94,7 +90,7 @@ function formb(req, res) {
       });
 
       x =
-        15.9 +
+        16 +
         columnWidths.SNO +
         columnWidths.APP_NO +
         columnWidths.REG_NO +
@@ -107,9 +103,9 @@ function formb(req, res) {
       let semY = y + headerHeight;
 
       sems.forEach(() => {
-        drawCell("obt", x, semY, columnWidths.SEM / 2, headerHeight);
+        drawCell("OBT", x, semY, columnWidths.SEM / 2, headerHeight);
         drawCell(
-          "max",
+          "MAX",
           x + columnWidths.SEM / 2,
           semY,
           columnWidths.SEM / 2,
@@ -118,29 +114,66 @@ function formb(req, res) {
         x += columnWidths.SEM;
       });
     }
+    function drawCell(text, x, y, width, height) {
+      let textHeight = doc.heightOfString(text,{
+        width: width-4,
+        align: "center",
+      })
+      let yOffset = y + (height - textHeight) / 2;
+        if (text === "S.NO") {
+    yOffset += 12;
+  }
+      doc.rect(x, y, width, height).stroke();
+      doc.fontSize(8).text(text, x + 2, yOffset,{
+        width: width - 4,
+        height: height - 10,
+        align: "center",
+      });
+    }
 
-    function drawStudentRow(student, index) {
+    Object.entries(studentsByBranch).forEach(([branchCodeKey, students]) => {
+      const branchName = branchCode.get(branchCodeKey) || "Unknown Branch";
+      if (
+        doc.y + doc.heightOfString(branchName) >
+        doc.page.height - doc.page.margins.bottom - 25
+      ) {
+        doc.addPage();
+        header("B", doc, collegeCode);
+        doc.moveDown();
+      }
+      doc.moveDown();
+      doc
+        .font("Arial-Bold")
+        .fontSize(13)
+        .text(`${branchCodeKey} - ${branchName}`, 16);
+      doc.moveDown();
+      tableheader();
+      let y = doc.y + 5;
+      students.forEach((student, index) => {
+        const rowHeight = doc.heightOfString("Thamarai Nagasamy Kumar".toString(), {
+      width: columnWidths.NAME - 4,
+      align: "center",
+    })+10;
+        drawStudentRow(student, index,rowHeight,y);
+        y+=rowHeight;
+      });
+      doc.moveDown();
+      function drawStudentRow(student, index ,rowHeight) {
       let x = 16;
-      const rowHeight = doc.heightOfString(student.name.toString(), {
-            width: columnWidths.NAME - 4,
-            align: "center",
-          })+10;
-
       if (doc.y + rowHeight > doc.page.height - doc.page.margins.bottom - 25) {
         doc.addPage();
         header("B", doc, collegeCode);
         doc.moveDown();
         tableheader();
+        y=doc.y+5; 
       }
-
-      const y = doc.y;
 
       const fields = [
         { key: "SNO", value: index + 1 },
         { key: "APP_NO", value: student.appln_no },
         { key: "REG_NO", value: student.reg_no },
         { key: "QUOTA", value: "GOVT" },
-        { key: "NAME", value: student.name },
+        { key: "NAME", value: "Thamarai Nagasamy Kumar" },
         { key: "NAT", value: student.nat },
         { key: "COM", value: student.com },
         { key: "BOARD", value: student.board },
@@ -165,7 +198,13 @@ function formb(req, res) {
         x += columnWidths.SEM;
       });
 
-      drawCell(String(student.average), x, y, columnWidths.PERCENT, rowHeight);
+      drawCell(
+        String(student.average.slice(0, 4)),
+        x,
+        y,
+        columnWidths.PERCENT,
+        rowHeight
+      );
       x += columnWidths.PERCENT;
 
       drawCell(student.fg ? "Y" : "N", x, y, columnWidths.FG, rowHeight);
@@ -173,34 +212,6 @@ function formb(req, res) {
 
       drawCell(student.afw ? "Y" : "N", x, y, columnWidths.AFW, rowHeight);
     }
-    function drawCell(text, x, y, width, height) {
-      doc.rect(x, y, width, height).stroke();
-      doc.fontSize(8).text(text, x + 2, y+5, {
-        width: width - 4,
-        height: height - 10,
-        align: "center",
-      });
-      doc.moveDown();
-    }
-
-    Object.entries(studentsByBranch).forEach(([branchCodeKey, students]) => {
-      const branchName = branchCode.get(branchCodeKey) || "Unknown Branch";
-      if (doc.y + doc.heightOfString(branchName) > doc.page.height - doc.page.margins.bottom - 25) {
-        doc.addPage();
-        header("B", doc, collegeCode);
-        doc.moveDown();
-      }
-      doc.moveDown();
-      doc
-        .font("Arial-Bold")
-        .fontSize(13)
-        .text(`${branchCodeKey} - ${branchName}`, 16);
-      doc.moveDown();
-      tableheader();
-      students.forEach((student, index) => {
-        drawStudentRow(student, index);
-      });
-      doc.moveDown();
     });
 
     doc.end();
