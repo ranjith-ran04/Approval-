@@ -4,7 +4,7 @@ const path = require("path");
 const arialBold = path.join(__dirname, "../fonts/G_ari_bd.TTF");
 const arial = path.join(__dirname, "../fonts/arial.ttf");
 const branchCode = require("../json/branch");
-const { header,footer } = require("./pageFrame");
+const { header, footer } = require("./pageFrame");
 
 function formb(req, res) {
   const { collegeCode } = req.body;
@@ -20,7 +20,7 @@ function formb(req, res) {
       size: "A4",
       layout: "landscape",
       margin: 8,
-      bufferPages:true
+      bufferPages: true,
     });
     doc.pipe(res);
     doc.registerFont("Arial-Bold", arialBold);
@@ -159,11 +159,19 @@ function formb(req, res) {
       tableheader();
       let y = doc.y + 5;
       students.forEach((student, index) => {
-        const rowHeight =
+        let rowHeight =
           doc.heightOfString(student.name.toString(), {
             width: columnWidths.NAME - 4,
             align: "center",
           }) + 10;
+        let boardHeight =
+          doc.heightOfString(student.board.toString(), {
+            width: columnWidths.BOARD - 4,
+            align: "center",
+          }) + 10;
+        if (boardHeight > rowHeight) {
+          rowHeight = boardHeight;
+        }
         drawStudentRow(student, index, rowHeight, y);
         y += rowHeight;
       });
