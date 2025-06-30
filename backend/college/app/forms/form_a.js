@@ -1,8 +1,8 @@
 const pdf = require("pdfkit");
 const db = require("../config/db");
 const path = require("path");
-const arialBold = path.join(__dirname, "../fonts/G_ari_bd.TTF");
-const arial = path.join(__dirname, "../fonts/arial.ttf");
+const arialBold = path.join(__dirname, "../fonts/arial/G_ari_bd.TTF");
+const arial = path.join(__dirname, "../fonts/arial/arial.ttf");
 const { header, footer } = require("./pageFrame");
 
 function forma(req, res) {
