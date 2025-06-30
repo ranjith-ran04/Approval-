@@ -1,6 +1,6 @@
 const college = require("../json/college");
 
-function header(c, doc, collegeCode) {
+function header(c, doc, collegeCode, freezed) {
   const collegeName = college.get(collegeCode.toString()) || "Unknown College";
   doc
     .rect(
@@ -12,13 +12,20 @@ function header(c, doc, collegeCode) {
     .stroke();
   doc.moveDown();
   doc.font("Arial-Bold").fontSize(13).text("Second Year : 2024-2025", 20, 35);
-  doc.font("Arial-Bold").fontSize(13).text("(Rough Copy)", 735, 35);
+
+  if(freezed==="0"){
+    doc.font("Arial-Bold").fontSize(13).text("(Rough Copy)", 735, 35);
+  }
+
   doc.fontSize(15).text(`FORM-${c}`, 0, 32, { align: "center" });
   doc.moveDown();
-  doc.fontSize(14).text(`${collegeCode} - ${collegeName}`, {
+  doc
+  .fontSize(14)
+  .text(`${collegeCode} - ${collegeName}`, doc.page.margins.left, undefined, {
     align: "center",
-    width: doc.page.width - doc.page.margins.left - doc.page.margins.right - 3,
+    width: doc.page.width - doc.page.margins.left - doc.page.margins.right - 2,
   });
+
   doc.moveDown();
 }
 
