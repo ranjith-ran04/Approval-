@@ -17,7 +17,7 @@ function Sidebar({ setCurrent }) {
       <div className="menuItems">Student Details</div>
       <div className="menuItems">Discontinued Details</div>
       <div className="menuItems">Form A</div>
-      <div className="menuItems" onClick={()=>handleForm('formb',{collegeCode:5901})}>
+      <div className="menuItems" onClick={()=>handleForm('formb',{collegeCode:1})}>
         Form B
       </div>
       <div className="menuItems">Form C</div>
