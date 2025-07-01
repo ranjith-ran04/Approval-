@@ -1,16 +1,24 @@
 import { useState } from "react";
 import "./navigationBar.css";
 import { useNavigate } from "react-router-dom";
+import axios from 'axios';
+import {host} from '../../constants/backendpath'
 
 function NavigationBar({ text, profile, bool,setCurrent,login}) {
   const [visible, setVisible] = useState(false);
 
   const Navigate = useNavigate();
 
-  const handleLogOut = () => {
+  const handleLogOut = async() => {
+    try{
+    const res = await axios.get(`${host}logout`,{withCredentials:true})
+    if(res.status === 200){
     Navigate("/")
-    sessionStorage.setItem("notesShown","")
-  }
+    sessionStorage.setItem("notesShown","")}
+}catch(error){
+  console.log(error);
+}
+}
 
   const handleClicks = () => {
     if(!bool){setVisible(!visible);}

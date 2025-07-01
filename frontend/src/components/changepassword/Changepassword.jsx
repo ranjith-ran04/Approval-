@@ -1,8 +1,10 @@
 import "./changepassword.css";
-import { useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import NavigationBar from "../../widgets/navigationBar/NavigationBar";
 import Alert from "../../widgets/alert/Alert";
+import axios from "axios";
+import { host } from "../../constants/backendpath";
 
 function Changepassword() {
   const [formData, setFormData] = useState({
@@ -15,79 +17,107 @@ function Changepassword() {
   const [showAlert, setShowAlert] = useState(false);
   const [alertType, setAlertType] = useState("");
   const [alertMessage, setAlertMessage] = useState("");
-  const [shouldNavigate, setShouldNavigate] = useState(false);
   const [errors, setErrors] = useState({});
-  const location = useLocation();
-  const username = location.state.username || {};
-  console.log(username);
+  const [collegeCode,setCollegeCode] = useState(null);
 
-  const handleSubmit = (e) => {
+  useEffect(() => {
+    changeFetch();
+  }, []);
+
+  async function changeFetch() {
+    try {
+      const res = await axios.get(`${host}changePassword`, {
+        withCredentials: true,
+      });
+      if (res.status === 200) {
+        const c_code = res.data;
+        setCollegeCode(c_code);
+      }
+    } catch (error) {
+      console.log(error);
+      navigate('/');
+    }
+  }
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const validationErrors = validateForm("All");
     setErrors(validationErrors);
 
     if (Object.values(validationErrors).every((val) => val === "")) {
-      setAlertType("success");
-      setAlertMessage("Password changed successfully.");
-      setShowAlert(true);
-      setShouldNavigate(true);
+      try {
+        const res = await axios.post(`${host}changePassword`,{oldPassword:formData.oldPassword,newPassword:formData.newPassword,collegeCode:collegeCode}, {
+          withCredentials: true,
+        });
+        if (res.status === 200) {
+          setAlertType("success");
+          setAlertMessage("Password changed successfully.");
+          setShowAlert(true);
+        }
+      } catch (error) {
+        console.log(error);
+        setAlertType("error");
+        setAlertMessage(error.response?.data?.message || "Password change failed");
+        setShowAlert(true);
+      }
     }
   };
 
   const handleCloseAlert = () => {
-    setShowAlert(false);
-    if (shouldNavigate) {
-      navigate("/dashboard", {
-        state: {
-          username: "Thamarai",
-          role: "admin",
-        },
-      });
+    if(alertType === "error"){
+      setShowAlert(false);
+      formData.confirmPassword=""
+      formData.newPassword=""
+      formData.oldPassword=""
     }
+    else{
+      navigate('/dashboard');
+    }
+    
   };
 
-const validateForm = (name) => {
-  const newErrors = { ...errors };
+  const validateForm = (name) => {
+    const newErrors = { ...errors };
 
-  if (name === "oldPassword" || name === "All") {
-    const oldPassword = formData.oldPassword.trim();
-    if (!oldPassword) {
-      newErrors.oldPassword = "*Old password is required";
-    } else if (oldPassword.length < 7) {
-      newErrors.oldPassword = "*Old password must be at least 7 characters";
-    } else {
-      newErrors.oldPassword = "";
+    if (name === "oldPassword" || name === "All") {
+      const oldPassword = formData.oldPassword.trim();
+      if (!oldPassword) {
+        newErrors.oldPassword = "*Old password is required";
+      } else if (oldPassword.length < 7) {
+        newErrors.oldPassword = "*Old password must be at least 7 characters";
+      } else {
+        newErrors.oldPassword = "";
+      }
     }
-  }
 
-  if (name === "newPassword" || name === "All") {
-    const newPassword = formData.newPassword.trim();
-    if (!newPassword) {
-      newErrors.newPassword = "*New password is required";
-    } else if (newPassword.length < 7) {
-      newErrors.newPassword = "*New password must be at least 7 characters";
-    } else {
-      newErrors.newPassword = "";
+    if (name === "newPassword" || name === "All") {
+      const newPassword = formData.newPassword.trim();
+      if (!newPassword) {
+        newErrors.newPassword = "*New password is required";
+      } else if (newPassword.length < 7) {
+        newErrors.newPassword = "*New password must be at least 7 characters";
+      } else {
+        newErrors.newPassword = "";
+      }
     }
-  }
 
-  if (name === "confirmPassword" || name === "All") {
-    const confirmPassword = formData.confirmPassword.trim();
-    const newPassword = formData.newPassword.trim();
-    if (!confirmPassword) {
-      newErrors.confirmPassword = "*Confirm password is required";
-    } else if (confirmPassword.length < 7) {
-      newErrors.confirmPassword = "*Confirm password must be at least 7 characters";
-    } else if (confirmPassword !== newPassword) {
-      newErrors.confirmPassword = "*Confirm password must match new password";
-    } else {
-      newErrors.confirmPassword = "";
+    if (name === "confirmPassword" || name === "All") {
+      const confirmPassword = formData.confirmPassword.trim();
+      const newPassword = formData.newPassword.trim();
+      if (!confirmPassword) {
+        newErrors.confirmPassword = "*Confirm password is required";
+      } else if (confirmPassword.length < 7) {
+        newErrors.confirmPassword =
+          "*Confirm password must be at least 7 characters";
+      } else if (confirmPassword !== newPassword) {
+        newErrors.confirmPassword = "*Confirm password must match new password";
+      } else {
+        newErrors.confirmPassword = "";
+      }
     }
-  }
 
-  return newErrors;
-};
-
+    return newErrors;
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;

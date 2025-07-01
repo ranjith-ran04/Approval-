@@ -1,17 +1,38 @@
 const db = require("../config/db");
+const bcrypt = require('bcrypt');
 
 function changePassword(req,res){
     const {oldPassword,newPassword,collegeCode} = req.body;
-    const query = "update user_login set pass = ? where c_code = ? and pass = ?;";
-    db.query(query,[newPassword,collegeCode,oldPassword],(err,results)=>{
+    var query = "select * from user_login where c_code = ?;"
+    db.query(query,[collegeCode],(err,results)=>{
         if(err){
-            return res.status(500).json({msg:'error in query'});
+            return res.status(500).json({msg:'error in change select query'});
         }
-        if(results.affectedRows === 0){
+        const data = results[0];
+        const isMatch = bcrypt.compareSync(oldPassword,data.pass);
+        if(!isMatch && data.pass !== oldPassword){
             return res.status(404).json({msg:'user not found'});
         }
-        res.status(200).json({msg:'successfully updated'});
+        const hashedNewPassword = bcrypt.hashSync(newPassword,10);
+        query = "update user_login set pass = ?,changed = ?  where c_code = ?;";
+        db.query(query,[hashedNewPassword,1,collegeCode],(err,results)=>{
+            if(err){
+                return res.status(500).json({msg:'error in change update query'});
+            }
+            if(results.affectedRows === 0) return res.status(500).json({msg:'error no affected rows'});
+            res.status(200).json({msg:'successfully updated'});
+        })
     })
 }
 
-module.exports = changePassword;
+function fetchCode(req,res){
+    try{
+    const collegeCode = parseInt(req.user.counsellingCode,10);
+    res.status(200).send(collegeCode);
+    }
+    catch(error){
+        res.status(500).json({msg:'error in fetchcollegeCode'});
+    }
+}
+
+module.exports = {changePassword,fetchCode};
