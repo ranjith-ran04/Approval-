@@ -72,12 +72,12 @@ function formb(req, res) {
         { label: "COM", width: columnWidths.COM },
         { label: "BOARD", width: columnWidths.BOARD },
       ].forEach((item) => {
-        drawCell(item.label, x, y, item.width, headerHeight * 2);
+        drawCell(item.label, x, y, item.width, headerHeight * 2,false);
         x += item.width;
       });
 
       sems.forEach((sem) => {
-        drawCell(sem, x, y, columnWidths.SEM, headerHeight);
+        drawCell(sem, x, y, columnWidths.SEM, headerHeight,false);
         x += columnWidths.SEM;
       });
 
@@ -86,7 +86,7 @@ function formb(req, res) {
         { label: "FG", width: columnWidths.FG },
         { label: "AFW", width: columnWidths.AFW },
       ].forEach((item) => {
-        drawCell(item.label, x, y, item.width, headerHeight * 2);
+        drawCell(item.label, x, y, item.width, headerHeight * 2,false);
         x += item.width;
       });
 
@@ -104,18 +104,18 @@ function formb(req, res) {
       let semY = y + headerHeight;
 
       sems.forEach(() => {
-        drawCell("OBT", x, semY, columnWidths.SEM / 2, headerHeight);
+        drawCell("OBT", x, semY, columnWidths.SEM / 2, headerHeight,false);
         drawCell(
           "MAX",
           x + columnWidths.SEM / 2,
           semY,
           columnWidths.SEM / 2,
-          headerHeight
+          headerHeight,false
         );
         x += columnWidths.SEM;
       });
     }
-    function drawCell(text, x, y, width, height) {
+    function drawCell(text, x, y, width, height,font) {
       let textHeight = doc.heightOfString(text, {
         width: width - 4,
         align: "center",
@@ -125,7 +125,7 @@ function formb(req, res) {
         yOffset += 12;
       }
       doc.rect(x, y, width, height).stroke();
-      doc.fontSize(8).text(text, x + 2, yOffset, {
+      doc.font(font?"Arial":"Arial-Bold").fontSize(8).text(text, x + 2, yOffset, {
         width: width - 4,
         height: height - 10,
         align: "center",
@@ -201,20 +201,21 @@ function formb(req, res) {
         ];
 
         fields.forEach((item) => {
-          drawCell(String(item.value), x, y, columnWidths[item.key], rowHeight);
+          drawCell(String(item.value), x, y, columnWidths[item.key], rowHeight,true);
           x += columnWidths[item.key];
         });
 
         sems.forEach((sem, i) => {
           const obt = student[`obt_${i + 1}`] ?? 0;
           const max = student[`max_${i + 1}`] ?? 0;
-          drawCell(String(obt), x, y, columnWidths.SEM / 2, rowHeight);
+          drawCell(String(obt), x, y, columnWidths.SEM / 2, rowHeight,true);
           drawCell(
             String(max),
             x + columnWidths.SEM / 2,
             y,
             columnWidths.SEM / 2,
-            rowHeight
+            rowHeight,
+            true 
           );
           x += columnWidths.SEM;
         });
@@ -224,14 +225,15 @@ function formb(req, res) {
           x,
           y,
           columnWidths.PERCENT,
-          rowHeight
+          rowHeight,
+          true
         );
         x += columnWidths.PERCENT;
 
-        drawCell(student.fg ? "Y" : "N", x, y, columnWidths.FG, rowHeight);
+        drawCell(student.fg ? "Y" : "N", x, y, columnWidths.FG, rowHeight,true);
         x += columnWidths.FG;
 
-        drawCell(student.afw ? "Y" : "N", x, y, columnWidths.AFW, rowHeight);
+        drawCell(student.afw ? "Y" : "N", x, y, columnWidths.AFW, rowHeight,true);
       }
     });
     const remainingHeight = doc.page.height - doc.y - doc.page.margins.bottom;

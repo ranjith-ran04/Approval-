@@ -14,8 +14,8 @@ function Home() {
     principalName:"",
     collegeContact:""
   });
-  const collegeCode = "4";
-  const header = `${collegeCode || "unknownCode" }. ${college.get(collegeCode) || "unknownCollege"}`
+  const collegeCode = "5901";
+  const header = `${collegeCode || "unknownCode" } - ${college.get(collegeCode) || "unknownCollege"}`
   async function fetch(collegeCode) {
     try {
       const res = await axios.post(`${host}home`, { collegeCode: collegeCode });

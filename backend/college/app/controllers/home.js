@@ -11,4 +11,4 @@ function home(req,res){
     })
 }
 
-module.exports = home
+module.exports = home;

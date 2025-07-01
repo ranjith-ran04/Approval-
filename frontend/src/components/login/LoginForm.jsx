@@ -40,7 +40,11 @@ const LoginForm = () => {
   const handleCloseAlert = () => {
     setShowAlert(false);
     if (shouldNavigate) {
-      navigate('/dashboard');
+          navigate("/changePassword", {
+      state: {
+        username: formData.regNo,
+      },
+    });
     }
   };
 
