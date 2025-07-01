@@ -14,7 +14,7 @@ function Home() {
     principalName:"",
     collegeContact:""
   });
-  const collegeCode = "4";
+  const collegeCode = "5901";
   const header = `${collegeCode || "unknownCode" }. ${college.get(collegeCode) || "unknownCollege"}`
   async function fetch(collegeCode) {
     try {

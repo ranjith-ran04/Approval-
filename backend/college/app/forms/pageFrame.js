@@ -11,32 +11,47 @@ function header(c, doc, collegeCode, freezed) {
     )
     .stroke();
   doc.moveDown();
+  const pageWidth = doc.page.width;
+
+  // Title on the left
   doc.font("Arial-Bold").fontSize(13).text("Second Year : 2024-2025", 20, 35);
 
-  if(freezed==="0"){
-    doc.font("Arial-Bold").fontSize(13).text("(Rough Copy)", 735, 35);
+  // Conditional right-side label
+  if (freezed === "0") {
+    const text = "(Rough Copy)";
+    const textWidth = doc.widthOfString(text, { font: "Arial-Bold", size: 13 });
+    doc
+      .font("Arial-Bold")
+      .fontSize(13)
+      .text(text, pageWidth - textWidth - 20, 35);
   }
 
-  doc.fontSize(15).text(`FORM-${c}`, 0, 32, { align: "center" });
+  // Centered Form title
+  doc.font("Arial-Bold").fontSize(15).text(`FORM-${c}`, 0, 32, {
+    align: "center",
+    width: pageWidth,
+  });
+
   doc.moveDown();
   doc
-  .fontSize(14)
-  .text(`${collegeCode} - ${collegeName}`, doc.page.margins.left, undefined, {
-    align: "center",
-    width: doc.page.width - doc.page.margins.left - doc.page.margins.right - 2,
-  });
+    .fontSize(14)
+    .text(`${collegeCode} - ${collegeName}`, doc.page.margins.left, undefined, {
+      align: "center",
+      width:
+        doc.page.width - doc.page.margins.left - doc.page.margins.right - 2,
+    });
 
   doc.moveDown();
 }
 
-function footer(doc){
+function footer(doc) {
   const pageCount = doc.bufferedPageRange().count;
 
   for (let i = 0; i < pageCount; i++) {
     doc.switchToPage(i);
 
     const pageWidth = doc.page.width;
-    const y = doc.page.height - 130;
+    const y = doc.page.height - 80;
     const margin = 50;
 
     const today = new Date();
@@ -69,4 +84,4 @@ function footer(doc){
   }
 }
 
-module.exports = { header,footer };
+module.exports = { header, footer };
