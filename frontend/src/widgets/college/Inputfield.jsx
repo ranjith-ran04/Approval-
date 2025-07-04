@@ -13,7 +13,6 @@ const Inputfield=({eltname,type,label,id,htmlfor,classname,radiolabel,options=[]
                 </div>
                 {error && <span className='error-message'>{error}</span>}
         </div>
-
         )
     }
     else{

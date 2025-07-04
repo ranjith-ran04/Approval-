@@ -1,8 +1,10 @@
 import { useState } from 'react'
 import './CollegeInfo.css'
+import axios from 'axios';
 import Button from '../../widgets/button/Button';
 import Alert from '../../widgets/alert/Alert';
 import Inputfield from '../../widgets/college/Inputfield';
+import {host} from '../../../src/constants/backendpath';
 
 const CollegeInfo = () => {
   const [selectedSection,setSelectedSection]=useState('All')
@@ -63,7 +65,7 @@ const validateFields = () => {
     if (["collegenameWithdistrict", "chairman", "principal's name", "district", "taluk", "constituency", "nearestrailway"].includes(field) &&/\d/.test(value)) {
       newErrors[field] = "Only letters are allowed";
     }
-    const telephone=["chairman's contact", "principal's contact", "collegephone", "antiraggingNo"];
+    const telephone=["chairman's contact", "principal's contact", "collegephone"];
     if(telephone.includes(field)&&isNaN(value)){
       newErrors[field]="Only numbers are allowed";
     }
@@ -118,7 +120,7 @@ const handleChange =(e)=>{
       if(["collegenameWithdistrict", "chairman", "principal's name", "district", "taluk", "constituency", "nearestrailway"].includes(name) &&/\d/.test(value)){
         isValid = false;
       }
-      const telephone = ["chairman's contact", "principal's contact", "collegephone", "antiraggingNo"];
+      const telephone = ["chairman's contact", "principal's contact", "collegephone"];
       if (telephone.includes(name)) {
         if (isNaN(value) || !/^\d{10}$/.test(value)) {
           isValid = false;
@@ -155,14 +157,31 @@ const handleChange =(e)=>{
       setShowAlert(false);
       setAlertStage('')
     };
-    const handleconfirmAlert=()=>{
+    const handleconfirmAlert=async()=>{
       setShowAlert(false);
-      setTimeout(()=>{
+      try{
+        console.log(formdata)
+        const response=await axios.post(`${host}collegeinfo`,formdata)
+        const result=response.data;
+        if(result.success){
+          setShowAlert(true);
+          setAlertStage('success');
+          setAlertMessage('Your Details are saved');
+          setAlertType('success');
+        }else{
+          setShowAlert(true);
+          setAlertMessage('Failed to save details')
+          setAlertStage('error')
+          setAlertType('error')
+        }
+      }
+      catch(error){
+        console.log(error)
         setShowAlert(true);
-        setAlertStage('success');
-        setAlertMessage('Your Details aren saved');
-        setAlertType('success');
-      },100);
+        setAlertMessage("Unable to connnect to server...")
+        setAlertStage('error')
+        setAlertType('error');
+      }
     };
     const handleSubmit = (e) => {
       console.log("Entered handlesubmit")
@@ -195,7 +214,7 @@ const handleChange =(e)=>{
             <option value="All">All</option>
             <option value="collegeinfo">college info</option>
             <option value="addressinfo">Address Details</option>
-            <option value="basicinfo">Basic info</option>
+            <option value="basicinfo">Bank info</option>
             <option value="transportfacility">Transport Facilities</option>
             <option value="boyshostel">Hostel Facilities for Boys</option>
             <option value="girlshostel">Hostel Facilities for Girls</option>
@@ -341,7 +360,7 @@ const handleChange =(e)=>{
 
               <div className='field-row'>
               <Inputfield eltname={"typeofmessgirls"} type={"radio"} radiolabel={"Type of Mess"} classname={"field-block"} options={[{ label: "Veg", value: "Veg" }, { label: "Non Veg", value: "Non Veg" }, { label: "Both", value: "Both" }]} error={error["typeofmessgirls"]} onchange={handleChange}/>
-              <Inputfield eltname={"messbillgirls"} type={"text"} radiolabel={"Mess Bill (Rs/Month)"} id={"messbillgirls"} htmlfor={"messbillgirls"} classname={"field-block"} error={error["messbillgirls"]} onchange={handleChange}/>
+              <Inputfield eltname={"messbillgirls"} type={"text"} label={"Mess Bill (Rs/Month)"} id={"messbillgirls"} htmlfor={"messbillgirls"} classname={"field-block"} error={error["messbillgirls"]} onchange={handleChange}/>
               </div>
 
               <div className='field-row'>
@@ -366,7 +385,7 @@ const handleChange =(e)=>{
           type={alertType}
           message={alertMessage}
           show={showAlert}
-          okbutton={alertStage==='confirm'? handleconfirmAlert : (alertStage==='success'||alertStage==='validation')? handleCloseAlert:null}
+          okbutton={alertStage==='confirm'? handleconfirmAlert :(alertStage==='success'||alertStage==='validation'||alertStage==='error')? handleCloseAlert:null}
           cancelbutton={alertStage==='confirm'?handleCloseAlert:null}
           />
           </div>   

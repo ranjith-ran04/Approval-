@@ -162,7 +162,7 @@ function BranchForm({
                 type={alertType}
                 message={alertMessage}
                 show={showAlert}
-                close={handleCloseAlert}
+                okbutton={handleCloseAlert}
               />
             </div>
           </div>

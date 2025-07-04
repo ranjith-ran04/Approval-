@@ -72,7 +72,7 @@ function Branch({ setCurrent, setState }) {
                       type={alertType}
                       message={alertMessage}
                       show={showAlert}
-                      close={handleCloseAlert} />
+                      okbutton={handleCloseAlert} />
             </div>
           </div>
         ))}

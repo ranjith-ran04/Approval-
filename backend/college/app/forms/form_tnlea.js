@@ -33,7 +33,7 @@ function form_tnlea(req,res){
             header("TNLEA", doc, allot_coll_code);
             const columns = [
             { label: "S.NO", width: 30 },
-            { label: "APP NO", width: 80 },
+            { label: "APPLICATION NO", width: 80 },
             { label: "NAME", width: 130 },
             { label: "COMM", width: 50 },
             { label: "FIRST GRADUATE", width: 60 },
@@ -68,7 +68,7 @@ function drawWrappedTableHeader(yPosition) {
         x += col.width;
     });
 
-    return yPosition+maxHeight; 
+    return yPosition+maxHeight;
 }
 function drawDataRow(row, serial, yPosition) {
     const totalObt = row.obt_1 + row.obt_2 + row.obt_3 + row.obt_4 +
@@ -83,7 +83,7 @@ function drawDataRow(row, serial, yPosition) {
         row.name,
         row.community,
         row.fg === 1 ? "YES" : "NO",
-        row.Availed_fg === 1 ? "YES" : "NO",
+        row.Availed_fg === 1 ?"YES":"NO",
         row.aicte_tfw === 1 ? "YES" : "NO",
         aggr,
         row.hsc_group
@@ -92,6 +92,7 @@ function drawDataRow(row, serial, yPosition) {
     doc.font("Arial").fontSize(9);
     let x = doc.page.margins.left + 10;
     const rowHeight = 30;
+    // const paddingvalue=5;
     // let nameheight=heightOfString(row.name);
     const nameColumnIndex = 2; // 'NAME' column
     const nameText = String(rowData[nameColumnIndex]);
@@ -129,10 +130,12 @@ function drawDataRow(row, serial, yPosition) {
             currentbranch=row.branch_name;
      
         }
-           if(currentY+20>(doc.page.height-doc.page.margins.bottom-50)){
+           if(currentY+20>(doc.page.height-doc.page.margins.bottom-60)){
             doc.addPage();
             header("TNLEA", doc, allot_coll_code);
             currentY = drawWrappedTableHeader(doc.page.height-currentY+60)+5;
+            // currentY=drawDataRow(row,serial,currentY);
+            // serial=serial+1
 
         }
    
@@ -140,13 +143,11 @@ function drawDataRow(row, serial, yPosition) {
         serial=serial+1
         console.log(currentY);
     })
-
-
     const remainingHeight = doc.page.height - currentY - doc.page.margins.bottom;
     const extraSpaceNeeded = 150;
     if (remainingHeight < extraSpaceNeeded) {
         doc.addPage();
-            header("TNLEA", doc, allot_coll_code);
+        // header("TNLEA", doc, allot_coll_code);
     }
     footer(doc)
     doc.end();
