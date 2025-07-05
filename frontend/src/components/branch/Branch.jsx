@@ -1,20 +1,35 @@
 import "./branch.css";
 import Alert from "../../widgets/alert/Alert";
-import React, { useState } from "react";
-
+import { useState, useEffect } from "react";
+import axios from "axios";
+import {host} from "../../constants/backendpath";
 
 function Branch({ setCurrent, setState }) {
-    const [showAlert, setShowAlert] = useState(false);
-    const [alertType, setAlertType] = useState("");
-    const [alertMessage, setAlertMessage] = useState("");
-    const handleCancel=()=>{
+
+  const [branchData,setBranchData] = useState([]);
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertType, setAlertType] = useState("");
+  const [alertMessage, setAlertMessage] = useState("");
+  const handleCancel = () => {
     setShowAlert(true);
     setAlertMessage("Confirm to Delete");
-    setAlertType('warning');
-  }
-   const handleCloseAlert = () => {
+    setAlertType("warning");
+  };
+  const handleCloseAlert = () => {
     setShowAlert(false);
   };
+ const collegeCode = "5901";
+  useEffect( () => {
+    console.log("useeffect is working")
+    const fetchData = async () => {
+      const res = await axios.get(`${host}branch?collegeCode=${collegeCode}`);
+      setBranchData(res.data);
+    }
+    fetchData();
+  },[])
+
+  // console.log(branchData);
+
   return (
     <div className="box">
       <div className="first">
@@ -40,7 +55,6 @@ function Branch({ setCurrent, setState }) {
           <div>NBA Status</div>
           <div>Delete</div>
         </div>
-        
 
         {branchData.map((branch, index) => (
           <div className="table-row" key={index}>
@@ -51,28 +65,31 @@ function Branch({ setCurrent, setState }) {
                   setCurrent(4);
                   setState(branch);
                 }}
-                >
+              >
                 Edit
               </button>
             </div>
-            <div>{branch.code}</div>
-            <div>{branch.name}</div>
-            <div>{branch.approvedIntake}</div>
-            <div>{branch.firstYearAdmitted}</div>
+            <div>{branch.b_code}</div>
+            <div>{branch.branch_name}</div>
+            <div>{branch.approved_in_take}</div>
+            <div>{branch.first_year_admitted}</div>
             <div>{branch.discontinued}</div>
-            <div>{branch.transferredFrom}</div>
-            <div>{branch.transferredTo}</div>
-            <div>{branch.lap}</div>
-            <div>{branch.yearStart}</div>
-            <div>{branch.accUpto}</div>
-            <div>{branch.nba}</div>
+            <div>{branch.transfered_from}</div>
+            <div>{branch.transfered_to}</div>
+            <div>{branch.LAP}</div>
+            <div>{branch.year_of_start}</div>
+            <div>{branch.accredition_valid_upto}</div>
+            <div>{branch.NBA_2020 === 1 ? "yes" : "no"}</div>
             <div>
-              <button className="delete-btn" onClick={handleCancel}>Delete</button>
-               <Alert
-                      type={alertType}
-                      message={alertMessage}
-                      show={showAlert}
-                      close={handleCloseAlert} />
+              <button className="delete-btn" onClick={handleCancel}>
+                Delete
+              </button>
+              <Alert
+                type={alertType}
+                message={alertMessage}
+                show={showAlert}
+                okbutton={handleCloseAlert}
+              />
             </div>
           </div>
         ))}
@@ -80,112 +97,5 @@ function Branch({ setCurrent, setState }) {
     </div>
   );
 }
-const branchData = [
-  {
-    code: "CM",
-    name: "COMPUTER SCIENCE AND ENGINEERING (SS)",
-    approvedIntake: 118,
-    firstYearAdmitted: 117,
-    discontinued: 2,
-    transferredFrom: 0,
-    transferredTo: 0,
-    lap: 1,
-    yearStart: 2006,
-    accUpto: 2029,
-    nba: "Yes",
-  },
-  {
-    code: "CS",
-    name: "COMPUTER SCIENCE AND ENGINEERING",
-    approvedIntake: 59,
-    firstYearAdmitted: 58,
-    discontinued: 0,
-    transferredFrom: 0,
-    transferredTo: 0,
-    lap: 1,
-    yearStart: 1982,
-    accUpto: 2029,
-    nba: "Yes",
-  },
-  {
-    code: "CM",
-    name: "COMPUTER SCIENCE AND ENGINEERING (SS)",
-    approvedIntake: 118,
-    firstYearAdmitted: 117,
-    discontinued: 2,
-    transferredFrom: 0,
-    transferredTo: 0,
-    lap: 1,
-    yearStart: 2006,
-    accUpto: 2029,
-    nba: "Yes",
-  },
-  {
-    code: "CS",
-    name: "COMPUTER SCIENCE AND ENGINEERING",
-    approvedIntake: 59,
-    firstYearAdmitted: 58,
-    discontinued: 0,
-    transferredFrom: 0,
-    transferredTo: 0,
-    lap: 1,
-    yearStart: 1982,
-    accUpto: 2029,
-    nba: "Yes",
-  },
-  {
-    code: "CM",
-    name: "COMPUTER SCIENCE AND ENGINEERING (SS)",
-    approvedIntake: 118,
-    firstYearAdmitted: 117,
-    discontinued: 2,
-    transferredFrom: 0,
-    transferredTo: 0,
-    lap: 1,
-    yearStart: 2006,
-    accUpto: 2029,
-    nba: "Yes",
-  },
-  {
-    code: "CS",
-    name: "COMPUTER SCIENCE AND ENGINEERING",
-    approvedIntake: 59,
-    firstYearAdmitted: 58,
-    discontinued: 0,
-    transferredFrom: 0,
-    transferredTo: 0,
-    lap: 1,
-    yearStart: 1982,
-    accUpto: 2029,
-    nba: "Yes",
-  },
-  {
-    code: "CM",
-    name: "COMPUTER SCIENCE AND ENGINEERING (SS)",
-    approvedIntake: 118,
-    firstYearAdmitted: 117,
-    discontinued: 2,
-    transferredFrom: 0,
-    transferredTo: 0,
-    lap: 1,
-    yearStart: 2006,
-    accUpto: 2029,
-    nba: "Yes",
-  },
-  {
-    code: "CS",
-    name: "COMPUTER SCIENCE AND ENGINEERING",
-    approvedIntake: 59,
-    firstYearAdmitted: 58,
-    discontinued: 0,
-    transferredFrom: 0,
-    transferredTo: 0,
-    lap: 1,
-    yearStart: 1982,
-    accUpto: 2029,
-    nba: "Yes",
-  },
-  // Add more rows if needed
-];
 
 export default Branch;

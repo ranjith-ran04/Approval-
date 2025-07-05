@@ -1,10 +1,47 @@
-import BranchForm from './BranchForm';
+import BranchForm from "./BranchForm";
+import axios from "axios";
+import { host } from "../../constants/backendpath";
 
-function EditBranch({state,setCurrent}) {
-  const handleSubmit = (data) => {
-    console.log(data);
+function EditBranch({ state, setCurrent }) {
+  const handleSubmit = async (data) => {
+    try {
+      const changedFields = {};
+
+      state.NBA_2020 === 1 ? (state.NBA_2020 = "yes") : (state.NBA_2020 = "no");
+
+      Object.keys(data).forEach((key) => {
+        if (String(data[key]) !== String(state[key])) {
+          changedFields[key] = data[key];
+        }
+      });
+      console.log(data);
+      console.log(state);
+      if ("NBA_2020" in changedFields) {
+        changedFields.NBA_2020 =
+          changedFields.NBA_2020.toLowerCase() === "yes" ? 1 : 0;
+      }
+
+      console.log("onyl changed fields : ", changedFields);
+
+      const res = await axios.put(`${host}branch`, {
+        ...changedFields,
+        collegeCode: state.c_code,
+        b_code: state.b_code,
+      });
+    } catch (err) {
+      console.error("update failed", err);
+    }
   };
 
-  return <BranchForm heading="EDIT BRANCH" values={state} onSubmit={handleSubmit} buttonText="SAVE" isEditMode={true} setCurrent={setCurrent} />;
+  return (
+    <BranchForm
+      heading="EDIT BRANCH"
+      values={state}
+      onSubmit={handleSubmit}
+      buttonText="SAVE"
+      isEditMode={true}
+      setCurrent={setCurrent}
+    />
+  );
 }
-export default EditBranch
+export default EditBranch;

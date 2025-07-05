@@ -26,9 +26,7 @@ function BranchForm({
     setCurrent(2)
   };
 
-  const handleFormSubmit = (e) => {
-    console.log('clicked');
-    
+  const handleFormSubmit = (e) => {    
     e.preventDefault();
     const formData = new FormData(e.target);
     const data = Object.fromEntries(formData.entries());
@@ -47,9 +45,9 @@ function BranchForm({
             <label className="form-label">Branch Code</label>
             <input
               className="branchforminput"
-              name="code"
+              name="b_code"
               placeholder="Branch Code"
-              defaultValue={values.code}
+              defaultValue={values.b_code}
               required
               disabled={isEditMode}
             />
@@ -57,9 +55,9 @@ function BranchForm({
             <label className="form-label">Branch Name</label>
             <input
               className="branchforminput"
-              name="name"
+              name="branch_name"
               placeholder="Branch Name"
-              defaultValue={values.name}
+              defaultValue={values.branch_name}
               required
               disabled={isEditMode}
             />
@@ -67,17 +65,17 @@ function BranchForm({
             <label className="form-label">Approved Intake</label>
             <input
               className="branchforminput"
-              name="approvedIntake"
+              name="approved_in_take"
               placeholder="Approved Intake"
-              defaultValue={values.approvedIntake}
+              defaultValue={values.approved_in_take}
             />
 
             <label className="form-label">First Year Admitted</label>
             <input
               className="branchforminput"
-              name="firstYearAdmitted"
+              name="first_year_admitted"
               placeholder="First Year Admitted"
-              defaultValue={values.firstYearAdmitted}
+              defaultValue={values.first_year_admitted}
             />
 
             <label className="form-label">Discontinued</label>
@@ -91,9 +89,9 @@ function BranchForm({
             <label className="form-label">Transferred From</label>
             <input
               className="branchforminput"
-              name="transferredFrom"
+              name="transfered_from"
               placeholder="Transferred From"
-              defaultValue={values.transferredFrom}
+              defaultValue={values.transfered_from}
             />
           </div>
 
@@ -101,33 +99,33 @@ function BranchForm({
             <label className="form-label">Transferred To</label>
             <input
               className="branchforminput"
-              name="transferredTo"
+              name="transfered_to"
               placeholder="Transferred To"
-              defaultValue={values.transferredTo}
+              defaultValue={values.transfered_to}
             />
 
             <label className="form-label">LAP</label>
             <input
               className="branchforminput"
-              name="lap"
+              name="LAP"
               placeholder="LAP"
-              defaultValue={values.lap}
+              defaultValue={values.LAP}
             />
 
             <label className="form-label">Year of Start</label>
             <input
               className="branchforminput"
-              name="yearStart"
+              name="year_of_start"
               placeholder="Year of Start"
-              defaultValue={values.yearStart}
+              defaultValue={values.year_of_start}
             />
 
             <label className="form-label">Accreditation Upto</label>
             <input
               className="branchforminput"
-              name="accUpto"
+              name="accredition_valid_upto"
               placeholder="Accreditation Upto"
-              defaultValue={values.accUpto}
+              defaultValue={values.accredition_valid_upto}
             />
 
             <label className="form-label">NBA Status</label>
@@ -136,20 +134,20 @@ function BranchForm({
                 <input
                   className="branchforminput"
                   type="radio"
-                  name="nba"
-                  value="Yes"
-                  defaultChecked={values.nba === "Yes"}
+                  name="NBA_2020"
+                  value="yes"
+                  defaultChecked={values.NBA_2020 === 1}
                   required
                 />
                 Yes
               </label>
-              <label style={{ marginLeft: "20px" }}>
+              <label>
                 <input
                   className="branchforminput"
                   type="radio"
-                  name="nba"
-                  value="No"
-                  defaultChecked={values.nba === "No"}
+                  name="NBA_2020"
+                  value="no"
+                  defaultChecked={values.NBA_2020 === 0}
                 />
                 No
               </label>
@@ -162,7 +160,7 @@ function BranchForm({
                 type={alertType}
                 message={alertMessage}
                 show={showAlert}
-                close={handleCloseAlert}
+                okbutton={handleCloseAlert}
               />
             </div>
           </div>
