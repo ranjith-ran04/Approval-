@@ -14,14 +14,11 @@ function EditBranch({ state, setCurrent }) {
           changedFields[key] = data[key];
         }
       });
-      console.log(data);
-      console.log(state);
+
       if ("NBA_2020" in changedFields) {
         changedFields.NBA_2020 =
           changedFields.NBA_2020.toLowerCase() === "yes" ? 1 : 0;
       }
-
-      console.log("onyl changed fields : ", changedFields);
 
       const res = await axios.put(`${host}branch`, {
         ...changedFields,
