@@ -1,5 +1,4 @@
 .box1 {
-  padding: 1em;
   width: 97%;
 }
 
@@ -10,10 +9,18 @@
 
 .form-grid {
   display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.form-rows {
+  display: flex;
+  flex-direction: row;
   gap: 2rem;
 }
 
 .form-col {
+  max-width: 48%;
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -27,17 +34,11 @@
   border: 1px solid #aaa;
 }
 
-#branchbutton {
-  margin-top: 55px;
-  display:flex;
-  align-items: center;
+.button-row {
+  /* margin-top: 20px; */
+  display: flex;
   justify-content: center;
-  color: black;
-  font-weight: bold;
-  border: none;
-  cursor: pointer;
-  border-radius: 4px;
-  gap:50px;
+  gap: 40px;
 }
 
 .form-label {
@@ -49,7 +50,8 @@
 }
 
 .head {
-  margin-top: 5px;
+  /* margin-top: 13px; */
+  /* margin-bottom: 10px; */
   font-weight: bold;
   font-size: 18px;
   padding-bottom: 20px;
@@ -57,14 +59,15 @@
   text-align: center;
 }
 
-.spcllabel {
-  padding: 20px;
-}
-
 .radio-group {
   display: flex;
   align-items: center;
+  gap: 20px;
 }
-.radio-group label {
-  margin-right: 15px;
+
+.branch-error {
+  color: red;
+  font-size: 0.85rem;
+  margin-top: -8px;
+  display: block;
 }

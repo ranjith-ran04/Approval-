@@ -3,7 +3,7 @@ import axios from "axios";
 import { host } from "../../constants/backendpath";
 
 function EditBranch({ state, setCurrent }) {
-  const handleSubmit = async (data) => {
+  const handleEditSubmit = async (data) => {
     try {
       const changedFields = {};
 
@@ -25,8 +25,14 @@ function EditBranch({ state, setCurrent }) {
         collegeCode: state.c_code,
         b_code: state.b_code,
       });
+
+      if(res.status === 200 || res.status === 201 ){
+        console.log("Branch Edited Successfully");  
+      }else {
+        console.error("Failed to edit branch");
+      }
     } catch (err) {
-      console.error("update failed", err);
+      console.error("update failed : ", err);
     }
   };
 
@@ -34,7 +40,7 @@ function EditBranch({ state, setCurrent }) {
     <BranchForm
       heading="EDIT BRANCH"
       values={state}
-      onSubmit={handleSubmit}
+      onSubmit={handleEditSubmit}
       buttonText="SAVE"
       isEditMode={true}
       setCurrent={setCurrent}
