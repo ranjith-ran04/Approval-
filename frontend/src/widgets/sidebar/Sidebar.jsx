@@ -25,14 +25,14 @@ function Sidebar({ setCurrent }) {
       <div className="menuItems">
       <div id='discontinuedIcon'></div>
       Discontinued Details</div>
-      <div className="menuItems">
+      <div className="menuItems" onClick={()=>handleForm('forma')}>
       <div id='formIcon'></div>
       Form A</div>
       <div className="menuItems" onClick={()=>handleForm('formb')}>
       <div id='formIcon'></div>
         Form B
       </div>
-      <div className="menuItems">
+      <div className="menuItems" onClick={()=>handleForm('formc')}>
       <div id='formIcon'></div>
       Form C</div>
       <div className="menuItems">
