@@ -1,6 +1,6 @@
 import "./changepassword.css";
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate,useLocation } from "react-router-dom";
 import NavigationBar from "../../widgets/navigationBar/NavigationBar";
 import Alert from "../../widgets/alert/Alert";
 import axios from "axios";
@@ -19,6 +19,9 @@ function Changepassword() {
   const [alertMessage, setAlertMessage] = useState("");
   const [errors, setErrors] = useState({});
   const [collegeCode,setCollegeCode] = useState(null);
+  const location = useLocation();
+  const logged = location.state?.logged || false;
+
 
   useEffect(() => {
     changeFetch();
@@ -129,7 +132,7 @@ function Changepassword() {
     const validationErrors = validateForm(name);
     setErrors(validationErrors);
   };
-  return (
+  return logged?(
     <div className="change-page">
       <NavigationBar
         text={`GOVERNMENT OF TAMILNADU
@@ -220,7 +223,7 @@ Tamilnadu Lateral Entry Direct Second Year B.E/B.Tech.,Approval-2025`}
         </div>
       </div>
     </div>
-  );
+  ):null;
 }
 
 export default Changepassword;

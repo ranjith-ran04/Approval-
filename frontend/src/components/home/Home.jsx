@@ -1,38 +1,8 @@
 import "./home.css";
 import { useState,useEffect } from "react";
-import axios from "axios";
-import { host } from "../../constants/backendpath";
-import {useNavigate} from 'react-router-dom';
 
-function Home() {
-  const [details, setDetails] = useState({
-    taluk:"",
-    district:"",
-    constituency:"",
-    pincode:"",
-    chairman:"",
-    principalName:"",
-    collegeContact:""
-  });
-  const navigate = useNavigate();
-  async function fetch() {
-    try {
-      // console.log('hi')
-      const res = await axios.get(`${host}home`,{
-  withCredentials: true,
-});
-      if (res.status === 200) {
-        console.log(res.data);
-        setDetails(res.data);
-      }
-
-    } catch (error) {
-        navigate('/');
-    }
-  }
-  useEffect(()=>{
-    fetch();
-  },[]);
+function Home({details}) {
+  // console.log(details);
 
   return (
     <div className="container">

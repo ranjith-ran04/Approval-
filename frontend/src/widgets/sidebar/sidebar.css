@@ -1,38 +1,117 @@
-#sidebar{
-    background-color: #f4f9f9;
-    /* width: 15dvw; */
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    flex-wrap: wrap;
-    flex-wrap: wrap;
-    align-items: center;
-    /* justify-content: center; */
-    color: rgb(0, 0, 0);
-    gap: 5px;
-    width: 15%;
-    width: 15%;
-    position: fixed;
-    /* padding: 20px;    */
-    box-shadow: 1.95px 1.95px 2.6px #00000026 ;
-    padding-top: 50px;
-    padding-left: 20px;
-    padding-right:20px;
+#sidebar {
+  background-color: #f4f9f9;
+  /* width: 15dvw; */
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  /* flex-wrap: wrap; */
+  /* align-items: center; */
+  /* justify-content: center; */
+  color: rgb(0, 0, 0);
+  gap: 5px;
+  width: 15%;
+  position: fixed;
+  /* padding: 20px;    */
+  box-shadow: 1.95px 1.95px 2.6px #00000026;
+  padding-top: 23px;
+  /* padding-left: 20px; */
+  padding-right: 20px;
 }
-.menuItems{
-    height: 5vh;
-    width: 100%;
+#homeIcon {
+  height: 15px;
+  width: 15px;
+  background-image: url("../../../public/assets/home.svg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  margin-left: 10px;
+}
+#collegeIcon {
+  height: 15px;
+  width: 15px;
+  background-image: url("../../../public/assets/college1.svg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  margin-left: 10px;
+}
+#formIcon {
+  height: 15px;
+  width: 15px;
+  background-image: url("../../../public/assets/form.svg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  margin-left: 10px;
+}
+#studentIcon {
+  height: 15px;
+  width: 15px;
+  background-image: url("../../../public/assets/badge.svg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  margin-left: 10px;
+}
+#branchIcon {
+  height: 15px;
+  width: 15px;
+  background-image: url("../../../public/assets/branch.svg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  margin-left: 10px;
+}
+#discontinuedIcon {
+  height: 15px;
+  width: 15px;
+  background-image: url("../../../public/assets/badge.svg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  margin-left: 10px;
+}
+#listIcon{
+  height: 20px;
+  width: 20px;
+  background-image: url("../../../public/assets/list1.svg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  /* margin-left: 5px; */
+}
+#iconDiv{
+    height: 40px;
+    width:40px;
+    border-radius: 5px;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 20px;
-    font-weight: bold;
-    /* font-size: 2vh; */
-    /* font-size: 2vh; */
-    margin-top: 8px;
+
 }
-.menuItems:hover{
-    cursor: pointer;
-    background-color: rgba(0,0,0,0.3);
-    
+#iconDiv:hover {
+  cursor: pointer;
+  background-color: rgba(0, 0, 0, 0.3);
+}
+.menuItems {
+  height: 5vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  border-radius: 5px;
+  font-weight: bold;
+  margin-top: 8px;
+  gap: 20px;
+}
+.menuItems:hover {
+  cursor: pointer;
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+#buttonDiv{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

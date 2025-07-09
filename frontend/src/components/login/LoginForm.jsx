@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import NavigationBar from "../../widgets/navigationBar/NavigationBar";
 import Alert from "../../widgets/alert/Alert";
 import axios from "axios";
+import {host} from '../../constants/backendpath';
 
 const LoginForm = () => {
   const [formData, setFormData] = useState({ regNo: "", pwd: "" });
@@ -23,6 +24,19 @@ const LoginForm = () => {
   useEffect(() => {
     validateForm();
   }, [formData, touched]);
+  useEffect(()=>{
+    async function fetchLogin(){
+    try{
+      const res = await axios.get(`${host}login`,{withCredentials:true});
+      if(res.status === 200){
+        console.log('successfully cleared');
+      }
+    }
+    catch(error){
+      console.log('error',error);
+    }}
+    fetchLogin();
+  },[])
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -95,9 +109,17 @@ const LoginForm = () => {
 
   const handleCloseAlert = () => {
     if (changed === 0) {
-      navigate("/changePassword");
+      navigate("/changePassword",{
+        state:{
+          logged:true
+        }
+      });
     } else {
-      navigate("/dashboard");
+      navigate("/dashboard",{
+        state:{
+          logged:true
+        }
+      });
     }
   };
 
