@@ -1,6 +1,5 @@
 const jwt = require('jsonwebtoken');
-// const verify = require('./middleware/verifyjwt');
-const db = require('../config/db'); // Your MySQL connection file
+const db = require('../config/db');
 require('dotenv').config();
 
 const login = (req, res) => {
