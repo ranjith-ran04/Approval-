@@ -23,7 +23,7 @@ function Sidebar({ setCurrent }) {
       <div className="menuItems">Form C</div>
       <div className="menuItems">Form D</div>
       <div className="menuItems">Form G</div>
-      <div className="menuItems" onClick={()=>handleForm('formlea',{allot_coll_code:5901})}>Form LEA2025</div>
+      <div className="menuItems" onClick={()=>handleForm('formlea',{allot_coll_code:1315})}>Form LEA2025</div>
       <div>
         <Button name={"SUBMIT"} />
       </div>

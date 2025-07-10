@@ -15,31 +15,7 @@ const[formdata,setFormdata]=useState({})
 const[error,setError]=useState({})
 const[alertStage,setAlertStage]=useState('');
 
-const requiredFields = ["collegecode","collegenameWithdistrict","chairman","chairman's contact","principal's name","principal's contact","address","taluk","district",
-  "constituency",
-  "pincode",
-  "collegephone",
-  "collegeemail",
-  "websitecollege",
-  "antiraggingNo",
-  "bankaccountno",
-  "bankname",
-  "minoritystatus",
-  "autonomousstatus",
-  "distance",
-  "nearestrailway",
-  "distancefromrailway",
-  "transportfacility",
-  "transport",
-  "mintransportcharge",
-  "maxtransportcharge",
-  "accomodationavailableboys",
-  "hostelstaytypeboys",
-  "typeofmessboys",
-  "messbillboys",
-  "roomrentboys",
-  "electricityboys",
-  "cautiondepositboys",
+const requiredFields = ["collegecode","collegenameWithdistrict","chairman","chairman's contact","principal's name","principal's contact","address","taluk","district","constituency","pincode","collegephone","collegeemail","websitecollege","antiraggingNo","bankaccountno","bankname","minoritystatus", "autonomousstatus","distance","nearestrailway","distancefromrailway","transportfacility","transport","mintransportcharge","maxtransportcharge","accomodationavailableboys","hostelstaytypeboys","typeofmessboys","messbillboys","roomrentboys","electricityboys","cautiondepositboys",
   "establishmentboys",
   "admissionfeesboys",
   "accomodationavailablegirls",
@@ -75,11 +51,9 @@ const validateFields = () => {
     if (field === "collegeemail" && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
       newErrors[field] = "Invalid email format";
     }
-
     if (field === "pincode" && !/^\d{6}$/.test(value)) {
       newErrors[field] = "Enter a valid 6-digit pincode";
     }
-
     const numericFields = [
       "collegecode","bankaccountno", "distance", "distancefromrailway",
       "mintransportcharge", "maxtransportcharge",
@@ -87,13 +61,11 @@ const validateFields = () => {
       "messbillgirls", "roomrentgirls", "electricitygirls", "cautiondepositgirls", "establishmentgirls", "admissionfeesgirls"];
     if (numericFields.includes(field) && isNaN(value)) {
       newErrors[field] = "Only numbers are allowed";
-      console.log(value)
     }
     else if(field==="collegecode" && value.length!==1&&value.length!==4){
       newErrors[field]="College code must be 1 or 4";
     }
   });
-
   setError(newErrors);
   if(Object.keys(newErrors).length === 0){
     return true;
@@ -103,8 +75,7 @@ const validateFields = () => {
   }
 };
 const handleChange =(e)=>{
-      const{name,value,type}=e.target;
-      console.log(`Field:${name},Value:${value},type:${type}`)
+      const{name,value}=e.target;
       setFormdata((prev)=>({
         ...prev,
         [name]:value,
@@ -160,10 +131,8 @@ const handleChange =(e)=>{
     const handleconfirmAlert=async()=>{
       setShowAlert(false);
       try{
-        console.log(formdata)
         const response=await axios.post(`${host}collegeinfo`,formdata)
-        const result=response.data;
-        if(result.success){
+        if(response.status===200){
           setShowAlert(true);
           setAlertStage('success');
           setAlertMessage('Your Details are saved');
@@ -184,7 +153,6 @@ const handleChange =(e)=>{
       }
     };
     const handleSubmit = (e) => {
-      console.log("Entered handlesubmit")
       // e.preventDefault();
       const isValid=validateFields()
       if(isValid){
@@ -200,11 +168,6 @@ const handleChange =(e)=>{
         setAlertStage('validation')
       }
     };
-  // const handleCancel=()=>{
-  //   setShowAlert(true);
-  //   setAlertMessage("Something went wrong");
-  //   setAlertType('error');
-  // }
 
   return (
     <div className="collegewholediv">

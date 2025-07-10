@@ -16,17 +16,14 @@ const Inputfield=({eltname,type,label,id,htmlfor,classname,radiolabel,options=[]
         )
     }
     else{
-        return(   
-
+        return( 
         <div className={classname}>
         <div className="collegeinput">
             <label id="collegelabel" htmlFor={htmlfor}>{label} </label>
             <input type={type} id={id} name={eltname} onChange={onchange}/>
         </div>
         {error && <span className='error-message'>{error}</span>}
-
         </div>
-
     )
     }
 

@@ -2,13 +2,11 @@ const pdf = require("pdfkit");
 const db = require("../config/db");
 const { header,footer } = require("./pageFrame");
 const path = require("path");
-const { log } = require("console");
 const arialBold = path.join(__dirname, "../fonts/G_ari_bd.TTF");
 const arial = path.join(__dirname, "../fonts/arial.ttf");
-
 function form_tnlea(req,res){
     const {allot_coll_code}=req.body;
-    console.log("received body:",req.body);
+    // console.log("received body:",req.body);
     // console.log(collegeCode);
     const query="SELECT branch_name,a_no,name,community,fg,Availed_fg,aicte_tfw,obt_1,max_1,obt_2,max_2,obt_3,max_3,obt_4,max_4,obt_5,max_5,obt_6,max_6,obt_7,max_7,obt_8,max_8,hsc_group from (select b_code,branch_name from branch_info where c_code=?) as branch_info,(select b_code,a_no,name,community,fg,Availed_fg,aicte_tfw,obt_1,max_1,obt_2,max_2,obt_3,max_3,obt_4,max_4,obt_5,max_5,obt_6,max_6,obt_7,max_7,obt_8,max_8,hsc_group from student_info where c_code=?) as student_info where student_info.b_code=branch_info.b_code order by branch_name;"
     // const {collegeCode}=req.body;
@@ -44,7 +42,7 @@ function form_tnlea(req,res){
         ];
 const padding = 3;
 let currentY = doc.y;
-function drawWrappedTableHeader(yPosition) {
+function TableHeader(yPosition) {
     doc.font("Arial-Bold").fontSize(9);
     let maxHeight = 0;
     columns.forEach(col => {
@@ -57,7 +55,7 @@ function drawWrappedTableHeader(yPosition) {
           
     });
     maxHeight += 2 * padding; 
-    console.log(maxHeight)
+    // console.log(maxHeight)
     let x = doc.page.margins.left;
     columns.forEach(col => {
         doc.rect(x+10, yPosition, col.width, maxHeight).stroke();
@@ -94,7 +92,7 @@ function drawDataRow(row, serial, yPosition) {
     const rowHeight = 30;
     // const paddingvalue=5;
     // let nameheight=heightOfString(row.name);
-    const nameColumnIndex = 2; // 'NAME' column
+    const nameColumnIndex = 2; 
     const nameText = String(rowData[nameColumnIndex]);
     const nameColumnWidth = columns[nameColumnIndex].width - 2 * padding;
     const nameheight = doc.heightOfString(nameText, {
@@ -113,7 +111,6 @@ function drawDataRow(row, serial, yPosition) {
 
     return yPosition + dynamicrowheight;
 }
-
     let currentbranch="";
     let serial=1;
     result.forEach(row=>{
@@ -125,7 +122,7 @@ function drawDataRow(row, serial, yPosition) {
 
         // }
             doc.font("Arial-Bold").fontSize(12).text(row.branch_name.toUpperCase(),doc.page.margins.left+10,currentY+10);
-            currentY = drawWrappedTableHeader(currentY+30)+5;
+            currentY = TableHeader(currentY+30)+5;
             // currentY=currentY+5;
             currentbranch=row.branch_name;
      
@@ -133,7 +130,7 @@ function drawDataRow(row, serial, yPosition) {
            if(currentY+20>(doc.page.height-doc.page.margins.bottom-60)){
             doc.addPage();
             header("TNLEA", doc, allot_coll_code);
-            currentY = drawWrappedTableHeader(doc.page.height-currentY+60)+5;
+            currentY = TableHeader(doc.page.height-currentY+60)+5;
             // currentY=drawDataRow(row,serial,currentY);
             // serial=serial+1
 
@@ -141,8 +138,9 @@ function drawDataRow(row, serial, yPosition) {
    
         currentY=drawDataRow(row,serial,currentY);
         serial=serial+1
-        console.log(currentY);
+        // console.log(currentY);
     })
+    
     const remainingHeight = doc.page.height - currentY - doc.page.margins.bottom;
     const extraSpaceNeeded = 150;
     if (remainingHeight < extraSpaceNeeded) {
