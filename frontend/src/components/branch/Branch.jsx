@@ -166,7 +166,7 @@ function Branch({ setCurrent, setState }) {
                       collegeCode,
                       branchData[showIndex]?.b_code
                     )
-                : alertStage === "success"
+                : alertStage === "success" || "cancel"
                 ? handleCloseAlert
                 : null
             }

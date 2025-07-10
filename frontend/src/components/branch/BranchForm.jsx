@@ -48,13 +48,13 @@ function BranchForm({
     const newErrors = {};
 
     if(!/^\d+$/.test(data.approved_in_take.trim())) {
-      newErrors.approved_in_take = "Must be a number.";
+      newErrors.approved_in_take = "*Must be a number.";
     }
 
     if(Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
       setAlertType("warning");
-      setAlertMessage("Please correct the highlighted errors.");
+      setAlertMessage("Please fill all the details correctly!");
       setShowAlert(true);
       return;  
     }setErrors({});
@@ -63,8 +63,9 @@ function BranchForm({
       const [b_code, branch_name] = data.branch.split("|");
       data.b_code = b_code.trim();
       data.branch_name = branch_name.trim();
+      data.NBA_2020 = data.NBA_2020 === "yes" ? 1 : 0;
       delete data.branch;
-    }data.NBA_2020 = data.NBA_2020 === "yes" ? 1 : 0;
+    }
 
 
     onSubmit(data);
