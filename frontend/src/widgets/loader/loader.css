@@ -1,0 +1,75 @@
+.standard-loader-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 0;
+  animation: fadeIn 0.4s ease-out both;
+}
+
+.loader-message {
+  margin-top: 14px;
+  font-size: 1rem;
+  color: #000000;
+  font-weight: 500;
+  font-family: "Segoe UI", sans-serif;
+  text-align: center;
+}
+
+/* Spinner styles */
+.spinner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.dot {
+  width: 12px;
+  height: 12px;
+  background-color: #2c4c8e;
+  border-radius: 50%;
+  animation: bounce 1.2s infinite ease-in-out;
+}
+
+.dot:nth-child(2) {
+  animation-delay: 0.15s;
+}
+
+.dot:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+/* Sizes */
+.standard-loader-wrapper.small .dot {
+  width: 8px;
+  height: 8px;
+}
+
+.standard-loader-wrapper.large .dot {
+  width: 16px;
+  height: 16px;
+}
+
+/* Animations */
+@keyframes bounce {
+  0%, 80%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  40% {
+    transform: scale(1.6);
+    opacity: 0.6;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

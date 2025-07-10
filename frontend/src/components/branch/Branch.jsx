@@ -1,191 +1,180 @@
 import "./branch.css";
 import Alert from "../../widgets/alert/Alert";
-import React, { useState } from "react";
-
+import { useState, useEffect } from "react";
+import axios from "axios";
+import { host } from "../../constants/backendpath";
+import Loader from "../../widgets/loader/Loader";
 
 function Branch({ setCurrent, setState }) {
-    const [showAlert, setShowAlert] = useState(false);
-    const [alertType, setAlertType] = useState("");
-    const [alertMessage, setAlertMessage] = useState("");
-    const handleCancel=()=>{
+  const [loading, setLoading] = useState(true); // NEW
+  const [error, setError] = useState(false);
+  const [alertStage, setAlertStage] = useState();
+  const [branchData, setBranchData] = useState([]);
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertType, setAlertType] = useState("");
+  const [alertMessage, setAlertMessage] = useState("");
+  const [showIndex, setShowIndex] = useState(null);
+
+  const handleCancel = (index) => {
+    setShowIndex(index);
     setShowAlert(true);
     setAlertMessage("Confirm to Delete");
-    setAlertType('warning');
-  }
-   const handleCloseAlert = () => {
+    setAlertType("warning");
+    setAlertStage("confirm");
+  };
+  const handleCloseAlert = () => {
     setShowAlert(false);
   };
+  
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await axios.get(`${host}branch`,{withCredentials:true});
+        setBranchData(res.data);
+        setError(false);
+      } catch (err) {
+        console.error("Fetching data failed", err);
+        setBranchData([]);
+        setError(true);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
+
+  const handleDeleteBranch = async ( branch_code) => {
+    try {
+      const res = await axios.delete(`${host}branch`, {
+        data: { b_code: branch_code },
+        withCredentials:true
+      });
+
+      if (res.status === 200) {
+        setAlertType("success");
+        setAlertStage("success");
+        setAlertMessage("Successfully Deleted Branch");
+        setShowAlert(true);
+      }
+    } catch (err) {
+      console.error("Delete Failed", err);
+      setAlertType("error");
+      setAlertStage("error");
+      setAlertMessage("Failed to Delete Branch!");
+      setShowAlert(true);
+    }
+    setBranchData((prev) =>
+        prev.filter((b) => b.b_code !== branchData[showIndex].b_code)
+      );
+  };
+
   return (
     <div className="box">
-      <div className="first">
-        <h2 className="heading">BRANCH DETAILS</h2>
-        <button className="addBranch-btn" onClick={() => setCurrent(3)}>
-          Add Branch
-        </button>
-      </div>
-
-      <div className="table">
-        <div className="table-header">
-          <div>Edit</div>
-          <div>Branch Code</div>
-          <div>Branch Name</div>
-          <div>Approved In Take</div>
-          <div>First Year Admitted</div>
-          <div>Discontinued</div>
-          <div>Transferred Students From Your College</div>
-          <div>Transferred Students To Your College</div>
-          <div>LAP</div>
-          <div>Year of Starting the Course</div>
-          <div>Accredition Valid Upto</div>
-          <div>NBA Status</div>
-          <div>Delete</div>
+      {loading ? (
+        <div className="full-loader-wrapper">
+          <Loader message="Loading branch data..." size="medium" />
         </div>
-        
-
-        {branchData.map((branch, index) => (
-          <div className="table-row" key={index}>
-            <div>
-              <button
-                className="edit-btn"
-                onClick={() => {
-                  setCurrent(4);
-                  setState(branch);
-                }}
-                >
-                Edit
-              </button>
-            </div>
-            <div>{branch.code}</div>
-            <div>{branch.name}</div>
-            <div>{branch.approvedIntake}</div>
-            <div>{branch.firstYearAdmitted}</div>
-            <div>{branch.discontinued}</div>
-            <div>{branch.transferredFrom}</div>
-            <div>{branch.transferredTo}</div>
-            <div>{branch.lap}</div>
-            <div>{branch.yearStart}</div>
-            <div>{branch.accUpto}</div>
-            <div>{branch.nba}</div>
-            <div>
-              <button className="delete-btn" onClick={handleCancel}>Delete</button>
-               <Alert
-                      type={alertType}
-                      message={alertMessage}
-                      show={showAlert}
-                      okbutton={handleCloseAlert} />
-            </div>
+      ) : (
+        <>
+          <div className="first">
+            <h2 className="heading">BRANCH DETAILS</h2>
+            <button className="addBranch-btn" onClick={() => setCurrent(3)}>
+              Add Branch
+            </button>
           </div>
-        ))}
-      </div>
+
+          <div className="table">
+            <div className="table-header">
+              <div>Edit</div>
+              <div>Branch Code</div>
+              <div>Branch Name</div>
+              <div>Approved In Take</div>
+              <div>First Year Admitted</div>
+              <div>Discontinued</div>
+              <div>Transferred Students From Your College</div>
+              <div>Transferred Students To Your College</div>
+              <div>LAP</div>
+              <div>Year of Starting the Course</div>
+              <div>Accredition Valid Upto</div>
+              <div>NBA Status</div>
+              <div>Delete</div>
+            </div>
+
+            {error ? (
+              <div className="table-row">
+                <div
+                  className="error-msg"
+                  style={{ gridColumn: "1 / -1", color: "red" }}
+                >
+                  Failed to load branches. Please check your internet
+                  connection.
+                </div>
+              </div>
+            ) : branchData.length === 0 ? (
+              <div className="table-row">
+                <div className="no-data-msg" style={{ gridColumn: "1 / -1" }}>
+                  No branches available.
+                </div>
+              </div>
+            ) : (
+              branchData.map((branch, index) => (
+                <div className="table-row" key={index} data-id={index}>
+                  <div>
+                    <button
+                      className="edit-btn"
+                      onClick={() => {
+                        setCurrent(4);
+                        setState(branch);
+                      }}
+                    >
+                      Edit
+                    </button>
+                  </div>
+                  <div>{branch.b_code}</div>
+                  <div>{branch.branch_name}</div>
+                  <div>{branch.approved_in_take}</div>
+                  <div>{branch.first_year_admitted}</div>
+                  <div>{branch.discontinued}</div>
+                  <div>{branch.transfered_from}</div>
+                  <div>{branch.transfered_to}</div>
+                  <div>{branch.LAP}</div>
+                  <div>{branch.year_of_start}</div>
+                  <div>{branch.accredition_valid_upto}</div>
+                  <div>{branch.NBA_2020 === 1 ? "yes" : "no"}</div>
+                  <div>
+                    <button
+                      className="delete-btn"
+                      onClick={() => handleCancel(index)}
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+
+          <Alert
+            key={`${alertStage}-${showAlert}`}
+            type={alertType}
+            message={alertMessage}
+            show={showAlert}
+            okbutton={
+              alertStage === "confirm"
+                ? () =>
+                    handleDeleteBranch(
+                      branchData[showIndex]?.b_code
+                    )
+                : alertStage === "success" || "error"
+                ? handleCloseAlert
+                : null
+            }
+            cancelbutton={alertStage === "confirm" ? handleCloseAlert : null}
+          />
+        </>
+      )}
     </div>
   );
 }
-const branchData = [
-  {
-    code: "CM",
-    name: "COMPUTER SCIENCE AND ENGINEERING (SS)",
-    approvedIntake: 118,
-    firstYearAdmitted: 117,
-    discontinued: 2,
-    transferredFrom: 0,
-    transferredTo: 0,
-    lap: 1,
-    yearStart: 2006,
-    accUpto: 2029,
-    nba: "Yes",
-  },
-  {
-    code: "CS",
-    name: "COMPUTER SCIENCE AND ENGINEERING",
-    approvedIntake: 59,
-    firstYearAdmitted: 58,
-    discontinued: 0,
-    transferredFrom: 0,
-    transferredTo: 0,
-    lap: 1,
-    yearStart: 1982,
-    accUpto: 2029,
-    nba: "Yes",
-  },
-  {
-    code: "CM",
-    name: "COMPUTER SCIENCE AND ENGINEERING (SS)",
-    approvedIntake: 118,
-    firstYearAdmitted: 117,
-    discontinued: 2,
-    transferredFrom: 0,
-    transferredTo: 0,
-    lap: 1,
-    yearStart: 2006,
-    accUpto: 2029,
-    nba: "Yes",
-  },
-  {
-    code: "CS",
-    name: "COMPUTER SCIENCE AND ENGINEERING",
-    approvedIntake: 59,
-    firstYearAdmitted: 58,
-    discontinued: 0,
-    transferredFrom: 0,
-    transferredTo: 0,
-    lap: 1,
-    yearStart: 1982,
-    accUpto: 2029,
-    nba: "Yes",
-  },
-  {
-    code: "CM",
-    name: "COMPUTER SCIENCE AND ENGINEERING (SS)",
-    approvedIntake: 118,
-    firstYearAdmitted: 117,
-    discontinued: 2,
-    transferredFrom: 0,
-    transferredTo: 0,
-    lap: 1,
-    yearStart: 2006,
-    accUpto: 2029,
-    nba: "Yes",
-  },
-  {
-    code: "CS",
-    name: "COMPUTER SCIENCE AND ENGINEERING",
-    approvedIntake: 59,
-    firstYearAdmitted: 58,
-    discontinued: 0,
-    transferredFrom: 0,
-    transferredTo: 0,
-    lap: 1,
-    yearStart: 1982,
-    accUpto: 2029,
-    nba: "Yes",
-  },
-  {
-    code: "CM",
-    name: "COMPUTER SCIENCE AND ENGINEERING (SS)",
-    approvedIntake: 118,
-    firstYearAdmitted: 117,
-    discontinued: 2,
-    transferredFrom: 0,
-    transferredTo: 0,
-    lap: 1,
-    yearStart: 2006,
-    accUpto: 2029,
-    nba: "Yes",
-  },
-  {
-    code: "CS",
-    name: "COMPUTER SCIENCE AND ENGINEERING",
-    approvedIntake: 59,
-    firstYearAdmitted: 58,
-    discontinued: 0,
-    transferredFrom: 0,
-    transferredTo: 0,
-    lap: 1,
-    yearStart: 1982,
-    accUpto: 2029,
-    nba: "Yes",
-  },
-  // Add more rows if needed
-];
 
 export default Branch;

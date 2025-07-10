@@ -1,41 +1,12 @@
 import "./home.css";
 import { useState,useEffect } from "react";
-import axios from "axios";
-import { host } from "../../constants/backendpath";
-import college from "../../constants/college";
 
-function Home() {
-  const [details, setDetails] = useState({
-    taluk:"",
-    district:"",
-    constituency:"",
-    pincode:"",
-    chairman:"",
-    principalName:"",
-    collegeContact:""
-  });
-  const collegeCode = "4";
-  const header = `${collegeCode || "unknownCode" }. ${college.get(collegeCode) || "unknownCollege"}`
-  async function fetch(collegeCode) {
-    try {
-      const res = await axios.post(`${host}home`, { collegeCode: collegeCode });
-      if (res.status === 200) {
-        console.log(res.data);
-        setDetails(res.data);
-      } else {
-        console.log("error in res");
-      }
-    } catch (error) {
-      console.log("Error occured in fetching");
-    }
-  }
-  useEffect(()=>{
-    fetch(collegeCode);
-  },[]);
+function Home({details}) {
+  // console.log(details);
 
   return (
     <div className="container">
-      <h2 className="heading">{header}</h2>
+      <h2 className="heading">{`${details.collegeCode || "unknownCode" } - ${details.collegeName || "unknownCollege"}`}</h2>
       <div className="content-box">
         <div className="section">
           <h3>Location Details</h3>
