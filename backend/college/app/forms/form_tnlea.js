@@ -2,8 +2,8 @@ const pdf = require("pdfkit");
 const db = require("../config/db");
 const { header,footer } = require("./pageFrame");
 const path = require("path");
-const arialBold = path.join(__dirname, "../fonts/G_ari_bd.TTF");
-const arial = path.join(__dirname, "../fonts/arial.ttf");
+const arialBold = path.join(__dirname, "../fonts/arial/G_ari_bd.TTF");
+const arial = path.join(__dirname, "../fonts/arial/arial.ttf");
 function form_tnlea(req,res){
     const allot_coll_code=req.user.counsellingCode;
     // console.log("received body:",req.body);

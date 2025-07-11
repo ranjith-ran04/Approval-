@@ -81,16 +81,22 @@
   margin-right: 20px;
 }
 
-.dropdown {
-  display: flex;
-  /* flex-direction: column; */
-  align-items: center;
+.dropdown{
   gap:10px;
   margin-bottom: 20px;
   width: 100%;
   max-width: 400px;
   margin-left:500px;
   margin-top: 20px;
+  position: sticky;
+  top: 0;
+  z-index: 0.9;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 4.5px;
+  text-align: center;
 }
 
 .dropdown label {
@@ -140,3 +146,9 @@
 .error-message{
   color:red;
 }
+#stabledrop>fieldset{
+
+}
+/* #stabledrop{
+  display:contents;
+} */

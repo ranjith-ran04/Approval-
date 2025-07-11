@@ -38,5 +38,4 @@ function collegeinfo(req, res) {
         });
     });
 }
-
 module.exports = collegeinfo;

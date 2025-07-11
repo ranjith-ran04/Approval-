@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import './CollegeInfo.css'
 import axios from 'axios';
 import Button from '../../widgets/button/Button';
@@ -15,7 +15,7 @@ const[formdata,setFormdata]=useState({})
 const[error,setError]=useState({})
 const[alertStage,setAlertStage]=useState('');
 
-const requiredFields = ["collegecode","collegenameWithdistrict","chairman","chairman's contact","principal's name","principal's contact","address","taluk","district","constituency","pincode","collegephone","collegeemail","websitecollege","antiraggingNo","bankaccountno","bankname","minoritystatus", "autonomousstatus","distance","nearestrailway","distancefromrailway","transportfacility","transport","mintransportcharge","maxtransportcharge","accomodationavailableboys","hostelstaytypeboys","typeofmessboys","messbillboys","roomrentboys","electricityboys","cautiondepositboys",
+const requiredFields = ["chairman","chairmancontact","principalname","principalcontact","address","taluk","district","constituency","pincode","collegephone","collegeemail","websitecollege","antiraggingNo","bankaccountno","bankname","minoritystatus", "autonomousstatus","distance","nearestrailway","distancefromrailway","transportfacility","transport","mintransportcharge","maxtransportcharge","accomodationavailableboys","hostelstaytypeboys","typeofmessboys","messbillboys","roomrentboys","electricityboys","cautiondepositboys",
   "establishmentboys",
   "admissionfeesboys",
   "accomodationavailablegirls",
@@ -38,10 +38,10 @@ const validateFields = () => {
       return; 
     }
 
-    if (["collegenameWithdistrict", "chairman", "principal's name", "district", "taluk", "constituency", "nearestrailway"].includes(field) &&/\d/.test(value)) {
+    if (["collegenameWithdistrict", "chairman", "principalname", "district", "taluk", "constituency", "nearestrailway"].includes(field) &&/\d/.test(value)) {
       newErrors[field] = "Only letters are allowed";
     }
-    const telephone=["chairman's contact", "principal's contact", "collegephone"];
+    const telephone=["chairmancontact", "principalcontact", "collegephone"];
     if(telephone.includes(field)&&isNaN(value)){
       newErrors[field]="Only numbers are allowed";
     }
@@ -55,7 +55,7 @@ const validateFields = () => {
       newErrors[field] = "Enter a valid 6-digit pincode";
     }
     const numericFields = [
-      "collegecode","bankaccountno", "distance", "distancefromrailway",
+      "bankaccountno", "distance", "distancefromrailway",
       "mintransportcharge", "maxtransportcharge",
       "messbillboys", "roomrentboys", "electricityboys", "cautiondepositboys", "establishmentboys", "admissionfeesboys",
       "messbillgirls", "roomrentgirls", "electricitygirls", "cautiondepositgirls", "establishmentgirls", "admissionfeesgirls"];
@@ -88,10 +88,10 @@ const handleChange =(e)=>{
       if (value.trim() === "") {
         isValid = false;
       }
-      if(["collegenameWithdistrict", "chairman", "principal's name", "district", "taluk", "constituency", "nearestrailway"].includes(name) &&/\d/.test(value)){
+      if(["collegenameWithdistrict", "chairman", "principalname", "district", "taluk", "constituency", "nearestrailway"].includes(name) &&/\d/.test(value)){
         isValid = false;
       }
-      const telephone = ["chairman's contact", "principal's contact", "collegephone"];
+      const telephone = ["chairmancontact", "principalcontact", "collegephone"];
       if (telephone.includes(name)) {
         if (isNaN(value) || !/^\d{10}$/.test(value)) {
           isValid = false;
@@ -128,6 +128,20 @@ const handleChange =(e)=>{
       setShowAlert(false);
       setAlertStage('')
     };
+    useEffect(() => {
+    const fetchCollegeData=async() => {
+        try {
+          const res = await axios.get(`${host}collegeinfo`, {withCredentials:true});
+            if (res.status===200) {
+                setFormdata({collegecode:res.data.collegecode,collegenameWithdistrict: res.data.collegenameWithdistrict});
+          }
+        } catch (err) {
+            console.log(err);
+        }
+    };
+    fetchCollegeData();
+}, []);
+
     const handleconfirmAlert=async()=>{
       setShowAlert(false);
       try{
@@ -173,7 +187,7 @@ const handleChange =(e)=>{
     <div className="collegewholediv">
       <div className='dropdown'>
       <label>Options</label>
-        <select onChange={(e)=>setSelectedSection(e.target.value)} value={selectedSection}>
+        <select id="stabledrop" onChange={(e)=>setSelectedSection(e.target.value)} value={selectedSection}>
             <option value="All">All</option>
             <option value="collegeinfo">college info</option>
             <option value="addressinfo">Address Details</option>
@@ -190,16 +204,16 @@ const handleChange =(e)=>{
               <fieldset className="collegefieldset">
               <legend className="collegelegend">College info</legend>
                 <div className="field-row">
-                <Inputfield eltname={"collegecode"} type={"text"} label={"College Code"} id={"collegecode"} htmlfor={"collegecode"} classname={"field-block"} onchange={handleChange} error={error["collegecode"]}/>
-                <Inputfield eltname={"collegenameWithdistrict"} type={"text"} label={"College name With district"} id={"cnwd"} htmlfor={"cwnd"} classname={"field-block"} onchange={handleChange} error={error["collegenameWithdistrict"]} />
+                <Inputfield eltname={"collegecode"} type={"text"} label={"College Code"} id={"collegecode"} htmlfor={"collegecode"} classname={"field-block"} onchange={handleChange} error={error["collegecode"]} value={formdata.collegecode} disabled={true}/>
+                <Inputfield eltname={"collegenameWithdistrict"} type={"text"} label={"College name With district"} id={"cnwd"} htmlfor={"cwnd"} classname={"field-block"} onchange={handleChange} error={error["collegenameWithdistrict"]} value={formdata.collegenameWithdistrict} disabled={true}/>
                 </div>
                 <div className="field-row">
-                <Inputfield eltname={"chairman"} type={"text"} label={"Name of the Chairman"} id={"chairman"} htmlfor={"chairman"}  classname={"field-block"} onchange={handleChange} error={error["chairman"]} />
-                <Inputfield eltname={"chairman's contact"} type={"text"} label={"chairman's contact"} id={"chairmancontact"} htmlfor={"chairmancontact"}  classname={"field-block"} error={error["chairman's contact"]} onchange={handleChange}/>
+                <Inputfield eltname={"chairman"} type={"text"} label={"Name of the Chairman"} id={"chairman"} htmlfor={"chairman"}  classname={"field-block"} onchange={handleChange} error={error["chairman"]} value={formdata.chairman}/>
+                <Inputfield eltname={"chairmancontact"} type={"text"} label={"chairman's contact"} id={"chairmancontact"} htmlfor={"chairmancontact"}  classname={"field-block"} error={error["chairmancontact"]} onchange={handleChange} value={formdata.chairmancontact}/>
                 </div>
               <div className='field-row'>
-                <Inputfield eltname={"principal's name"} type={"text"} label={"Name of the principal"} id={"principal"} htmlfor={"principal"}  classname={"field-block"} error={error["principal's name"]} onchange={handleChange}/>
-                <Inputfield eltname={"principal's contact"} type={"text"} label={"Principal Contact Number"} id={"principalcontact"} htmlfor={"principalcontact"}  classname={"field-block"} error={error["principal's contact"]} onchange={handleChange}/>
+                <Inputfield eltname={"principalname"} type={"text"} label={"Name of the principal"} id={"principal"} htmlfor={"principal"}  classname={"field-block"} error={error["principalname"]} onchange={handleChange} value={formdata.principalname}/>
+                <Inputfield eltname={"principalcontact"} type={"text"} label={"Principal Contact Number"} id={"principalcontact"} htmlfor={"principalcontact"}  classname={"field-block"} error={error["principalcontact"]} onchange={handleChange} value={formdata.principalcontact}/>
               </div>
               </fieldset>
               </>
@@ -213,8 +227,8 @@ const handleChange =(e)=>{
               <div className='field-row'>
               <div className='field-block'>
                 <label htmlFor="Address">Address (Enter address only)</label>
-                <textarea  name="address" id="Address" onChange={handleChange}></textarea>
-                {error["address"] && <p className="error-message">{error["address"]}</p>}
+                <textarea  name="address" id="Address" onChange={handleChange} value={formdata.address}></textarea>
+                {error["address"] && <p className="error-message">{error["address"]} </p>}
               </div>
             <Inputfield eltname={"taluk"} type={"text"} label={"Taluk"} id={"taluk"} htmlfor={"taluk"} classname={"field-block"} error={error["taluk"]} onchange={handleChange}/>
             </div>
