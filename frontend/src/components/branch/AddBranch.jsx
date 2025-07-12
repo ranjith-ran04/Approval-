@@ -15,8 +15,10 @@ function AddBranch({ setCurrent }) {
   };
 
   const handleAddSubmit = async (data) => {
+    // console.log("Data being sent:", data);
+
     try {
-      const c_code = "5901";
+      const c_code = "1149";
       const formData = {
         collegeCode: c_code,
         ...data,

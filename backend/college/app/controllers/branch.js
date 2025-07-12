@@ -81,6 +81,7 @@ function addBranch(req, res) {
     accredition_valid_upto,
     NBA_2020,
     LAP,
+    Amount,
   } = req.body;
 
   const values = [
@@ -96,9 +97,10 @@ function addBranch(req, res) {
     accredition_valid_upto,
     NBA_2020,
     LAP,
+    Amount,
   ];
 
-  const query = `insert into branch_info(c_code, b_code,branch_name,approved_in_take,first_year_admitted,discontinued,transfered_from,transfered_to,year_of_start,accredition_valid_upto,NBA_2020,LAP) values(?,?,?,?,?,?,?,?,?,?,?,?);`;
+  const query = `insert into branch_info(c_code, b_code,branch_name,approved_in_take,first_year_admitted,discontinued,transfered_from,transfered_to,year_of_start,accredition_valid_upto,NBA_2020,LAP,Amount) values(?,?,?,?,?,?,?,?,?,?,?,?,?);`;
   const checkQuery = `select * from branch_info where c_code = ? and b_code = ?`;
   db.query(checkQuery, [collegeCode, b_code], (checkErr, rows) => {
     if (checkErr) {

@@ -26,7 +26,7 @@ function Branch({ setCurrent, setState }) {
   const handleCloseAlert = () => {
     setShowAlert(false);
   };
-  const collegeCode = "5901";
+  const collegeCode = "1149";
   useEffect(() => {
     const fetchData = async () => {
       try {
