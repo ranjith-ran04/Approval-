@@ -97,7 +97,7 @@ circle {
 .symbol-animate {
   stroke-dasharray:50; 
   stroke-dashoffset:50;
-  animation: drawSymbol 5s ease-out forwards;
+  animation: drawSymbol 2s ease-out forwards;
 }
 @keyframes drawSymbol {
   to {

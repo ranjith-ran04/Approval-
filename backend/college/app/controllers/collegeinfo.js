@@ -7,6 +7,7 @@ const booleanFields = ["minority_status","autonomous_status",
 ];
 function collegeinfo(req, res) {
     const data = req.body;
+    const collegecode=req.user.counsellingCode;
     if (!data || Object.keys(data).length === 0) {
         return res.status(400).json({ success: false, message: "No data provided" });
     }
@@ -24,17 +25,18 @@ function collegeinfo(req, res) {
             dbData[field] = dbData[field] === "Yes" ? 1 : 0;
         }
     });
-    const columns = Object.keys(dbData).join(", ");
-    const placeholders = Object.keys(dbData).map(() => "?").join(", ");
+    const setClause = Object.keys(dbData).map(col => `${col} = ?`).join(", ");
     const values = Object.values(dbData);
-    const query = `INSERT INTO college_info (${columns}) VALUES (${placeholders})`;
+
+    const query = `UPDATE college_info SET ${setClause} WHERE c_code =${collegecode}`;
+    values.push(collegecode);
     db.query(query, values, (error, result) => {
         if (error) {
             console.error(error);
-            return res.status(500).json({ success: false, message: "Database insertion error", error });
+            return res.status(500).json({ success: false, message: "Database updation error", error });
         }
-        res.status(200).json({success: true,message: "College info saved successfully",
-            insertId: result.insertId
+        res.status(200).json({success: true,message: "College info updated successfully",
+            affectedrows: result.affectedRows
         });
     });
 }

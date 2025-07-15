@@ -84,11 +84,10 @@
 .dropdown{
   gap:10px;
   margin-bottom: 20px;
-  width: 100%;
-  max-width: 400px;
-  margin-left:500px;
+  width: 100%;  
   margin-top: 20px;
-  position: sticky;
+  /* position: sticky; */
+
   top: 0;
   z-index: 0.9;
   font-weight: bold;
@@ -146,9 +145,7 @@
 .error-message{
   color:red;
 }
-#stabledrop>fieldset{
 
-}
 /* #stabledrop{
   display:contents;
 } */

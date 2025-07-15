@@ -27,10 +27,8 @@ router.put("/branch", verifyjwt,editBranch);
 router.delete("/branch", verifyjwt,deleteBranch);
 router.post("/branch", verifyjwt,addBranch);
 router.get("/formlea",verifyjwt,form_tnlea)
-router.post("/collegeinfo",verifyjwt,collegeinfo)
+router.put("/collegeinfo",verifyjwt,collegeinfo)
 router.get("/collegeinfo",verifyjwt,collegeget);
-
-
 
 
 module.exports = router;
