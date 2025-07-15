@@ -1,3 +1,9 @@
+const PDFDocument = require("pdfkit");
+const path = require("path");
+const arialBold = path.join(__dirname, "../fonts/G_ari_bd.TTF");
+const arial = path.join(__dirname, "../fonts/arial.ttf");
+const { header, footer } = require("./pageFrame"); 
+
 const express = require("express");
 const mysql = require("mysql2");
 const PDFDocument = require("pdfkit");
@@ -5,6 +11,7 @@ const cors = require("cors");
 
 const app = express();
 app.use(cors());
+app.use(express.json());
 
 const connection = mysql.createConnection({
   host: "localhost",
@@ -13,169 +20,186 @@ const connection = mysql.createConnection({
   database: "approval_2025",
 });
 
-// Constants
-const columnWidths = {
-  sno: 40,
-  applno: 90,
-  name: 170,
-  quota: 60,
-  community: 60,
-  amount: 60,
-};
-const rowHeight = 25;
-const topMargin = 40;
-const leftMargin = 40;
-const pageHeight = 842;
+connection.connect((err) => {
+  if (err) {
+    console.error("DB connection failed:", err.message);
+  } else {
+    console.log("Connected to MySQL");
+  }
+});
 
-// Helper: Draw header
-function drawTableHeader(doc, y) {
-  doc.font("Times-Bold").fontSize(11);
+app.post("/form-d", (req, res) => {
+  const c_code = req.body.c_code?.trim();
+  if (!c_code) return res.status(400).send("College code is required.");
 
-  doc.rect(leftMargin, y, columnWidths.sno, rowHeight).stroke();
-  doc.text("S.no", leftMargin, y + 7, {
-    align: "center",
-    width: columnWidths.sno,
-  });
+  const collegeQuery = `
+    SELECT freezed, name_of_college, address 
+    FROM college_info 
+    WHERE c_code = ?
+  `;
 
-  doc.rect(leftMargin + columnWidths.sno, y, columnWidths.applno, rowHeight).stroke();
-  doc.text("Applno", leftMargin + columnWidths.sno, y + 7, {
-    align: "center",
-    width: columnWidths.applno,
-  });
-
-  doc.rect(leftMargin + columnWidths.sno + columnWidths.applno, y, columnWidths.name, rowHeight).stroke();
-  doc.text("Name", leftMargin + columnWidths.sno + columnWidths.applno, y + 7, {
-    align: "center",
-    width: columnWidths.name,
-  });
-
-  doc.rect(leftMargin + columnWidths.sno + columnWidths.applno + columnWidths.name, y, columnWidths.quota, rowHeight).stroke();
-  doc.text("Quota", leftMargin + columnWidths.sno + columnWidths.applno + columnWidths.name, y + 7, {
-    align: "center",
-    width: columnWidths.quota,
-  });
-
-  doc.rect(leftMargin + columnWidths.sno + columnWidths.applno + columnWidths.name + columnWidths.quota, y, columnWidths.community, rowHeight).stroke();
-  doc.text("Community", leftMargin + columnWidths.sno + columnWidths.applno + columnWidths.name + columnWidths.quota, y + 7, {
-    align: "center",
-    width: columnWidths.community,
-  });
-
-  doc.rect(leftMargin + columnWidths.sno + columnWidths.applno + columnWidths.name + columnWidths.quota + columnWidths.community, y, columnWidths.amount, rowHeight).stroke();
-  doc.text("Amount", leftMargin + columnWidths.sno + columnWidths.applno + columnWidths.name + columnWidths.quota + columnWidths.community, y + 7, {
-    align: "center",
-    width: columnWidths.amount,
-  });
-}
-
-app.get("/generate-pdf", (req, res) => {
-  const doc = new PDFDocument({ margin: 40, size: "A4" });
-  const filename = "form_fg.pdf";
-  res.setHeader("Content-Disposition", `attachment; filename=${filename}`);
-  res.setHeader("Content-Type", "application/pdf");
-  doc.pipe(res);
-
-  // Header
-  const c_code = "1";
-  const collegeName =
-    "University Departments of Anna University, Chennai - CEG Campus, Sardar Patel Road, Guindy, Chennai 600 025";
-  const address = "SARDAR PATEL ROAD, GUINDY, CHENNAI - 600 025";
-
-  doc.font("Times-Bold").fontSize(16).text("FORM-FG", { align: "center" });
-  doc.font("Times-Roman").fontSize(12).text("(Rough Copy)", { align: "right" });
-  doc.moveDown();
-  doc.font("Times-Bold").fontSize(13).text(`${c_code} - ${collegeName}`, {
-    align: "center",
-    underline: true,
-  });
-  doc.font("Times-Roman").fontSize(12).text(address, { align: "center" });
-  doc.moveDown().font("Times-Roman").fontSize(12).text("SECOND YEAR : 2024 - 2025", {
-    align: "left",
-  });
-  doc.moveDown();
-
-  let y = doc.y;
-  drawTableHeader(doc, y);
-  y += rowHeight;
-
-  const sql = `SELECT Amount, branch_name, a_no, name, catogory, community 
-    FROM (
-      SELECT b_code, branch_name FROM branch_info WHERE c_code = ?
-    ) AS b
-    JOIN (
-      SELECT Amount, b_code, a_no, name, catogory, community FROM student_info 
-      WHERE c_code = ? AND fg = 1 AND (Amount >= 0)
-    ) AS s ON b.b_code = s.b_code 
-    ORDER BY branch_name`;
-
-  connection.query(sql, [c_code, c_code], (err, results) => {
-    if (err) {
-      console.error(err);
-      res.status(500).send("Error generating PDF");
-      return;
+  connection.query(collegeQuery, [c_code], (err, collegeRows) => {
+    if (err || collegeRows.length === 0) {
+      return res.status(500).send("Failed to fetch college info");
     }
 
-    let currentBranch = null;
-    let count = 1;
+    const collegeInfo = {
+      c_code,
+      name_of_college: collegeRows[0].name_of_college,
+      address: collegeRows[0].address,
+      freezed: collegeRows[0].freezed,
+    };
 
-    results.forEach((row) => {
-      if (row.branch_name !== currentBranch) {
-        currentBranch = row.branch_name;
+    const branchQuery = `
+      SELECT DISTINCT b.BRANCH, b.NAME 
+      FROM branches b
+      WHERE b.BRANCH IN (
+        SELECT DISTINCT BRANCH FROM discontinued_info WHERE COLLCODE = ?
+      )
+      ORDER BY b.BRANCH
+    `;
 
-        // Check space before section heading
-        if (y + rowHeight > pageHeight - 60) {
-          doc.addPage();
-          y = topMargin;
-          drawTableHeader(doc, y);
-          y += rowHeight;
-        }
+    connection.query(branchQuery, [c_code], (err, branches) => {
+      if (err) return res.status(500).send("Failed to fetch branch data");
 
-        doc.font("Times-Bold").fontSize(12).text(currentBranch, leftMargin, y);
-        y += 20;
-        count = 1;
+      const branchData = [];
+      let pending = branches.length;
+
+      if (pending === 0) {
+        return res.status(404).send("No discontinued students found.");
       }
 
-      // Check page overflow before student row
-      if (y + rowHeight > pageHeight - 60) {
+      branches.forEach((branch) => {
+        const studentQuery = `
+          SELECT DISTINCT REG_NO, NAME, APPROVE_STATE, TC_STATE 
+          FROM discontinued_info 
+          WHERE COLLCODE = ? AND BRANCH = ?
+        `;
+
+        connection.query(studentQuery, [c_code, branch.BRANCH], (err, students) => {
+          if (err) students = [];
+
+          branchData.push({
+            branch_name: branch.NAME,
+            students,
+          });
+
+          pending--;
+          if (pending === 0) {
+            generatePDF(res, collegeInfo, branchData);
+          }
+        });
+      });
+    });
+  });
+});
+
+function generatePDF(res, collegeInfo, branchData) {
+  const doc = new PDFDocument({ size: "A4", margin: 30 });
+
+  res.setHeader("Content-Type", "application/pdf");
+  res.setHeader("Content-Disposition", "attachment; filename=form_d.pdf");
+  doc.pipe(res);
+
+//   doc.font("Times-Roman").fontSize(14).text("FORM-D DISCONTINUED DETAILS", { align: "center" });
+//   if (!collegeInfo.freezed) {
+//     doc.fontSize(14).text("(Rough Copy)", { align: "right" });
+//   }
+
+//   doc.moveDown();
+//   doc.fontSize(14).text(`${collegeInfo.c_code} - ${collegeInfo.name_of_college}`, { align: "center" });
+//   doc.moveDown(0.5);
+//   doc.fontSize(12).text(collegeInfo.address, { align: "center" });
+//   doc.moveDown(1);
+//   doc.text("LATERAL ENTRY : 2024 - 2025", { align: "left" });
+//   doc.moveDown();
+
+  const startX = 30;
+  const colWidths = {
+    sno: 50,
+    regno: 120,
+    name: 170,
+    approved: 100,
+    tc: 100,
+  };
+
+  branchData.forEach((branchGroup) => {
+    // doc.addPage();
+    doc.moveDown(0.5);
+    doc.font("Times-Bold").fontSize(12).text(branchGroup.branch_name.toUpperCase(), startX, doc.y, { align: "left" });
+    doc.moveDown(0.5);
+
+    let y = doc.y;
+    const rowHeight = 28;
+
+    doc.font("Times-Bold").fontSize(10);
+    doc.rect(startX, y, colWidths.sno, rowHeight).stroke();
+    doc.rect(startX + colWidths.sno, y, colWidths.regno, rowHeight).stroke();
+    doc.rect(startX + colWidths.sno + colWidths.regno, y, colWidths.name, rowHeight).stroke();
+    doc.rect(startX + colWidths.sno + colWidths.regno + colWidths.name, y, colWidths.approved, rowHeight).stroke();
+    doc.rect(startX + colWidths.sno + colWidths.regno + colWidths.name + colWidths.approved, y, colWidths.tc, rowHeight).stroke();
+
+    doc.text("S.NO", startX + 5, y + 6, {align: "center"});
+    doc.text("REG NO", startX + colWidths.sno + 5, y + 6, {align: "center"});
+    doc.text("NAME", startX + colWidths.sno + colWidths.regno + 5, y + 6, {align: "center"});
+    doc.text("APPROVED\nBY DOTE", startX + colWidths.sno + colWidths.regno + colWidths.name + 5, y + 3, {align: "center"});
+    doc.text("TC\nAPPROVED", startX + colWidths.sno + colWidths.regno + colWidths.name + colWidths.approved + 5, y + 3, {align: "center"});
+
+    y += rowHeight;
+    doc.font("Times-Roman").fontSize(10);
+
+    branchGroup.students.forEach((student, idx) => {
+      // Check for page break
+      if (y + rowHeight > doc.page.height - doc.page.margins.bottom) {
         doc.addPage();
-        y = topMargin;
-        drawTableHeader(doc, y);
-        y += rowHeight;
+        y = doc.y;
       }
 
-      doc.font("Times-Roman").fontSize(11);
+      doc.rect(startX, y, colWidths.sno, rowHeight).stroke();
+      doc.rect(startX + colWidths.sno, y, colWidths.regno, rowHeight).stroke();
+      doc.rect(startX + colWidths.sno + colWidths.regno, y, colWidths.name, rowHeight).stroke();
+      doc.rect(startX + colWidths.sno + colWidths.regno + colWidths.name, y, colWidths.approved, rowHeight).stroke();
+      doc.rect(startX + colWidths.sno + colWidths.regno + colWidths.name + colWidths.approved, y, colWidths.tc, rowHeight).stroke();
 
-      doc.rect(leftMargin, y, columnWidths.sno, rowHeight).stroke();
-      doc.text(count++, leftMargin, y + 7, {
-        align: "center",
-        width: columnWidths.sno,
-      });
-
-      doc.rect(leftMargin + columnWidths.sno, y, columnWidths.applno, rowHeight).stroke();
-      doc.text(row.a_no, leftMargin + columnWidths.sno, y + 7, {
-        align: "center",
-        width: columnWidths.applno,
-      });
-
-      doc.rect(leftMargin + columnWidths.sno + columnWidths.applno, y, columnWidths.name, rowHeight).stroke();
-      doc.text(row.name, leftMargin + columnWidths.sno + columnWidths.applno + 5, y + 7);
-
-      doc.rect(leftMargin + columnWidths.sno + columnWidths.applno + columnWidths.name, y, columnWidths.quota, rowHeight).stroke();
-      doc.text(row.catogory === "GOVERNMENT" ? "GOVT" : "MNGT", leftMargin + columnWidths.sno + columnWidths.applno + columnWidths.name + 5, y + 7);
-
-      doc.rect(leftMargin + columnWidths.sno + columnWidths.applno + columnWidths.name + columnWidths.quota, y, columnWidths.community, rowHeight).stroke();
-      doc.text(row.community, leftMargin + columnWidths.sno + columnWidths.applno + columnWidths.name + columnWidths.quota + 5, y + 7);
-
-      doc.rect(leftMargin + columnWidths.sno + columnWidths.applno + columnWidths.name + columnWidths.quota + columnWidths.community, y, columnWidths.amount, rowHeight).stroke();
-      doc.text(row.Amount.toString(), leftMargin + columnWidths.sno + columnWidths.applno + columnWidths.name + columnWidths.quota + columnWidths.community + 5, y + 7);
+      doc.text(`${idx + 1}`, startX + 5, y + 6);
+      doc.text(student.REG_NO, startX + colWidths.sno + 5, y + 6);
+      doc.text(student.NAME, startX + colWidths.sno + colWidths.regno + 5, y + 6);
+      doc.text(student.APPROVE_STATE ? "YES" : "NO", startX + colWidths.sno + colWidths.regno + colWidths.name + 5, y + 6);
+      doc.text(student.TC_STATE ? "YES" : "NO", startX + colWidths.sno + colWidths.regno + colWidths.name + colWidths.approved + 5, y + 6);
 
       y += rowHeight;
     });
 
-    doc.end();
+    doc.moveDown(2);
   });
-});
 
-app.listen(3000, () => {
-  console.log("Server running on port 3000");
+  // Signature Page
+//   doc.addPage();
+//   doc.moveDown(2);
+//   doc.font("Times-Roman").fontSize(11.5);
+//   doc.text(
+//     'This is to certify that the above students have discontinued the course from our institution and TC has been issued to the above students marked with "Discontinued". Further it is verified that on any account the above students will not be readmitted in our institution in future since their vacancies have been added for filling up of students during Lateral Entry 2024-2025',
+//     { align: "justify" }
+//   );
+
+//   doc.moveDown(2);
+//   const today = new Date().toLocaleDateString("en-GB");
+//   doc.text(`Date: ${today}`, 30);
+//   doc.text("College Seal", 260);
+//   doc.text("Signature Field", 420);
+
+const remainingHeight = doc.page.height - doc.y - doc.page.margins.bottom;
+    const extraSpaceNeeded = 150;
+    if (remainingHeight < extraSpaceNeeded) {
+      doc.addPage();
+      header("B", doc, collegeCode);
+    }
+    footer(doc);
+
+  doc.end();
+}
+
+const PORT = 5000;
+app.listen(PORT, () => {
+  console.log(`Server running at http://localhost:${PORT}`);
 });

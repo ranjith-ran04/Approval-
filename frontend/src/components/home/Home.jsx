@@ -1,32 +1,35 @@
 import "./home.css";
+import { useState,useEffect } from "react";
 
-function Home() {
-  const details = {
-    Taluk: "Mambam",
-    Contituency: "Mylapore",
-    District: "Chennai",
-    Pincode: "620001",
-  };
-
-  const contactDetails = {
-    Chairman: "Vishnu (ph.no: 9897969594)",
-    Principal: "Dr.K.S.EASWARAKUMAR (ph.no: 04422358491)",
-    College: "044-22358491",
-  };
+function Home({details}) {
+  // console.log(details);
 
   return (
     <div className="container">
-      <h2 className="heading">1. UNIVERSITY COLLEGE OF ENGINEERING</h2>
+      <h2 className="heading">{`${details.collegeCode || "unknownCode" } - ${details.collegeName || "unknownCollege"}`}</h2>
       <div className="content-box">
         <div className="section">
           <h3>Location Details</h3>
-          {Object.entries(details).map(([label, value]) => (
-            <div className="row" key={label}>
-              <span className="label">{label}</span>
-              <span className="separator">:</span>
-              <span className="value">{value}</span>
-            </div>
-          ))}
+          <div className="row">
+            <span className="label">Taluk</span>
+            <span className="separator">:</span>
+            <span className="value">{details.taluk}</span>
+          </div>
+          <div className="row">
+            <span className="label">District</span>
+            <span className="separator">:</span>
+            <span className="value">{details.district}</span>
+          </div>
+          <div className="row">
+            <span className="label">Constituency</span>
+            <span className="separator">:</span>
+            <span className="value">{details.constituency}</span>
+          </div>
+          <div className="row">
+            <span className="label">Pincode</span>
+            <span className="separator">:</span>
+            <span className="value">{details.pincode}</span>
+          </div>
         </div>
 
         <div className="section">
@@ -34,17 +37,17 @@ function Home() {
           <div className="row">
             <span className="label">Chairman</span>
             <span className="separator">:</span>
-            <span className="value">{contactDetails.Chairman}</span>
+            <span className="value">{details.chairman || "-"}</span>
           </div>
           <div className="row">
             <span className="label">Principal/Dean</span>
             <span className="separator">:</span>
-            <span className="value">{contactDetails.Principal}</span>
+            <span className="value">{details.principalName}</span>
           </div>
           <div className="row">
             <span className="label">College Contact No</span>
             <span className="separator">:</span>
-            <span className="value">{contactDetails.College}</span>
+            <span className="value">{details.collegeContact}</span>
           </div>
         </div>
       </div>

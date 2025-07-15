@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import NavigationBar from "../../widgets/navigationBar/NavigationBar";
 import Alert from "../../widgets/alert/Alert";
 import axios from "axios";
+import {host} from '../../constants/backendpath';
 
 const LoginForm = () => {
   const [formData, setFormData] = useState({ regNo: "", pwd: "" });
@@ -14,12 +15,28 @@ const LoginForm = () => {
   const [alertMessage, setAlertMessage] = useState("");
   const [errors, setErrors] = useState({});
   const [touched, setTouched] = useState({});
+  const [changed, setChanged] = useState(0);
+  const [loginStatus, setLoginStatus] = useState(null);
+
   const navigate = useNavigate();
   const fieldsOrder = ["regNo", "pwd"];
 
   useEffect(() => {
     validateForm();
   }, [formData, touched]);
+  useEffect(()=>{
+    async function fetchLogin(){
+    try{
+      const res = await axios.get(`${host}login`,{withCredentials:true});
+      if(res.status === 200){
+        console.log('successfully cleared');
+      }
+    }
+    catch(error){
+      console.log('error',error);
+    }}
+    fetchLogin();
+  },[])
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -36,23 +53,15 @@ const LoginForm = () => {
           },
           { withCredentials: true }
         );
-
-        const { changed } = response.data;
-
+        const changeFlag = response.data.changed;
+        setChanged(changeFlag);
+        setLoginStatus("success");
         setAlertType("success");
         setAlertMessage("Logged in successfully.");
         setShowAlert(true);
-        navigate('/dashboard');
 
-        // setTimeout(() => {
-        //   if (changed === 0) {
-        //     navigate("/change-password");
-        //   } else {
-        //     navigate("/dashboard");
-        //   }
-        // }, 1000);
       } catch (error) {
-        console.log(error)
+        setLoginStatus("error");
         setAlertType("error");
         setAlertMessage(error.response?.data?.message || "Login failed");
         setShowAlert(true);
@@ -98,7 +107,25 @@ const LoginForm = () => {
     return newErrors;
   };
 
-  const handleCloseAlert = () => setShowAlert(false);
+  const handleCloseAlert = () => {
+    if (changed === 0) {
+      navigate("/changePassword",{
+        state:{
+          logged:true
+        }
+      });
+    } else {
+      navigate("/dashboard",{
+        state:{
+          logged:true
+        }
+      });
+    }
+  };
+
+  const handleInvalid = () => {
+    setShowAlert(false);
+  };
 
   return (
     <div className="login-page">
@@ -107,6 +134,7 @@ const LoginForm = () => {
 Tamilnadu Lateral Entry Direct Second Year B.E/B.Tech.,Approval-2025`}
         profile={true}
         bool={true}
+        login={true}
       />
       <div className="login-container">
         <div className="login-box">
@@ -145,7 +173,13 @@ Tamilnadu Lateral Entry Direct Second Year B.E/B.Tech.,Approval-2025`}
             {errors.pwd && <p className="error">{errors.pwd}</p>}
 
             <button type="submit" className="login-button">LOGIN</button>
-            <Alert type={alertType} message={alertMessage} show={showAlert} close={handleCloseAlert} />
+
+            <Alert
+              type={alertType}
+              message={alertMessage}
+              show={showAlert}
+              okbutton={loginStatus === "success" ? handleCloseAlert : handleInvalid}
+            />
           </form>
         </div>
       </div>
