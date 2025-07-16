@@ -221,6 +221,7 @@ const handleChange =(e)=>{
 
         </select>
          </div>
+         <div id='collegeFields'>
 
           {(selectedSection==='All' || selectedSection==='collegeinfo') && (
               <>
@@ -389,6 +390,7 @@ const handleChange =(e)=>{
           cancelbutton={alertStage==='confirm'?handleCloseAlert:null}
           />
           </div>   
+        </div>
         </div>
   )
 }

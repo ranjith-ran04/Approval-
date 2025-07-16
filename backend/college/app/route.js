@@ -11,6 +11,9 @@ const verifyjwt = require('./middleware/verifyjwt')
 const logout = require('./controllers/logout')
 const collegeinfo = require("./controllers/collegeinfo");
 const {branch, editBranch, deleteBranch, addBranch} = require("./controllers/branch");
+const {collegeBranchFetch,studentDetails} = require('./controllers/studentDetails');
+
+console.log(typeof collegeBranchFetch);
 
 router.get("/forma", verifyjwt,forma);
 router.get("/formb",verifyjwt,formb);
@@ -25,8 +28,11 @@ router.get("/branch", verifyjwt,branch);
 router.put("/branch", verifyjwt,editBranch);
 router.delete("/branch", verifyjwt,deleteBranch);
 router.post("/branch", verifyjwt,addBranch);
-router.post("/formlea",verifyjwt,form_tnlea)
-router.post("/collegeinfo",collegeinfo)
+router.post("/formlea",verifyjwt,form_tnlea);
+router.post("/collegeinfo",collegeinfo);
+router.get('/collegeBranchFetch',verifyjwt,collegeBranchFetch);
+router.post('/studentBranch',verifyjwt,studentDetails);
+
 
 
 

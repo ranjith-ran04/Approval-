@@ -11,6 +11,7 @@ import Notes from "./widgets/notes/Notes.jsx";
 import axios from "axios";
 import { host } from "./constants/backendpath.js";
 import { useNavigate, useLocation } from "react-router-dom";
+import StudentDetails from "./components/studentDetails/StudentDetails.jsx";
 
 function Dashboard() {
   const [current, setCurrent] = useState(0);
@@ -70,6 +71,7 @@ Tamilnadu Lateral Entry Direct Second Year B.E/B.Tech.,Approval-2025`}
             <EditBranch setCurrent={setCurrent} state={state} />
           )}
           {current === 0 && <Notes />}
+          {current === 5 && <StudentDetails/>}
         </div>
       </div>
     </div>

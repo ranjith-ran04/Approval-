@@ -8,7 +8,7 @@
   width: 15%;
   /* position: fixed; */
   box-shadow: 1.95px 1.95px 2.6px #00000026;
-  padding-top: 23px;
+  padding-top: 13px;
   padding-right: 10px;
   padding-left: 10px;
   transition: width 0.3s ease;
@@ -31,17 +31,14 @@
 }
 
 #iconDiv {
-  height: 40px;
-  width: 40px;
+  height: 35px;
+  width: 35px;
   border-radius: 5px;
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-#iconDiv:hover {
+    background-color: rgba(0, 0, 0, 0.3);
   cursor: pointer;
-  background-color: rgba(0, 0, 0, 0.3);
 }
 
 .menuItems {
@@ -141,5 +138,5 @@
 }
 
 .menuItems.active{
-  background-color: blue;
+  background-color: #a1e3f9;
 }
