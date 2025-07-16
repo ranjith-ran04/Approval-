@@ -32,12 +32,12 @@
 
 #iconDiv {
   height: 35px;
-  width: 35px;
+  width: 40px;
   border-radius: 5px;
   display: flex;
   align-items: center;
   justify-content: center;
-    background-color: rgba(0, 0, 0, 0.3);
+  background-color: rgba(0, 0, 0, 0.3);
   cursor: pointer;
 }
 
@@ -104,24 +104,21 @@
   transition: opacity 0.3s ease, visibility 0.3s ease;
 }
 
-/* #sidebar.collapsed .menuItems {
-  padding-left:0px;
-} */
-
-#sidebar.collapsed .menuItems span,
-#sidebar.collapsed .menuItems p,
-#sidebar.collapsed .menuItems div:not(:first-child) {
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
+#sidebar.collapsed .menuItems {
+  padding-left:3px;
+}
+#sidebar.collapsed{
+  display:flex;
+  align-items:center;
+  padding-left: 0px;
+  padding-right:0px;
+}
+#sidebar .menuItems{
+  transition: transform 0.3s ease;
 }
 
-#sidebar .menuItems > div:first-child {
-  transition: transform 0.3s ease, opacity 0.3s ease;
-}
-
-#sidebar.collapsed .menuItems > div:first-child {
-  transform: scale(1.2);
+#sidebar.collapsed .menuItems{
+  width:70%;
 }
 
 #buttonDiv {
