@@ -13,54 +13,50 @@ function EditBranch({ state, setCurrent }) {
     setShowAlert(false);
     if (alertType === "success") setCurrent(2);
   };
-  console.log("State passed to BranchForm", state);
 
-  const normalizedState = { ...state, NBA_2020: state.NBA_2020 === 1 ? "yes" : "no"};
-  console.log(state.Amount);
-
+  const normalizedState = {
+    ...state,
+  };
 
   const handleEditSubmit = async (data) => {
     try {
       const changedFields = {};
-console.log(data.Amount);
-      // state.NBA_2020 === 1 ? (state.NBA_2020 = "yes") : (state.NBA_2020 = "no");
-      
 
       Object.keys(data).forEach((key) => {
-        if (String(data[key]) !== String(state[key])) {
-          changedFields[key] = data[key];
+        if (data.b_code || data.branch_name || data.year_of_start) {
+          if (String(data[key]) !== String(state[key])) {
+            changedFields[key] = data[key];
+          }
+        } else {
+          if (Number(data[key]) !== Number(state[key])) {
+            changedFields[key] = data[key];
+          }
         }
       });
 
       if ("NBA_2020" in changedFields) {
-        changedFields.NBA_2020 =
-          changedFields.NBA_2020.toLowerCase() === "yes" ? 1 : 0;
-
         if (changedFields.NBA_2020 === 1) {
-          if (String(data.Amount) !== String(state.Amount)) {
+          if (Number(data.Amount) !== Number(state.Amount)) {
             changedFields.Amount = parseInt(data.Amount || "0");
           }
           if (
-            String(data.accredition_valid_upto) !==
-            String(state.accredition_valid_upto)
+            Number(data.accredition_valid_upto) !==
+            Number(state.accredition_valid_upto)
           ) {
             changedFields.accredition_valid_upto = data.accredition_valid_upto;
           }
         } else {
           if (state.amount !== 0) changedFields.amount = 0;
-          if (state.accredition_valid_upto !== "")
-            changedFields.accredition_valid_upto = "";
+          if (state.accredition_valid_upto !== 0)
+            changedFields.accredition_valid_upto = 0;
         }
       }
-
-      console.log(changedFields);
 
       const res = await axios.put(`${host}branch`, {
         ...changedFields,
         collegeCode: state.c_code,
         b_code: state.b_code,
       });
-      console.log("Fetched Branch Data:", res.data);
 
       if (res.status === 200 || res.status === 201) {
         setAlertType("success");
@@ -94,7 +90,6 @@ console.log(data.Amount);
         buttonText="SAVE"
         isEditMode={true}
         setCurrent={setCurrent}
-        showSubmitAlert={false}
       />
       <Alert
         type={alertType}

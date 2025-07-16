@@ -11,7 +11,6 @@ function BranchForm({
   buttonText,
   isEditMode = false,
   setCurrent,
-  showSubmitAlert = true,
 }) {
   const [nbaValue, setNbaValue] = useState(
     isEditMode
@@ -39,8 +38,6 @@ function BranchForm({
     })
   );
 
-  // const isNbaYes = nbaValue === "yes";
-
   useEffect(() => {
     if (!isEditMode) return;
 
@@ -48,6 +45,12 @@ function BranchForm({
     //   setAmount("0");
     //   setAccto("0");
     // } else if (nbaValue === "yes") {
+
+    // }
+    // if (nbaValue === "no") {
+    //   setAmount("");
+    //   setAccto("");
+    // } else {
     setAmount((values.Amount ?? "").toString());
     setAccto((values.accredition_valid_upto ?? "").toString());
     // }
@@ -59,10 +62,7 @@ function BranchForm({
   };
 
   const handleCancel = () => {
-    setShowAlert(true);
-    setAlertMessage("Confirm to Cancel");
-    setAlertType("warning");
-    setAlertStage("cancel");
+    setCurrent(2);
   };
 
   const handleCloseAlert = () => {
@@ -81,31 +81,51 @@ function BranchForm({
     const newErrors = {};
 
     const trim = (val) => (val || "").toString().trim();
+    
+    const helperErr = (val) => {
+      const num = Number(val);
+      return !trim(val) || isNaN(num) || num < 0 || !Number.isInteger(num);
+    };
 
-    // Validate all required fields
-    if (!/^\d+$/.test(data.approved_in_take.trim())) {
+    if (helperErr(data.approved_in_take)) {
       newErrors.approved_in_take = "*Invalid value";
     }
-    if (!trim(data.first_year_admitted) || (data.first_year_admitted > data.approved_in_take)) {
+    if (
+      helperErr(data.first_year_admitted) ||
+      Number(data.first_year_admitted) > Number(data.approved_in_take)
+    ) {
       newErrors.first_year_admitted = "*Invalid value";
     }
-    if (!trim(data.discontinued || ((data.discontinued)>data.first_year_admitted))) {
+    if (
+      helperErr(data.first_year_admitted) ||
+      Number(data.discontinued) + Number(data.transfered_to) >
+        data.first_year_admitted
+    ) {
       newErrors.discontinued = "*Invalid value";
     }
-    if (!trim(data.transfered_from)) {
+    if (helperErr(data.transfered_from)) {
       newErrors.transfered_from = "*Invalid value";
     }
-    if (!trim(data.transfered_to)) {
+    if (
+      helperErr(data.discontinued) ||
+      Number(data.discontinued) + Number(data.transfered_to) >
+        Number(data.first_year_admitted)
+    ) {
       newErrors.transfered_to = "*Invalid value";
     }
-    if (!trim(data.LAP)) {
+    if (helperErr(data.LAP)) {
       newErrors.LAP = "*Invalid value";
     }
-    if (!trim(data.year_of_start)) {
+    const current_year = new Date().getFullYear();
+
+    if (
+      helperErr(data.year_of_start) ||
+      Number(data.year_of_start) > current_year ||
+      Number(data.year_of_start) < 1500 
+    ) {
       newErrors.year_of_start = "*Invalid value";
     }
 
-    // Radio validation (NBA_2020 must be yes or no)
     if (!["yes", "no"].includes(nbaValue)) {
       newErrors.NBA_2020 = "*Please select Yes or No";
     }
@@ -114,19 +134,20 @@ function BranchForm({
     if (nbaValue === "yes") {
       if (!trim(amount)) {
         newErrors.amount = "*Amount required";
+      } else if (helperErr(amount)) {
+        newErrors.amount = "*Invalid value";
       }
       if (!trim(accto)) {
-        newErrors.accredition_valid_upto = "*Accreditation date required";
+        newErrors.accredition_valid_upto = "*Accreditation valid upto required";
+      } else if (
+        helperErr(accto) ||
+        Number(accto) - Number(data.year_of_start) <
+          2||
+          Number(accto) < current_year
+      ) {
+        newErrors.accredition_valid_upto = "*Invalid value";
       }
     }
-
-    // if (!/^\d+$/.test(data.approved_in_take.trim())) {
-    //   newErrors.approved_in_take = "*Invalid value";
-    // }
-
-    // if (nbaValue === "yes" && !amount.trim()) {
-    //   newErrors.amount = "*Amount required";
-    // }
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
@@ -169,14 +190,6 @@ function BranchForm({
     }
 
     onSubmit(data);
-
-    if (showSubmitAlert) {
-      setAlertType("success");
-      setAlertMessage(
-        isEditMode ? "Branch Edited Successfully" : "Branch Added Successfully"
-      );
-      setShowAlert(true);
-    }
   };
 
   return (
@@ -360,7 +373,7 @@ function BranchForm({
 
           {/* Buttons */}
           <div className="button-row">
-            <Button name={"CANCEL"} onClick={handleCancel} type="button" />
+            <Button name={"BACK"} onClick={handleCancel} type="button" />
             <Button name={buttonText} type="submit" />
           </div>
 

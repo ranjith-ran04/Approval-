@@ -54,7 +54,6 @@ function AddBranch({ setCurrent }) {
         buttonText="Add Branch"
         isEditMode={false}
         setCurrent={setCurrent}
-        showSubmitAlert={false}
       />
       <Alert
         type={alertType}
