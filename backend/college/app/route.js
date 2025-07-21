@@ -5,7 +5,7 @@ const formb = require("./forms/form_b");
 const formc = require("./forms/form_c");
 const home = require('../app/controllers/home');
 const {branch, editBranch, deleteBranch, addBranch} = require("./controllers/branch");
-const { student } = require("./controllers/studentInfo");
+const { student, editStudent, deleteStudent } = require("./controllers/studentInfo");
 
 router.post("/forma", forma);
 router.post("/formb", formb);
@@ -16,5 +16,7 @@ router.put("/branch", editBranch);
 router.delete("/branch", deleteBranch);
 router.post("/branch", addBranch);
 router.get("/student", student);
+router.put("/student", editStudent);
+router.delete("/student", deleteStudent);
 
 module.exports = router;
