@@ -8,7 +8,7 @@ function Sidebar({ setCurrent }) {
     { id: 0, iconId: "homeIcon", label: "Home", action: () => setCurrent(0) },
     { id: 1, iconId: "collegeIcon", label: "College Details", action: () => setCurrent(1) },
     { id: 2, iconId: "branchIcon", label: "Branchwise Details", action: () => setCurrent(2) },
-    { id: 3, iconId: "studentIcon", label: "Student Details" },
+    { id: 3, iconId: "studentIcon", label: "Student Details",action:()=>setCurrent(5) },
     { id: 4, iconId: "discontinuedIcon", label: "Discontinued Details" },
     { id: 5, iconId: "formIcon", label: "Form A", action: () => handleForm("forma") },
     { id: 6, iconId: "formIcon", label: "Form B", action: () => handleForm("formb") },

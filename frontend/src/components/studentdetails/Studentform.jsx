@@ -1,20 +1,326 @@
 import Inputfield from "../../../src/widgets/college/Inputfield";
+import {useState} from 'react';
+import '../../components/College/CollegeInfo.css';
+import Alert from "../../widgets/alert/Alert";
+import Button from "../../widgets/button/Button";
+import tamilnaduDistricts from "../../../src/constants/Tndistricts"
 
 const Addstudent = () => {
+const [studentData,setStudentData]=useState({});
+const [selectedCommunity,setSelectedCommunity]=useState('');
+const [selectedCaste,setSelectedCaste]=useState('');
+const [caste,setCastes]=useState([])
+const [showAlert, setShowAlert] = useState(false);
+const[alertStage,setAlertStage]=useState('');
+const[alertType,setAlertType]=useState('');
+const[alertMessage,setAlertMessage]=useState('');
+const [selectedState, setSelectedState] = useState('');
+const [selectedDistrict, setSelectedDistrict] = useState('');
+const [otherStateName, setOtherStateName] = useState('');
+const [certificates, setCertificates] = useState([
+  { id: 1, name: "Community Certificate", file: null },
+  { id: 2, name: "Provisional/Degree Certificate", file: null },
+  { id: 3, name: "Consolidated Mark Sheet", file: null },
+  { id: 4, name: "Transfer Certificate", file: null },
+  { id: 5, name: "Equivalency", file: null },
+  { id: 6, name: "First Graduate Certificate", file: null },
+]);
+const handlecloseAlert=()=>{
+  setShowAlert(false);
+}
+const handleStateChange = (e) => {
+  console.log("handlestatechange");
+  const state = e.target.value;
+  console.log(state)
+  setSelectedState(state);
+  if (state === "Others") {
+    setSelectedDistrict('');
+  } else {
+    setOtherStateName(''); 
+  }
+};
+
+const handleconfirmAlert=()=>{
+  setShowAlert(true);
+  setAlertMessage("Updated successfully");
+  setAlertStage("success");
+  setAlertType("success");
+}
+const handleSubmit=()=>{
+  setShowAlert(true);
+  setAlertStage("confirm");
+  setAlertMessage("Confirm to update")
+  setAlertType("warning")
+}
+const handleStuDelete=()=>{
+  setShowAlert(true);
+  setAlertStage("confirm");
+  setAlertMessage("Confirm to Delete")
+  setAlertType("warning")
+}
+const handleDistrictChange=(e)=>{
+  setSelectedDistrict(e.target.value);
+}
+const handleFileChange = (e, index) => {
+  const file = e.target.files[0];
+  setCertificates(prev => {
+    const updated = [...prev];
+    updated[index].file = file;
+    return updated;
+  });
+  setShowAlert(true);
+  setAlertMessage("File Uploaded Successfully");
+  setAlertType("success");
+};
+
+const handleView = (file) => {
+  if (file) {
+    const url = URL.createObjectURL(file);
+    window.open(url, "_blank");
+  }
+};
+
+const handleDelete = (index) => {
+  setCertificates(prev => {
+    const updated = [...prev];
+    updated[index].file = null;
+    return updated;
+  });
+};
+
+const handleChange = (e) => {
+    const { name, value }=e.target;
+    setStudentData((prev) => ({
+        ...prev,
+        [name]: value
+    }));
+};
+const handleCommunityChange=async(e)=>{
+  const selectedCommunity=e.target.value;
+  setSelectedCommunity(selectedCommunity);
+  try{
+    let castelist=[];
+    if(selectedCommunity==='BC'){
+      castelist=await import('../../../src/constants/bc.json');
+    }
+    else if(selectedCommunity==='BCM'){
+      castelist=await import('../../../src/constants/bcm.json')
+    }
+    else if(selectedCommunity==='SC'){
+      castelist=await import('../../../src/constants/sc.json')
+    }
+    else if(selectedCommunity==='SCA'){
+      castelist=await import('../../../src/constants/sca.json')
+    }
+    else if(selectedCommunity==='ST'){
+      castelist=await import('../../../src/constants/st.json')
+    }
+    else{
+      castelist=await import('../../../src/constants/mbc.json')
+    }
+    setCastes(castelist.default);
+    setSelectedCaste('');
+  }catch(err){
+    console.log(err);
+    setCastes([]);
+  }
+}
+const handleCasteChange =(e)=>{
+  setSelectedCaste(e.target.value);
+}
+const currentyear=new Date().getFullYear();
+const fromYear=1950;
+const Yearlist=[];
+for (let year=fromYear;year<=currentyear;year++){
+   Yearlist.push({ label: year.toString(), key: year.toString(), value: year.toString() });
+}
   return (
     <div className="collegewholediv">
-      <input name="appln_no" id="appln_no" placeholder="Application Number"></input>
+      <div id="appln_no">
+        <input name="appln_no" type="text" placeholder="Application Number" />
+      </div>
+      <div id="category">
+        <Inputfield label={"CATEGORY"} id={"CATEGORY"} eltname={"CATEGORY"} type={"dropdown"} htmlfor={"CATEGORY"} options={[{label:"Government",value:"Government"},{label:"Government-Aided",value:"Government-Aided"}]}/>
+      </div>
       <div>
         <fieldset className="collegefieldset">
-          <legend>PERSONAL DETAILS</legend>
+          <legend className="collegelegend">PERSONAL DETAILS</legend>
           <div className="field-row">
             <Inputfield label={"Candidate's Name"} id={"candidatename"} eltname={"candidatename"} type={"text"} htmlfor={"candidatename"} classname={"field-block"} />
             <Inputfield label={"Date of Birth"} id={"dob"} eltname={"dob"} type={"date"} htmlfor={"dob"} classname={"field-block"} />
           </div>
           <div className="field-row">
-            <Inputfield label={""}/>
+            <Inputfield eltname={"gender"} type={"radio"} radiolabel={"Gender :"} classname={"field-block"} options={[{label:"Male",value:"Male"},{label:"Female",value:"Female"},{label:"Transgender",value:"Transgender"}]}/>
+            <Inputfield eltname={"mobile"} type={"text"} label={"Mobile"} classname={"field-block"} id={"mobile"} htmlfor={"mobile"}/>
+          </div>
+          <div className="field-row">
+            <Inputfield eltname={"email"} type={"text"} label={"Email"} classname={"field-block"} id={"email"} htmlfor={"email"}/>
+            <Inputfield eltname={"Aadhar"} type={"text"} label={"Aadhar No"} classname={"field-block"} id={"Aadhar"} htmlfor={"Aadhar"}/>
           </div>
         </fieldset>
+        <fieldset className="collegefieldset">
+            <legend className="collegelegend">ELIGIBILITY DETAILS</legend>
+            <div className="field-row">
+                <Inputfield eltname={"Nationality"} type={"radio"} radiolabel={"Nationality :"} classname={"field-block"} options={[{label:"Indian",value:"Indian"},{label:"Srilankan Refugee",value:"Srilankan Refugee"},{label:"Others",value:"Others"}]} id={"Nationality"} htmlfor={"Nationality"} />
+                <Inputfield eltname={"Nativity"} type={"radio"} radiolabel={"Nativity :"} options={[{label:"Tamilnadu",value:"Tamilnadu"},{label:"Others",value:"Others"}]} classname={"field-block"} id={"Nativity"} htmlfor={"Nativity"}/>
+            </div>
+        <div className="field-row">
+          <Inputfield eltname={"Religion"} type={"dropdown"} label={"Religion"} classname={"field-block"} id={"Religion"} htmlfor={"Religion"} options={[{label:"Hindu",key:"Hindu",value:"Hindu"},{label:"Muslim",key:"Muslim",value:"Muslim"},{label:"Christian",key:"Christian",value:"Christian"},{label:"Others",key:"Others",value:"Others"}]}/>
+          <Inputfield eltname={"Community"} type={"dropdown"} label={"Community"} classname={"field-block"} id={"Community"} htmlfor={"Community"} options={[{label:"BC",key:"BC",value:"BC"},{label:"BCM",key:"BCM",value:"BCM"},{label:"SC",key:"SC",value:"SC"},{label:"SCA",key:"SCA",value:"SCA"},{label:"ST",key:"ST",value:"ST"},{label:"MBC",key:"MBC",value:"MBC"}]} onchange={handleCommunityChange} value={selectedCommunity.code}/>
+        </div>
+        <div className="field-row">
+          <Inputfield eltname={"Caste Name"} type={"dropdown"} label={"Caste Name"} classname={"field-block"} id={"CasteName"} htmlfor={"CasteName"} options={caste.map((c) => ({label: c.name,key:c.name,value: c.name}))} onchange={handleCasteChange} value={selectedCaste}/>
+          <Inputfield eltname={"Parent Occupation"} type={"dropdown"} label={"Parent Occupation"} options={[{label:"Agriculture",value:"Agriculture",key:"Agriculture"},{label:"Others",value:"Others",key:"Others"}]} classname={"field-block"} id={"ParentOccupation"} htmlfor={"ParentOccupation"} />
+        </div>
+        <div className="field-row">
+          <Inputfield eltname={"state"} type={"dropdown"} id={"state"} label={"State"} htmlfor={"state"} options={[ { label: "Tamilnadu", value: "Tamilnadu" }, { label: "Others", value: "Others" } ]} value={selectedState} onchange={handleStateChange} classname={"field-block"}/>
+{selectedState === "Tamilnadu" && (
+  <Inputfield
+    eltname={"district"}
+    type={"dropdown"}
+    id={"district"}
+    label={"District"}
+    htmlfor={"district"}
+    options={tamilnaduDistricts}
+    value={selectedDistrict}
+    onchange={handleDistrictChange}
+    classname={"field-block"}
+  />
+)}
+
+{selectedState === "Others" && (
+  <Inputfield
+    eltname={"otherState"}
+    type={"text"}
+    id={"otherState"}
+    label={"Enter State Name"}
+    htmlfor={"otherState"}
+    value={otherStateName}
+    onchange={(e) => setOtherStateName(e.target.value)}
+    classname={"field-block"}
+  />
+)}
+          
+    </div>
+        <div className="field-row">
+            <Inputfield eltname={"studied in TN"} type={"radio"} radiolabel={"Last 5 Years Studied in TamilNadu?"} classname={"field-block"} options={[{ label: "Yes", value: "Yes" },{ label: "No", value: "No" }]} id={"studied in TN"} htmlfor={"studied in TN"} />
+
+        </div>
+      </fieldset>
+      <fieldset className="collegefieldset">
+        <legend className="collegelegend">ACADEMIC DETAILS</legend>
+        <div className="field-row">
+          <Inputfield eltname={"Qualifying Examination"} type={"dropdown"} label={"Qualifying Examination"} classname={"field-block"} options={[{label:"DIPLOMO",key:"DIPLOMO",value:"DIPLOMO"},{label:"BSC",key:"BSC",value:"BSC"},{label:"OTHERS",key:"OTHERS",value:"OTHERS"}]} id={"QualifyingExam"} value={studentData["QualifyingExam"]} htmlfor={"QualifyingExam"} onchange={handleChange}/>
+          <Inputfield eltname={"Year of Passing"} type={"dropdown"} label={"Year of Passing"} classname={"field-block"} id={"YearOfPassing"} htmlfor={"YearOfPassing"} options={Yearlist}/>
+        </div>
+        <div className="field-row">
+          <Inputfield eltname={"Univ Reg Num"} type={"text"} label={"University Reg. Number"} classname={"field-block"} id={"UnivRegNum"} htmlfor={"UnivRegNum"} />
+          <Inputfield eltname={"Board of Exam"} type={"dropdown"} label={"Board of Examination"} classname={"field-block"} id={"BoardExam"} htmlfor={"BoardExam"} options={[{label:"DOTE",key:"DOTE",value:"DOTE"},{label:"Autonomous",key:"Autonomous",value:"Autonomous"},{label:"University",key:"University",value:"University"},{label:"Others",key:"Others",value:"Others"}]}/>
+        </div>
+        <div className="field-row">
+          <Inputfield eltname={"coursetype"} type={"radio"} radiolabel={"Course Type"} classname={"field-block"} options={[{label:"Regular",key:"Regular",value:"Regular"},{label:"Lateral",key:"Lateral",value:"Lateral"},{label:"Part time",key:"Part time",value:"Part time"},{label:"Sandwich (7 Semesters)",key:"Sandwich (7 Semesters)",value:"Sandwich (7 Semesters)"},{label:"Sandwich (8 Semesters)",key:"Sandwich (8 Semesters)",value:"Sandwich (8 Semesters)"},{label:"BSC",key:"BSC",value:"BSC"}]} id={"QualifyingExam"} value={studentData["QualifyingExam"]} htmlfor={"QualifyingExam"} onchange={handleChange}/>
+        </div>
+        <div>
+          <Inputfield eltname={"mathsstudied"} type={"radio"} radiolabel={"Maths Studied in 12th or Degree Level"} classname={"field-block"} options={[{ label: "Yes", value: "Yes" },{ label: "No", value: "No" }]} id={"mathsstudied"} htmlfor={"mathsstudied"}/>
+        </div>
+      </fieldset>
+
+      <fieldset className="collegefieldset">
+        <legend className="collegelegend">SCHOLARSHIP DETAILS</legend>
+        <div className="field-row">
+          <Inputfield eltname={"Annual Income"} type={"text"} label={"Annual Income"} classname={"field-block"} id={"AnnualIncome"} htmlfor={"AnnualIncome"} />
+          <Inputfield eltname={"First Graduate"} type={"radio"} radiolabel={"First Graduate :"} classname={"field-block"} options={[{ label: "Yes", value: "Yes" },{ label: "No", value: "No" }]} id={"FirstGraduate"} htmlfor={"FirstGraduate"} />
+        </div>
+          <div className="field-row">
+          <Inputfield eltname={"AICTE Tuition fee"} type={"radio"} radiolabel={"AICTE Tuition Fee Waiver (TFW) Scheme :"} options={[{ label: "Yes", value: "Yes" },{ label: "No", value: "No" }]} id={"AICTE Tuition Fee"} htmlfor={"AICTE Tuition Fee"}/>
+          <Inputfield eltname={"PMS"} type={"radio"} radiolabel={"Postmatric Scholarship(SC/ST/SCA/Converted Christians) :"} options={[{ label: "Yes", value: "Yes" },{ label: "No", value: "No" }]} id={"PMS"} htmlfor={"PMS"}/>
+        </div>
+        <div className="field-row">
+          <Inputfield eltname={"FG Cert Issued District"} type={"dropdown"} label={"FG Cert Issued District"} classname={"field-block"} id={"FGDistrict"} htmlfor={"FGDistrict"} options={[{tamilnaduDistricts}]} />
+          <Inputfield eltname={"FG Certificate Number"} type={"text"} label={"FG Certificate Number"} classname={"field-block"} id={"FGCertificateNumber"} htmlfor={"FGCertificateNumber"} />
+        </div>
+        <div className="field-row-single">
+          <Inputfield eltname={"fg fees"} type={"text"} label={"First Graduate Fees"} classname={"field-block"} id={"fg fees"} htmlfor={"fg fees"}/>
+        </div>
+      </fieldset>
+      <fieldset className="collegefieldset">
+        <legend className="collegelegend">MARK DETAILS</legend>
+        <div className="field-row">
+          <Inputfield eltname={"sem1max"} placeholder={"Maximum Marks"} type={"text"} label={"SEMESTER 1"} classname={"field-block"} id={"sem1max"} htmlfor={"sem1max"}/>
+          <Inputfield eltname={"sem1obt"} placeholder={"Obtained Marks"} type={"text"} label={"SEMESTER 1"} classname={"field-block"} id={"sem1obt"} htmlfor={"sem1obt"}/>
+        </div>
+        <div className="field-row">
+          <Inputfield eltname={"sem2max"} placeholder={"Maximum Marks"} type={"text"} label={"SEMESTER 2"} classname={"field-block"} id={"sem2max"} htmlfor={"sem2max"}/>
+          <Inputfield eltname={"sem2obt"} placeholder={"Obtained Marks"} type={"text"} label={"SEMESTER 2"} classname={"field-block"} id={"sem2obt"} htmlfor={"sem2obt"}/>
+        </div>
+        <div className="field-row">
+          <Inputfield eltname={"sem3max"} placeholder={"Maximum Marks"} type={"text"} label={"SEMESTER 3"} classname={"field-block"} id={"sem3max"} htmlfor={"sem3max"}/>
+          <Inputfield eltname={"sem3obt"} placeholder={"Obtained Marks"} type={"text"} classname={"field-block"} label={"SEMESTER 3"} id={"sem3obt"} htmlfor={"sem3obt"}/>
+        </div>
+        <div className="field-row">
+          <Inputfield eltname={"sem4max"} placeholder={"Maximum Marks"} type={"text"} label={"SEMESTER 4"} classname={"field-block"} id={"sem4max"} htmlfor={"sem4max"}/>
+          <Inputfield eltname={"sem4obt"} placeholder={"Obtained Marks"} type={"text"} label={"SEMESTER 4"} classname={"field-block"} id={"sem4obt"} htmlfor={"sem4obt"}/>
+        </div>
+      </fieldset>
+      <div>
+        <fieldset className="collegefieldset">
+          <h3 className="fileinstruction">(All Certificates should be in the format of JPG/JPEG/PNG/GIF/PDF)</h3>
+          <h3 className="fileinstruction">Other than this format should not be viewable</h3>
+  <legend className="collegelegend">UPLOAD CERTIFICATES</legend>
+  {certificates.map((cert, index) => (
+    <div id= "fileuploaddiv" className="field-row" key={cert.id}>
+      <label>{cert.name} (size-limit: 500kb)</label>
+      {cert.file ? (
+        <div className="viewdelbuttonupload">
+          <p className="status">File uploaded successfully</p>
+          <button className="view" type="button" onClick={() => handleView(cert.file)}>View</button>
+          <button className="remove" type="button" onClick={() => handleDelete(index)}>Remove</button>
+          <input type="file" disabled />
+          <Alert
+          type={alertType}
+          message={alertMessage}
+          show={showAlert}
+          okbutton={handlecloseAlert}
+          />
+        </div>
+      ) : (
+        <div className="viewdelbuttonnot">
+          <p className="status">To be upload</p>
+          <button className="view" type="button" disabled>View</button>
+          <button className="remove" type="button" disabled>Remove</button>
+          <input type="file" onChange={(e) => handleFileChange(e, index)} />
+        </div>
+      )}
+    </div>
+  ))} 
+</fieldset>
+    <div>
+      <fieldset className="collegefieldset">
+        <legend className="collegelegend">REMARKS</legend>
+        <h4>Remarks on student (if any)</h4>
+        <textarea name="Remarks" id="studentRemarks" cols="80" rows="10"></textarea>
+      </fieldset>
+    </div>
+    <div id="studentbutton">
+          <Button name={"UPDATE"} onClick={handleSubmit}  />
+          <Alert
+          type={alertType}
+          message={alertMessage}
+          show={showAlert}
+          okbutton={alertStage==='confirm'? handleconfirmAlert :(alertStage==='success'||alertStage==='validation'||alertStage==='error')? handlecloseAlert:null}
+          cancelbutton={alertStage==='confirm'?handlecloseAlert:null}
+          />
+          <Button name={"DELETE"} onClick={handleStuDelete}  />
+          <Alert
+          type={alertType}
+          message={alertMessage}
+          show={showAlert}
+          okbutton={alertStage==='confirm'? handleconfirmAlert :(alertStage==='success'||alertStage==='validation'||alertStage==='error')? handlecloseAlert:null}
+          cancelbutton={alertStage==='confirm'?handlecloseAlert:null}
+          />
+      </div> 
+      </div>
+
       </div>
     </div>
   )

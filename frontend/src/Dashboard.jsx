@@ -67,10 +67,10 @@ Tamilnadu Lateral Entry Direct Second Year B.E/B.Tech.,Approval-2025`}
             <Branch setCurrent={setCurrent} setState={setState} />
           )}
           {current === 3 && <AddBranch setCurrent={setCurrent} />}
-          {/* {current === 4 && (
+          {current === 4 && (
             <EditBranch setCurrent={setCurrent} state={state} />
-          )} */}
-          {current===4 && <Studentform />}
+          )}
+          {current===5 && <Studentform setCurrent={setCurrent} setState={setState}/>}
           {current === 0 && <Notes />}
         </div>
       </div>

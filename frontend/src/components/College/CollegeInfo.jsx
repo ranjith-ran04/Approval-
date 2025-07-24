@@ -15,6 +15,7 @@ const CollegeInfo = () => {
   const[error,setError]=useState({})
   const[alertStage,setAlertStage]=useState('');
   const[changedFields,setchangedFields]=useState({})
+  
 
 const requiredFields = ["chairman","chairmancontact","principalname","principalcontact","address","taluk","district","constituency","pincode","collegephone","collegeemail","websitecollege","antiraggingNo","bankaccountno","bankname","minoritystatus", "autonomousstatus","distance","nearestrailway","distancefromrailway","transportfacility","transport","mintransportcharge","maxtransportcharge","accomodationavailableboys","hostelstaytypeboys","typeofmessboys","messbillboys","roomrentboys","electricityboys","cautiondepositboys",
   "establishmentboys",
@@ -263,7 +264,7 @@ const handleChange =(e)=>{
                 <Inputfield eltname={"bankname"} type={"text"} label={"Bank Name"} id={"bankname"} htmlfor={"bankname"} classname={"field-block"} error={error["bankname"]} onchange={handleChange} value={formdata.bankname}/>
               </div>
               <div className='field-row'>
-              <Inputfield eltname={"minoritystatus"} type={"radio"} radiolabel={"Minority Status"} classname={"field-block"} options={[{label:"Yes"},{label:"No",value:"No"}]} error={error["minoritystatus"]} onchange={handleChange} value={formdata.minoritystatus}/>
+              <Inputfield eltname={"minoritystatus"} type={"radio"} radiolabel={"Minority Status"} classname={"field-block"} options={[{label:"Yes",value:"Yes"},{label:"No",value:"No"}]} error={error["minoritystatus"]} onchange={handleChange} value={formdata.minoritystatus}/>
               <Inputfield eltname={"autonomousstatus"} type={"radio"} radiolabel={"Autonomous Status"} classname={"field-block"} options={[{label:"Yes",value:"Yes"},{label:"No",value:"No"}]} error={error["autonomousstatus"]} onchange={handleChange} value={formdata.autonomousstatus}/>
             
               </div>
