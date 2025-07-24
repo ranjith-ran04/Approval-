@@ -1,4 +1,5 @@
 #sidebar {
+  position: relative;
   background-color: #f4f9f9;
   /* height: 100vh; */
   display: flex;
@@ -13,6 +14,7 @@
   padding-left: 10px;
   transition: width 0.3s ease;
   overflow-x: hidden;
+  
 }
 
 #sidebar.collapsed {
@@ -31,6 +33,9 @@
 }
 
 #iconDiv {
+  position: absolute;
+  top: 10px;
+  left: 10px;
   height: 35px;
   width: 40px;
   border-radius: 5px;
@@ -41,6 +46,9 @@
   cursor: pointer;
 }
 
+.itemsDiv {
+  margin-top: 63px;
+}
 .menuItems {
   height: 5vh;
   width: 100%;
@@ -50,8 +58,15 @@
   font-weight: bold;
   margin-top: 8px;
   gap: 20px;
-  padding-left: 5px;
+  padding-left: 40px;
   transition: background-color 0.3s ease;
+}
+
+#sidebar.collapsed .menuItems {
+  width: 100%;
+  padding-left: 0;
+  justify-content: center;
+
 }
 
 .menuItems:hover {
@@ -64,9 +79,17 @@
 #formIcon,
 #studentIcon,
 #branchIcon,
-#discontinuedIcon {
-  height: 15px;
-  width: 15px;
+#discontinuedIcon,
+#formIcon1,
+#formIcon2,
+#formIcon3,
+#formIcon4,
+#formIcon5,
+#formIcon6 {
+  position: absolute;
+  left: 10px;
+  height: 20px;
+  width: 20px;
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
@@ -82,8 +105,28 @@
   background-image: url("../../../public/assets/college1.svg");
 }
 
-#formIcon {
-  background-image: url("../../../public/assets/form.svg");
+#formIcon1 {
+  background-image: url("../../../public/assets/formAsvg.svg");
+}
+
+#formIcon2 {
+  background-image: url("../../../public/assets/formBsvg.svg");
+}
+
+#formIcon3 {
+  background-image: url("../../../public/assets/formCsvg.svg");
+}
+
+#formIcon4 {
+  background-image: url("../../../public/assets/formDsvg.svg");
+}
+
+#formIcon5 {
+  background-image: url("../../../public/assets/formFGsvg.svg");
+}
+
+#formIcon6 {
+  background-image: url("../../../public/assets/formLeasvg.svg");
 }
 
 #studentIcon {
