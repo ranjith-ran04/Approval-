@@ -11,10 +11,11 @@ const [selectedCommunity,setSelectedCommunity]=useState('');
 const [selectedCaste,setSelectedCaste]=useState('');
 const [caste,setCastes]=useState([])
 const [showAlert, setShowAlert] = useState(false);
-const[alertStage,setAlertStage]=useState('');
-const[alertType,setAlertType]=useState('');
-const[alertMessage,setAlertMessage]=useState('');
+const [alertStage,setAlertStage]=useState('');
+const [alertType,setAlertType]=useState('');
+const [alertMessage,setAlertMessage]=useState('');
 const [selectedState, setSelectedState] = useState('');
+const [alertOkAction,setAlertOkAction]=useState(()=>()=>{});
 const [selectedDistrict, setSelectedDistrict] = useState('');
 const [otherStateName, setOtherStateName] = useState('');
 const [certificates, setCertificates] = useState([
@@ -46,17 +47,37 @@ const handleconfirmAlert=()=>{
   setAlertStage("success");
   setAlertType("success");
 }
-const handleSubmit=()=>{
+const handleconfirmAlertDel=()=>{
+  setShowAlert(true);
+  setAlertMessage("Deleted successfully");
+  setAlertStage("success");
+  setAlertType("success");
+}
+const handleUpdate=()=>{
   setShowAlert(true);
   setAlertStage("confirm");
   setAlertMessage("Confirm to update")
   setAlertType("warning")
+  setAlertOkAction(()=>()=>{
+    setShowAlert(true);
+    setAlertMessage("Updated Successfully");
+    setAlertStage("success");
+    setAlertType("success");
+    setAlertOkAction(()=>()=>{setShowAlert(false)})
+  })
 }
 const handleStuDelete=()=>{
   setShowAlert(true);
   setAlertStage("confirm");
   setAlertMessage("Confirm to Delete")
   setAlertType("warning")
+  setAlertOkAction(()=>()=>{
+    setShowAlert(true);
+    setAlertMessage("Deleted Successfully");
+    setAlertStage("success");
+    setAlertType("success");
+    setAlertOkAction(()=>()=>{setShowAlert(false)});
+  })
 }
 const handleDistrictChange=(e)=>{
   setSelectedDistrict(e.target.value);
@@ -71,6 +92,7 @@ const handleFileChange = (e, index) => {
   setShowAlert(true);
   setAlertMessage("File Uploaded Successfully");
   setAlertType("success");
+  setAlertStage("success")
 };
 
 const handleView = (file) => {
@@ -86,6 +108,19 @@ const handleDelete = (index) => {
     updated[index].file = null;
     return updated;
   });
+  setShowAlert(true);
+  setAlertMessage("Confirm to Delete");
+  setAlertStage("confirm");
+  setAlertType("warning");
+  setAlertOkAction(()=>()=>{
+    setShowAlert(true);
+    setAlertMessage("File Deleted Successfully");
+    setAlertStage("success");
+    setAlertType("success");
+    setAlertOkAction(()=>()=>{
+      setShowAlert(false);
+    })
+  })
 };
 
 const handleChange = (e) => {
@@ -280,7 +315,8 @@ for (let year=fromYear;year<=currentyear;year++){
           type={alertType}
           message={alertMessage}
           show={showAlert}
-          okbutton={handlecloseAlert}
+          okbutton={alertOkAction}
+          cancelbutton={alertStage==='confirm'?handlecloseAlert:null}
           />
         </div>
       ) : (
@@ -289,6 +325,7 @@ for (let year=fromYear;year<=currentyear;year++){
           <button className="view" type="button" disabled>View</button>
           <button className="remove" type="button" disabled>Remove</button>
           <input type="file" onChange={(e) => handleFileChange(e, index)} />
+    
         </div>
       )}
     </div>
@@ -302,25 +339,17 @@ for (let year=fromYear;year<=currentyear;year++){
       </fieldset>
     </div>
     <div id="studentbutton">
-          <Button name={"UPDATE"} onClick={handleSubmit}  />
-          <Alert
-          type={alertType}
-          message={alertMessage}
-          show={showAlert}
-          okbutton={alertStage==='confirm'? handleconfirmAlert :(alertStage==='success'||alertStage==='validation'||alertStage==='error')? handlecloseAlert:null}
-          cancelbutton={alertStage==='confirm'?handlecloseAlert:null}
-          />
+          <Button name={"UPDATE"} onClick={handleUpdate}  />
           <Button name={"DELETE"} onClick={handleStuDelete}  />
           <Alert
           type={alertType}
           message={alertMessage}
           show={showAlert}
-          okbutton={alertStage==='confirm'? handleconfirmAlert :(alertStage==='success'||alertStage==='validation'||alertStage==='error')? handlecloseAlert:null}
+          okbutton={alertOkAction}
           cancelbutton={alertStage==='confirm'?handlecloseAlert:null}
           />
       </div> 
       </div>
-
       </div>
     </div>
   )
