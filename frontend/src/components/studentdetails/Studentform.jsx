@@ -1,6 +1,6 @@
 import Inputfield from "../../../src/widgets/college/Inputfield";
 import {useState} from 'react';
-import '../../components/College/CollegeInfo.css';
+import '../../components/college/CollegeInfo.css';
 import Alert from "../../widgets/alert/Alert";
 import Button from "../../widgets/button/Button";
 import tamilnaduDistricts from "../../../src/constants/Tndistricts"
