@@ -18,7 +18,7 @@
 }
 
 #sidebar.collapsed {
-  width: 60px;
+  width: 8dvh;
   padding-right: 0;
   align-items: center;
 }
@@ -157,11 +157,15 @@
   padding-right:0px;
 }
 #sidebar .menuItems{
-  transition: transform 0.3s ease;
+  /* transition: transform 0.3s ease; */
+  box-sizing: border-box;
 }
 
 #sidebar.collapsed .menuItems{
-  width:70%;
+  width:100%;
+  min-height: 10px;
+  padding: 18px;
+  /* position: relative; */
 }
 
 #buttonDiv {
@@ -179,4 +183,9 @@
 
 .menuItems.active{
   background-color: #a1e3f9;
+  border-radius: 3px;
 }
+
+
+
+
