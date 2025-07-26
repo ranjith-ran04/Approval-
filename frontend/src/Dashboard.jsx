@@ -31,7 +31,7 @@ Tamilnadu Lateral Entry Direct Second Year B.E/B.Tech.,Approval-2025`}
 
         <div className="dashboard-body" ref={scrollRef}>
           <>
-            {current === 0 && <Home /> && <Notes/>}
+            {current === 0 && <Home />}
             {current === 1 && <CollegeInfo />}
             {current === 2 && (
               <Branch setCurrent={setCurrent} setState={setState} />
@@ -41,6 +41,7 @@ Tamilnadu Lateral Entry Direct Second Year B.E/B.Tech.,Approval-2025`}
               <EditBranch setCurrent={setCurrent} state={state} />
             )}
             {current === 5 && <Addstudent/>}
+            {current === 0 && <Notes/>}
             <ScrollToTop scrollRef={scrollRef} />
           </>
         </div>
