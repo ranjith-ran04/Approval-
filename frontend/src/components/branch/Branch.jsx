@@ -29,7 +29,6 @@ function Branch({ setCurrent, setState }) {
   const collegeCode = "1149";
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
-    console.log("Branch fetchData running");
     const fetchData = async () => {
       showLoader();
       try {

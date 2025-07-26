@@ -15,7 +15,6 @@ function Dashboard() {
   const [current, setCurrent] = useState(0);
   const [state, setState] = useState({});
   const scrollRef = useRef();
-  console.log("Dashboard current:", current);
   return (
     <div className="dashboard">
       <Sidebar setCurrent={setCurrent} />
