@@ -7,7 +7,7 @@ const Inputfield=({eltname,type,label,id,htmlfor,classname,radiolabel,options=[]
             <label>{radiolabel}</label>
                 {options.map((option)=>(
                     <label id="collegelabel2">
-                        <input key={option.value} type={type} name={eltname} value={option.value} onChange={onchange} disabled={disabled} />{option.value}
+                        <input key={option.value} type={type} name={eltname} value={option.value} onChange={onchange} disabled={disabled} checked={option.value}/>{option.value}
                     </label>
                 ))}
                 </div>
@@ -35,7 +35,7 @@ const Inputfield=({eltname,type,label,id,htmlfor,classname,radiolabel,options=[]
                     <select id={id} name={eltname} onChange={onchange}>
                         <option value="">--- Select ---</option>
                         {options.map((option)=> (
-                            <option key={option.value} value={option}>
+                            <option key={option.value} value={option.value}>
                                 {option.label}
                             </option>
                         ))}

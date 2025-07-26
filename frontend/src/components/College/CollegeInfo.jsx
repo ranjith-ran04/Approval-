@@ -137,7 +137,7 @@ const handleChange =(e)=>{
         try {
           const res = await axios.get(`${host}collegeinfo`, {withCredentials:true});
           console.log(res);
-            if (res.status===200) {
+          if (res.status===200) {
                 setFormdata(res.data.data);
           }
         } catch (err) {
@@ -150,6 +150,13 @@ const handleChange =(e)=>{
     const handleconfirmAlert=async()=>{
       setShowAlert(false);
       try{
+        if(Object.keys(changedFields).length===0){
+          setShowAlert(true);
+          setAlertMessage("Your details are already saved.");
+          setAlertStage('success');
+          setAlertType('success');
+          return;
+        }
         const response=await axios.put(`${host}collegeinfo`,changedFields,{withCredentials:true})
         if(response.status===200){
           setShowAlert(true);
@@ -243,7 +250,7 @@ const handleChange =(e)=>{
             </div>
 
             <div className='field-row'>
-          <Inputfield eltname={"collegeemail"} type={"email"} label={"Email ID"} id={"email"} htmlfor={"email"} classname={"field-block"} error={error["collegeemail"]} onchange={handleChange} value={formdata.collegeemail}/>
+             <Inputfield eltname={"collegeemail"} type={"text"} label={"Email ID"} id={"email"} htmlfor={"email"} classname={"field-block"} error={error["collegeemail"]} onchange={handleChange} value={formdata.collegeemail}/>
             <Inputfield eltname={"websitecollege"} type={"text"} label={"Website"} id={"website"} htmlfor={"website"} classname={"field-block"} error={error["websitecollege"]} onchange={handleChange} value={formdata.websitecollege}/>
             </div>
 
