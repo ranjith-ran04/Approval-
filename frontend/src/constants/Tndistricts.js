@@ -20,3 +20,4 @@ const tamilnaduDistricts = [
   { label: "Cuddalore", value: "Cuddalore" },
   { label: "Other", value: "Other" }
 ];
+export default tamilnaduDistricts;
