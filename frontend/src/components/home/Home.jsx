@@ -20,7 +20,6 @@ function Home() {
     try {
       const res = await axios.post(`${host}home`, { collegeCode: collegeCode });
       if (res.status === 200) {
-        console.log(res.data);
         setDetails(res.data);
       } else {
         console.log("error in res");
