@@ -1,0 +1,574 @@
+    [
+    {
+        "code": "230",
+        "name": "Agamudayar including Thozhu or Thuluva Vellala"
+    },
+    {
+        "code": "231",
+        "name": "Agaram Vellan Chettiar"
+    },
+    {
+        "code": "232",
+        "name": "Alwar, Azhavar and Alavar"
+    },
+    {
+        "code": "233",
+        "name": "Servai"
+    },
+    {
+        "code": "234",
+        "name": "Nulayar"
+    },
+    {
+        "code": "235",
+        "name": "Archakarai Vellala"
+    },
+    {
+        "code": "236",
+        "name": "Aryavathi"
+    },
+    {
+        "code": "237",
+        "name": "Ayira Vaisyar"
+    },
+    {
+        "code": "238",
+        "name": "Badagar"
+    },
+    {
+        "code": "239",
+        "name": "Billava"
+    },
+    {
+        "code": "240",
+        "name": "Bondil"
+    },
+    {
+        "code": "241",
+        "name": "Boyas, Pedda Boyar , Oddars , Kaloddars, Nellorepet Oddars , Sooramari Oddars"
+    },
+    {
+        "code": "242",
+        "name": "Chakkala"
+    },
+    {
+        "code": "243",
+        "name": "Chavalakarar"
+    },
+    {
+        "code": "244",
+        "name": "Chettu or Chetty (including Kottar Chetty, Elur Chetty, Pathira Chetty, Valayal Chetty, Pudukadai Chetty)"
+    },
+    {
+        "code": "245",
+        "name": "Chowdry"
+    },
+    {
+        "code": "246A",
+        "name": "Converts to Christianity from Scheduled Castes irrespective of the generation of conversion for the purpose of reservation of seats in Educational Institutions and for seats in Public Services"
+    },
+    {
+        "code": "247B",
+        "name": "C.S.I. formerly S.I.U.C."
+    },
+    {
+        "code": "244C",
+        "name": "Dommars"
+    },
+    {
+        "code": "248",
+        "name": "Donga Dasaris"
+    },
+    {
+        "code": "249",
+        "name": "Devangar, Sedar"
+    },
+    {
+        "code": "250",
+        "name": "Dombs"
+    },
+    {
+        "code": "251",
+        "name": "Enadi"
+    },
+    {
+        "code": "252",
+        "name": "Ezhavathy"
+    },
+    {
+        "code": "253",
+        "name": "Ezhuthachar"
+    },
+    {
+        "code": "254",
+        "name": "Ezhuva"
+    },
+    {
+        "code": "255",
+        "name": "Gangavar"
+    },
+    {
+        "code": "256",
+        "name": "Gavara, Gavarai & Vadugar (Vaduvar)"
+    },
+    {
+        "code": "257",
+        "name": "Gounder"
+    },
+    {
+        "code": "258",
+        "name": "Gowda (including Gammala, Kalali and Anuppa Gounder)"
+    },
+    {
+        "code": "259",
+        "name": "Hegde"
+    },
+    {
+        "code": "260",
+        "name": "Idiga"
+    },
+    {
+        "code": "261",
+        "name": "Illathu Pillaimar, Illuvar, Ezhuvar & Illathar"
+    },
+    {
+        "code": "262",
+        "name": "Jhetty"
+    },
+    {
+        "code": "263",
+        "name": "Jogis"
+    },
+    {
+        "code": "264",
+        "name": "Kabbera"
+    },
+    {
+        "code": "265",
+        "name": "Kaikolar, Sengunthar"
+    },
+    {
+        "code": "266",
+        "name": "Kaladi"
+    },
+    {
+        "code": "267",
+        "name": "Kalari Kurup including Kalari Panicker"
+    },
+    {
+        "code": "268",
+        "name": "Kalingi"
+    },
+    {
+        "code": "269",
+        "name": "Kallar, Easanattu  Kallar, Gandharva Kottai Kallars , KootappalKallars, Piramalai Kallars , Periyasooriyur Kallars"
+    },
+    {
+        "code": "270",
+        "name": "Kallar Kula Thondaman"
+    },
+    {
+        "code": "271",
+        "name": "Kalveli Gounder"
+    },
+    {
+        "code": "272",
+        "name": "Kambar"
+    },
+    {
+        "code": "273",
+        "name": "Kammalar or Viswakarma, Viswakarmala (including Thattar, Porkollar,    nar, Karumar, Kollar, Thacher, Kal Thacher, Kamsala and Viswabrahmin)"
+    },
+    {
+        "code": "274",
+        "name": "Kani, Kanisu, Kaniyar Panicker"
+    },
+    {
+        "code": "275",
+        "name": "Kaniyala Vellalar"
+    },
+    {
+        "code": "276",
+        "name": "Kannada Saineegar, Kannadiyar  and Dasapalanjika"
+    },
+    {
+        "code": "277",
+        "name": "Kannadiya Naidu"
+    },
+    {
+        "code": "278",
+        "name": "Karpoora Chettiar"
+    },
+    {
+        "code": "279",
+        "name": "Karuneegar (Seer Karuneegar, Sri Karuneegar, Sarattu Karuneegar, Kaikatti Karuneegar, Mathuvazhi Kanakkar, Sozhi Kanakkar & Sunnambu Karuneegar)"
+    },
+    {
+        "code": "280",
+        "name": "Kasukkara Chettiar"
+    },
+    {
+        "code": "281",
+        "name": "Katesar,  Pattamkatti"
+    },
+    {
+        "code": "282",
+        "name": "Kavuthiyar"
+    },
+    {
+        "code": "283",
+        "name": "Kerala Mudali"
+    },
+    {
+        "code": "284",
+        "name": "Kharvi"
+    },
+    {
+        "code": "285",
+        "name": "Khatri"
+    },
+    {
+        "code": "286",
+        "name": "Kongu Vaishnava"
+    },
+    {
+        "code": "287",
+        "name": "Kongu Vellalars"
+    },
+    {
+        "code": "288",
+        "name": "Koppala Velama"
+    },
+    {
+        "code": "289",
+        "name": "Koteyar"
+    },
+    {
+        "code": "290",
+        "name": "Krishnanvaka"
+    },
+    {
+        "code": "291",
+        "name": "Kudikara Vellalar"
+    },
+    {
+        "code": "292",
+        "name": "Kudumbi"
+    },
+    {
+        "code": "293",
+        "name": "Kuga Vellalar"
+    },
+    {
+        "code": "294",
+        "name": "Kunchidigar"
+    },
+    {
+        "code": "295A",
+        "name": "Latin Catholics except Latin Catholic Vannar in Kanniyakumari District"
+    },
+    {
+        "code": "296B",
+        "name": "Lathin Catholics in Shencottah Taluk of Tirunelveli District"
+    },
+    {
+        "code": "297",
+        "name": "Lambadi"
+    },
+    {
+        "code": "298",
+        "name": "Lingayat (Jangama)"
+    },
+    {
+        "code": "299",
+        "name": "Mahratta (NonBrahmin) (including Namadev Mahratta)"
+    },
+    {
+        "code": "300",
+        "name": "Malayar"
+    },
+    {
+        "code": "301",
+        "name": "Male"
+    },
+    {
+        "code": "302",
+        "name": "Maniagar"
+    },
+    {
+        "code": "303",
+        "name": "Maravars ,Karumaravars. Appanad Kondayamkottai Maravar and Sembanad Maravars"
+    },
+    {
+        "code": "304",
+        "name": "Moondrumandai Enbathunalu (84) Ur. Sozhia Vellalar"
+    },
+    {
+        "code": "305",
+        "name": "Mooppan"
+    },
+    {
+        "code": "306",
+        "name": "Muthuraja, Muthuracha, Muttiriyar, Mutharaiyar"
+    },
+    {
+        "code": "307",
+        "name": "Nadar, Shanar & Gramani"
+    },
+    {
+        "code": "308",
+        "name": "Nagaram"
+    },
+    {
+        "code": "309",
+        "name": "Naikkar"
+    },
+    {
+        "code": "310",
+        "name": "Nangudi Vellalar"
+    },
+    {
+        "code": "311",
+        "name": "Nanjil Mudali"
+    },
+    {
+        "code": "312",
+        "name": "Odar"
+    },
+    {
+        "code": "313",
+        "name": "Odiya"
+    },
+    {
+        "code": "314",
+        "name": "Oottruvalanattu Vellalar"
+    },
+    {
+        "code": "315",
+        "name": "O.P.S. Vellalar"
+    },
+    {
+        "code": "316",
+        "name": "Ovachar"
+    },
+    {
+        "code": "317",
+        "name": "Paiyur Kotta Vellalar"
+    },
+    {
+        "code": "318",
+        "name": "Pamulu"
+    },
+    {
+        "code": "319",
+        "name": "Panar"
+    },
+    {
+        "code": "320A",
+        "name": "Pandiya Vellalar"
+    },
+    {
+        "code": "322",
+        "name": "Kathikarar in Kanniyakumari District"
+    },
+    {
+        "code": "323",
+        "name": "Pannirandam Chettiar or Uthama Chettiar"
+    },
+    {
+        "code": "324",
+        "name": "Parkavakulam (including Surithimar Nathamar, Malayamar, Moopanar & Nainar)"
+    },
+    {
+        "code": "325",
+        "name": "Perike (including Perike Balija)"
+    },
+    {
+        "code": "326",
+        "name": "Perumkollar"
+    },
+    {
+        "code": "327",
+        "name": "Podikara Vellalar"
+    },
+    {
+        "code": "328",
+        "name": "Pooluva Gounder"
+    },
+    {
+        "code": "329",
+        "name": "Poraya"
+    },
+    {
+        "code": "330",
+        "name": "Pulavar"
+    },
+    {
+        "code": "331",
+        "name": "Pulluvar or Pooluvar"
+    },
+    {
+        "code": "332",
+        "name": "Pusala"
+    },
+    {
+        "code": "333",
+        "name": "Reddy (Ganjam)"
+    },
+    {
+        "code": "334",
+        "name": "Sadhu Chetty (including Telugu Chetty, Twenty four manai Telugu Chetty)"
+    },
+    {
+        "code": "335",
+        "name": "Sakkaravar or Kavathi"
+    },
+    {
+        "code": "336",
+        "name": "Salivagana"
+    },
+    {
+        "code": "337",
+        "name": "Saliyar, Padmasaliyar, Pattusaliyar, Pattariyar and Adhaviyar"
+    },
+    {
+        "code": "338",
+        "name": "Savalakkarar"
+    },
+    {
+        "code": "339",
+        "name": "Senaithalaivar, Senaikudiyar and Illaivaniar"
+    },
+    {
+        "code": "340A",
+        "name": "Serakula Vellalar"
+    },
+    {
+        "code": "341",
+        "name": "Sourashtra (Patnulkarar)"
+    },
+    {
+        "code": "342",
+        "name": "Sozhia Vellalar ( including Sozha Vellalar. Vetrilaikarar, Kodikalkarar and Keeraikarar)"
+    },
+    {
+        "code": "343",
+        "name": "Srisayar"
+    },
+    {
+        "code": "344",
+        "name": "Sundaram Chetty"
+    },
+    {
+        "code": "345",
+        "name": "Thogatta Veerakshatriya"
+    },
+    {
+        "code": "346",
+        "name": "Tholkollar"
+    },
+    {
+        "code": "347",
+        "name": "Tholuva Naicker and Vetalakara Naicker"
+    },
+    {
+        "code": "349",
+        "name": "Thoriyar"
+    },
+    {
+        "code": "349A",
+        "name": "Thoraiyar"
+    },
+    {
+        "code": "349B",
+        "name": "Thiyya"
+    },
+    {
+        "code": "350",
+        "name": "Ukkirakula Kshatriya Naicker"
+    },
+    {
+        "code": "351",
+        "name": "Uppara, Uppillia and Sagara"
+    },
+    {
+        "code": "352",
+        "name": "Urali Gounder"
+    },
+    {
+        "code": "353",
+        "name": "Urikkara Nayakkar"
+    },
+    {
+        "code": "354A",
+        "name": "Virakodi Vellala"
+    },
+    {
+        "code": "355",
+        "name": "Vallambar"
+    },
+    {
+        "code": "356A",
+        "name": "Vallanattu Chettiar"
+    },
+    {
+        "code": "357",
+        "name": "Valmiki"
+    },
+    {
+        "code": "358",
+        "name": "Vaniyar, Vania Chettiar (including Gandla, Ganika, Telikula and Chekkalar)"
+    },
+    {
+        "code": "359",
+        "name": "Veduvar and Vedar"
+    },
+    {
+        "code": "360",
+        "name": "Veerasaiva"
+    },
+    {
+        "code": "361",
+        "name": "Velar"
+    },
+    {
+        "code": "362",
+        "name": "Vellan Chettiar"
+    },
+    {
+        "code": "363",
+        "name": "Veluthodathu Nair"
+    },
+    {
+        "code": "364",
+        "name": " Vokkaligar (including Vakkaligar, Okkaligar, Kappiliyar, Kappiliya, Okkaliga Gowda, Okkaliya-Gowder, Okkaliya Gowda)"
+    },
+    {
+        "code": "365",
+        "name": "Wynad Chetty"
+    },
+    {
+        "code": "366",
+        "name": "Yadhava (including Idaiyar, Telugu Speaking Idaiyar known as Vaduga Ayar or Vaduga Idaiyar or Golla and Asthanthra Golla)"
+    },
+    {
+        "code": "367",
+        "name": "Yavana"
+    },
+    {
+        "code": "368",
+        "name": "Yerukula"
+    },
+    {
+        "code": "369",
+        "name": "Urikkara Nayakkar"
+    },
+    {
+        "code": "370",
+        "name": "Orphans and destitutes children who have lost their parents before reaching the age of ten and are destitutes; and who have nobody else to take care of them either by law or custom; and also who are admitted into any of the schools or orphanages run by the Government or recognized by the Government"
+    },
+    {
+        "code": "370A",
+        "name": "Converts to Christianity from any Hindu Backward Classes Community or Most Backward Classes Community or Denotified Communities (except the Converts to Christianity from Meenavar, Parvatharajakulam, Pattanavar, Sembadavar, Mukkuvar or Mukayar and Paravar)"
+    }
+]
