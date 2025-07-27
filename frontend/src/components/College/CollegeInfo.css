@@ -50,6 +50,7 @@
   font-size: 0.95rem;
   width: 100%;
   box-sizing: border-box;
+  padding:10px;
 }
 #Address{
   padding: 8px;
@@ -75,21 +76,26 @@
 .radio-group label {
   display: flex;
   align-items: center;
-  gap: 5px;
+  gap: 11px;
   font-weight: normal;
   margin-right: 20px;
 }
 
-.dropdown {
-  display: flex;
-  /* flex-direction: column; */
-  align-items: center;
+.dropdown{
   gap:10px;
   margin-bottom: 20px;
-  width: 100%;
-  max-width: 400px;
-  margin-left:500px;
+  width: 100%;  
   margin-top: 20px;
+  /* position: sticky; */
+
+  top: 0;
+  z-index: 0.9;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 4.5px;
+  text-align: center;
 }
 
 .dropdown label {
@@ -108,14 +114,23 @@
   color: #333;
 }
 
+.studentdropdown select{
+  padding:5px;
+  border-radius:5px;
+  margin-left:10px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  width:200px;
+
+}
 .dropdown select:focus {
   border-color: #3f51b5;
   outline: none;
   box-shadow: 0 0 0 3px rgba(63, 81, 181, 0.1);
 }
-input[type='text']:focus{
+/* input[type='text']:focus{
   border-color: rgb(89, 89, 161);
-}
+} */
 #collegebutton{
   margin-bottom: 10px;
   display:flex;
@@ -130,8 +145,96 @@ input[type='text']:focus{
 .field-row-single input{
   display: flex;
   justify-content: space-between;
-
   margin-bottom: 15px;
   gap: 20px; 
-  width:calc(50%-10px);
+  width:560px;
+  /* width:calc(100%-200px); */
+}
+.error-message{
+  color:red;
+}
+#appln_no{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* width:100px; */
+}
+#appln_no input{
+  width:300px;
+  padding:15px;
+  font-size: 20px;
+  margin-top: 20px;
+  border:1px solid black;
+  border-radius: 10px;
+  /* position: fixed; */
+}
+#category{
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+.viewdelbuttonupload{
+ display: flex;
+  align-items: center;
+  gap: 8px;
+
+}
+.viewdelbuttonnot{
+ display: flex;
+  align-items: center;
+  gap: 8px;
+
+}
+.viewdelbuttonupload button{
+  padding: 6px 12px;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+.viewdelbuttonnot button{
+  padding: 6px 12px;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+.viewdelbuttonupload .view{
+  background-color: green;
+  color: white;
+  border-radius: 10px;
+  width:100px;
+}
+.viewdelbuttonupload .remove{
+  background-color: red;
+  color:white;
+  border-radius: 10px;
+  width:100px;  
+}
+.viewdelbuttonnot .view{
+  background-color: lightgreen;
+  color: white;
+  border-radius: 10px;
+  width:100px;
+}
+.viewdelbuttonnot .remove{
+  background-color: lightcoral;
+  color:white;
+  border-radius: 10px;
+  width:100px;  
+}
+#fileuploaddiv{
+  margin-top:20px;
+}
+.fileinstruction{
+  color:red
+}
+#studentRemarks{
+  margin-top: 20px;
+  border-radius: 10px;
+  padding:10px;
+}
+#studentbutton{
+  margin-bottom: 10px;
+  display:flex;
+  align-items: center;
+  justify-content: center;
+  gap:10px;
 }
