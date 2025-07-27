@@ -162,8 +162,8 @@ function Branch({ setCurrent, setState }) {
           okbutton={
             alertStage === "confirm"
               ? () =>
-                  handleDeleteBranch(branchData[showIndex]?.b_code)
-              : alertStage === "success" || "error"
+                  handleDeleteBranch(collegeCode, branchData[showIndex]?.b_code)
+              : alertStage === "success" || "cancel"
               ? handleCloseAlert
               : null
           }
