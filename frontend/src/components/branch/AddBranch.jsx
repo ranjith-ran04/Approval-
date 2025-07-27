@@ -15,7 +15,10 @@ function AddBranch({ setCurrent }) {
   };
 
   const handleAddSubmit = async (data) => {
+    // console.log("Data being sent:", data);
+
     try {
+      const c_code = "1149";
       const formData = {
         ...data,
       };
@@ -50,7 +53,6 @@ function AddBranch({ setCurrent }) {
         buttonText="Add Branch"
         isEditMode={false}
         setCurrent={setCurrent}
-        showSubmitAlert={false}
       />
       <Alert
         type={alertType}
