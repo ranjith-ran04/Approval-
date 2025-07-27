@@ -14,10 +14,11 @@ function Branch({ setCurrent, setState }) {
   const [alertType, setAlertType] = useState("");
   const [alertMessage, setAlertMessage] = useState("");
   const [showIndex, setShowIndex] = useState(null);
-
   const handleCancel = (index) => {
     setShowIndex(index);
+    console.log(index)
     setShowAlert(true);
+    console.log(showAlert);
     setAlertMessage("Confirm to Delete");
     setAlertType("warning");
     setAlertStage("confirm");
@@ -32,6 +33,7 @@ function Branch({ setCurrent, setState }) {
       showLoader();
       try {
         const res = await axios.get(`${host}branch`,{withCredentials:true});
+        console.log(res.data);
         setBranchData(res.data);
         setError(false);
       } catch (err) {
@@ -46,6 +48,7 @@ function Branch({ setCurrent, setState }) {
   }, []);
 
   const handleDeleteBranch = async ( branch_code) => {
+    console.log(branch_code);
     try {
       const res = await axios.delete(`${host}branch`, {
         data: { b_code: branch_code },
@@ -159,8 +162,8 @@ function Branch({ setCurrent, setState }) {
           okbutton={
             alertStage === "confirm"
               ? () =>
-                  handleDeleteBranch(collegeCode, branchData[showIndex]?.b_code)
-              : alertStage === "success" || "cancel"
+                  handleDeleteBranch(branchData[showIndex]?.b_code)
+              : alertStage === "success" || "error"
               ? handleCloseAlert
               : null
           }

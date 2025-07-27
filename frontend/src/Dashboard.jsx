@@ -9,7 +9,7 @@ import { useState, useRef, useEffect } from "react";
 import EditBranch from "./components/branch/EditBranch.jsx";
 import Notes from "./widgets/notes/Notes.jsx";
 import ScrollToTop from "./widgets/scrollToTop/ScrollToTop.jsx";
-import Addstudent from "./components/studentdetails/Studentform.jsx";
+import Addstudent from "./components/studentDetails/Studentform.jsx";
 import axios from "axios";
 import { host } from "./constants/backendpath.js";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -38,8 +38,8 @@ function Dashboard() {
         withCredentials: true,
       });
       if (res.status === 200) {
-        // console.log(res.data);
-        setDetails(res.data);
+        console.log('dashboard',res.data);
+        setDetails(res.data[0]);
       }
     } catch (error) {
       navigate("/");
