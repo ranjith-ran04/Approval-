@@ -9,7 +9,7 @@ import { useState, useRef } from "react";
 import EditBranch from "./components/branch/EditBranch.jsx";
 import Notes from "./widgets/notes/Notes.jsx";
 import ScrollToTop from "./widgets/scrollToTop/ScrollToTop.jsx";
-import Addstudent from "./components/studentdetails/Studentform.jsx";
+// import Addstudent from "./components/studentdetails/Studentform.jsx";
 
 function Dashboard() {
   const [current, setCurrent] = useState(0);
@@ -39,8 +39,8 @@ Tamilnadu Lateral Entry Direct Second Year B.E/B.Tech.,Approval-2025`}
             {current === 4 && (
               <EditBranch setCurrent={setCurrent} state={state} />
             )}
-            {current === 5 && <Addstudent/>}
-            {current === 0 && <Notes/>}
+            {/* {current === 5 && <Addstudent/>} */}
+            {/* {current === 0 && <Notes/>} */}
             <ScrollToTop scrollRef={scrollRef} />
           </>
         </div>
