@@ -1,38 +1,139 @@
-#sidebar{
-    background-color: #f4f9f9;
-    /* width: 15dvw; */
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    flex-wrap: wrap;
-    flex-wrap: wrap;
-    align-items: center;
-    /* justify-content: center; */
-    color: rgb(0, 0, 0);
-    gap: 5px;
-    width: 15%;
-    width: 15%;
-    position: fixed;
-    /* padding: 20px;    */
-    box-shadow: 1.95px 1.95px 2.6px #00000026 ;
-    padding-top: 50px;
-    padding-left: 20px;
-    padding-right:20px;
+#sidebar {
+  background-color: #f4f9f9;
+  /* height: 100vh; */
+  display: flex;
+  flex-direction: column;
+  color: rgb(0, 0, 0);
+  gap: 5px;
+  width: 15%;
+  /* position: fixed; */
+  box-shadow: 1.95px 1.95px 2.6px #00000026;
+  padding-top: 13px;
+  padding-right: 10px;
+  padding-left: 10px;
+  transition: width 0.3s ease;
+  overflow-x: hidden;
 }
-.menuItems{
-    height: 5vh;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 20px;
-    font-weight: bold;
-    /* font-size: 2vh; */
-    /* font-size: 2vh; */
-    margin-top: 8px;
+
+#sidebar.collapsed {
+  width: 60px;
+  padding-right: 0;
+  align-items: center;
 }
-.menuItems:hover{
-    cursor: pointer;
-    background-color: rgba(0,0,0,0.3);
-    
+
+#listIcon {
+  height: 20px;
+  width: 20px;
+  background-image: url("../../../public/assets/list1.svg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+
+#iconDiv {
+  height: 35px;
+  width: 40px;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+}
+
+.menuItems {
+  height: 5vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  border-radius: 5px;
+  font-weight: bold;
+  margin-top: 8px;
+  gap: 20px;
+  padding-left: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.menuItems:hover {
+  cursor: pointer;
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+#homeIcon,
+#collegeIcon,
+#formIcon,
+#studentIcon,
+#branchIcon,
+#discontinuedIcon {
+  height: 15px;
+  width: 15px;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  margin-left: 10px;
+  flex-shrink: 0;
+}
+
+#homeIcon {
+  background-image: url("../../../public/assets/home.svg");
+}
+
+#collegeIcon {
+  background-image: url("../../../public/assets/college1.svg");
+}
+
+#formIcon {
+  background-image: url("../../../public/assets/form.svg");
+}
+
+#studentIcon {
+  background-image: url("../../../public/assets/badge.svg");
+}
+
+#branchIcon {
+  background-image: url("../../../public/assets/branch.svg");
+}
+
+#discontinuedIcon {
+  background-image: url("../../../public/assets/badge.svg");
+}
+
+.menuItems span,
+.menuItems p,
+.menuItems div:not(:first-child) {
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+#sidebar.collapsed .menuItems {
+  padding-left:3px;
+}
+#sidebar.collapsed{
+  display:flex;
+  align-items:center;
+  padding-left: 0px;
+  padding-right:0px;
+}
+#sidebar .menuItems{
+  transition: transform 0.3s ease;
+}
+
+#sidebar.collapsed .menuItems{
+  width:70%;
+}
+
+#buttonDiv {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+#sidebar.collapsed #buttonDiv {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.menuItems.active{
+  background-color: #a1e3f9;
 }

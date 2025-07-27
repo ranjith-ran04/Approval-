@@ -7,7 +7,7 @@
   gap: 30px;
 }
 
-.heading {
+.homeheading {
   text-align: center;
   font-size: 22px;
   font-weight: 500;
@@ -27,7 +27,7 @@
   font-size: 18px;
 }
 
-.row {
+.row-Home {
   display: flex;
   align-items: flex-start;
   margin-bottom: 12px;

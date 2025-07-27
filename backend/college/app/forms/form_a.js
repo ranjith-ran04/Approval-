@@ -6,7 +6,7 @@ const arial = path.join(__dirname, "../fonts/arial/arial.ttf");
 const { header, footer } = require("./pageFrame");
 
 function forma(req, res) {
-  const { collegeCode } = req.body;
+  const collegeCode  = req.user.counsellingCode;
 
   if (!collegeCode) {
     return res.status(400).json({ error: "collegeCode is required" });

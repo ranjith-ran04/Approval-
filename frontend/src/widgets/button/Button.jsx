@@ -1,7 +1,7 @@
 import './button.css';
 import { useRef } from 'react';
 
-function Button({ name, onClick, type = "button" }) {
+function Button({ name, onClick, type = "button" ,style}) {
   const buttonRef = useRef(null);
 
   const createRipple = (event) => {
@@ -33,6 +33,7 @@ function Button({ name, onClick, type = "button" }) {
       className="submit-btn"
       onClick={handleClick}
       type={type}
+      style={style}
       >
       {name}
     </button>
