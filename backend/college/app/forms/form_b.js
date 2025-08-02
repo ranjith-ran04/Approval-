@@ -6,15 +6,16 @@ const arial = path.join(__dirname, "../fonts/arial/arial.ttf");
 const branchCode = require("../json/branch");
 const { header, footer } = require("./pageFrame");
 
-function formb(req, res) {
+async function formb(req, res) {
   const collegeCode= req.user.counsellingCode;
   // console.log()
   const query = `SELECT ta.avg AS average, si.b_code AS branch, si.a_no AS appln_no, si.univ_reg_no AS reg_no, si.name AS name, si.nationality AS nat, si.community AS com, si.name_of_board AS board, si.obt_1, si.max_1, si.obt_2, si.max_2, si.obt_3, si.max_3, si.obt_4, si.max_4, si.obt_5, si.max_5, si.obt_6, si.max_6, si.obt_7, si.max_7, si.obt_8, si.max_8, si.fg AS fg, si.aicte_tfw AS afw FROM total_allotted ta JOIN student_info si ON ta.reg_no = si.a_no WHERE si.c_code = ? ORDER BY ta.avg;`;
-
-  db.query(query, [collegeCode], (err, result) => {
-    if (err) {
+   var result;
+  try{
+  [result] = await db.query(query, [collegeCode])
+    }catch(err){
       return res.status(500).json({ msg: "Error in query" });
-    }
+  }
     res.setHeader("Content-Type", "application/pdf");
     res.setHeader("Content-Disposition", 'inline; filename="formb.pdf"');
     const doc = new PDFDocument({
@@ -246,7 +247,7 @@ function formb(req, res) {
     footer(doc);
 
     doc.end();
-  });
+
 }
 
 module.exports = formb;

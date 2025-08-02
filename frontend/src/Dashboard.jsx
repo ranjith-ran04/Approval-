@@ -51,7 +51,7 @@ function Dashboard() {
 
   return logged ? (
     <div className="dashboard">
-      <Sidebar setCurrent={setCurrent} />
+      <Sidebar setCurrent={setCurrent} admin={false} />
       <div className="dashone">
         <NavigationBar
           text={`GOVERNMENT OF TAMILNADU
@@ -60,6 +60,7 @@ Tamilnadu Lateral Entry Direct Second Year B.E/B.Tech.,Approval-2025`}
           profile={true}
           bool={false}
           setCurrent={setCurrent}
+          admin={false}
         />
 
         <div className="dashboard-body" ref={scrollRef}>

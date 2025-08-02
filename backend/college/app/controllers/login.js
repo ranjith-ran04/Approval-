@@ -27,13 +27,13 @@ const login = async (req, res) => {
     const token = jwt.sign(
       { counsellingCode: user.c_code },
       process.env.JWT_SECRET,
-      { expiresIn: "10h" }
+      { expiresIn: "1h" }
     );
 
     res.cookie("token", token, {
       httpOnly: true,
       secure: false,
-      maxAge: 10 * 60 * 1000,
+      maxAge: 60 * 60 * 1000,
     });
 
     return res.status(200).json({ changed: user.changed });
@@ -43,4 +43,10 @@ const login = async (req, res) => {
   }
 };
 
-module.exports = login;
+function fetchlogin(req,res){
+  const cousellingCode = req.user?.counsellingCode || false;
+  if(!cousellingCode) return res.status(401).json({msg:'user not found'});
+  return res.status(200).json({msg:'user found'});
+}
+
+module.exports = {fetchlogin,login};
