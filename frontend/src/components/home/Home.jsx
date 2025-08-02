@@ -34,7 +34,11 @@ function Home() {
 
   return (
     <div className="container">
+<<<<<<< HEAD
       <h2 className="heading">{header}</h2>
+=======
+      <h2 className="homeheading">{`${details.collegeCode || "unknownCode" } - ${details.collegeName || "unknownCollege"}`}</h2>
+>>>>>>> hasan
       <div className="content-box">
         <div className="section">
           <h3>Location Details</h3>

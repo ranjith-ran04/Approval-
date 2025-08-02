@@ -9,6 +9,7 @@ import { useState, useRef, useEffect } from "react";
 import EditBranch from "./components/branch/EditBranch.jsx";
 import Notes from "./widgets/notes/Notes.jsx";
 import ScrollToTop from "./widgets/scrollToTop/ScrollToTop.jsx";
+// import Addstudent from "./components/studentDetails/Studentform.jsx";
 import axios from "axios";
 import { host } from "./constants/backendpath.js";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -50,7 +51,7 @@ function Dashboard() {
 
   return logged ? (
     <div className="dashboard">
-      <Sidebar setCurrent={setCurrent} />
+      <Sidebar setCurrent={setCurrent} admin={false} />
       <div className="dashone">
         <NavigationBar
           text={`GOVERNMENT OF TAMILNADU
@@ -59,6 +60,7 @@ Tamilnadu Lateral Entry Direct Second Year B.E/B.Tech.,Approval-2025`}
           profile={true}
           bool={false}
           setCurrent={setCurrent}
+          admin={false}
         />
 
         <div className="dashboard-body" ref={scrollRef}>
@@ -73,7 +75,7 @@ Tamilnadu Lateral Entry Direct Second Year B.E/B.Tech.,Approval-2025`}
               <EditBranch setCurrent={setCurrent} state={state} />
             )}
             {/* {current === 5 && <Addstudent/>} */}
-           {current === 0 && <Notes/>}
+           {/* {current === 0 && <Notes/>} */}
           {current === 5 && <StudentDetails/>}
             <ScrollToTop scrollRef={scrollRef} />
           </>

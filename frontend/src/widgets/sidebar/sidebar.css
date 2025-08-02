@@ -1,24 +1,22 @@
 #sidebar {
   background-color: #f4f9f9;
-  /* height: 100vh; */
   display: flex;
   flex-direction: column;
   color: rgb(0, 0, 0);
-  gap: 5px;
+  gap: 2px;
+  height:99vh;
   width: 15%;
-  /* position: fixed; */
   box-shadow: 1.95px 1.95px 2.6px #00000026;
-  padding-top: 13px;
-  padding-right: 10px;
-  padding-left: 10px;
+  padding: 13px 10px 0;
   transition: width 0.3s ease;
   overflow-x: hidden;
+  overflow-y:auto;
 }
 
 #sidebar.collapsed {
   width: 60px;
-  padding-right: 0;
-  /* align-items: center; */
+  align-items: center;
+  padding: 13px 0 0;
 }
 
 #listIcon {
@@ -31,8 +29,9 @@
 }
 
 #iconDiv {
-  height: 35px;
   width: 40px;
+  padding-top: 10px;
+  padding-bottom: 10px;
   border-radius: 5px;
   display: flex;
   align-items: center;
@@ -42,83 +41,44 @@
 }
 
 .menuItems {
-  height: 5vh;
-  width: 100%;
   display: flex;
   align-items: center;
-  border-radius: 5px;
-  font-weight: bold;
+  gap: 10px;
+  height: auto;
+  width: 100%;
+  padding: 8px 10px;
   margin-top: 8px;
-  gap: 20px;
-  padding-left: 5px;
+  border-radius: 5px;
   transition: background-color 0.3s ease;
+  word-break: break-word;
+  white-space: normal;
+  line-height: 1.2;
 }
 
 .menuItems:hover {
   cursor: pointer;
-  background-color: rgba(0, 0, 0, 0.3);
+  background-color: rgba(0, 0, 0, 0.1);
 }
 
-#homeIcon,
-#collegeIcon,
-#formIcon,
-#studentIcon,
-#branchIcon,
-#discontinuedIcon {
-  height: 15px;
-  width: 15px;
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center;
-  margin-left: 10px;
-  flex-shrink: 0;
-}
-
-#homeIcon {
-  background-image: url("../../../public/assets/home.svg");
-}
-
-#collegeIcon {
-  background-image: url("../../../public/assets/college1.svg");
-}
-
-#formIcon {
-  background-image: url("../../../public/assets/form.svg");
-}
-
-#studentIcon {
-  background-image: url("../../../public/assets/badge.svg");
-}
-
-#branchIcon {
-  background-image: url("../../../public/assets/branch.svg");
-}
-
-#discontinuedIcon {
-  background-image: url("../../../public/assets/badge.svg");
-}
-
-.menuItems span,
-.menuItems p,
-.menuItems div:not(:first-child) {
-  transition: opacity 0.3s ease, visibility 0.3s ease;
+/* ✅ Only allow active class for specific items */
+.menuItems[data-activable="true"].active {
+  background-color: #a1e3f9;
 }
 
 #sidebar.collapsed .menuItems {
-  padding-left:3px;
-}
-#sidebar.collapsed{
-  display:flex;
-  align-items:center;
-  padding-left: 0px;
-  padding-right:0px;
-}
-#sidebar .menuItems{
-  transition: transform 0.3s ease;
+  width: 90%;
+  padding: 8px 5px;
+  justify-content: center;
 }
 
-#sidebar.collapsed .menuItems{
-  width:70%;
+#sidebar.collapsed {
+  display: flex;
+  align-items: center;
+  padding: 13px 0 0;
+}
+
+#sidebar .menuItems {
+  transition: transform 0.3s ease;
 }
 
 #buttonDiv {
@@ -134,6 +94,29 @@
   visibility: hidden;
 }
 
-.menuItems.active{
+/* Icons */
+#homeIcon, #collegeIcon, #formIcon, #studentIcon, #branchIcon, #discontinuedIcon {
+  height: 15px;
+  width: 15px;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  flex-shrink: 0;
+}
+
+#homeIcon { background-image: url("../../../public/assets/home.svg"); }
+#collegeIcon { background-image: url("../../../public/assets/college1.svg"); }
+#formIcon { background-image: url("../../../public/assets/form.svg"); }
+#studentIcon { background-image: url("../../../public/assets/badge.svg"); }
+#branchIcon { background-image: url("../../../public/assets/branch.svg"); }
+#discontinuedIcon { background-image: url("../../../public/assets/badge.svg"); }
+
+
+.menuItems.active {
   background-color: #a1e3f9;
 }
+
+.menuItems.nonActive {
+  cursor: pointer;
+}
+

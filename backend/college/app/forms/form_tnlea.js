@@ -3,18 +3,22 @@ const db = require("../config/db");
 const { header,footer } = require("./pageFrame");
 const path = require("path");
 const { log } = require("console");
-const arialBold = path.join(__dirname, "../fonts/G_ari_bd.TTF");
-const arial = path.join(__dirname, "../fonts/arial.ttf");
+const arialBold = path.join(__dirname, "../fonts/arial/G_ari_bd.TTF");
+const arial = path.join(__dirname, "../fonts/arial/arial.ttf");
 
-function form_tnlea(req,res){
+async function form_tnlea(req,res){
     const allot_coll_code=req.user.counsellingCode;
+
     // console.log("received body:",req.body);
-    console.log(collegeCode);
+    // console.log(collegeCode);
     const query="SELECT branch_name,a_no,name,community,fg,Availed_fg,aicte_tfw,obt_1,max_1,obt_2,max_2,obt_3,max_3,obt_4,max_4,obt_5,max_5,obt_6,max_6,obt_7,max_7,obt_8,max_8,hsc_group from (select b_code,branch_name from branch_info where c_code=?) as branch_info,(select b_code,a_no,name,community,fg,Availed_fg,aicte_tfw,obt_1,max_1,obt_2,max_2,obt_3,max_3,obt_4,max_4,obt_5,max_5,obt_6,max_6,obt_7,max_7,obt_8,max_8,hsc_group from student_info where c_code=?) as student_info where student_info.b_code=branch_info.b_code order by branch_name;"
     // const {collegeCode}=req.body;
     // console/log(collegeCode);
-    db.query(query,[allot_coll_code,allot_coll_code],(error,result)=>{
-        if(error){
+    var result;
+    try{
+    [result] = await db.query(query,[allot_coll_code,allot_coll_code]);
+    // console.log(result)
+    }catch(err){
            return res.status(500).json({msg:"query error"});
         }
         if(result.length==0){
@@ -57,7 +61,7 @@ function drawWrappedTableHeader(yPosition) {
           
     });
     maxHeight += 2 * padding; 
-    console.log(maxHeight)
+    // console.log(maxHeight)
     let x = doc.page.margins.left;
     columns.forEach(col => {
         doc.rect(x+10, yPosition, col.width, maxHeight).stroke();
@@ -141,7 +145,7 @@ function drawDataRow(row, serial, yPosition) {
    
         currentY=drawDataRow(row,serial,currentY);
         serial=serial+1
-        console.log(currentY);
+        // console.log(currentY);
     })
     const remainingHeight = doc.page.height - currentY - doc.page.margins.bottom;
     const extraSpaceNeeded = 150;
@@ -152,7 +156,6 @@ function drawDataRow(row, serial, yPosition) {
     footer(doc)
     doc.end();
     }
-    })
 }
 
 module.exports=form_tnlea;  
