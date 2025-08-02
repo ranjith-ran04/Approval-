@@ -45,7 +45,7 @@ let currentY = doc.y;
 function TableHeader(yPosition) {
     doc.font("Arial-Bold").fontSize(9);
     let maxHeight = 0;
-    columns.forEach(col => {
+    columns.forEach(col=>{
         const labelHeight = doc.heightOfString(col.label, {
             width: col.width - 2 * padding,
             align: "center"
@@ -111,35 +111,63 @@ function drawDataRow(row, serial, yPosition) {
 
     return yPosition + dynamicrowheight;
 }
-    let currentbranch="";
-    let serial=1;
-    result.forEach(row=>{
-        if(currentbranch!=row.branch_name){
-        //   if(currentY+20>(doc.page.height-doc.page.margins.bottom-50)){
-        //     doc.addPage();
-        //     header("TNLEA", doc, allot_coll_code);
-        //     currentY = drawWrappedTableHeader(doc.page.margins.top + 10);
+let currentbranch = "";
+let serial = 1;
 
-        // }
-            doc.font("Arial-Bold").fontSize(12).text(row.branch_name.toUpperCase(),doc.page.margins.left+10,currentY+10);
-            currentY = TableHeader(currentY+30)+5;
-            // currentY=currentY+5;
-            currentbranch=row.branch_name;
-     
-        }
-           if(currentY+20>(doc.page.height-doc.page.margins.bottom-60)){
+result.forEach((row, index) => {
+    const isNewBranch = currentbranch !== row.branch_name;
+
+    // Calculate dynamic row height based on name column
+    const nameColumnIndex = 2;
+    const nameText = String(row.name);
+    const nameColumnWidth = columns[nameColumnIndex].width - 2 * padding;
+    const nameheight = doc.heightOfString(nameText, {
+        width: nameColumnWidth,
+        align: "center"
+    });
+    const rowHeight = Math.max(30, nameheight + 10);
+
+    // Before printing anything new, check space
+    if (isNewBranch) {
+        const headingHeight = 20;
+        const tableHeaderHeight = 30;
+        const totalRequired = headingHeight + tableHeaderHeight + rowHeight;
+
+        // Check if all 3 fit: branch heading + header + one row
+        if (currentY + totalRequired+30 > doc.page.height - doc.page.margins.bottom) {
             doc.addPage();
             header("TNLEA", doc, allot_coll_code);
-            currentY = TableHeader(doc.page.height-currentY+60)+5;
-            // currentY=drawDataRow(row,serial,currentY);
-            // serial=serial+1
-
+            currentY = doc.y;
         }
-   
-        currentY=drawDataRow(row,serial,currentY);
-        serial=serial+1
-        // console.log(currentY);
-    })
+
+        // Draw Branch Title
+        doc.font("Arial-Bold").fontSize(12).text(
+            row.branch_name.toUpperCase(),
+            doc.page.margins.left + 10,
+            currentY + 10
+        );
+
+        // Draw Table Header
+        currentY = TableHeader(currentY + 40)+5;
+        currentbranch = row.branch_name;
+    }
+
+    if (!isNewBranch && currentY + rowHeight+30 > doc.page.height - doc.page.margins.bottom) {
+        doc.addPage();
+        header("TNLEA", doc, allot_coll_code);
+
+        doc.font("Arial-Bold").fontSize(12).text(
+            row.branch_name.toUpperCase(),
+            doc.page.margins.left + 10,
+            doc.y + 10
+        );
+        currentY = TableHeader(doc.y + 40) + 5;
+    }
+
+    currentY = drawDataRow(row, serial, currentY);
+    serial++;
+});
+
     
     const remainingHeight = doc.page.height - currentY - doc.page.margins.bottom;
     const extraSpaceNeeded = 150;

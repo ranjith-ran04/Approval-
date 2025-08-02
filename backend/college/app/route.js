@@ -12,6 +12,7 @@ const logout = require('./controllers/logout')
 const collegeinfo = require("./controllers/collegeinfo");
 const {branch, editBranch, deleteBranch, addBranch} = require("./controllers/branch");
 const collegeget = require("./controllers/collegeget");
+const abstract_form = require("./forms/abstract_form");
 
 router.get("/forma", verifyjwt,forma);
 router.get("/formb",verifyjwt,formb);

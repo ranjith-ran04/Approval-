@@ -13,7 +13,7 @@ function Sidebar({ setCurrent }) {
     { id: 5, iconId: "formIcon", label: "Form A", action: () => handleForm("forma") },
     { id: 6, iconId: "formIcon", label: "Form B", action: () => handleForm("formb") },
     { id: 7, iconId: "formIcon", label: "Form C", action: () => handleForm("formc") },
-    { id: 8, iconId: "formIcon", label: "Form D" },
+    { id: 8, iconId: "formIcon", label: "Form D"},
     { id: 9, iconId: "formIcon", label: "Form FG" },
     { id: 10, iconId: "formIcon", label: "Form LEA2025", action: () => handleForm("formlea")},
   ];
