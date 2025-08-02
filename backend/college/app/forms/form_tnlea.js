@@ -117,7 +117,6 @@ let serial = 1;
 result.forEach((row, index) => {
     const isNewBranch = currentbranch !== row.branch_name;
 
-    // Calculate dynamic row height based on name column
     const nameColumnIndex = 2;
     const nameText = String(row.name);
     const nameColumnWidth = columns[nameColumnIndex].width - 2 * padding;
@@ -127,27 +126,23 @@ result.forEach((row, index) => {
     });
     const rowHeight = Math.max(30, nameheight + 10);
 
-    // Before printing anything new, check space
     if (isNewBranch) {
         const headingHeight = 20;
         const tableHeaderHeight = 30;
         const totalRequired = headingHeight + tableHeaderHeight + rowHeight;
 
-        // Check if all 3 fit: branch heading + header + one row
         if (currentY + totalRequired+30 > doc.page.height - doc.page.margins.bottom) {
             doc.addPage();
             header("TNLEA", doc, allot_coll_code);
             currentY = doc.y;
         }
 
-        // Draw Branch Title
         doc.font("Arial-Bold").fontSize(12).text(
             row.branch_name.toUpperCase(),
             doc.page.margins.left + 10,
             currentY + 10
         );
 
-        // Draw Table Header
         currentY = TableHeader(currentY + 40)+5;
         currentbranch = row.branch_name;
     }
