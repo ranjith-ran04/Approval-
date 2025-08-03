@@ -15,11 +15,15 @@ function AddBranch({ setCurrent }) {
   };
 
   const handleAddSubmit = async (data) => {
+    // console.log("Data being sent:", data);
+
     try {
+      const c_code = "1149";
       const formData = {
+        collegeCode: c_code,
         ...data,
       };
-      const res = await axios.post(`${host}branch`, formData,{withCredentials:true});
+      const res = await axios.post(`${host}branch`, formData);
 
       if (res.status === 200 || res.status === 201) {
         console.log("Branch Added Successfully");
@@ -50,7 +54,6 @@ function AddBranch({ setCurrent }) {
         buttonText="Add Branch"
         isEditMode={false}
         setCurrent={setCurrent}
-        showSubmitAlert={false}
       />
       <Alert
         type={alertType}
