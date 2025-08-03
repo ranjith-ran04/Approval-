@@ -10,7 +10,7 @@ function StudentDetails({admin}) {
   const [selected, setSelected] = useState("");
   const [branch, setBranch] = useState([]);
   const [students, setStudents] = useState([]);
-  const [view, setView] = useState(false);
+  const [appln_no, setAppln_no] = useState('');
   const [clicked, setClicked] = useState(0);
   const formRef = useRef(null);
   const collegeCode = 5901;
@@ -77,6 +77,7 @@ function StudentDetails({admin}) {
             </option>
           ))}
         </select>
+        {admin && (
         <div id="studentButton">
           <Button
             name={"College Details"}
@@ -88,7 +89,7 @@ function StudentDetails({admin}) {
               width: "130px",
             }}
           />
-        </div>
+        </div>)}
       </div>
       <div className="student-table">
         <div className="student-row">
@@ -107,6 +108,7 @@ function StudentDetails({admin}) {
               <button
                 className="student-button"
                 onClick={() => {
+                  setAppln_no(item.app_no);
                   setClicked(clicked + 1);
                 }}
               >
@@ -121,7 +123,7 @@ function StudentDetails({admin}) {
       </div>
       {clicked > 0 && (
         <div ref={formRef}>
-          <StudentForm handleClear={handleClear}/>
+          <StudentForm handleClear={handleClear} appln_no={appln_no}/>
         </div>
       )}
     </div>

@@ -72,7 +72,7 @@ Tamilnadu Lateral Entry Direct Second Year B.E/B.Tech.,Approval-2025`}
             {current === 4 && (
               <EditBranch setCurrent={setCurrent} state={state} />
             )}
-           {/* {current === 0 && <Notes/>} */}
+           {current === 0 && <Notes/>}
           {current === 5 && <StudentDetails/>}
             <ScrollToTop scrollRef={scrollRef} />
           </>
