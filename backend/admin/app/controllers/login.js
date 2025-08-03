@@ -1,7 +1,6 @@
 const jwt = require("jsonwebtoken");
 const db = require("../config/db");
 require("dotenv").config();
-const bcrypt = require("bcrypt");
 
 const login = async (req, res) => {
   const { counsellingCode, password } = req.body;

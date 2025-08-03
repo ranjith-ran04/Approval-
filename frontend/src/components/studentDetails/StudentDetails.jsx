@@ -2,6 +2,7 @@ import "./studentDetails.css";
 import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { host } from "../../constants/backendpath";
+import StudentForm from "./StudentForm";
 import "../college/CollegeInfo.css";
 import Button from "../../widgets/button/Button";
 
@@ -117,6 +118,7 @@ function StudentDetails() {
       </div>
       {clicked > 0 && (
         <div ref={formRef}>
+          <StudentForm />
         </div>
       )}
     </div>

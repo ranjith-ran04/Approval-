@@ -3,7 +3,7 @@ import "./sidebar.css";
 import Button from "../button/Button";
 import handleForm from "../sidebar/pdfApi";
 
-function Sidebar({ setCurrent, admin}) {
+function Sidebar({ setCurrent, admin }) {
   const items = [
     { id: 0, iconId: "homeIcon", label: "Home", action: () => setCurrent(0) },
     {
@@ -62,7 +62,7 @@ function Sidebar({ setCurrent, admin}) {
     { id: 6, label: "Form FG" },
     { id: 7, label: "Abstract Form" },
     { id: 8, label: "Note Order" },
-    { id: 9, label: "Note Orde-Approved" },
+    { id: 9, label: "Note Order-Approved" },
     { id: 10, label: "Note Order-Approved/Pending" },
     { id: 11, label: "Principal/Letter" },
     { id: 12, label: "Principal-Approved" },
@@ -119,7 +119,7 @@ function Sidebar({ setCurrent, admin}) {
   };
 
   return (
-    <div id="sidebar" className={collapsed ? "collapsed" : ""}>
+    <div id="sidebar" className={collapsed ? "collapsed" : ""} >
       <div id="iconDiv" onClick={toggleSidebar}>
         <div id="listIcon"></div>
       </div>
@@ -128,7 +128,7 @@ function Sidebar({ setCurrent, admin}) {
         <>
           {items.map((item, index) => (
             <div
-            style={{fontWeight:'bold'}}
+              style={{ fontWeight: "bold" }}
               key={item.id}
               className={`menuItems ${activeAdminId === index ? "active" : ""}`}
               onClick={() => handleItemClick(index, item.action)}
@@ -144,11 +144,15 @@ function Sidebar({ setCurrent, admin}) {
           )}
         </>
       ) : (
-        <>
+        <div id='sideMenu'>
           <br />
           {sideBarList.map(([list, title], sectionIndex) => (
             <div key={sectionIndex}>
-              {!collapsed && <div className="sectionTitle" style={{fontWeight:'bold'}}>{title}</div>}
+              {!collapsed && (
+                <div className="sectionTitle" style={{ fontWeight: "bold" }}>
+                  {title}
+                </div>
+              )}
               {list.map((item) => (
                 <div
                   key={item.id}
@@ -165,13 +169,15 @@ function Sidebar({ setCurrent, admin}) {
               <br />
             </div>
           ))}
-          <div id="sideCollegeDetails">COLLEGE DETAILS</div>
           {!collapsed && (
-            <div id="buttonDiv">
-              <Button name="College Details Pdf" />
-            </div>
+            <>
+              <div id="sideCollegeDetails">COLLEGE DETAILS</div>
+              <div id="buttonDiv">
+                <Button name="College Details Pdf" />
+              </div>
+            </>
           )}
-        </>
+        </div>
       )}
     </div>
   );
