@@ -25,7 +25,7 @@ function StudentDetails({admin}) {
         withCredentials: true,
       });}
       if (result.status === 200) {
-        console.log(result.data);
+        // console.log(result.data);
         setBranch(result.data);
       }
     } catch (error) {
@@ -64,7 +64,7 @@ function StudentDetails({admin}) {
   const handleClear = () => {
     setClicked(0);
   };
-  console.log(students);
+  // console.log(students);
   return (
     <div className="student-container">
       <div className="head-studentdropdown">

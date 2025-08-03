@@ -1,16 +1,16 @@
 const db = require("../config/db");
-const util = require("util");
-const query = util.promisify(db.query).bind(db);
 
 async function student(req, res) {
   try {
-    const { collegeCode } = req.body;
+    const collegeCode = req.user.counsellingCode;
+    const appln_no = req.body.appln_no;
+
     if (!collegeCode) {
       return res.status(400).json({ err: "collegeCode is required" });
     }
-    const stdQuery = `select * from student_info`;
-    const result = await query(stdQuery,[collegeCode]);
-    res.status(200).send(result).json({ msg : "Student details sent Successfully."});
+    const stdQuery = `select * from student_info where c_code =? and a_no = ?`;
+    const result = await db.query(stdQuery,[collegeCode,appln_no]);
+    res.status(200).send(result);
 
   } catch (err) {
     return res.status(500).json({ err: "Query error", sqlErr: err });

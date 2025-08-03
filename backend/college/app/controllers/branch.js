@@ -5,14 +5,13 @@ const db = require("../config/db");
 async function branch(req, res) {
   try {
     const collegeCode = req.user.counsellingCode;
-    console.log(collegeCode);
+    
     if (!collegeCode) {
       return res.status(400).json({ err: "collegeCode is required" });
     }
     const selectQuery = "select * from branch_info where c_code=?";
     const [result] = await db.query(selectQuery, [collegeCode]);
-    console.log('hi');
-    console.log(result);
+    
     res.status(200).send(result);
   } catch (err) {
     res.status(500).json({ err: "Query error", sqlErr: err });

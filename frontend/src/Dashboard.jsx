@@ -36,7 +36,7 @@ function Dashboard() {
         withCredentials: true,
       });
       if (res.status === 200) {
-        console.log('dashboard',res.data);
+        // console.log('dashboard',res.data);
         setDetails(res.data[0]);
       }
     } catch (error) {
