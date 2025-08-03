@@ -1,32 +1,184 @@
+import { useState } from "react";
 import "./sidebar.css";
 import Button from "../button/Button";
-import handleForm from '../sidebar/pdfApi'
+import handleForm from "../sidebar/pdfApi";
 
-function Sidebar({ setCurrent }) {
+function Sidebar({ setCurrent, admin }) {
+  const items = [
+    { id: 0, iconId: "homeIcon", label: "Home", action: () => setCurrent(0) },
+    {
+      id: 1,
+      iconId: "collegeIcon",
+      label: "College Details",
+      action: () => setCurrent(1),
+    },
+    {
+      id: 2,
+      iconId: "branchIcon",
+      label: "Branchwise Details",
+      action: () => setCurrent(2),
+    },
+    {
+      id: 3,
+      iconId: "studentIcon",
+      label: "Student Details",
+      action: () => setCurrent(5),
+    },
+    { id: 4, iconId: "discontinuedIcon", label: "Discontinued Details" },
+    {
+      id: 5,
+      iconId: "formIcon",
+      label: "Form A",
+      action: () => handleForm("forma"),
+    },
+    {
+      id: 6,
+      iconId: "formIcon",
+      label: "Form B",
+      action: () => handleForm("formb"),
+    },
+    {
+      id: 7,
+      iconId: "formIcon",
+      label: "Form C",
+      action: () => handleForm("formc"),
+    },
+    { id: 8, iconId: "formIcon", label: "Form D" },
+    { id: 9, iconId: "formIcon", label: "Form FG" },
+    {
+      id: 10,
+      iconId: "formIcon",
+      label: "Form LEA2025",
+      action: () => handleForm("formlea"),
+    },
+  ];
+
+  const adminMenuItems = [{ id: 0, label: "Approved Details By college" ,action: () => setCurrent(1)}];
+  const adminFormItems = [
+    { id: 2, label: "Form A" },
+    { id: 3, label: "Form B" },
+    { id: 4, label: "Form C" },
+    { id: 5, label: "Form D" },
+    { id: 6, label: "Form FG" },
+    { id: 7, label: "Abstract Form" },
+    { id: 8, label: "Note Order" },
+    { id: 9, label: "Note Order-Approved" },
+    { id: 10, label: "Note Order-Approved/Pending" },
+    { id: 11, label: "Principal/Letter" },
+    { id: 12, label: "Principal-Approved" },
+    { id: 13, label: "Principal-Not Approved" },
+  ];
+
+  const adminFgaItems = [
+    { id: 14, label: "OC/BCM/BC/MBC/DNC" },
+    { id: 15, label: "SC/SCA" },
+    { id: 16, label: "ST" },
+  ];
+
+  const adminFgItems = [
+    { id: 17, label: "OC/BCM/BC/MBC/DNC" },
+    { id: 18, label: "SC/SCA" },
+    { id: 19, label: "ST" },
+  ];
+
+  const adminSubItems = [{ id: 20, label: "Student Details" }];
+  const adminFormsItems = [{ id: 21, label: "Note Order-Approved" }];
+  const adminFGItems = [
+    { id: 22, label: "OC/BCM/BC/MBC/DNC" },
+    { id: 23, label: "SC/SCA" },
+    { id: 24, label: "ST" },
+  ];
+
+  const sideBarList = [
+    [adminMenuItems, "MENU"],
+    [adminFormItems, "FORM GENERATION"],
+    [adminFgaItems, "FG APPROVED"],
+    [adminFgItems, "FG NOT APPROVED"],
+    [adminSubItems, "SUPPLEMENTARY APPROVAL"],
+    [adminFormsItems, "FORMS"],
+    [adminFGItems, "FG"],
+  ];
+
+  const [collapsed, setCollapsed] = useState(false);
+  const [activeAdminId, setActiveAdminId] = useState('');
+
+  const toggleSidebar = () => setCollapsed((prev) => !prev);
+
+  const handleItemClick = (index, action) => {
+    if (!admin) {
+      if (index < 5) setActiveAdminId(index);
+      if (action) action();
+    }
+  };
+
+  const handleAdminClick = (id, action) => {
+    if (id === 0 || id === 20) {
+      setActiveAdminId(id);
+    }
+    if (action) action();
+  };
+
   return (
-    <div id="sidebar">
-      <div className="menuItems" onClick={() => setCurrent(0)}>
-        Home
+    <div id="sidebar" className={collapsed ? "collapsed" : ""} >
+      <div id="iconDiv" onClick={toggleSidebar}>
+        <div id="listIcon"></div>
       </div>
-      <div className="menuItems" onClick={() => setCurrent(1)}>
-        College Details
-      </div>
-      <div className="menuItems" onClick={() => setCurrent(2)}>
-        Branchwise Details
-      </div>
-      <div className="menuItems">Student Details</div>
-      <div className="menuItems">Discontinued Details</div>
-      <div className="menuItems">Form A</div>
-      <div className="menuItems" onClick={()=>handleForm('formb',{collegeCode:5901})}>
-        Form B
-      </div>
-      <div className="menuItems">Form C</div>
-      <div className="menuItems">Form D</div>
-      <div className="menuItems">Form G</div>
-      <div className="menuItems" onClick={()=>handleForm('formlea',{allot_coll_code:1})}>Form LEA2025</div>
-      <div>
-        <Button name={"SUBMIT"} />
-      </div>
+
+      {!admin ? (
+        <>
+          {items.map((item, index) => (
+            <div
+              style={{ fontWeight: "bold" }}
+              key={item.id}
+              className={`menuItems ${activeAdminId === index ? "active" : ""}`}
+              onClick={() => handleItemClick(index, item.action)}
+            >
+              <div id={item.iconId}></div>
+              {!collapsed && item.label}
+            </div>
+          ))}
+          {!collapsed && (
+            <div id="buttonDiv">
+              <Button name="SUBMIT" />
+            </div>
+          )}
+        </>
+      ) : (
+        <div id='sideMenu'>
+          <br />
+          {sideBarList.map(([list, title], sectionIndex) => (
+            <div key={sectionIndex}>
+              {!collapsed && (
+                <div className="sectionTitle" style={{ fontWeight: "bold" }}>
+                  {title}
+                </div>
+              )}
+              {list.map((item) => (
+                <div
+                  key={item.id}
+                  className={`menuItems 
+                    ${item.id === activeAdminId ? "active" : ""}
+                    ${item.id !== 0 && item.id !== 20 ? "nonActive" : ""}
+                  `}
+                  onClick={() => handleAdminClick(item.id, item.action)}
+                >
+                  <div id={item.iconId}></div>
+                  {!collapsed && item.label}
+                </div>
+              ))}
+              <br />
+            </div>
+          ))}
+          {!collapsed && (
+            <>
+              <div id="sideCollegeDetails">COLLEGE DETAILS</div>
+              <div id="buttonDiv">
+                <Button name="College Details Pdf" />
+              </div>
+            </>
+          )}
+        </div>
+      )}
     </div>
   );
 }

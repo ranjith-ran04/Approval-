@@ -1,16 +1,27 @@
 import { useState } from "react";
 import "./navigationBar.css";
 import { useNavigate } from "react-router-dom";
+import axios from 'axios';
+import {host} from '../../constants/backendpath'
 
-function NavigationBar({ text, profile, style,bool,setCurrent }) {
+function NavigationBar({ text, profile, bool,setCurrent,login,admin}) {
   const [visible, setVisible] = useState(false);
 
   const Navigate = useNavigate();
 
-  const handleLogOut = () => {
+  const handleLogOut = async() => {
+    try{
+    const res = await axios.get(`${host}logout`,{withCredentials:true})
+    if(res.status === 200){
+      if(admin){
+        Navigate("/admin/login");
+      }else{
     Navigate("/")
-    sessionStorage.setItem("notesShown","")
-  }
+    sessionStorage.setItem("notesShown","")}}
+}catch(error){
+  console.log(error);
+}
+}
 
   const handleClicks = () => {
     if(!bool){setVisible(!visible);}
@@ -24,7 +35,7 @@ function NavigationBar({ text, profile, style,bool,setCurrent }) {
   };
   return (
     <nav>
-      <div id="logo"  onClick={()=>{setCurrent(0)}}></div>
+      <div id="logo"  onClick={()=>{login?login=true:setCurrent(0)}}></div>
       <div id="center">
         <div>
           {text.split("\n").map((line, index) => (
@@ -39,7 +50,8 @@ function NavigationBar({ text, profile, style,bool,setCurrent }) {
       {visible && (
         <div id="overlay1" onClick={handleClicksoverlay}>
           <div id="list">
-            <div className="item">Change Password</div>
+          {!admin &&
+            (<div className="item" onClick={()=>Navigate('/changePassword')}>Change Password</div>)}
             <div className="item" onClick={handleLogOut}>
               Logout
             </div>
