@@ -5,7 +5,7 @@ import Alert from "../../widgets/alert/Alert";
 import Button from "../../widgets/button/Button";
 import tamilnaduDistricts from "../../../src/constants/Tndistricts"
 
-const Addstudent = () => {
+const StudentForm = () => {
 const [studentData,setStudentData]=useState({});
 const [caste,setCastes]=useState([])
 const [showAlert, setShowAlert] = useState(false);
@@ -472,4 +472,4 @@ for (let year=fromYear;year<=currentyear;year++){
     </div>
   )
 }
-export default Addstudent;
+export default StudentForm;
