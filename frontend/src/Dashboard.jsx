@@ -9,7 +9,6 @@ import { useState, useRef, useEffect } from "react";
 import EditBranch from "./components/branch/EditBranch.jsx";
 import Notes from "./widgets/notes/Notes.jsx";
 import ScrollToTop from "./widgets/scrollToTop/ScrollToTop.jsx";
-// import Addstudent from "./components/studentDetails/Studentform.jsx";
 import axios from "axios";
 import { host } from "./constants/backendpath.js";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -33,7 +32,6 @@ function Dashboard() {
   const navigate = useNavigate();
   async function fetch() {
     try {
-      // console.log('hi')
       const res = await axios.get(`${host}home`, {
         withCredentials: true,
       });
@@ -74,7 +72,6 @@ Tamilnadu Lateral Entry Direct Second Year B.E/B.Tech.,Approval-2025`}
             {current === 4 && (
               <EditBranch setCurrent={setCurrent} state={state} />
             )}
-            {/* {current === 5 && <Addstudent/>} */}
            {/* {current === 0 && <Notes/>} */}
           {current === 5 && <StudentDetails/>}
             <ScrollToTop scrollRef={scrollRef} />

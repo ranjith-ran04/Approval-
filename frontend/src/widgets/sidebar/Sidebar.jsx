@@ -53,7 +53,7 @@ function Sidebar({ setCurrent, admin }) {
     },
   ];
 
-  const adminMenuItems = [{ id: 0, label: "Approved Details By college" }];
+  const adminMenuItems = [{ id: 0, label: "Approved Details By college" ,action: () => setCurrent(1)}];
   const adminFormItems = [
     { id: 2, label: "Form A" },
     { id: 3, label: "Form B" },
@@ -100,7 +100,7 @@ function Sidebar({ setCurrent, admin }) {
   ];
 
   const [collapsed, setCollapsed] = useState(false);
-  const [activeAdminId, setActiveAdminId] = useState(0);
+  const [activeAdminId, setActiveAdminId] = useState('');
 
   const toggleSidebar = () => setCollapsed((prev) => !prev);
 

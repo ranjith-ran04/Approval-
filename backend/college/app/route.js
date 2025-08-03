@@ -32,6 +32,7 @@ router.delete("/branch", verifyjwt,deleteBranch);
 router.post("/branch", verifyjwt,addBranch);
 router.post("/collegeinfo",collegeinfo);
 router.get('/collegeBranchFetch',verifyjwt,collegeBranchFetch);
+router.post('/collegeBranchFetch',verifyjwt,collegeBranchFetch);
 router.post('/studentBranch',verifyjwt,studentDetails);
 router.get("/student", student);
 router.put("/student", editStudent);

@@ -5,7 +5,7 @@ import Alert from "../../widgets/alert/Alert";
 import Button from "../../widgets/button/Button";
 import tamilnaduDistricts from "../../../src/constants/Tndistricts"
 
-const Addstudent = () => {
+const Addstudent = ({handleClear}) => {
 const [studentData,setStudentData]=useState({});
 const [caste,setCastes]=useState([])
 const [showAlert, setShowAlert] = useState(false);
@@ -150,8 +150,21 @@ for (let year=fromYear;year<=currentyear;year++){
       <div id="appln_no">
         <input name="appln_no" type="text" placeholder="Application Number" />
       </div>
-      <div id="category">
+      <div id="category" style={{gap:'50px'}}>
         <Inputfield label={"CATEGORY"} id={"CATEGORY"} eltname={"CATEGORY"} type={"dropdown"} htmlfor={"CATEGORY"} options={[{label:"Government",value:"Government"},{label:"Government-Aided",value:"Government-Aided"}]} value={studentData["CATEGORY"]}/>
+          <div style={{display:'flex',gap:'10px'}}>
+          <Button
+            name={"ADD"}
+            style={{ width: "130px" }}
+          />
+          <Button
+            name={"Clear"}
+            style={{
+              width: "130px",
+              backgroundColor: "red", 
+            }}
+            onClick={handleClear}
+          /></div>
       </div>
       <div>
         <fieldset className="collegefieldset">

@@ -6,18 +6,24 @@ import StudentForm from "./StudentForm";
 import "../college/CollegeInfo.css";
 import Button from "../../widgets/button/Button";
 
-function StudentDetails() {
+function StudentDetails({admin}) {
   const [selected, setSelected] = useState("");
   const [branch, setBranch] = useState([]);
   const [students, setStudents] = useState([]);
   const [view, setView] = useState(false);
   const [clicked, setClicked] = useState(0);
   const formRef = useRef(null);
+  const collegeCode = 5901;
   async function handleFetch() {
     try {
-      const result = await axios.get(`${host}collegeBranchFetch`, {
+      var result;
+      if(admin){
+        result = await axios.post(`${host}collegeBranchFetch`,{collegeCode:collegeCode},{ withCredentials:true});
+      }
+      else{
+      result = await axios.get(`${host}collegeBranchFetch`, {
         withCredentials: true,
-      });
+      });}
       if (result.status === 200) {
         console.log(result.data);
         setBranch(result.data);
@@ -42,9 +48,10 @@ function StudentDetails() {
       return;
     }
     try {
+
       const result = await axios.post(
         `${host}studentBranch`,
-        { branch: branch },
+        { branch: branch , ...(admin && {collegeCode:collegeCode})},
         { withCredentials: true }
       );
       if (result.status === 200) {
@@ -55,9 +62,7 @@ function StudentDetails() {
     }
   }
   const handleClear = () => {
-    setSelected("");
     setClicked(0);
-    setStudents([]);
   };
   console.log(students);
   return (
@@ -74,16 +79,14 @@ function StudentDetails() {
         </select>
         <div id="studentButton">
           <Button
-            name={"ADD"}
+            name={"College Details"}
             style={{ width: "130px" }}
           />
           <Button
-            name={"Clear"}
+            name={"Branch Details"}
             style={{
               width: "130px",
-              backgroundColor: "red", 
             }}
-            onClick={handleClear}
           />
         </div>
       </div>
@@ -118,7 +121,7 @@ function StudentDetails() {
       </div>
       {clicked > 0 && (
         <div ref={formRef}>
-          <StudentForm />
+          <StudentForm handleClear={handleClear}/>
         </div>
       )}
     </div>
