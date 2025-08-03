@@ -3,14 +3,12 @@ const db = require("../config/db");
 require("dotenv").config();
 const bcrypt = require("bcrypt");
 
-const login = (req, res) => {
+const login = async(req, res) => {
   const { counsellingCode, password } = req.body;
 
   const query = "SELECT * FROM user_login WHERE c_code = ?";
-  db.query(query, [counsellingCode, password], (err, result) => {
-    if (err) {
-      return res.status(500).json({ message: "Server error" });
-    }
+  try{
+  const [result] = await db.query(query, [counsellingCode, password])
 
     const user = result[0];
     const isMatch = bcrypt.compareSync(password, user.pass);
@@ -31,7 +29,9 @@ const login = (req, res) => {
     });
 
     return res.status(200).json({ changed: user.changed });
-  });
+  }catch(err){
+    console.log(err);
+  }
 };
 
 module.exports = login;

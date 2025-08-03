@@ -38,10 +38,10 @@ function Sidebar({ setCurrent }) {
       <div className="menuItems">
       <div id='formIcon'></div>
       Form D</div>
-      <div className="menuItems">
+      <div className="menuItems" onClick={()=>handleForm('formd')}>
       <div id='formIcon'></div>
       Form G</div>
-      <div className="menuItems">
+      <div className="menuItems" onClick={()=>handleForm('formfg')}>
       <div id='formIcon'></div>
       Form LEA2025</div>
       <div id='buttonDiv'>

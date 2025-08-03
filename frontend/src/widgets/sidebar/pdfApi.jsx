@@ -2,6 +2,7 @@
   import axios from 'axios';
   
   const handleForm = async (endpoint) => {
+    console.log('hi');
     try {
       const res = await axios.get(`${host}${endpoint}`,{withCredentials:true,responseType: "blob" });
       if (res.status === 200) {

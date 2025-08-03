@@ -1,36 +1,23 @@
 const PDFDocument = require("pdfkit");
 const path = require("path");
+const db = require("../config/db");
 const arialBold = path.join(__dirname, "../fonts/G_ari_bd.TTF");
 const arial = path.join(__dirname, "../fonts/arial.ttf");
 const { header, footer } = require("./pageFrame"); 
 
-const express = require("express");
-const mysql = require("mysql2");
-const PDFDocument = require("pdfkit");
-const cors = require("cors");
+// const express = require("express");
+// const mysql = require("mysql2");
+// const PDFDocument = require("pdfkit");
+// const cors = require("cors");
 
-const app = express();
-app.use(cors());
-app.use(express.json());
+// const app = express();
+// app.use(cors());
+// app.use(express.json());
 
-const connection = mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  password: "Vishnu12*#",
-  database: "approval_2025",
-});
-
-connection.connect((err) => {
-  if (err) {
-    console.error("DB connection failed:", err.message);
-  } else {
-    console.log("Connected to MySQL");
-  }
-});
-
-app.post("/form-d", (req, res) => {
-  const c_code = req.body.c_code?.trim();
+const formd=async (req, res) => {
+  const c_code = req.user.counsellingCode;
   if (!c_code) return res.status(400).send("College code is required.");
+  try{
 
   const collegeQuery = `
     SELECT freezed, name_of_college, address 
@@ -38,10 +25,7 @@ app.post("/form-d", (req, res) => {
     WHERE c_code = ?
   `;
 
-  connection.query(collegeQuery, [c_code], (err, collegeRows) => {
-    if (err || collegeRows.length === 0) {
-      return res.status(500).send("Failed to fetch college info");
-    }
+  const [collegeRows] = await db.query(collegeQuery, [c_code])
 
     const collegeInfo = {
       c_code,
@@ -59,8 +43,7 @@ app.post("/form-d", (req, res) => {
       ORDER BY b.BRANCH
     `;
 
-    connection.query(branchQuery, [c_code], (err, branches) => {
-      if (err) return res.status(500).send("Failed to fetch branch data");
+    const [branches] = await db.query(branchQuery, [c_code])
 
       const branchData = [];
       let pending = branches.length;
@@ -69,16 +52,15 @@ app.post("/form-d", (req, res) => {
         return res.status(404).send("No discontinued students found.");
       }
 
-      branches.forEach((branch) => {
+      branches.forEach(async (branch) => {
         const studentQuery = `
           SELECT DISTINCT REG_NO, NAME, APPROVE_STATE, TC_STATE 
           FROM discontinued_info 
           WHERE COLLCODE = ? AND BRANCH = ?
         `;
 
-        connection.query(studentQuery, [c_code, branch.BRANCH], (err, students) => {
-          if (err) students = [];
-
+       const [students] = await db.query(studentQuery, [c_code, branch.BRANCH])
+       console.log(students);
           branchData.push({
             branch_name: branch.NAME,
             students,
@@ -88,31 +70,37 @@ app.post("/form-d", (req, res) => {
           if (pending === 0) {
             generatePDF(res, collegeInfo, branchData);
           }
-        });
       });
-    });
-  });
-});
+}catch(err){
+    res.status(500).send("Failed to fetch college info");
+
+}
+};
 
 function generatePDF(res, collegeInfo, branchData) {
-  const doc = new PDFDocument({ size: "A4", margin: 30 });
+  const doc = new PDFDocument({ size: "A4", margin: 8,bufferPages:true});
 
   res.setHeader("Content-Type", "application/pdf");
   res.setHeader("Content-Disposition", "attachment; filename=form_d.pdf");
   doc.pipe(res);
+  doc.registerFont("Arial-Bold", arialBold);
+  doc.registerFont("Arial", arial);
+  doc.moveDown(0.2);
+  header("D", doc, collegeInfo.c_code);
+  
 
-//   doc.font("Times-Roman").fontSize(14).text("FORM-D DISCONTINUED DETAILS", { align: "center" });
-//   if (!collegeInfo.freezed) {
-//     doc.fontSize(14).text("(Rough Copy)", { align: "right" });
-//   }
+  // doc.font("Times-Roman").fontSize(14).text("FORM-D DISCONTINUED DETAILS", { align: "center" });
+  // if (!collegeInfo.freezed) {
+  //   doc.fontSize(14).text("(Rough Copy)", { align: "right" });
+  // }
 
-//   doc.moveDown();
-//   doc.fontSize(14).text(`${collegeInfo.c_code} - ${collegeInfo.name_of_college}`, { align: "center" });
-//   doc.moveDown(0.5);
-//   doc.fontSize(12).text(collegeInfo.address, { align: "center" });
-//   doc.moveDown(1);
-//   doc.text("LATERAL ENTRY : 2024 - 2025", { align: "left" });
-//   doc.moveDown();
+  // doc.moveDown();
+  // doc.fontSize(14).text(`${collegeInfo.c_code} - ${collegeInfo.name_of_college}`, { align: "center" });
+  // doc.moveDown(0.5);
+  // doc.fontSize(12).text(collegeInfo.address, { align: "center" });
+  // doc.moveDown(1);
+  // doc.text("LATERAL ENTRY : 2024 - 2025", { align: "left" });
+  // doc.moveDown();
 
   const startX = 30;
   const colWidths = {
@@ -125,12 +113,15 @@ function generatePDF(res, collegeInfo, branchData) {
 
   branchData.forEach((branchGroup) => {
     // doc.addPage();
-    doc.moveDown(0.5);
+    doc.moveDown(0.2);
     doc.font("Times-Bold").fontSize(12).text(branchGroup.branch_name.toUpperCase(), startX, doc.y, { align: "left" });
     doc.moveDown(0.5);
 
     let y = doc.y;
-    const rowHeight = 28;
+    const rowHeight = 25;
+    const pageHeight = 842;
+    const leftMargin = 50;
+    const topMargin = 40;
 
     doc.font("Times-Bold").fontSize(10);
     doc.rect(startX, y, colWidths.sno, rowHeight).stroke();
@@ -139,19 +130,20 @@ function generatePDF(res, collegeInfo, branchData) {
     doc.rect(startX + colWidths.sno + colWidths.regno + colWidths.name, y, colWidths.approved, rowHeight).stroke();
     doc.rect(startX + colWidths.sno + colWidths.regno + colWidths.name + colWidths.approved, y, colWidths.tc, rowHeight).stroke();
 
-    doc.text("S.NO", startX + 5, y + 6, {align: "center"});
-    doc.text("REG NO", startX + colWidths.sno + 5, y + 6, {align: "center"});
-    doc.text("NAME", startX + colWidths.sno + colWidths.regno + 5, y + 6, {align: "center"});
-    doc.text("APPROVED\nBY DOTE", startX + colWidths.sno + colWidths.regno + colWidths.name + 5, y + 3, {align: "center"});
-    doc.text("TC\nAPPROVED", startX + colWidths.sno + colWidths.regno + colWidths.name + colWidths.approved + 5, y + 3, {align: "center"});
+    doc.text("S.NO", startX, y + 4, {width: "colWidths.sno", align: "center"});
+    doc.text("REG NO", startX + colWidths.sno, y + 4, {width: colWidths.regno, align: "center"});
+    doc.text("NAME", startX + colWidths.sno + colWidths.regno, y + 4, {width: colWidths.name, align: "center"});
+    doc.text("APPROVED\nBY DOTE", startX + colWidths.sno + colWidths.regno + colWidths.name, y + 4, {width: colWidths.approved, align: "center"});
+    doc.text("TC\nAPPROVED", startX + colWidths.sno + colWidths.regno + colWidths.name + colWidths.approved, y + 4, { width: colWidths.tc, align: "center"});
 
     y += rowHeight;
     doc.font("Times-Roman").fontSize(10);
 
     branchGroup.students.forEach((student, idx) => {
       // Check for page break
-      if (y + rowHeight > doc.page.height - doc.page.margins.bottom) {
+      if (y + rowHeight > doc.page.height - doc.page.margins.bottom+1) {
         doc.addPage();
+        header("D",doc,collegeInfo.c_code);
         y = doc.y;
       }
 
@@ -192,14 +184,11 @@ const remainingHeight = doc.page.height - doc.y - doc.page.margins.bottom;
     const extraSpaceNeeded = 150;
     if (remainingHeight < extraSpaceNeeded) {
       doc.addPage();
-      header("B", doc, collegeCode);
+      header("D", doc, collegeInfo.c_code);
     }
     footer(doc);
 
   doc.end();
 }
 
-const PORT = 5000;
-app.listen(PORT, () => {
-  console.log(`Server running at http://localhost:${PORT}`);
-});
+module.exports=formd;

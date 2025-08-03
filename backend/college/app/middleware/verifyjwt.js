@@ -11,6 +11,7 @@ const jwt = require('jsonwebtoken')
       return res.status(403).json({ message: "Token invalid" });
     }
     req.user = decoded;
+    console.log(req.user);
     next();
   });
  }
