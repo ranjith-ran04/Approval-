@@ -1,6 +1,7 @@
 const PDFDocument = require("pdfkit");
 const db = require("../config/db");
 const path = require("path");
+<<<<<<< HEAD
 const arialBold = path.join(__dirname, "../fonts/G_ari_bd.TTF");
 const arial = path.join(__dirname, "../fonts/arial.ttf");
 const branchCode = require("../json/branch");
@@ -115,6 +116,124 @@ function formb(req, res) {
         x += columnWidths.SEM;
       });
     }
+=======
+const arialBold = path.join(__dirname, "../fonts/arial/G_ari_bd.TTF");
+const arial = path.join(__dirname, "../fonts/arial/arial.ttf");
+const branchCode = require("../json/branch");
+const { header, footer } = require("./pageFrame");
+
+async function formb(req, res) {
+  const collegeCode= req.user.counsellingCode;
+  // console.log()
+  const query = `SELECT ta.avg AS average, si.b_code AS branch, si.a_no AS appln_no, si.univ_reg_no AS reg_no, si.name AS name, si.nationality AS nat, si.community AS com, si.name_of_board AS board, si.obt_1, si.max_1, si.obt_2, si.max_2, si.obt_3, si.max_3, si.obt_4, si.max_4, si.obt_5, si.max_5, si.obt_6, si.max_6, si.obt_7, si.max_7, si.obt_8, si.max_8, si.fg AS fg, si.aicte_tfw AS afw FROM total_allotted ta JOIN student_info si ON ta.reg_no = si.a_no WHERE si.c_code = ? ORDER BY ta.avg;`;
+   var result;
+  try{
+  [result] = await db.query(query, [collegeCode])
+    }catch(err){
+      return res.status(500).json({ msg: "Error in query" });
+  }
+    res.setHeader("Content-Type", "application/pdf");
+    res.setHeader("Content-Disposition", 'inline; filename="formb.pdf"');
+    const doc = new PDFDocument({
+      size: "A4",
+      layout: "landscape",
+      margin: 8,
+      bufferPages: true,
+    });
+    doc.pipe(res);
+    doc.registerFont("Arial-Bold", arialBold);
+    doc.registerFont("Arial", arial);
+    header("B", doc, collegeCode);
+    const studentsByBranch = result.reduce((acc, student) => {
+      const branch = student.branch;
+      if (!acc[branch]) acc[branch] = [];
+      acc[branch].push(student);
+      return acc;
+    }, {});
+    const columnWidths = {
+      SNO: 26,
+      APP_NO: 40,
+      REG_NO: 47,
+      QUOTA: 37,
+      NAME: 96,
+      NAT: 33,
+      COM: 28,
+      BOARD: 40,
+      SEM: 50,
+      PERCENT: 20,
+      FG: 20,
+      AFW: 25,
+    };
+    const sems = [
+      "SEM-1",
+      "SEM-2",
+      "SEM-3",
+      "SEM-4",
+      "SEM-5",
+      "SEM-6",
+      "SEM-7",
+      "SEM-8",
+    ];
+
+    function tableheader() {
+      let y = doc.y;
+      let x = 16;
+      let headerHeight = 20;
+
+      [
+        { label: "S.NO", width: columnWidths.SNO },
+        { label: "APP_NO", width: columnWidths.APP_NO },
+        { label: "REG_NO", width: columnWidths.REG_NO },
+        { label: "QUOTA", width: columnWidths.QUOTA },
+        { label: "NAME", width: columnWidths.NAME },
+        { label: "NAT", width: columnWidths.NAT },
+        { label: "COM", width: columnWidths.COM },
+        { label: "BOARD", width: columnWidths.BOARD },
+      ].forEach((item) => {
+        drawCell(item.label, x, y, item.width, headerHeight * 2,false);
+        x += item.width;
+      });
+
+      sems.forEach((sem) => {
+        drawCell(sem, x, y, columnWidths.SEM, headerHeight,false);
+        x += columnWidths.SEM;
+      });
+
+      [
+        { label: "%", width: columnWidths.PERCENT },
+        { label: "FG", width: columnWidths.FG },
+        { label: "AFW", width: columnWidths.AFW },
+      ].forEach((item) => {
+        drawCell(item.label, x, y, item.width, headerHeight * 2,false);
+        x += item.width;
+      });
+
+      x =
+        16 +
+        columnWidths.SNO +
+        columnWidths.APP_NO +
+        columnWidths.REG_NO +
+        columnWidths.QUOTA +
+        columnWidths.NAME +
+        columnWidths.NAT +
+        columnWidths.COM +
+        columnWidths.BOARD;
+
+      let semY = y + headerHeight;
+
+      sems.forEach(() => {
+        drawCell("OBT", x, semY, columnWidths.SEM / 2, headerHeight,false);
+        drawCell(
+          "MAX",
+          x + columnWidths.SEM / 2,
+          semY,
+          columnWidths.SEM / 2,
+          headerHeight,false
+        );
+        x += columnWidths.SEM;
+      });
+    }
+>>>>>>> 51d74f161c2401dbe4c9f719c371648fd551158b
     function drawCell(text, x, y, width, height,font) {
       let textHeight = doc.heightOfString(text, {
         width: width - 4,
@@ -245,7 +364,11 @@ function formb(req, res) {
     footer(doc);
 
     doc.end();
+<<<<<<< HEAD
   });
+=======
+
+>>>>>>> 51d74f161c2401dbe4c9f719c371648fd551158b
 }
 
 module.exports = formb;

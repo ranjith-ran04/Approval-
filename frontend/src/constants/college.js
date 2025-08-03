@@ -391,7 +391,11 @@ const map=new Map(
 [ "4971" ,"St. Xavier s Catholic College of Engineering (Autonomous), Chunkankadai, Nagercoil, Kanyakumari District 629807"],
 [ "4972" ,"AMRITA  College of Engineering and Technology, Erachakulam Post, Kanyakumari District 629902"],
 [ "4975" ,"Dr. G U Pope College of Engineering, Sawyerpuram, Thoothukudi District  628251"],
+<<<<<<< HEAD
 [ "4976" ,"Infant Jesus College of Engineering, Thoothukudi Highway (NH7\/A), Thoothukudi District 628851"],
+=======
+[ "4976" ,"Infant Jesus College of Engineering, Thoothukudi Highway (NH7A), Thoothukudi District 628851"],
+>>>>>>> 51d74f161c2401dbe4c9f719c371648fd551158b
 [ "4977" ,"Narayanaguru College of Engineering, Manjalumoodu, Kanyakumari District 629151"],
 [ "4978" ,"Udaya School of Engineering, Ammandivilai Post, Kanyakumari District 629204"],
 [ "4979" ,"Arul Tharum VPMM College of Engineering and Technology, Krishnakoil,Virudhunagar-626 190"],
