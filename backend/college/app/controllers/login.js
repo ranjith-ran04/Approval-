@@ -10,7 +10,7 @@ const login = async (req, res) => {
   try {
     const result = await db.query(query, [counsellingCode]);
     const user = result[0][0];
-    console.log('change',user);
+    console.log("change", user);
 
     if (!user || !user.pass) {
       console.log(user);
@@ -19,7 +19,7 @@ const login = async (req, res) => {
 
     const isMatch = bcrypt.compareSync(password, user.pass);
     console.log(password);
-    if (!isMatch &&  password !== user.pass) {
+    if (!isMatch && password !== user.pass) {
       console.log(isMatch);
       return res.status(401).json({ message: "Invalid credentials" });
     }
@@ -27,13 +27,13 @@ const login = async (req, res) => {
     const token = jwt.sign(
       { counsellingCode: user.c_code },
       process.env.JWT_SECRET,
-      { expiresIn: "1h" }
+      { expiresIn: "24h" }
     );
 
     res.cookie("token", token, {
       httpOnly: true,
       secure: false,
-      maxAge: 60 * 60 * 1000,
+      maxAge: 24 * 60 * 60 * 1000,
     });
 
     return res.status(200).json({ changed: user.changed });
@@ -43,10 +43,10 @@ const login = async (req, res) => {
   }
 };
 
-function fetchlogin(req,res){
+function fetchlogin(req, res) {
   const cousellingCode = req.user?.counsellingCode || false;
-  if(!cousellingCode) return res.status(401).json({msg:'user not found'});
-  return res.status(200).json({msg:'user found'});
+  if (!cousellingCode) return res.status(401).json({ msg: "user not found" });
+  return res.status(200).json({ msg: "user found" });
 }
 
-module.exports = {fetchlogin,login};
+module.exports = { fetchlogin, login };

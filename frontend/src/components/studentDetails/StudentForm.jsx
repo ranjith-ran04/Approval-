@@ -6,9 +6,16 @@ import Alert from "../../widgets/alert/Alert";
 import Button from "../../widgets/button/Button";
 import tamilnaduDistricts from "../../../src/constants/Tndistricts";
 import { host } from "../../constants/backendpath";
+import { useLoader } from "../../context/LoaderContext";
+import states from "../../constants/states";
 
 const Addstudent = ({ handleClear, appln_no }) => {
-  const [studentData, setStudentData] = useState({});
+  const { showLoader, hideLoader } = useLoader();
+  const [studentData, setStudentData] = useState({
+    gender: "",
+    nationality: "",
+    nativity: "",
+  });
   const [caste, setCastes] = useState([]);
   const [showAlert, setShowAlert] = useState(false);
   const [alertStage, setAlertStage] = useState("");
@@ -73,6 +80,7 @@ const Addstudent = ({ handleClear, appln_no }) => {
   ];
 
   async function studentInfo() {
+    showLoader();
     try {
       const result = await axios.post(
         `${host}student`,
@@ -80,21 +88,23 @@ const Addstudent = ({ handleClear, appln_no }) => {
         { withCredentials: true }
       );
       const raw = result.data?.[0]?.[0];
-      console.log(result.data?.[0]?.[0]);
+      // console.log("Raw API:", raw);
+      // console.log("API catogory:", raw.catogory);
+      // console.log(result.data?.[0]?.[0]);
       if (!raw) {
         console.warn("No student found in response", result.data);
         setStudentData({});
         return;
       }
-      const normalized = {
-        ...raw,
-        CATEGORY: raw.catogory || "",
-      };
-      setStudentData(normalized);
+      // console.log(result.data?.[0]?.[0]);
+      setStudentData(raw);
     } catch (err) {
       console.log(err);
+    } finally {
+      hideLoader();
     }
   }
+
   useEffect(() => {
     studentInfo();
   }, [appln_no]);
@@ -185,7 +195,6 @@ const Addstudent = ({ handleClear, appln_no }) => {
     }
   };
   const handleAddStudent = () => {
-    console.log("hii");
     const noerrors = validateFields();
     if (noerrors) {
       setShowAlert(true);
@@ -288,69 +297,84 @@ const Addstudent = ({ handleClear, appln_no }) => {
 
   const handleChange = async (e) => {
     const { name, value } = e.target;
-    if (name == "Community") {
+
+    // Prepare new data state
+    let updatedData = { [name]: value };
+
+    // Special handling for Community
+    if (name === "community") {
       try {
-        let castelist = [];
-        if (value === "BC") {
-          castelist = await import("../../../src/constants/bc.json");
-        } else if (value === "BCM") {
-          castelist = await import("../../../src/constants/bcm.json");
-        } else if (value === "SC") {
-          castelist = await import("../../../src/constants/sc.json");
-        } else if (value === "SCA") {
-          castelist = await import("../../../src/constants/sca.json");
-        } else if (value === "ST") {
-          castelist = await import("../../../src/constants/st.json");
-        } else {
-          castelist = await import("../../../src/constants/mbc.json");
+        let casteListModule = [];
+        switch (value) {
+          case "BC":
+            casteListModule = await import("../../../src/constants/bc.json");
+            break;
+          case "BCM":
+            casteListModule = await import("../../../src/constants/bcm.json");
+            break;
+          case "SC":
+            casteListModule = await import("../../../src/constants/sc.json");
+            break;
+          case "SCA":
+            casteListModule = await import("../../../src/constants/sca.json");
+            break;
+          case "ST":
+            casteListModule = await import("../../../src/constants/st.json");
+            break;
+          default:
+            casteListModule = await import("../../../src/constants/mbc.json");
         }
-        setCastes(castelist.default);
-        setStudentData((prev) => ({
-          ...prev,
-          Community: value,
-          "Caste Name": "",
-          CATEGORY: value,
-        }));
+        setCastes(casteListModule.default);
+        updatedData = { ...updatedData, caste_name: "" }; // reset caste
       } catch (err) {
-        console.log(err);
+        console.error("Error loading caste list:", err);
         setCastes([]);
       }
     }
 
+    // ✅ Single state update for studentData
     setStudentData((prev) => ({
       ...prev,
-      [name]: value,
+      ...updatedData,
     }));
+
+    // ✅ Validation
     setError((prevErrors) => {
       const updatedErrors = { ...prevErrors };
+
       if (updatedErrors[name]) {
-        let isvalid = true;
+        let isValid = true;
+
         if (value.trim() === "") {
-          isvalid = false;
+          isValid = false;
         }
-        if (
-          [
-            "candidatename",
-            "Religion",
-            "Community",
-            "Caste Name",
-            "Parent Occupation",
-            "state",
-            "district",
-            "otherStateName",
-            "Board of Exam",
-            "FG Cert Issued District",
-            "Remarks",
-          ].includes(name) &&
-          /\d/.test(value)
-        ) {
-          isvalid = false;
+
+        // String fields should not contain digits
+        const stringFields = [
+          "candidatename",
+          "Religion",
+          "Community",
+          "Caste Name",
+          "Parent Occupation",
+          "state",
+          "district",
+          "otherStateName",
+          "Board of Exam",
+          "FG Cert Issued District",
+          "Remarks",
+        ];
+        if (stringFields.includes(name) && /\d/.test(value)) {
+          isValid = false;
         }
-        if (name === "mobile" && isNaN(value)) {
-          isvalid = false;
-        } else if (name === "mobile" && !/^\d{10}$/.test(value)) {
-          isvalid = false;
+
+        // Mobile validation
+        if (name === "mobile") {
+          if (isNaN(value) || !/^\d{10}$/.test(value)) {
+            isValid = false;
+          }
         }
+
+        // Numeric-only fields
         const numericFields = [
           "appln_no",
           "Aadhar",
@@ -369,51 +393,18 @@ const Addstudent = ({ handleClear, appln_no }) => {
           "overallobt",
         ];
         if (numericFields.includes(name) && isNaN(value)) {
-          isvalid = false;
+          isValid = false;
         }
-        if (isvalid) {
+
+        // Remove error if valid
+        if (isValid) {
           delete updatedErrors[name];
         }
       }
+
       return updatedErrors;
     });
   };
-
-  // const handleCommunityChange=async(e)=>{
-  //   const selectedCommunity=e.target.value;
-  //   setStudentData((prev) => ({
-  //     ...prev,
-  //     community: selectedCommunity,
-  //     caste: '',
-  //   }));
-  //   delete error[e.target.name];
-  //   try{
-  //     let castelist=[];
-  //     if(selectedCommunity==='BC'){
-  //       castelist=await import('../../../src/constants/bc.json');
-  //     }
-  //     else if(selectedCommunity==='BCM'){
-  //       castelist=await import('../../../src/constants/bcm.json')
-  //     }
-  //     else if(selectedCommunity==='SC'){
-  //       castelist=await import('../../../src/constants/sc.json')
-  //     }
-  //     else if(selectedCommunity==='SCA'){
-  //       castelist=await import('../../../src/constants/sca.json')
-  //     }
-  //     else if(selectedCommunity==='ST'){
-  //       castelist=await import('../../../src/constants/st.json')
-  //     }
-  //     else{
-  //       castelist=await import('../../../src/constants/mbc.json')
-  //     }
-  //     setCastes(castelist.default);
-
-  //   }catch(err){
-  //     console.log(err);
-  //     setCastes([]);
-  //   }
-  // }
 
   const currentyear = new Date().getFullYear();
   const fromYear = 1950;
@@ -425,6 +416,8 @@ const Addstudent = ({ handleClear, appln_no }) => {
       value: year.toString(),
     });
   }
+  // console.log("Before render catogory:", studentData.catogory);
+
   return (
     <div className="collegewholediv">
       <div id="appln_no">
@@ -437,6 +430,7 @@ const Addstudent = ({ handleClear, appln_no }) => {
           disabled={true}
         />
       </div>
+
       <div id="category" style={{ gap: "50px" }}>
         <Inputfield
           label={"CATEGORY"}
@@ -454,7 +448,7 @@ const Addstudent = ({ handleClear, appln_no }) => {
             { label: "NRI", value: "NRI" },
           ]}
           value={studentData.catogory}
-          onchange={handleChange}
+          onChange={handleChange}
           error={error["CATEGORY"]}
         />
         <div style={{ display: "flex", gap: "10px" }}>
@@ -482,7 +476,7 @@ const Addstudent = ({ handleClear, appln_no }) => {
               classname={"field-block"}
               value={studentData.name}
               error={error["candidatename"]}
-              onchange={handleChange}
+              onChange={handleChange}
             />
             <Inputfield
               label={"Date of Birth"}
@@ -492,7 +486,7 @@ const Addstudent = ({ handleClear, appln_no }) => {
               htmlfor={"dob"}
               classname={"field-block"}
               value={studentData.dob}
-              onchange={handleChange}
+              onChange={handleChange}
               error={error["dob"]}
             />
           </div>
@@ -502,7 +496,7 @@ const Addstudent = ({ handleClear, appln_no }) => {
               type={"radio"}
               radiolabel={"Gender :"}
               classname={"field-block"}
-              onchange={handleChange}
+              onChange={handleChange}
               options={[
                 { label: "Male", value: "MALE" },
                 { label: "Female", value: "FEMALE" },
@@ -517,7 +511,7 @@ const Addstudent = ({ handleClear, appln_no }) => {
               label={"Mobile"}
               classname={"field-block"}
               id={"mobile"}
-              onchange={handleChange}
+              onChange={handleChange}
               htmlfor={"mobile"}
               value={studentData.mobile}
               error={error["mobile"]}
@@ -529,7 +523,7 @@ const Addstudent = ({ handleClear, appln_no }) => {
               type={"text"}
               label={"Email"}
               classname={"field-block"}
-              onchange={handleChange}
+              onChange={handleChange}
               id={"email"}
               htmlfor={"email"}
               value={studentData.email}
@@ -541,7 +535,7 @@ const Addstudent = ({ handleClear, appln_no }) => {
               label={"Aadhar No"}
               classname={"field-block"}
               id={"Aadhar"}
-              onchange={handleChange}
+              onChange={handleChange}
               htmlfor={"Aadhar"}
               value={studentData.aadharno}
               error={error["Aadhar"]}
@@ -555,7 +549,7 @@ const Addstudent = ({ handleClear, appln_no }) => {
               eltname={"nationality"}
               type={"radio"}
               radiolabel={"Nationality :"}
-              onchange={handleChange}
+              onChange={handleChange}
               classname={"field-block"}
               options={[
                 { label: "Indian", value: "INDIAN" },
@@ -571,7 +565,7 @@ const Addstudent = ({ handleClear, appln_no }) => {
               eltname={"nativity"}
               type={"radio"}
               radiolabel={"Nativity :"}
-              onchange={handleChange}
+              onChange={handleChange}
               options={[
                 { label: "Tamilnadu", value: "TN" },
                 { label: "Others", value: "OTHERS" },
@@ -585,20 +579,20 @@ const Addstudent = ({ handleClear, appln_no }) => {
           </div>
           <div className="field-row">
             <Inputfield
-              eltname={"Religion"}
+              eltname={"religion"}
               type={"dropdown"}
               label={"Religion"}
               classname={"field-block"}
-              onchange={handleChange}
+              onChange={handleChange}
               id={"Religion"}
               htmlfor={"Religion"}
               options={[
                 { label: "Hindu", key: "Hindu", value: "Hindu" },
                 { label: "Muslim", key: "Muslim", value: "Muslim" },
                 { label: "Christian", key: "Christian", value: "Christian" },
-                { label: "Sikhism", value : "Sikhism"},
-                {label : "Jainism", value : "Jainism"},
-                {label : "Others", value : "Others"},
+                { label: "Sikhism", value: "Sikhism" },
+                { label: "Jainism", value: "Jainism" },
+                { label: "Others", value: "Others" },
               ]}
               value={studentData.religion}
               error={error["Religion"]}
@@ -606,7 +600,7 @@ const Addstudent = ({ handleClear, appln_no }) => {
             {(studentData.religion === "Hindu" ||
               studentData.religion === "Christian") && (
               <Inputfield
-                eltname={"Community"}
+                eltname={"community"}
                 type={"dropdown"}
                 label={"Community"}
                 classname={"field-block"}
@@ -621,14 +615,14 @@ const Addstudent = ({ handleClear, appln_no }) => {
                   { label: "SCA", key: "SCA", value: "SCA" },
                   { label: "DNC", key: "DNC", value: "DNC" },
                 ]}
-                onchange={handleChange}
+                onChange={handleChange}
                 value={studentData.community}
-                error={error["Community"]}
+                error={error["community"]}
               />
             )}
-            {studentData["Religion"] === "Muslim" && (
+            {studentData.religion === "Muslim" && (
               <Inputfield
-                eltname={"Community"}
+                eltname={"community"}
                 type={"dropdown"}
                 label={"Community"}
                 classname={"field-block"}
@@ -636,45 +630,51 @@ const Addstudent = ({ handleClear, appln_no }) => {
                 htmlfor={"Community"}
                 options={[{ label: "BCM", key: "BCM", value: "BCM" }]}
                 onChange={handleChange}
-                value={studentData["Community"]}
+                value={studentData.community}
                 error={error["Community"]}
               />
             )}
           </div>
           <div className="field-row">
             <Inputfield
-              eltname={"Caste Name"}
+              eltname={"caste_name"}
               type={"dropdown"}
               label={"Caste Name"}
               classname={"field-block"}
               id={"CasteName"}
               htmlfor={"CasteName"}
               options={caste.map((c) => ({
-                label: c.name,
-                key: c.name,
-                value: c.name,
+                label: `${c.code}-${c.name}`,
+                key: `${c.code}-${c.name}`,
+                value: `${c.code}-${c.name}`,
               }))}
-              onchange={handleChange}
-              value={studentData["Caste Name"]}
+              onChange={handleChange}
+              value={studentData.caste_name}
               error={error["Caste Name"]}
             />
             <Inputfield
-              eltname={"Parent Occupation"}
+              eltname={"parent_occupation"}
               type={"dropdown"}
               label={"Parent Occupation"}
               options={[
+                { label: "Agriculture", value: "Agriculture" },
                 {
-                  label: "Agriculture",
-                  value: "Agriculture",
-                  key: "Agriculture",
+                  label: "Private Organization",
+                  value: "Private Organization",
                 },
-                { label: "Others", value: "Others", key: "Others" },
+                { label: "Small Trade", value: "Small Trade" },
+                { label: "Business", value: "Business" },
+                { label: "Industry", value: "Industry" },
+                { label: "Professional", value: "Professional" },
+                { label: "Central Govt.", value: "Central Govt." },
+                { label: "State Govt.", value: "State Govt." },
+                { label: "Others", value: "Others" },
               ]}
               classname={"field-block"}
               id={"ParentOccupation"}
               htmlfor={"ParentOccupation"}
-              value={studentData["ParentOccupation"]}
-              onchange={handleChange}
+              value={studentData.parent_occupation}
+              onChange={handleChange}
               error={error["Parent Occupation"]}
             />
           </div>
@@ -685,11 +685,8 @@ const Addstudent = ({ handleClear, appln_no }) => {
               id={"state"}
               label={"State"}
               htmlfor={"state"}
-              options={[
-                { label: "Tamilnadu", value: "Tamilnadu" },
-                { label: "Others", value: "Others" },
-              ]}
-              onchange={(e) =>
+              options={states}
+              onChange={(e) =>
                 setStudentData({
                   ...studentData,
                   state: e.target.value,
@@ -697,10 +694,10 @@ const Addstudent = ({ handleClear, appln_no }) => {
                 })
               }
               classname={"field-block"}
-              value={studentData["state"]}
+              value={studentData.state}
               error={error["state"]}
             />
-            {studentData["state"] === "Tamilnadu" && (
+            {studentData.state === "TAMILNADU" && (
               <Inputfield
                 eltname={"district"}
                 type={"dropdown"}
@@ -708,11 +705,11 @@ const Addstudent = ({ handleClear, appln_no }) => {
                 label={"District"}
                 htmlfor={"district"}
                 options={tamilnaduDistricts}
-                onchange={(e) =>
+                onChange={(e) =>
                   setStudentData({ ...studentData, district: e.target.value })
                 }
                 classname={"field-block"}
-                value={studentData["district"]}
+                value={studentData.district}
                 error={error["district"]}
               />
             )}
@@ -724,7 +721,7 @@ const Addstudent = ({ handleClear, appln_no }) => {
                 id={"otherState"}
                 label={"State Name"}
                 htmlfor={"otherState"}
-                onchange={(e) =>
+                onChange={(e) =>
                   setStudentData({
                     ...studentData,
                     otherStateName: e.target.value,
@@ -738,18 +735,18 @@ const Addstudent = ({ handleClear, appln_no }) => {
           </div>
           <div className="field-row">
             <Inputfield
-              eltname={"studied in TN"}
+              eltname={"hsc_tn"}
               type={"radio"}
               radiolabel={"Last 5 Years Studied in TamilNadu?"}
               classname={"field-block"}
               options={[
-                { label: "Yes", value: "Yes" },
-                { label: "No", value: "No" },
+                { label: "Yes", value: "1" },
+                { label: "No", value: "0" },
               ]}
               id={"studied in TN"}
               htmlfor={"studied in TN"}
-              value={studentData["studied in TN"]}
-              onchange={handleChange}
+              value={studentData.hsc_tn}
+              onChange={handleChange}
               error={error["studied in TN"]}
             />
           </div>
@@ -758,48 +755,48 @@ const Addstudent = ({ handleClear, appln_no }) => {
           <legend className="collegelegend">ACADEMIC DETAILS</legend>
           <div className="field-row">
             <Inputfield
-              eltname={"Qualifying Examination"}
+              eltname={"qualifying_exam"}
               type={"dropdown"}
               label={"Qualifying Examination"}
               classname={"field-block"}
               options={[
-                { label: "DIPLOMO", key: "DIPLOMO", value: "DIPLOMO" },
-                { label: "BSC", key: "BSC", value: "BSC" },
-                { label: "OTHERS", key: "OTHERS", value: "OTHERS" },
+                { label: "Diplomo", key: "DIPLOMO", value: "DIP" },
+                { label: "BSc", key: "BSC", value: "B.Sc" },
+                { label: "Others", key: "OTHERS", value: "OTHERS" },
               ]}
               id={"QualifyingExam"}
-              value={studentData["Qualifying Examination"]}
+              value={studentData.qualifying_exam}
               htmlfor={"QualifyingExam"}
-              onchange={handleChange}
+              onChange={handleChange}
               error={error["Qualifying Examination"]}
             />
             <Inputfield
-              eltname={"Year of Passing"}
+              eltname={"year_of_passing"}
               type={"dropdown"}
               label={"Year of Passing"}
               classname={"field-block"}
               id={"YearOfPassing"}
               htmlfor={"YearOfPassing"}
               options={Yearlist}
-              value={studentData["Year of Passing"]}
-              onchange={handleChange}
+              value={studentData.year_of_passing}
+              onChange={handleChange}
               error={error["Year of Passing"]}
             />
           </div>
           <div className="field-row">
             <Inputfield
-              eltname={"Univ Reg Num"}
+              eltname={"univ_reg_no"}
               type={"text"}
               label={"University Reg. Number"}
               classname={"field-block"}
               id={"UnivRegNum"}
               htmlfor={"UnivRegNum"}
-              value={studentData["Univ Reg Num"]}
-              onchange={handleChange}
+              value={studentData.univ_reg_no}
+              onChange={handleChange}
               error={error["Univ Reg Num"]}
             />
             <Inputfield
-              eltname={"Board of Exam"}
+              eltname={"name_of_board"}
               type={"dropdown"}
               label={"Board of Examination"}
               classname={"field-block"}
@@ -807,58 +804,64 @@ const Addstudent = ({ handleClear, appln_no }) => {
               htmlfor={"BoardExam"}
               options={[
                 { label: "DOTE", key: "DOTE", value: "DOTE" },
-                { label: "Autonomous", key: "Autonomous", value: "Autonomous" },
-                { label: "University", key: "University", value: "University" },
-                { label: "Others", key: "Others", value: "Others" },
+                { label: "Autonomous", key: "Autonomous", value: "AUTONOMOUS" },
+                { label: "University", key: "University", value: "UNIVERSITY" },
+                { label: "UIT", key: "UIT", value: "UIT" },
+                { label: "UIO", key: "UIO", value: "UIO" },
+                { label: "Others", key: "Others", value: "others" },
               ]}
-              value={studentData["Board of Exam"]}
-              onchange={handleChange}
+              value={studentData.name_of_board}
+              onChange={handleChange}
               error={error["Board of Exam"]}
             />
           </div>
           <div className="field-row">
             <Inputfield
-              eltname={"coursetype"}
+              eltname={"hsc_group"}
               type={"radio"}
               radiolabel={"Course Type"}
               classname={"field-block"}
               options={[
-                { label: "Regular", key: "Regular", value: "Regular" },
-                { label: "Lateral", key: "Lateral", value: "Lateral" },
-                { label: "Part time", key: "Part time", value: "Part time" },
+                { label: "Regular", key: "Regular", value: "DIP-Regular" },
+                { label: "Lateral", key: "Lateral", value: "DIP-Lateral" },
+                {
+                  label: "Part time",
+                  key: "Part time",
+                  value: "DIP-Part_time",
+                },
                 {
                   label: "Sandwich (7 Semesters)",
                   key: "Sandwich (7 Semesters)",
-                  value: "Sandwich (7 Semesters)",
+                  value: "DIP-Sandwich_7",
                 },
                 {
                   label: "Sandwich (8 Semesters)",
                   key: "Sandwich (8 Semesters)",
-                  value: "Sandwich (8 Semesters)",
+                  value: "DIP-Sandwich_8",
                 },
-                { label: "BSC", key: "BSC", value: "BSC" },
+                { label: "BSc", key: "BSC", value: "Bsc" },
               ]}
               id={"QualifyingExam"}
-              value={studentData["coursetype"]}
+              value={studentData.hsc_group}
               htmlfor={"QualifyingExam"}
-              onchange={handleChange}
+              onChange={handleChange}
               error={error["coursetype"]}
             />
           </div>
           <div>
             <Inputfield
-              eltname={"mathsstudied"}
+              eltname={"maths_studied"}
               type={"radio"}
               radiolabel={"Maths Studied in 12th or Degree Level"}
               classname={"field-block"}
               options={[
-                { label: "Yes", value: "Yes" },
-                { label: "No", value: "No" },
+                { label: "Yes", value: 1 },
+                { label: "No", value: 0 },
               ]}
               id={"mathsstudied"}
               htmlfor={"mathsstudied"}
-              value={studentData["mathsstudied"]}
-              onchange={handleChange}
+              value={studentData.maths_studied}
+              onChange={handleChange}
               error={error["mathsstudied"]}
             />
           </div>
@@ -868,99 +871,99 @@ const Addstudent = ({ handleClear, appln_no }) => {
           <legend className="collegelegend">SCHOLARSHIP DETAILS</legend>
           <div className="field-row">
             <Inputfield
-              eltname={"Annual Income"}
+              eltname={"annual_income"}
               type={"text"}
               label={"Annual Income"}
               classname={"field-block"}
               id={"AnnualIncome"}
               htmlfor={"AnnualIncome"}
-              value={studentData["Annual Income"]}
-              onchange={handleChange}
+              value={studentData.annual_income}
+              onChange={handleChange}
               error={error["Annual Income"]}
             />
             <Inputfield
-              eltname={"First Graduate"}
+              eltname={"fg"}
               type={"radio"}
               radiolabel={"First Graduate :"}
               classname={"field-block"}
               options={[
-                { label: "Yes", value: "Yes" },
-                { label: "No", value: "No" },
+                { label: "Yes", value: 1 },
+                { label: "No", value: 0 },
               ]}
               id={"FirstGraduate"}
               htmlfor={"FirstGraduate"}
-              value={studentData["First Graduate"]}
-              onchange={handleChange}
+              value={studentData.fg}
+              onChange={handleChange}
               error={error["First Graduate"]}
             />
           </div>
           <div className="field-row">
             <Inputfield
-              eltname={"AICTE Tuition fee"}
+              eltname={"aicte_tfw"}
               type={"radio"}
               radiolabel={"AICTE Tuition Fee Waiver (TFW) Scheme :"}
               options={[
-                { label: "Yes", value: "Yes" },
-                { label: "No", value: "No" },
+                { label: "Yes", value: "1" },
+                { label: "No", value: "0" },
               ]}
               id={"AICTE Tuition Fee"}
               htmlfor={"AICTE Tuition Fee"}
-              value={studentData["AICTE Tuition fee"]}
-              onchange={handleChange}
+              value={studentData.aicte_tfw}
+              onChange={handleChange}
               error={error["AICTE Tuition fee"]}
             />
             <Inputfield
-              eltname={"PMS"}
+              eltname={"pms"}
               type={"radio"}
               radiolabel={
                 "Postmatric Scholarship(SC/ST/SCA/Converted Christians) :"
               }
               options={[
-                { label: "Yes", value: "Yes" },
-                { label: "No", value: "No" },
+                { label: "Yes", value: "1" },
+                { label: "No", value: "0" },
               ]}
               id={"PMS"}
               htmlfor={"PMS"}
-              value={studentData["PMS"]}
-              onchange={handleChange}
+              value={studentData.pms}
+              onChange={handleChange}
               error={error["PMS"]}
             />
           </div>
           <div className="field-row">
             <Inputfield
-              eltname={"FG Cert Issued District"}
+              eltname={"fg_district"}
               type={"dropdown"}
               label={"FG Cert Issued District"}
               classname={"field-block"}
               id={"FGDistrict"}
               htmlfor={"FGDistrict"}
               options={tamilnaduDistricts}
-              onchange={handleChange}
-              value={studentData["FG Cert Issued District"]}
+              onChange={handleChange}
+              value={studentData.fg_district}
               error={error["FG Cert Issued District"]}
             />
             <Inputfield
-              eltname={"FG Certificate Number"}
+              eltname={"fg_no"}
               type={"text"}
               label={"FG Certificate Number"}
               classname={"field-block"}
               id={"FGCertificateNumber"}
               htmlfor={"FGCertificateNumber"}
-              value={studentData["FG Certificate Number"]}
-              onchange={handleChange}
+              value={studentData.fg_no}
+              onChange={handleChange}
               error={error["FG Certificate Number"]}
             />
           </div>
           <div className="field-row-single">
             <Inputfield
-              eltname={"fg fees"}
+              eltname={"Amount"}
               type={"text"}
               label={"First Graduate Fees"}
               classname={"field-block"}
               id={"fg fees"}
               htmlfor={"fg fees"}
-              value={studentData["fg fees"]}
-              onchange={handleChange}
+              value={studentData.Amount}
+              onChange={handleChange}
               error={error["fg fees"]}
             />
           </div>
@@ -969,106 +972,210 @@ const Addstudent = ({ handleClear, appln_no }) => {
           <legend className="collegelegend">MARK DETAILS</legend>
           <div className="field-row">
             <Inputfield
-              eltname={"sem1max"}
+              eltname={"max_1"}
               placeholder={"Maximum Marks"}
               type={"text"}
               label={"SEMESTER 1"}
               classname={"field-block"}
               id={"sem1max"}
               htmlfor={"sem1max"}
-              value={studentData["sem1max"]}
-              onchange={handleChange}
+              value={studentData.max_1}
+              onChange={handleChange}
               error={error["sem1max"]}
             />
             <Inputfield
-              eltname={"sem1obt"}
+              eltname={"obt_1"}
               placeholder={"Obtained Marks"}
               type={"text"}
               label={"SEMESTER 1"}
               classname={"field-block"}
               id={"sem1obt"}
               htmlfor={"sem1obt"}
-              value={studentData["sem1obt"]}
-              onchange={handleChange}
+              value={studentData.obt_1}
+              onChange={handleChange}
               error={error["sem1obt"]}
             />
           </div>
           <div className="field-row">
             <Inputfield
-              eltname={"sem2max"}
+              eltname={"max_2"}
               placeholder={"Maximum Marks"}
               type={"text"}
               label={"SEMESTER 2"}
               classname={"field-block"}
               id={"sem2max"}
               htmlfor={"sem2max"}
-              value={studentData["sem2max"]}
-              onchange={handleChange}
+              value={studentData.max_2}
+              onChange={handleChange}
               error={error["sem2max"]}
             />
             <Inputfield
-              eltname={"sem2obt"}
+              eltname={"obt_2"}
               placeholder={"Obtained Marks"}
               type={"text"}
               label={"SEMESTER 2"}
               classname={"field-block"}
               id={"sem2obt"}
               htmlfor={"sem2obt"}
-              value={studentData["sem2obt"]}
-              onchange={handleChange}
+              value={studentData.obt_2}
+              onChange={handleChange}
               error={error["sem2obt"]}
             />
           </div>
           <div className="field-row">
             <Inputfield
-              eltname={"sem3max"}
+              eltname={"max_3"}
               placeholder={"Maximum Marks"}
               type={"text"}
               label={"SEMESTER 3"}
               classname={"field-block"}
               id={"sem3max"}
               htmlfor={"sem3max"}
-              value={studentData["sem3max"]}
-              onchange={handleChange}
+              value={studentData.max_3}
+              onChange={handleChange}
               error={error["sem3max"]}
             />
             <Inputfield
-              eltname={"sem3obt"}
+              eltname={"obt_3"}
               placeholder={"Obtained Marks"}
               type={"text"}
               classname={"field-block"}
               label={"SEMESTER 3"}
               id={"sem3obt"}
               htmlfor={"sem3obt"}
-              value={studentData["sem3obt"]}
-              onchange={handleChange}
+              value={studentData.obt_3}
+              onChange={handleChange}
               error={error["sem3obt"]}
             />
           </div>
           <div className="field-row">
             <Inputfield
-              eltname={"sem4max"}
+              eltname={"max_4"}
               placeholder={"Maximum Marks"}
               type={"text"}
               label={"SEMESTER 4"}
               classname={"field-block"}
               id={"sem4max"}
               htmlfor={"sem4max"}
-              value={studentData["sem4max"]}
-              onchange={handleChange}
+              value={studentData["max_4"]}
+              onChange={handleChange}
               error={error["sem4max"]}
             />
             <Inputfield
-              eltname={"sem4obt"}
+              eltname={"obt_4"}
               placeholder={"Obtained Marks"}
               type={"text"}
               label={"SEMESTER 4"}
               classname={"field-block"}
               id={"sem4obt"}
               htmlfor={"sem4obt"}
-              value={studentData["sem4obt"]}
-              onchange={handleChange}
+              value={studentData["obt_4"]}
+              onChange={handleChange}
               error={error["sem4obt"]}
+            />
+          </div>
+          <div className="field-row">
+            <Inputfield
+              eltname={"max_5"}
+              placeholder={"Obtained Marks"}
+              type={"text"}
+              label={"SEMESTER 5"}
+              classname={"field-block"}
+              id={"sem5max"}
+              htmlfor={"sem5max"}
+              value={studentData.max_5}
+              onChange={handleChange}
+              error={error["sem5max"]}
+            />
+            <Inputfield
+              eltname={"obt_5"}
+              placeholder={"Obtained Marks"}
+              type={"text"}
+              label={"SEMESTER 5"}
+              classname={"field-block"}
+              id={"sem5obt"}
+              htmlfor={"sem5obt"}
+              value={studentData.obt_5}
+              onChange={handleChange}
+              error={error["sem5obt"]}
+            />
+          </div>
+          <div className="field-row">
+            <Inputfield
+              eltname={"max_6"}
+              placeholder={"Obtained Marks"}
+              type={"text"}
+              label={"SEMESTER 6"}
+              classname={"field-block"}
+              id={"sem6max"}
+              htmlfor={"sem6max"}
+              value={studentData.max_6}
+              onChange={handleChange}
+              error={error["sem6max"]}
+            />
+            <Inputfield
+              eltname={"obt_6"}
+              placeholder={"Obtained Marks"}
+              type={"text"}
+              label={"SEMESTER 6"}
+              classname={"field-block"}
+              id={"sem6obt"}
+              htmlfor={"sem6obt"}
+              value={studentData["obt_6"]}
+              onChange={handleChange}
+              error={error["sem6obt"]}
+            />
+          </div>
+          <div className="field-row">
+            <Inputfield
+              eltname={"max_7"}
+              placeholder={"Obtained Marks"}
+              type={"text"}
+              label={"SEMESTER 7"}
+              classname={"field-block"}
+              id={"sem7max"}
+              htmlfor={"sem7max"}
+              value={studentData.max_7}
+              onChange={handleChange}
+              error={error["sem7max"]}
+            />
+            <Inputfield
+              eltname={"obt_7"}
+              placeholder={"Obtained Marks"}
+              type={"text"}
+              label={"SEMESTER 7"}
+              classname={"field-block"}
+              id={"sem7obt"}
+              htmlfor={"sem7obt"}
+              value={studentData["obt_7"]}
+              onChange={handleChange}
+              error={error["sem7obt"]}
+            />
+          </div>
+          <div className="field-row">
+            <Inputfield
+              eltname={"max_8"}
+              placeholder={"Obtained Marks"}
+              type={"text"}
+              label={"SEMESTER 8"}
+              classname={"field-block"}
+              id={"sem8max"}
+              htmlfor={"sem8max"}
+              value={studentData.max_8}
+              onChange={handleChange}
+              error={error["sem8max"]}
+            />
+            <Inputfield
+              eltname={"obt_8"}
+              placeholder={"Obtained Marks"}
+              type={"text"}
+              label={"SEMESTER 8"}
+              classname={"field-block"}
+              id={"sem8obt"}
+              htmlfor={"sem8obt"}
+              value={studentData["obt_8"]}
+              onChange={handleChange}
+              error={error["sem8obt"]}
             />
           </div>
         </fieldset>
@@ -1146,11 +1253,11 @@ const Addstudent = ({ handleClear, appln_no }) => {
               <legend className="collegelegend">REMARKS</legend>
               <h4>Remarks on student (if any)</h4>
               <textarea
-                name="Remarks"
+                name="remarks"
                 id="studentRemarks"
-                cols="80"
+                cols="70"
                 rows="10"
-                value={studentData["Remarks"]}
+                value={studentData.remarks}
                 onChange={handleChange}
               ></textarea>
               <br></br>

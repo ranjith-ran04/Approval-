@@ -1,4 +1,4 @@
-import '../../components/college/CollegeInfo.css';
+import "../../components/college/CollegeInfo.css";
 
 const Inputfield = ({
   eltname,
@@ -10,13 +10,12 @@ const Inputfield = ({
   radiolabel,
   options = [],
   error,
-  onChange,        // prefer standard camelCase
-  onchange,        // fallback if parent still uses lowercase
+  onChange,
   disabled,
   value,
   placeholder,
 }) => {
-  const handleChange = onChange || onchange;
+  const handleChange = onChange;
 
   if (type === "radio") {
     return (
@@ -28,10 +27,18 @@ const Inputfield = ({
               <input
                 type="radio"
                 name={eltname}
-                value={option.value}
-                onChange={handleChange}
                 disabled={disabled}
-                checked={value === option.value}
+                value={option.value}
+                // only set checked if value is explicitly provided (controlled)
+                {...(value !== undefined
+                  ? { checked: value === option.value }
+                  : {})}
+                // only attach onChange if provided; if checked is present but no onChange, make it explicit readOnly
+                {...(onChange
+                  ? { onChange: handleChange }
+                  : value !== undefined
+                  ? { readOnly: true } // suppress warning if someone passed value but forgot onChange
+                  : {})}
               />
               {option.label}
             </label>
@@ -51,10 +58,14 @@ const Inputfield = ({
             type={type}
             id={id}
             name={eltname}
-            onChange={handleChange}
             disabled={disabled}
-            value={value}
             placeholder={placeholder}
+            {...(onChange
+              ? {
+                  value: value !== undefined ? value : "",
+                  onChange: handleChange,
+                }
+              : { defaultValue: value !== undefined ? value : "" })}
           />
         </div>
         {error && <span className="error-message">{error}</span>}
@@ -70,9 +81,13 @@ const Inputfield = ({
           <select
             id={id}
             name={eltname}
-            onChange={handleChange}
-            value={value || ""}
             disabled={disabled}
+            {...(onChange
+              ? {
+                  value: value !== undefined ? value : "",
+                  onChange: handleChange,
+                }
+              : { defaultValue: value !== undefined ? value : "" })}
           >
             <option value="">--- Select ---</option>
             {options.map((option) => (
