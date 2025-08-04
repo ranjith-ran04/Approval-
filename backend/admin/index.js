@@ -16,6 +16,6 @@ app.use(
   })
 );
 
-app.use("/api", appRouter);
+app.use("/api/admin", appRouter);
 
 app.listen(PORT, () => console.log(`server is running on ${PORT}......`));

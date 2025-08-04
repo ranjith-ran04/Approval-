@@ -7,6 +7,7 @@ import { adminhost } from "../../constants/backendpath.js";
 import { useNavigate, useLocation } from "react-router-dom";
 import StudentDetails from "../../components/studentDetails/StudentDetails.jsx";
 import ScrollToTop from "../../widgets/scrollToTop/ScrollToTop.jsx";
+import Chart from '../../widgets/chart/PieChartsDashboard.js';
 
 function Dashboard() {
   const [current, setCurrent] = useState(0);
@@ -45,10 +46,12 @@ Tamilnadu Lateral Entry Direct Second Year B.E/B.Tech.,Approval-2025`}
           bool={false}
           setCurrent={setCurrent}
           admin={true}
+          style={{height:'40px'}}
         />
 
         <div className="dashboard-body" ref={scrollRef}>
         <>
+        {current === 0 && <Chart/>}
         {current === 1 && <StudentDetails admin={true}/>}
         <ScrollToTop scrollRef={scrollRef} />
         </>

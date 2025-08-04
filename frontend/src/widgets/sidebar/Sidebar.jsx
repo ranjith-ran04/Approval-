@@ -43,8 +43,8 @@ function Sidebar({ setCurrent, admin }) {
       label: "Form C",
       action: () => handleForm("formc"),
     },
-    { id: 8, iconId: "formIcon", label: "Form D" },
-    { id: 9, iconId: "formIcon", label: "Form FG" },
+    { id: 8, iconId: "formIcon", label: "Form D", action: () => handleForm("formd")},
+    { id: 9, iconId: "formIcon", label: "Form FG", action: () => handleForm("formfg")},
     {
       id: 10,
       iconId: "formIcon",
@@ -53,13 +53,16 @@ function Sidebar({ setCurrent, admin }) {
     },
   ];
 
-  const adminMenuItems = [{ id: 0, label: "Approved Details By college" ,action: () => setCurrent(1)}];
+  const adminMenuItems = [{ id: 0, label: "Home" ,action: () => setCurrent(0)},
+    { id: 1, label: "Approved Details By college" ,action: () => setCurrent(1)}
+  ];
+  const collegeCode = '5901';
   const adminFormItems = [
-    { id: 2, label: "Form A" },
-    { id: 3, label: "Form B" },
-    { id: 4, label: "Form C" },
-    { id: 5, label: "Form D" },
-    { id: 6, label: "Form FG" },
+    { id: 2, label: "Form A", action : () => handleForm("forma",true,collegeCode) },
+    { id: 3, label: "Form B", action : () => handleForm("formb",true,collegeCode) },
+    { id: 4, label: "Form C",action : () => handleForm("formc",true,collegeCode) },
+    { id: 5, label: "Form D",action : () => handleForm("formd",true,collegeCode)},
+    { id: 6, label: "Form FG",action : () => handleForm("formfg",true,collegeCode) },
     { id: 7, label: "Abstract Form" },
     { id: 8, label: "Note Order" },
     { id: 9, label: "Note Order-Approved" },
@@ -100,7 +103,7 @@ function Sidebar({ setCurrent, admin }) {
   ];
 
   const [collapsed, setCollapsed] = useState(false);
-  const [activeAdminId, setActiveAdminId] = useState('');
+  const [activeAdminId, setActiveAdminId] = useState(0);
 
   const toggleSidebar = () => setCollapsed((prev) => !prev);
 
@@ -112,7 +115,7 @@ function Sidebar({ setCurrent, admin }) {
   };
 
   const handleAdminClick = (id, action) => {
-    if (id === 0 || id === 20) {
+    if (id === 0 || id === 1 || id === 20) {
       setActiveAdminId(id);
     }
     if (action) action();

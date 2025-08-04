@@ -204,7 +204,7 @@ const handleChange =(e)=>{
             <option value="girlshostel">Hostel Facilities for Girls</option>
 
         </select>
-        </div>
+         </div>
 
           {(selectedSection==='All' || selectedSection==='collegeinfo') && (
               <>

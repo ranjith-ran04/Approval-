@@ -3,9 +3,11 @@ const router = express.Router();
 const {login,fetchlogin} = require('./controllers/login');
 const verifyjwt = require('../../college/app/middleware/verifyjwt');
 const home = require('./controllers/home');
+const chart = require('./controllers/chart');
 
-router.post('/admin/login',login);
-router.get('/admin/login',verifyjwt,fetchlogin);
-router.get('/admin/home',verifyjwt,home);
+router.post('/login',login);
+router.get('/login',verifyjwt,fetchlogin);
+router.get('/home',verifyjwt,home);
+router.post('/chart',verifyjwt,chart);
 
 module.exports = router;

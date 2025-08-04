@@ -6,10 +6,14 @@ const arial = path.join(__dirname, "../fonts/arial/arial.ttf");
 const { header, footer } = require("./pageFrame");
 
 async function forma(req, res) {
-  const collegeCode = req.user.counsellingCode;
-
-  if (!collegeCode) {
-    return res.status(400).json({ error: "collegeCode is required" });
+  var collegeCode;
+  if(req.user.counsellingCode){
+    collegeCode = req.user.counsellingCode;
+    if(!collegeCode) return res.status(404).json({msg:'collgecode not found'});
+  }else{
+    const name = req.user.name;
+    collegeCode = req.body.collegeCode;
+    if(!name) return res.status(404).json({msg:'user not found'});
   }
 
   const query =
