@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import "./input.css";
+import Button from "../button/Button";
 
-const Input = () => {
+const Input = ({add,clicked,click,appln_no}) => {
   const [input, setInput] = useState("");
   const [touched, setTouched] = useState(false);
   const [visibleIndexes, setVisibleIndexes] = useState([]);
@@ -43,6 +44,16 @@ const Input = () => {
       });
     }
   };
+  function handleCancel(){
+    add(false);
+    clicked(click+1);
+  }
+  function handleConfirm(){
+    add(false);
+    clicked(click+1);
+    appln_no(input);
+  }
+
 
   return (
     <div className="input-container">
@@ -57,7 +68,7 @@ const Input = () => {
 
       <ul className="validation-list">
         {validations.map((item, index) => {
-          if (!visibleIndexes.includes(index)) return null;
+          {/* if (!visibleIndexes.includes(index)) return null; */}
           const passed = item.check(input);
           return (
             <li
@@ -72,6 +83,21 @@ const Input = () => {
           );
         })}
       </ul>
+      <br/>
+                  <div style={{display:'flex',gap:'10px'}}>
+          <Button
+            name={"ADD"}
+            style={{ width: "130px" }}
+            onClick={handleConfirm}
+          />
+          <Button
+            name={"CANCEL"}
+            style={{
+              width: "130px",
+              backgroundColor: "red", 
+            }}
+            onClick={handleCancel}
+          /></div>
     </div>
   );
 };

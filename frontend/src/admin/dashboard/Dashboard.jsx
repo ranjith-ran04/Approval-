@@ -12,6 +12,7 @@ import Chart from '../../widgets/chart/PieChartsDashboard.js';
 function Dashboard() {
   const [current, setCurrent] = useState(0);
   const [state, setState] = useState({});
+  const [supp,setSupp] = useState(false);
   const scrollRef = useRef();  
   const location = useLocation();
   console.log(location.state);
@@ -34,6 +35,16 @@ function Dashboard() {
     fetch();
   }, []);
 
+  useEffect(()=>{
+    if(current === 2){
+      setSupp(true);
+    }else{
+      setSupp(false);
+    }
+  },[current]);
+
+console.log(supp);
+
   return logged ? (
     <div className="dashboard">
       <Sidebar setCurrent={setCurrent} admin={true} />
@@ -52,7 +63,9 @@ Tamilnadu Lateral Entry Direct Second Year B.E/B.Tech.,Approval-2025`}
         <div className="dashboard-body" ref={scrollRef}>
         <>
         {current === 0 && <Chart/>}
-        {current === 1 && <StudentDetails admin={true}/>}
+        {current === 1 && <StudentDetails admin={true} supp={supp}/>}
+        {current === 2 && <StudentDetails admin={true} supp={supp}/>}
+
         <ScrollToTop scrollRef={scrollRef} />
         </>
         </div>

@@ -84,7 +84,7 @@ function Sidebar({ setCurrent, admin }) {
     { id: 19, label: "ST" },
   ];
 
-  const adminSubItems = [{ id: 20, label: "Student Details" }];
+  const adminSubItems = [{ id: 20, label: "Student Details",action: () => setCurrent(2)}];
   const adminFormsItems = [{ id: 21, label: "Note Order-Approved" }];
   const adminFGItems = [
     { id: 22, label: "OC/BCM/BC/MBC/DNC" },

@@ -5,7 +5,7 @@ import Alert from "../../widgets/alert/Alert";
 import Button from "../../widgets/button/Button";
 import tamilnaduDistricts from "../../../src/constants/Tndistricts"
 
-const Addstudent = ({handleClear,appln_no}) => {
+const Addstudent = ({handleClear,appln_no,add,clicked}) => {
 const [studentData,setStudentData]=useState({});
 const [caste,setCastes]=useState([])
 const [showAlert, setShowAlert] = useState(false);
@@ -292,6 +292,11 @@ const handleChange = async(e) => {
 //   }
 // }
 
+const addHandle = () => {
+  add(true);
+  clicked(0);
+}
+
 const currentyear=new Date().getFullYear();
 const fromYear=1950;
 const Yearlist=[];
@@ -309,6 +314,7 @@ for (let year=fromYear;year<=currentyear;year++){
           <Button
             name={"ADD"}
             style={{ width: "130px" }}
+            onClick={addHandle}
           />
           <Button
             name={"CLEAR"}
