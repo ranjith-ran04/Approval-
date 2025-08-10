@@ -40,7 +40,6 @@ function BranchForm({
 
   useEffect(() => {
     if (!isEditMode) return;
-
     // if (nbaValue === "no") {
     //   setAmount("0");
     //   setAccto("0");

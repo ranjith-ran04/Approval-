@@ -11,6 +11,7 @@ import states from "../../constants/states";
 
 const Addstudent = ({ handleClear, appln_no }) => {
   const { showLoader, hideLoader } = useLoader();
+  const [changedFields, setchangedFields] = useState({});
   const [studentData, setStudentData] = useState({
     gender: "",
     nationality: "",
@@ -96,8 +97,32 @@ const Addstudent = ({ handleClear, appln_no }) => {
         setStudentData({});
         return;
       }
+
       // console.log(result.data?.[0]?.[0]);
       setStudentData(raw);
+
+      let casteListModule = [];
+      switch (raw.community) {
+        case "BC":
+          casteListModule = await import("../../../src/constants/bc.json");
+          break;
+        case "BCM":
+          casteListModule = await import("../../../src/constants/bcm.json");
+          break;
+        case "SC":
+          casteListModule = await import("../../../src/constants/sc.json");
+          break;
+        case "SCA":
+          casteListModule = await import("../../../src/constants/sca.json");
+          break;
+        case "ST":
+          casteListModule = await import("../../../src/constants/st.json");
+          break;
+        case "MBC":
+          casteListModule = await import("../../../src/constants/mbc.json");
+          break;
+      }
+      setCastes(casteListModule.default);
     } catch (err) {
       console.log(err);
     } finally {
@@ -220,20 +245,41 @@ const Addstudent = ({ handleClear, appln_no }) => {
       });
     }
   };
-  const handleUpdate = () => {
-    setShowAlert(true);
-    setAlertStage("confirm");
-    setAlertMessage("Confirm to update");
-    setAlertType("warning");
-    setAlertOkAction(() => () => {
-      setShowAlert(true);
-      setAlertMessage("Updated Successfully");
-      setAlertStage("success");
-      setAlertType("success");
-      setAlertOkAction(() => () => {
-        setShowAlert(false);
+  const handleUpdate = async () => {
+    setShowAlert(false);
+    try {
+      if (Object.keys(changedFields).length === 0) {
+        setShowAlert(true);
+        setAlertMessage("Your details are already saved.");
+        setAlertStage("success");
+        setAlertType("success");
+        return;
+      }
+      const response = await axios.put(`${host}collegeinfo`, changedFields, {
+        withCredentials: true,
       });
-    });
+      if (response.status === 200) {
+        setShowAlert(true);
+        setAlertStage("confirm");
+        setAlertMessage("Confirm to update");
+        setAlertType("warning");
+        setAlertOkAction(() => () => {
+          setShowAlert(true);
+          setAlertMessage("Updated Successfully");
+          setAlertStage("success");
+          setAlertType("success");
+          setAlertOkAction(() => () => {
+            setShowAlert(false);
+          });
+        });
+      }
+    } catch (error) {
+      console.log(error);
+      setShowAlert(true);
+      setAlertMessage("Unable to connnect to server...");
+      setAlertStage("error");
+      setAlertType("error");
+    }
   };
   const handleStuDelete = () => {
     setShowAlert(true);
@@ -294,49 +340,30 @@ const Addstudent = ({ handleClear, appln_no }) => {
       });
     });
   };
+  // Extract just the code from backend value
+  const casteCodeFromBackend = studentData.caste_name?.split("-")[0];
 
+  // Find matching caste in JSON
+  const matchedCaste = caste.find((c) => c.code === casteCodeFromBackend);
+
+  // Build the value in CODE-NAME format from JSON
+  const selectedValue = matchedCaste
+    ? `${matchedCaste.code}-${matchedCaste.name}`
+    : "";
   const handleChange = async (e) => {
     const { name, value } = e.target;
 
-    // Prepare new data state
-    let updatedData = { [name]: value };
+    // For caste_name, you might want to store only the code in backend format
+    let updatedValue = value;
 
-    // Special handling for Community
-    if (name === "community") {
-      try {
-        let casteListModule = [];
-        switch (value) {
-          case "BC":
-            casteListModule = await import("../../../src/constants/bc.json");
-            break;
-          case "BCM":
-            casteListModule = await import("../../../src/constants/bcm.json");
-            break;
-          case "SC":
-            casteListModule = await import("../../../src/constants/sc.json");
-            break;
-          case "SCA":
-            casteListModule = await import("../../../src/constants/sca.json");
-            break;
-          case "ST":
-            casteListModule = await import("../../../src/constants/st.json");
-            break;
-          default:
-            casteListModule = await import("../../../src/constants/mbc.json");
-        }
-        setCastes(casteListModule.default);
-        updatedData = { ...updatedData, caste_name: "" }; // reset caste
-      } catch (err) {
-        console.error("Error loading caste list:", err);
-        setCastes([]);
-      }
+    // Example: store as "101-name" if your backend expects that
+    if (name === "caste_name") {
+      updatedValue = value; // or value.split("-")[0] if you want only code
     }
 
-    // ✅ Single state update for studentData
-    setStudentData((prev) => ({
-      ...prev,
-      ...updatedData,
-    }));
+    setchangedFields((prev) => ({ ...prev, [name]: value }));
+    // Update student data
+    setStudentData((prev) => ({ ...prev, [name]: updatedValue }));
 
     // ✅ Validation
     setError((prevErrors) => {
@@ -649,7 +676,7 @@ const Addstudent = ({ handleClear, appln_no }) => {
                 value: `${c.code}-${c.name}`,
               }))}
               onChange={handleChange}
-              value={studentData.caste_name}
+              value={selectedValue}
               error={error["Caste Name"]}
             />
             <Inputfield
@@ -1267,7 +1294,7 @@ const Addstudent = ({ handleClear, appln_no }) => {
             </fieldset>
           </div>
           <div id="studentbutton">
-            <Button name={"UPDATE"} onClick={handleAddStudent} />
+            <Button name={"UPDATE"} onClick={handleUpdate} />
             <Button name={"DELETE"} onClick={handleStuDelete} />
             <Alert
               type={alertType}
