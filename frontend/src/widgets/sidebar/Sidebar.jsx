@@ -122,11 +122,9 @@ function Sidebar({ setCurrent, admin }) {
   };
 
   return (
-    <div id="sidebar" className={collapsed ? "collapsed" : ""} >
+    <div id="sidebar" className={collapsed ? "collapsed" : ""} style={{paddingRight:admin?'0px':collapsed?'0px':'13px'}}>
       <div id="iconDiv" onClick={toggleSidebar}>
-        <div id="listIcon"></div>
-      </div>
-
+        <div id="listIcon"></div></div>
       {!admin ? (
         <>
           {items.map((item, index) => (
