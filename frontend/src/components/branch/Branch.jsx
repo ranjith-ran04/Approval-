@@ -19,7 +19,9 @@ function Branch({ setCurrent, setState }) {
     setShowIndex(index);
     console.log(showIndex);
     setShowAlert(true);
+    console.log("del");
     setAlertMessage("Confirm to Delete");
+    console.log("sdfsd");
     setAlertType("warning");
     setAlertStage("confirm");
   };
@@ -155,7 +157,7 @@ function Branch({ setCurrent, setState }) {
           key={`${alertStage}-${showAlert}`}
           type={alertType}
           message={alertMessage}
-          showAlert={showAlert}
+          show={showAlert}
           okbutton={
             alertStage === "confirm"
               ? () =>
