@@ -64,6 +64,11 @@ function StudentDetails({admin}) {
   const handleClear = () => {
     setClicked(0);
   };
+
+  const deleteOne = (appln_no) => {
+    setStudents(prev => prev.filter( students => students.app_no !== appln_no));
+    setClicked(0);
+  };
   // console.log(students);
   return (
     <div className="student-container">
@@ -123,7 +128,7 @@ function StudentDetails({admin}) {
       </div>
       {clicked > 0 && (
         <div ref={formRef}>
-          <StudentForm handleClear={handleClear} appln_no={appln_no}/>
+          <StudentForm handleClear={handleClear} appln_no={appln_no} index={deleteOne}/>
         </div>
       )}
     </div>

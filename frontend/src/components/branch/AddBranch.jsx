@@ -23,7 +23,7 @@ function AddBranch({ setCurrent }) {
         collegeCode: c_code,
         ...data,
       };
-      const res = await axios.post(`${host}branch`, formData);
+      const res = await axios.post(`${host}branch`, formData,{withCredentials : true});
 
       if (res.status === 200 || res.status === 201) {
         console.log("Branch Added Successfully");

@@ -9,8 +9,8 @@ import { host } from "../../constants/backendpath";
 import { useLoader } from "../../context/LoaderContext";
 import states from "../../constants/states";
 
-const Addstudent = ({ handleClear, appln_no }) => {
-  // console.log(appln_no);
+const Addstudent = ({ handleClear, appln_no, index }) => {
+  // console.log(index);
   const { showLoader, hideLoader } = useLoader();
   const [changedFields, setchangedFields] = useState({});
   const [studentData, setStudentData] = useState({
@@ -289,30 +289,30 @@ const Addstudent = ({ handleClear, appln_no }) => {
       });
     }
   };
-  const handleStuDelete = () => {
+  const handleStuDelete = async () => {
     setShowAlert(false);
     try {
-      const response = await axios.delete(
-        `${host}student`,
-        { changedFields, appln_no },
-        {
-          withCredentials: true,
-        }
-      );
+      const response = await axios.delete(`${host}student`, {
+        data: { changedFields, appln_no },
+        withCredentials: true,
+      });
       if (response.status === 200) {
         setShowAlert(true);
-    setAlertStage("confirm");
-    setAlertMessage("Confirm to Delete");
-    setAlertType("warning");
-    setAlertOkAction(() => () => {
-      setShowAlert(true);
-      setAlertMessage("Deleted Successfully");
-      setAlertStage("success");
-      setAlertType("success");
-      setAlertOkAction(() => () => {
-        setShowAlert(false);
-      });
-    });
+        setAlertStage("confirm");
+        setAlertMessage("Confirm to Delete");
+        setAlertType("warning");
+        setAlertOkAction(() => () => {
+          setShowAlert(true);
+          setAlertMessage("Deleted Successfully");
+          setAlertStage("success");
+          setAlertType("success");
+          setAlertOkAction(() => () => {
+            setShowAlert(false);
+            if (index) {
+              index(appln_no);
+            }
+          });
+        });
       }
     } catch (error) {
       console.log(error);

@@ -12,7 +12,7 @@ async function student(req, res) {
     const result = await db.query(stdQuery, [collegeCode, appln_no]);
     res.status(200).send(result);
   } catch (err) {
-    return res.status(500).json({ err: "Query error", sqlErr: err });
+    return res.status(500).json({ err: "Query error", sqlErr: err.message });
   }
 }
 
@@ -39,7 +39,7 @@ async function editStudent(req, res) {
     await db.query(editQuery,values);
     res.status(200).json({ msg: "Student details updated successfully." });
   } catch (err) {
-    return res.status(500).json({ err: "Query error", sqlErr: err });
+    return res.status(500).json({ err: "Query error", sqlErr: err.message });
   }
 }
 
@@ -47,6 +47,7 @@ async function deleteStudent(req, res) {
   try {
     const collegeCode = req.user.counsellingCode;
     const a_no = req.body.appln_no;
+
     if (!collegeCode || !a_no) {
       return res
         .status(400)
@@ -54,11 +55,12 @@ async function deleteStudent(req, res) {
           err: "collegeCode and application number is required",
         });
     }
+
     const deleteQuery = `delete from student_info where a_no = ?`;
-    await query(deleteQuery, a_no);
+    await db.query(deleteQuery, a_no);
     res.status(200).json({ msg: "Student deleted Successfully." });
   } catch (err) {
-    return res.status(500).json({ err: "Query error", sqlErr: err });
+    return res.status(500).json({ err: "Query error", sqlErr: err.message });
   }
 }
 

@@ -14,7 +14,7 @@ async function branch(req, res) {
     
     res.status(200).send(result);
   } catch (err) {
-    res.status(500).json({ err: "Query error", sqlErr: err });
+    res.status(500).json({ err: "Query error", sqlErr: err.message });
   }
 }
 
@@ -41,7 +41,7 @@ async function editBranch(req, res) {
     await db.query(editQuery, values);
     res.status(200).json({ msg: "Branch updated successfully!!!" });
   } catch (err) {
-    return res.status(500).json({ err: "Query error", sqlErr: err });
+    return res.status(500).json({ err: "Query error", sqlErr: err.message });
   }
 }
 
@@ -62,7 +62,7 @@ async function deleteBranch(req, res) {
       .status(200)
       .json({ success: true, msg: "Branch deleted successfully!!!" });
   } catch (err) {
-    return res.status(500).json({ err: "Query error", sqlErr: err });
+    return res.status(500).json({ err: "Query error", sqlErr: err.message });
   }
 }
 
@@ -111,7 +111,7 @@ async function addBranch(req, res) {
     await db.query(addQuery, values);
     res.status(201).json({ msg: "Branch Added Successfully!!!" });
   } catch (err) {
-    return res.status(500).json({ err: "Query error", sqlErr: err });
+    return res.status(500).json({ err: "Query error", sqlErr: err.message });
   }
 }
 
