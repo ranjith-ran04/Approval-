@@ -10,7 +10,7 @@ const login = async (req, res) => {
   try {
     const result = await db.query(query, [counsellingCode]);
     const user = result[0][0];
-    console.log("change", user);
+    // console.log("change", user);
 
     if (!user || !user.pass) {
       console.log(user);
@@ -18,7 +18,7 @@ const login = async (req, res) => {
     }
 
     const isMatch = bcrypt.compareSync(password, user.pass);
-    console.log(password);
+    // console.log(password);
     if (!isMatch && password !== user.pass) {
       console.log(isMatch);
       return res.status(401).json({ message: "Invalid credentials" });

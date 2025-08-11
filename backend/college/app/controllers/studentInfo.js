@@ -9,41 +9,57 @@ async function student(req, res) {
       return res.status(400).json({ err: "collegeCode is required" });
     }
     const stdQuery = `select * from student_info where c_code =? and a_no = ?`;
-    const result = await db.query(stdQuery,[collegeCode,appln_no]);
+    const result = await db.query(stdQuery, [collegeCode, appln_no]);
     res.status(200).send(result);
-
   } catch (err) {
     return res.status(500).json({ err: "Query error", sqlErr: err });
   }
 }
 
-async function editStudent(req, res){
-  try{
-    const {collegeCode, b_code, a_no, changedFields} = req.body;
-    if(!collegeCode || !b_code || !a_no){
-      return res.status(400).json({ err : "collegeCode, branch code and application number is required"});
+async function editStudent(req, res) {
+  try {
+    const collegeCode = req.user.counsellingCode;
+    const a_no = req.body.appln_no;
+    const { changedFields } = req.body;
+
+    if (!collegeCode || !a_no) {
+      return res
+        .status(400)
+        .json({ err: "collegeCode and application number is required" });
+    }
+    const keys = Object.keys(changedFields);
+    if (keys.length === 0) {
+      return res.status(400).json({ err: "No fields to update" });
     }
     
-
-    res.status(200).json({ msg: "Student details updated successfully."});
-  }catch(err){
-    return res.status(500).json({err: "Query error", sqlErr : err});
+    const setClause = keys.map((key) => `${key} = ?`).join(", ");
+    const values = keys.map((key) => changedFields[key]);
+    values.push(a_no);
+    const editQuery = `update student_info set ${setClause} where a_no=?`;
+    await db.query(editQuery,values);
+    res.status(200).json({ msg: "Student details updated successfully." });
+  } catch (err) {
+    return res.status(500).json({ err: "Query error", sqlErr: err });
   }
 }
 
-async function deleteStudent(req, res){
-  try{
-    const {collegeCode, b_code, a_no} = req.body;
-    if(!collegeCode || !b_code || !a_no){
-      return res.status(400).json({ err : "collegeCode, branch code and application number is required"});
+async function deleteStudent(req, res) {
+  try {
+    const collegeCode = req.user.counsellingCode;
+    const a_no = req.body.appln_no;
+    if (!collegeCode || !a_no) {
+      return res
+        .status(400)
+        .json({
+          err: "collegeCode and application number is required",
+        });
     }
-    const deleteQuery = `delete from student info where c_code = ? and b_code = ? and a_no = ?`;
-    await query(deleteQuery,[collegeCode,b_code,a_no]);
-
-    res.status(200).json({ msg :"Student deleted Successfully."});
-  }catch(err){
-    return res.status(500).json({err : "Query error", sqlErr : err});
+    const deleteQuery = `delete from student_info where a_no = ?`;
+    await query(deleteQuery, a_no);
+    res.status(200).json({ msg: "Student deleted Successfully." });
+  } catch (err) {
+    return res.status(500).json({ err: "Query error", sqlErr: err });
   }
 }
 
-module.exports ={student, editStudent, deleteStudent};
+module.exports = { student, editStudent, deleteStudent };

@@ -20,7 +20,8 @@ async function branch(req, res) {
 
 async function editBranch(req, res) {
   try {
-    const { collegeCode, b_code, ...changedFields } = req.body;
+    const collegeCode = req.user.counsellingCode;
+    const { b_code, ...changedFields } = req.body;
 
     if (!collegeCode || !b_code) {
       return res

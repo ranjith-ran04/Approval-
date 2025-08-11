@@ -35,7 +35,7 @@ router.get('/collegeBranchFetch',verifyjwt,collegeBranchFetch);
 router.post('/collegeBranchFetch',verifyjwt,collegeBranchFetch);
 router.post('/studentBranch',verifyjwt,studentDetails);
 router.post("/student", verifyjwt,student);
-router.put("/student", editStudent);
-router.delete("/student", deleteStudent);
+router.put("/student", verifyjwt, editStudent);
+router.delete("/student", verifyjwt, deleteStudent);
 
 module.exports = router;

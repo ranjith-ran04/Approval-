@@ -10,6 +10,7 @@ import { useLoader } from "../../context/LoaderContext";
 import states from "../../constants/states";
 
 const Addstudent = ({ handleClear, appln_no }) => {
+  // console.log(appln_no);
   const { showLoader, hideLoader } = useLoader();
   const [changedFields, setchangedFields] = useState({});
   const [studentData, setStudentData] = useState({
@@ -255,9 +256,13 @@ const Addstudent = ({ handleClear, appln_no }) => {
         setAlertType("success");
         return;
       }
-      const response = await axios.put(`${host}collegeinfo`, changedFields, {
-        withCredentials: true,
-      });
+      const response = await axios.put(
+        `${host}student`,
+        { changedFields, appln_no },
+        {
+          withCredentials: true,
+        }
+      );
       if (response.status === 200) {
         setShowAlert(true);
         setAlertStage("confirm");
@@ -279,10 +284,23 @@ const Addstudent = ({ handleClear, appln_no }) => {
       setAlertMessage("Unable to connnect to server...");
       setAlertStage("error");
       setAlertType("error");
+      setAlertOkAction(() => () => {
+        setShowAlert(false);
+      });
     }
   };
   const handleStuDelete = () => {
-    setShowAlert(true);
+    setShowAlert(false);
+    try {
+      const response = await axios.delete(
+        `${host}student`,
+        { changedFields, appln_no },
+        {
+          withCredentials: true,
+        }
+      );
+      if (response.status === 200) {
+        setShowAlert(true);
     setAlertStage("confirm");
     setAlertMessage("Confirm to Delete");
     setAlertType("warning");
@@ -295,6 +313,17 @@ const Addstudent = ({ handleClear, appln_no }) => {
         setShowAlert(false);
       });
     });
+      }
+    } catch (error) {
+      console.log(error);
+      setShowAlert(true);
+      setAlertMessage("Unable to connnect to server...");
+      setAlertStage("error");
+      setAlertType("error");
+      setAlertOkAction(() => () => {
+        setShowAlert(false);
+      });
+    }
   };
 
   const handleFileChange = (e, index) => {
@@ -452,7 +481,7 @@ const Addstudent = ({ handleClear, appln_no }) => {
           name={"appln_no"}
           type={"text"}
           placeholder={"Application Number"}
-          onchange={handleChange}
+          onChange={handleChange}
           value={appln_no}
           disabled={true}
         />
