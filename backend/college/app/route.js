@@ -3,6 +3,8 @@ const router = express.Router();
 const forma = require("./forms/form_a");
 const formb = require("./forms/form_b");
 const formc = require("./forms/form_c");
+const formd = require('./forms/form_d');
+const formfg = require('./forms/form_fg');
 const form_tnlea = require("./forms/form_tnlea");
 const home = require('../app/controllers/home');
 const {changePassword,fetchCode} = require('../app/controllers/changePassword');
@@ -14,11 +16,16 @@ const {branch, editBranch, deleteBranch, addBranch} = require("./controllers/bra
 const {collegeBranchFetch,studentDetails} = require('./controllers/studentDetails');
 const { student, editStudent, deleteStudent } = require("./controllers/studentInfo");
 
-// console.log(typeof collegeBranchFetch);
-
 router.get("/forma", verifyjwt,forma);
+router.post("/forma", verifyjwt,forma);
 router.get("/formb",verifyjwt,formb);
+router.post("/formb",verifyjwt,formb);
 router.get("/formc", verifyjwt,formc);
+router.post("/formc", verifyjwt,formc);
+router.get('/formd',verifyjwt,formd);
+router.post('/formd',verifyjwt,formd);
+router.get('/formfg',verifyjwt,formfg);
+router.post('/formfg',verifyjwt,formfg);
 router.get("/formlea",verifyjwt,form_tnlea);
 router.get("/home",verifyjwt,home);
 router.post("/changePassword",changePassword);

@@ -13,7 +13,7 @@
 #button:hover{
     cursor: pointer;
 }
-.ripple {
+/* .ripple {
   height: 13px;
   width: 50px;
   position: absolute;
@@ -21,11 +21,11 @@
   background-color: rgba(0, 0, 0, 0.3);
   animation: ripple-effect 500ms linear;
   transform: scale(0);
-}
+} */
 
-@keyframes ripple-effect {
+/* @keyframes ripple-effect {
   to {
     transform: scale(4);
     opacity: 0;
   }
-}
+} */

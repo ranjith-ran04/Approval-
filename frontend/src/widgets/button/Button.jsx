@@ -18,7 +18,7 @@ function Button({ name, onClick, type = "button" ,style}) {
   };
 
   const handleClick = (e) => {
-    createRipple(e);
+    // createRipple(e);
     
     if (onClick && type !== "submit") {
       console.log('buttn cliced');

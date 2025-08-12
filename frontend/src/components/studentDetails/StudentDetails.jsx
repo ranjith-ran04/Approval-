@@ -5,14 +5,17 @@ import { host } from "../../constants/backendpath";
 import StudentForm from "./StudentForm";
 import "../college/CollegeInfo.css";
 import Button from "../../widgets/button/Button";
+import AddInput from '../../widgets/addinput/input.jsx';
 
-function StudentDetails({admin}) {
+function StudentDetails({admin,supp}) {
   const [selected, setSelected] = useState("");
   const [branch, setBranch] = useState([]);
   const [students, setStudents] = useState([]);
-  const [appln_no, setAppln_no] = useState('');
+  const [appln_no, setAppln_no] = useState(false);
   const [clicked, setClicked] = useState(0);
+  const [add,setAdd] = useState('');
   const formRef = useRef(null);
+  const addRef = useRef(null);
   const collegeCode = 5901;
   async function handleFetch() {
     try {
@@ -40,6 +43,13 @@ function StudentDetails({admin}) {
       formRef.current.scrollIntoView({ behavior: "smooth" });
     }
   }, [clicked]);
+
+  useEffect(()=>{
+    if(add){
+      addRef.current.scrollIntoView({ behavior:'smooth'});
+    }
+  }, [add]);
+
   async function handleSelect(branch) {
     setSelected(branch);
     if (branch === "") {
@@ -48,10 +58,10 @@ function StudentDetails({admin}) {
       return;
     }
     try {
-
+      console.log(supp);
       const result = await axios.post(
         `${host}studentBranch`,
-        { branch: branch , ...(admin && {collegeCode:collegeCode})},
+        { branch: branch , ...(admin && {collegeCode:collegeCode}),supp:supp?true:false},
         { withCredentials: true }
       );
       if (result.status === 200) {
@@ -108,6 +118,7 @@ function StudentDetails({admin}) {
               <button
                 className="student-button"
                 onClick={() => {
+                  setAdd(false);
                   setAppln_no(item.app_no);
                   setClicked(clicked + 1);
                 }}
@@ -123,9 +134,15 @@ function StudentDetails({admin}) {
       </div>
       {clicked > 0 && (
         <div ref={formRef}>
-          <StudentForm handleClear={handleClear} appln_no={appln_no}/>
+          <StudentForm handleClear={handleClear} appln_no={appln_no} add={setAdd} clicked={setClicked}/>
         </div>
       )}
+      {add && (
+        <div ref={addRef} >
+        <AddInput add={setAdd} clicked={setClicked} click={clicked} appln_no={setAppln_no}/>
+        </div>
+      )
+      }
     </div>
   );
 }
