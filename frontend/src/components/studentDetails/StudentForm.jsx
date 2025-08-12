@@ -81,6 +81,36 @@ const Addstudent = ({ handleClear, appln_no, index }) => {
     "Percentage",
   ];
 
+  const caste_drop = async (community) => {
+    let casteListModule = [];
+    switch (community) {
+      case "BC":
+        casteListModule = ((await import("../../../src/constants/bc.json")).default);
+        break;
+      case "BCM":
+        casteListModule = ((await import("../../../src/constants/bcm.json")).default);
+        break;
+      case "SC":
+        casteListModule = ((await import("../../../src/constants/sc.json")).default);
+        break;
+      case "SCA":
+        casteListModule = ((await import("../../../src/constants/sca.json")).default);
+        break;
+      case "ST":
+        casteListModule = ((await import("../../../src/constants/st.json")).default);
+        break;
+      case "MBC":
+        casteListModule = ((await import("../../../src/constants/mbc.json")).default);
+        break;
+      case "OC": // Only Others for Open Category
+      default: // Only Others when nothing matches
+        casteListModule = [{ code: "others" ,name : "" }];
+        setCastes(casteListModule);
+        return;
+    }
+    setCastes(casteListModule);
+  };
+
   async function studentInfo() {
     showLoader();
     try {
@@ -101,29 +131,7 @@ const Addstudent = ({ handleClear, appln_no, index }) => {
 
       // console.log(result.data?.[0]?.[0]);
       setStudentData(raw);
-
-      let casteListModule = [];
-      switch (raw.community) {
-        case "BC":
-          casteListModule = await import("../../../src/constants/bc.json");
-          break;
-        case "BCM":
-          casteListModule = await import("../../../src/constants/bcm.json");
-          break;
-        case "SC":
-          casteListModule = await import("../../../src/constants/sc.json");
-          break;
-        case "SCA":
-          casteListModule = await import("../../../src/constants/sca.json");
-          break;
-        case "ST":
-          casteListModule = await import("../../../src/constants/st.json");
-          break;
-        case "MBC":
-          casteListModule = await import("../../../src/constants/mbc.json");
-          break;
-      }
-      setCastes(casteListModule.default);
+      await caste_drop(raw.community);
     } catch (err) {
       console.log(err);
     } finally {
@@ -251,9 +259,12 @@ const Addstudent = ({ handleClear, appln_no, index }) => {
     try {
       if (Object.keys(changedFields).length === 0) {
         setShowAlert(true);
-        setAlertMessage("Your details are already saved.");
-        setAlertStage("success");
-        setAlertType("success");
+        setAlertMessage("No Changes detected.");
+        // setAlertStage("success");
+        setAlertType("warning");
+        setAlertOkAction(() => () => {
+          setShowAlert(false);
+        });
         return;
       }
       const response = await axios.put(
@@ -264,6 +275,8 @@ const Addstudent = ({ handleClear, appln_no, index }) => {
         }
       );
       if (response.status === 200) {
+        setchangedFields({});
+
         setShowAlert(true);
         setAlertStage("confirm");
         setAlertMessage("Confirm to update");
@@ -390,9 +403,20 @@ const Addstudent = ({ handleClear, appln_no, index }) => {
       updatedValue = value; // or value.split("-")[0] if you want only code
     }
 
+    if (name === "community") {
+      setStudentData((prev) => ({
+        ...prev,
+        community: value,
+        caste_name: "",
+      }));
+
+      await caste_drop(value);
+    } else {
+      setStudentData((prev) => ({ ...prev, [name]: updatedValue }));
+    }
+
     setchangedFields((prev) => ({ ...prev, [name]: value }));
     // Update student data
-    setStudentData((prev) => ({ ...prev, [name]: updatedValue }));
 
     // ✅ Validation
     setError((prevErrors) => {

@@ -49,7 +49,6 @@ async function deleteBranch(req, res) {
   try {
     const collegeCode = req.user.counsellingCode;
     const { b_code } = req.body;
-    console.log(collegeCode,b_code);
     
     if (!collegeCode || !b_code) {
       return res
@@ -68,8 +67,8 @@ async function deleteBranch(req, res) {
 
 async function addBranch(req, res) {
   try {
+    const collegeCode = req.user.counsellingCode;
     const {
-      collegeCode,
       b_code,
       branch_name,
       approved_in_take,
@@ -100,8 +99,7 @@ async function addBranch(req, res) {
       Amount,
     ];
     const checkQuery = `select * from branch_info where c_code = ? and b_code = ?`;
-
-    const existing = await db.query(checkQuery, [collegeCode, b_code]);
+    const [existing] = await db.query(checkQuery, [collegeCode, b_code]);
     if (existing.length > 0) {
       return res
         .status(409)

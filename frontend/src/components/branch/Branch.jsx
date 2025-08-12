@@ -155,7 +155,7 @@ function Branch({ setCurrent, setState }) {
           key={`${alertStage}-${showAlert}`}
           type={alertType}
           message={alertMessage}
-          showAlert={showAlert}
+          show={showAlert}
           okbutton={
             alertStage === "confirm"
               ? () =>

@@ -18,9 +18,8 @@ function AddBranch({ setCurrent }) {
     // console.log("Data being sent:", data);
 
     try {
-      const c_code = "1149";
+      
       const formData = {
-        collegeCode: c_code,
         ...data,
       };
       const res = await axios.post(`${host}branch`, formData,{withCredentials : true});
