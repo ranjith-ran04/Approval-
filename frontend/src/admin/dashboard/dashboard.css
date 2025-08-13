@@ -45,3 +45,34 @@
   min-height: 400px;      /* fallback height if content is small */
   width: 100%;
 }
+
+/* Container styling for nice spacing */
+.collgroup {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-width: 300px;
+}
+
+.collgroup label {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.collgroup   input[type="text"] {
+  padding: 10px 14px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  transition: all 0.25s ease;
+  outline: none;
+}
+
+.collgroup input[type="text"]:focus {
+  border-color: darkblue;
+}
+
+.collgroup input::placeholder {
+  color: #999;
+}

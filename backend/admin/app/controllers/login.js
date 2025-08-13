@@ -9,7 +9,7 @@ const login = async (req, res) => {
   try {
     const result = await db.query(query, [counsellingCode]);
     const user = result[0][0];
-    console.log('change',user);
+    // console.log('change',user);
 
     if (!user || !user.pass) {
       console.log(user);

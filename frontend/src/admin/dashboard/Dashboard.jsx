@@ -7,13 +7,13 @@ import { adminhost } from "../../constants/backendpath.js";
 import { useNavigate, useLocation } from "react-router-dom";
 import StudentDetails from "../../components/studentDetails/StudentDetails.jsx";
 import ScrollToTop from "../../widgets/scrollToTop/ScrollToTop.jsx";
-import Chart from '../../widgets/chart/PieChartsDashboard.js';
+import Chart from "../../widgets/chart/PieChartsDashboard.js";
 
 function Dashboard() {
   const [current, setCurrent] = useState(0);
   const [state, setState] = useState({});
-  const [supp,setSupp] = useState(false);
-  const scrollRef = useRef();  
+  const [supp, setSupp] = useState(false);
+  const scrollRef = useRef();
   const location = useLocation();
   console.log(location.state);
   const logged = location.state?.logged || false;
@@ -25,7 +25,7 @@ function Dashboard() {
         withCredentials: true,
       });
       if (res.status === 200) {
-        console.log('dashboard',res.data);
+        console.log("dashboard", res.data);
       }
     } catch (error) {
       navigate("/admin/login");
@@ -35,15 +35,15 @@ function Dashboard() {
     fetch();
   }, []);
 
-  useEffect(()=>{
-    if(current === 2){
+  useEffect(() => {
+    if (current === 2) {
       setSupp(true);
-    }else{
+    } else {
       setSupp(false);
     }
-  },[current]);
+  }, [current]);
 
-console.log(supp);
+  console.log(supp);
 
   return logged ? (
     <div className="dashboard">
@@ -57,17 +57,28 @@ Tamilnadu Lateral Entry Direct Second Year B.E/B.Tech.,Approval-2025`}
           bool={false}
           setCurrent={setCurrent}
           admin={true}
-          style={{height:'40px'}}
+          style={{ height: "40px" }}
         />
 
         <div className="dashboard-body" ref={scrollRef}>
-        <>
-        {current === 0 && <Chart/>}
-        {current === 1 && <StudentDetails admin={true} supp={supp}/>}
-        {current === 2 && <StudentDetails admin={true} supp={supp}/>}
+          <>
+            <div className="collgroup">
+              <label htmlFor="collcode">
+                College Code
+              </label>
+              <input
+                type="text"
+                id="collcode"
+                name="collegeCode"
+                placeholder="Enter College Code"
+              />
+            </div>
+            {current === 0 && <Chart />}
+            {current === 1 && <StudentDetails admin={true} supp={supp} />}
+            {current === 2 && <StudentDetails admin={true} supp={supp} />}
 
-        <ScrollToTop scrollRef={scrollRef} />
-        </>
+            <ScrollToTop scrollRef={scrollRef} />
+          </>
         </div>
       </div>
     </div>
