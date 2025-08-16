@@ -6,14 +6,14 @@ import {adminhost} from '../../constants/backendpath';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-const PieChartDashboard = () => {
+const PieChartDashboard = (collegeCode) => {
   const [communityData, setCommunityData] = useState([]);
   const [categoryData, setCategoryData] = useState([]);
 
   useEffect(() => {
     async function fetchChart(){
     try{
-    const res = await axios.post(`${adminhost}chart`,{collegeCode:'5901'},{withCredentials:true});
+    const res = await axios.post(`${adminhost}chart`,{collegeCode:collegeCode.collegeCode},{withCredentials:true});
       if(res.status === 200){
         console.log(res.data);
         setCommunityData(res.data[0]);
@@ -36,7 +36,7 @@ const PieChartDashboard = () => {
     ],
   };
 
-  console.log(categoryData)
+  // console.log(categoryData)
 
   const categoryChart = {
     labels: categoryData.map((d) => d.catogory.slice(0,3)),
