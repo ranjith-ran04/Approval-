@@ -73,23 +73,23 @@ function Sidebar({ setCurrent, admin }) {
   ];
 
   const adminFgaItems = [
-    { id: 14, label: "OC/BCM/BC/MBC/DNC",iconId: "formIcon" },
-    { id: 15, label: "SC/SCA",iconId: "formIcon" },
-    { id: 16, label: "ST",iconId: "formIcon" },
+    { id: 14, label: "OC/BCM/BC/MBC/DNC",iconId: "formIcon", action : () => handleForm('fg_form',true,collegeCode,['oc','bc','bcm','mbc'],true)},
+    { id: 15, label: "SC/SCA",iconId: "formIcon", action : () => handleForm('fg_form',true,collegeCode,['sc','sca'],true)},
+    { id: 16, label: "ST",iconId: "formIcon", action : () => handleForm('fg_form',true,collegeCode,['st'],true)},
   ];
 
   const adminFgItems = [
-    { id: 17, label: "OC/BCM/BC/MBC/DNC",iconId: "formIcon" },
-    { id: 18, label: "SC/SCA",iconId: "formIcon" },
-    { id: 19, label: "ST",iconId: "formIcon" },
+    { id: 17, label: "OC/BCM/BC/MBC/DNC",iconId: "formIcon", action : () => handleForm('fg_form',true,collegeCode,['oc','bc','bcm','mbc'],false)},
+    { id: 18, label: "SC/SCA",iconId: "formIcon", action : () => handleForm('fg_form',true,collegeCode,['sc','sca'],false)},
+    { id: 19, label: "ST",iconId: "formIcon", action : () => handleForm('fg_form',true,collegeCode,['st'],false)},
   ];
 
   const adminSubItems = [{ id: 20, label: "Student Details",iconId: "studentIcon",action: () => setCurrent(2)}];
   const adminFormsItems = [{ id: 21, label: "Note Order-Approved",iconId: "formIcon" }];
   const adminFGItems = [
-    { id: 22, label: "OC/BCM/BC/MBC/DNC",iconId: "formIcon"},
-    { id: 23, label: "SC/SCA",iconId: "formIcon" },
-    { id: 24, label: "ST",iconId: "formIcon" },
+    { id: 22, label: "OC/BCM/BC/MBC/DNC",iconId: "formIcon", action : () => handleForm('fg_form',true,collegeCode,['oc','bc','bcm','mbc'],true,true)},
+    { id: 23, label: "SC/SCA",iconId: "formIcon", action : () => handleForm('fg_form',true,collegeCode,['sc','sca'],true,true) },
+    { id: 24, label: "ST",iconId: "formIcon", action : () => handleForm('fg_form',true,collegeCode,['st'],true,true) },
   ];
 
   const sideBarList = [
