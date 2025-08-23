@@ -14,6 +14,7 @@ function Dashboard() {
   const [isSubmit, setIsSubmit] = useState(false);
   const [data, setData] = useState({});
   const [collegeCode, setCollegeCode] = useState("");
+  const [submittedCode, setsubmittedCode] = useState("");
   const [supp, setSupp] = useState(false);
   const scrollRef = useRef();
   const location = useLocation();
@@ -28,19 +29,39 @@ function Dashboard() {
         { collegeCode },
         { withCredentials: true }
       );
-      if (res.status === 200) {
-        console.log("dashboard", res.data[0]);
+      if (res.status === 200 && res.data && res.data.length > 0) {
         setData(res.data[0]);
+      } else {
+        setData({});
       }
     } catch (error) {
       navigate("/admin/login");
     }
   }
+
+  const handleChange = (e) => {
+
+  }
+
+  const updateDetails = async () => {
+    try {
+      const res = await axios.put(
+        `${adminhost}home`,
+        { collegeCode },
+        { withCredentials: true }
+      );
+      if (res.status === 200) {
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   useEffect(() => {
     if (collegeCode) {
       fetch();
     }
-  }, [setCollegeCode]);
+  }, [isSubmit]);
 
   useEffect(() => {
     if (current === 2) {
@@ -52,6 +73,8 @@ function Dashboard() {
 
   const handleKey = (e) => {
     if (e.key === "Enter" && collegeCode) {
+      setsubmittedCode(collegeCode);
+      setCollegeCode(collegeCode);
       fetch();
       setIsSubmit(true);
     }
@@ -87,7 +110,9 @@ Tamilnadu Lateral Entry Direct Second Year B.E/B.Tech.,Approval-2025`}
                 onKeyDown={handleKey}
                 onChange={(e) => setCollegeCode(e.target.value)}
               />
-              <button className="collbut" onSubmit={fetch}>Enter</button>
+              <button className="collbut" onSubmit={fetch}>
+                Enter
+              </button>
             </div>
 
             {isSubmit && (
@@ -97,7 +122,13 @@ Tamilnadu Lateral Entry Direct Second Year B.E/B.Tech.,Approval-2025`}
                   <label htmlFor="collname" className="coll-label">
                     College Name
                   </label>
-                  <input type="text" id="collname" className="coll-input" value={data.name_of_college || ""}/>
+                  <input
+                    type="text"
+                    id="collname"
+                    className="coll-input"
+                    value={data.name_of_college || ""}
+                    readOnly
+                  />
                 </div>
 
                 {/* Office Letter */}
@@ -108,13 +139,25 @@ Tamilnadu Lateral Entry Direct Second Year B.E/B.Tech.,Approval-2025`}
                       <label htmlFor="offlet" className="coll-label">
                         Letter No
                       </label>
-                      <input type="text" id="offlet" className="coll-input" value={data.letter_no || ""}/>
+                      <input
+                        type="text"
+                        id="offlet"
+                        className="coll-input"
+                        value={data.letter_no || ""}
+                        onChange={handleChange}
+                      />
                     </div>
                     <div className="collgroup-half">
                       <label htmlFor="letdat" className="coll-label">
                         Dated
                       </label>
-                      <input type="text" id="letdat" className="coll-input" value={data.dated || ""} />
+                      <input
+                        type="text"
+                        id="letdat"
+                        className="coll-input"
+                        value={data.dated || ""}
+                        onChange={handleChange}
+                      />
                     </div>
                   </div>
                 </div>
@@ -127,13 +170,25 @@ Tamilnadu Lateral Entry Direct Second Year B.E/B.Tech.,Approval-2025`}
                       <label htmlFor="prinlet" className="coll-label">
                         Letter No
                       </label>
-                      <input type="text" id="prinlet" className="coll-input" value={data.p_letter_no || ""}/>
+                      <input
+                        type="text"
+                        id="prinlet"
+                        className="coll-input"
+                        value={data.p_letter_no || ""}
+                        onChange={handleChange}
+                      />
                     </div>
                     <div className="collgroup-half">
                       <label htmlFor="prindat" className="coll-label">
                         Dated
                       </label>
-                      <input type="text" id="prindat" className="coll-input" value={data.p_dated || ""}/>
+                      <input
+                        type="text"
+                        id="prindat"
+                        className="coll-input"
+                        value={data.p_dated || ""}
+                        onChange={handleChange}
+                      />
                     </div>
                   </div>
                 </div>
@@ -147,7 +202,7 @@ Tamilnadu Lateral Entry Direct Second Year B.E/B.Tech.,Approval-2025`}
           </div>
           {isSubmit && (
             <>
-              {current === 0 && <Chart collegeCode={collegeCode}/>}
+              { isSubmit && current === 0 && <Chart collegeCode={collegeCode} key={submittedCode} />}
               {current === 1 && <StudentDetails admin={true} supp={supp} />}
               {current === 2 && <StudentDetails admin={true} supp={supp} />}
 

@@ -55,7 +55,6 @@
 .collgroup {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
   margin-bottom: 1rem;
 }
 
@@ -86,7 +85,7 @@
 .collgroup-full {
   display: flex;
   flex-direction: column;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
 }
 
 .collgroup-full .coll-input {
@@ -110,7 +109,7 @@
 .coll-label {
   font-size: 1rem;
   font-weight: 600;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.3rem;
   color: #333;
 }
 
@@ -141,7 +140,7 @@
 .coll-btn-container {
   display: flex;
   justify-content: center;
-  margin-top: 2rem;
+  margin-top: 1rem;
 }
 
 /* Save button */

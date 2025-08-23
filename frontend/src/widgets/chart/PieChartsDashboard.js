@@ -15,7 +15,7 @@ const PieChartDashboard = (collegeCode) => {
     try{
     const res = await axios.post(`${adminhost}chart`,{collegeCode:collegeCode.collegeCode},{withCredentials:true});
       if(res.status === 200){
-        console.log(res.data);
+        // console.log(res.data);
         setCommunityData(res.data[0]);
         setCategoryData(res.data[1]);
       }
