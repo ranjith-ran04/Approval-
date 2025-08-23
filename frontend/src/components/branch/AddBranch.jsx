@@ -18,11 +18,11 @@ function AddBranch({ setCurrent }) {
     // console.log("Data being sent:", data);
 
     try {
-      const c_code = "1149";
+      
       const formData = {
         ...data,
       };
-      const res = await axios.post(`${host}branch`, formData,{withCredentials:true});
+      const res = await axios.post(`${host}branch`, formData,{withCredentials : true});
 
       if (res.status === 200 || res.status === 201) {
         console.log("Branch Added Successfully");

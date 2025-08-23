@@ -14,11 +14,11 @@ function Branch({ setCurrent, setState }) {
   const [alertType, setAlertType] = useState("");
   const [alertMessage, setAlertMessage] = useState("");
   const [showIndex, setShowIndex] = useState(null);
+
   const handleCancel = (index) => {
     setShowIndex(index);
-    console.log(index)
+    // console.log(showIndex);
     setShowAlert(true);
-    console.log(showAlert);
     setAlertMessage("Confirm to Delete");
     setAlertType("warning");
     setAlertStage("confirm");
@@ -26,14 +26,13 @@ function Branch({ setCurrent, setState }) {
   const handleCloseAlert = () => {
     setShowAlert(false);
   };
-  const collegeCode = "1149";
+  const collegeCode = "1";
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     const fetchData = async () => {
       showLoader();
       try {
-        const res = await axios.get(`${host}branch`,{withCredentials:true});
-        console.log(res.data);
+        const res = await axios.get(`${host}branch`,{withCredentials : true});
         setBranchData(res.data);
         setError(false);
       } catch (err) {
@@ -47,12 +46,10 @@ function Branch({ setCurrent, setState }) {
     fetchData();
   }, []);
 
-  const handleDeleteBranch = async ( branch_code) => {
-    console.log(branch_code);
+  const handleDeleteBranch = async (collegeCode, branch_code) => {
     try {
       const res = await axios.delete(`${host}branch`, {
-        data: { b_code: branch_code },
-        withCredentials:true
+        data: { collegeCode, b_code: branch_code },withCredentials:true
       });
 
       if (res.status === 200) {
@@ -158,12 +155,12 @@ function Branch({ setCurrent, setState }) {
           key={`${alertStage}-${showAlert}`}
           type={alertType}
           message={alertMessage}
-          showAlert={showAlert}
+          show={showAlert}
           okbutton={
             alertStage === "confirm"
               ? () =>
-                  handleDeleteBranch(branchData[showIndex]?.b_code)
-              : alertStage === "success" || "error"
+                  handleDeleteBranch(collegeCode, branchData[showIndex]?.b_code)
+              : alertStage === "success" || "cancel"
               ? handleCloseAlert
               : null
           }

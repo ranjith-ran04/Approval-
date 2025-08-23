@@ -52,12 +52,11 @@ function EditBranch({ state, setCurrent }) {
         }
       }
 
-      console.log("hi")
       const res = await axios.put(`${host}branch`, {
         ...changedFields,
         b_code: state.b_code,
-      },{withCredentials:true});
-      console.log(res)
+        
+      },{withCredentials : true});
 
       if (res.status === 200 || res.status === 201) {
         setAlertType("success");

@@ -7,7 +7,7 @@ function ScrollToTop({scrollRef}) {
   useEffect(() => {
      
     const container = scrollRef?.current;
-    console.log("Scrolled: ", container);
+    // console.log("Scrolled: ", container);
     const toggleVisibility = () => {
       const scrollTop = container.scrollTop;
       if (scrollTop  > 300) {

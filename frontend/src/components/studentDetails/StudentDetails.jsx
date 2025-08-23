@@ -2,24 +2,30 @@ import "./studentDetails.css";
 import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { host } from "../../constants/backendpath";
-import StudentForm from "./Studentform";
+import StudentForm from "./StudentForm";
 import "../college/CollegeInfo.css";
 import Button from "../../widgets/button/Button";
 
-function StudentDetails() {
+function StudentDetails({admin}) {
   const [selected, setSelected] = useState("");
   const [branch, setBranch] = useState([]);
   const [students, setStudents] = useState([]);
-  const [view, setView] = useState(false);
+  const [appln_no, setAppln_no] = useState('');
   const [clicked, setClicked] = useState(0);
   const formRef = useRef(null);
+  const collegeCode = 5901;
   async function handleFetch() {
     try {
-      const result = await axios.get(`${host}collegeBranchFetch`, {
+      var result;
+      if(admin){
+        result = await axios.post(`${host}collegeBranchFetch`,{collegeCode:collegeCode},{ withCredentials:true});
+      }
+      else{
+      result = await axios.get(`${host}collegeBranchFetch`, {
         withCredentials: true,
-      });
+      });}
       if (result.status === 200) {
-        console.log(result.data);
+        // console.log(result.data);
         setBranch(result.data);
       }
     } catch (error) {
@@ -42,9 +48,10 @@ function StudentDetails() {
       return;
     }
     try {
+
       const result = await axios.post(
         `${host}studentBranch`,
-        { branch: branch },
+        { branch: branch , ...(admin && {collegeCode:collegeCode})},
         { withCredentials: true }
       );
       if (result.status === 200) {
@@ -55,11 +62,14 @@ function StudentDetails() {
     }
   }
   const handleClear = () => {
-    setSelected("");
     setClicked(0);
-    setStudents([]);
   };
-  console.log(students);
+
+  const deleteOne = (appln_no) => {
+    setStudents(prev => prev.filter( students => students.app_no !== appln_no));
+    setClicked(0);
+  };
+  // console.log(students);
   return (
     <div className="student-container">
       <div className="head-studentdropdown">
@@ -72,20 +82,19 @@ function StudentDetails() {
             </option>
           ))}
         </select>
+        {admin && (
         <div id="studentButton">
           <Button
-            name={"ADD"}
+            name={"College Details"}
             style={{ width: "130px" }}
           />
           <Button
-            name={"Clear"}
+            name={"Branch Details"}
             style={{
               width: "130px",
-              backgroundColor: "red", 
             }}
-            onClick={handleClear}
           />
-        </div>
+        </div>)}
       </div>
       <div className="student-table">
         <div className="student-row">
@@ -104,6 +113,7 @@ function StudentDetails() {
               <button
                 className="student-button"
                 onClick={() => {
+                  setAppln_no(item.app_no);
                   setClicked(clicked + 1);
                 }}
               >
@@ -118,7 +128,7 @@ function StudentDetails() {
       </div>
       {clicked > 0 && (
         <div ref={formRef}>
-          <StudentForm />
+          <StudentForm handleClear={handleClear} appln_no={appln_no} index={deleteOne}/>
         </div>
       )}
     </div>

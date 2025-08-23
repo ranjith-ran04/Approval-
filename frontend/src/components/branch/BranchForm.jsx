@@ -40,7 +40,6 @@ function BranchForm({
 
   useEffect(() => {
     if (!isEditMode) return;
-
     // if (nbaValue === "no") {
     //   setAmount("0");
     //   setAccto("0");
@@ -186,7 +185,6 @@ function BranchForm({
       const [b_code, branch_name] = data.branch.split("|");
       data.b_code = b_code.trim();
       data.branch_name = branch_name.trim();
-      data.NBA_2020 = data.NBA_2020 === "yes" ? 1 : 0;
       delete data.branch;
     }
 

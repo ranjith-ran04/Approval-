@@ -2,11 +2,11 @@ import "./home.css";
 import { useState,useEffect } from "react";
 
 function Home({details}) {
-  console.log(details);
+  // console.log(details);
 
   return (
     <div className="container">
-      <h2 className="heading">{`${details.collegeCode || "unknownCode" } - ${details.collegeName || "unknownCollege"}`}</h2>
+      <h2 className="homeheading">{`${details.collegeCode || "unknownCode" } - ${details.collegeName || "unknownCollege"}`}</h2>
       <div className="content-box">
         <div className="section">
           <h3>Location Details</h3>

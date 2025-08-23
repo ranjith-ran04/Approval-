@@ -375,7 +375,6 @@ const handleChange =(e)=>{
           />
           </div>   
         </div>
-        
   )
 }
 export default CollegeInfo;

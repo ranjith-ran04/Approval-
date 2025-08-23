@@ -2,8 +2,18 @@ const db = require('../config/db');
 const branchMap = require('../json/branch');
 
 async function collegeBranchFetch(req,res){
-    const collegeCode = req.user.counsellingCode;
+    var collegeCode;
+    var user;
+    if(req.user.counsellingCode){
+    collegeCode = req.user.counsellingCode;
     if(!collegeCode) return res.status(401).json({msg:'college not found'});
+}else{
+    user = req.user.name;
+if(!user){
+    return res.status(401).json({msg:'user not found'});
+}
+collegeCode = req.body.collegeCode;
+}
     const query = 'select b_code from branch_info where c_code = ?';
     try{
     const [result] = await db.query(query,[collegeCode]);
@@ -22,9 +32,18 @@ async function collegeBranchFetch(req,res){
 }
 
 async function studentDetails(req,res){
-    const collegeCode = req.user.counsellingCode;
-    const branch = req.body.branch;
+    var collegeCode;
+    var name;
+    if(req.user.counsellingCode){
+     collegeCode = req.user.counsellingCode;
     if(!collegeCode) return res.status(401).json({msg:'college not found'});
+    }
+    else{
+        name = req.user.name;
+        if(!name) return res.status(401).json({msg:'user not found'});
+        collegeCode = req.body.collegeCode;
+    }
+    const branch = req.body.branch;
     const query = 'select name,a_no as app_no from student_info where c_code = ? and b_code = ?';
     try{
     const [result] = await db.query(query,[collegeCode,branch]);
