@@ -28,23 +28,29 @@ router.post('/formd',verifyjwt,formd);
 router.get('/formfg',verifyjwt,formfg);
 router.post('/formfg',verifyjwt,formfg);
 router.get("/formlea",verifyjwt,form_tnlea);
+
 router.get("/home",verifyjwt,home);
 router.post("/changePassword",changePassword);
 router.get('/changePassword',verifyjwt,fetchCode);
 router.post("/login",login)
 router.get('/logout',logout);
 router.get('/login',verifyjwt,fetchlogin);
+
 router.get("/branch", verifyjwt,branch);
 router.put("/branch", verifyjwt,editBranch);
 router.delete("/branch", verifyjwt,deleteBranch);
 router.post("/branch", verifyjwt,addBranch);
+
 router.put("/collegeinfo",verifyjwt,collegeinfo);
-router.get("/collegeinfo",verifyjwt,collegeget)
+router.get("/collegeinfo",verifyjwt,collegeget);
+
 router.get('/collegeBranchFetch',verifyjwt,collegeBranchFetch);
 router.post('/collegeBranchFetch',verifyjwt,collegeBranchFetch);
+
 router.post('/studentBranch',verifyjwt,studentDetails);
 router.post("/student", verifyjwt,student);
 router.put("/student", verifyjwt, editStudent);
 router.delete("/student", verifyjwt, deleteStudent);
+
 
 module.exports = router;
