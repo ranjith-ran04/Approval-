@@ -3,10 +3,10 @@ import Alert from "../../widgets/alert/Alert";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { host } from "../../constants/backendpath";
-import Loader from "../../widgets/loader/Loader";
+import { useLoader } from "../../context/LoaderContext";
 
 function Branch({ setCurrent, setState }) {
-  const [loading, setLoading] = useState(true); // NEW
+  const { showLoader, hideLoader } = useLoader();
   const [error, setError] = useState(false);
   const [alertStage, setAlertStage] = useState();
   const [branchData, setBranchData] = useState([]);
@@ -17,6 +17,7 @@ function Branch({ setCurrent, setState }) {
 
   const handleCancel = (index) => {
     setShowIndex(index);
+    console.log(showIndex);
     setShowAlert(true);
     setAlertMessage("Confirm to Delete");
     setAlertType("warning");
@@ -25,11 +26,13 @@ function Branch({ setCurrent, setState }) {
   const handleCloseAlert = () => {
     setShowAlert(false);
   };
-  
+  const collegeCode = "1149";
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     const fetchData = async () => {
+      showLoader();
       try {
-        const res = await axios.get(`${host}branch`,{withCredentials:true});
+        const res = await axios.get(`${host}branch?collegeCode=${collegeCode}`);
         setBranchData(res.data);
         setError(false);
       } catch (err) {
@@ -37,17 +40,16 @@ function Branch({ setCurrent, setState }) {
         setBranchData([]);
         setError(true);
       } finally {
-        setLoading(false);
+        hideLoader();
       }
     };
     fetchData();
   }, []);
 
-  const handleDeleteBranch = async ( branch_code) => {
+  const handleDeleteBranch = async (collegeCode, branch_code) => {
     try {
       const res = await axios.delete(`${host}branch`, {
-        data: { b_code: branch_code },
-        withCredentials:true
+        data: { collegeCode, b_code: branch_code },
       });
 
       if (res.status === 200) {
@@ -64,115 +66,108 @@ function Branch({ setCurrent, setState }) {
       setShowAlert(true);
     }
     setBranchData((prev) =>
-        prev.filter((b) => b.b_code !== branchData[showIndex].b_code)
-      );
+      prev.filter((b) => b.b_code !== branchData[showIndex].b_code)
+    );
   };
 
   return (
     <div className="box">
-      {loading ? (
-        <div className="full-loader-wrapper">
-          <Loader message="Loading branch data..." size="medium" />
+      
+      <>
+        <div className="first">
+          <h2 className="heading">BRANCH DETAILS</h2>
+          <button className="addBranch-btn" onClick={() => setCurrent(3)}>
+            Add Branch
+          </button>
         </div>
-      ) : (
-        <>
-          <div className="first">
-            <h2 className="heading">BRANCH DETAILS</h2>
-            <button className="addBranch-btn" onClick={() => setCurrent(3)}>
-              Add Branch
-            </button>
+
+        <div className="table">
+          <div className="table-header">
+            <div>Edit</div>
+            <div>Branch Code</div>
+            <div>Branch Name</div>
+            <div>Approved In Take</div>
+            <div>First Year Admitted</div>
+            <div>Discontinued</div>
+            <div>Transferred Students From Your College</div>
+            <div>Transferred Students To Your College</div>
+            <div>LAP</div>
+            <div>Year of Starting the Course</div>
+            <div>Accredition Valid Upto</div>
+            <div>NBA Status</div>
+            <div>Delete</div>
           </div>
 
-          <div className="table">
-            <div className="table-header">
-              <div>Edit</div>
-              <div>Branch Code</div>
-              <div>Branch Name</div>
-              <div>Approved In Take</div>
-              <div>First Year Admitted</div>
-              <div>Discontinued</div>
-              <div>Transferred Students From Your College</div>
-              <div>Transferred Students To Your College</div>
-              <div>LAP</div>
-              <div>Year of Starting the Course</div>
-              <div>Accredition Valid Upto</div>
-              <div>NBA Status</div>
-              <div>Delete</div>
+          {error ? (
+            <div className="table-row">
+              <div
+                className="error-msg"
+                style={{ gridColumn: "1 / -1", color: "red" }}
+              >
+                Failed to load branches. Please check your internet connection.
+              </div>
             </div>
-
-            {error ? (
-              <div className="table-row">
-                <div
-                  className="error-msg"
-                  style={{ gridColumn: "1 / -1", color: "red" }}
-                >
-                  Failed to load branches. Please check your internet
-                  connection.
+          ) : branchData.length === 0 ? (
+            <div className="table-row">
+              <div className="no-data-msg" style={{ gridColumn: "1 / -1" }}>
+                No branches available.
+              </div>
+            </div>
+          ) : (
+            branchData.map((branch, index) => (
+              <div className="table-row" key={index} data-id={index}>
+                <div>
+                  <button
+                    className="edit-btn"
+                    onClick={() => {
+                      setCurrent(4);
+                      setState(branch);
+                    }}
+                  >
+                    Edit
+                  </button>
+                </div>
+                <div>{branch.b_code}</div>
+                <div>{branch.branch_name}</div>
+                <div>{branch.approved_in_take}</div>
+                <div>{branch.first_year_admitted}</div>
+                <div>{branch.discontinued}</div>
+                <div>{branch.transfered_from}</div>
+                <div>{branch.transfered_to}</div>
+                <div>{branch.LAP}</div>
+                <div>{branch.year_of_start}</div>
+                <div>{branch.accredition_valid_upto}</div>
+                <div>{branch.NBA_2020 === 1 ? "yes" : "no"}</div>
+                <div>
+                  <button
+                    className="delete-btn"
+                    onClick={() => handleCancel(index)}
+                  >
+                    Delete
+                  </button>
                 </div>
               </div>
-            ) : branchData.length === 0 ? (
-              <div className="table-row">
-                <div className="no-data-msg" style={{ gridColumn: "1 / -1" }}>
-                  No branches available.
-                </div>
-              </div>
-            ) : (
-              branchData.map((branch, index) => (
-                <div className="table-row" key={index} data-id={index}>
-                  <div>
-                    <button
-                      className="edit-btn"
-                      onClick={() => {
-                        setCurrent(4);
-                        setState(branch);
-                      }}
-                    >
-                      Edit
-                    </button>
-                  </div>
-                  <div>{branch.b_code}</div>
-                  <div>{branch.branch_name}</div>
-                  <div>{branch.approved_in_take}</div>
-                  <div>{branch.first_year_admitted}</div>
-                  <div>{branch.discontinued}</div>
-                  <div>{branch.transfered_from}</div>
-                  <div>{branch.transfered_to}</div>
-                  <div>{branch.LAP}</div>
-                  <div>{branch.year_of_start}</div>
-                  <div>{branch.accredition_valid_upto}</div>
-                  <div>{branch.NBA_2020 === 1 ? "yes" : "no"}</div>
-                  <div>
-                    <button
-                      className="delete-btn"
-                      onClick={() => handleCancel(index)}
-                    >
-                      Delete
-                    </button>
-                  </div>
-                </div>
-              ))
-            )}
-          </div>
+            ))
+          )}
+        </div>
 
-          <Alert
-            key={`${alertStage}-${showAlert}`}
-            type={alertType}
-            message={alertMessage}
-            show={showAlert}
-            okbutton={
-              alertStage === "confirm"
-                ? () =>
-                    handleDeleteBranch(
-                      branchData[showIndex]?.b_code
-                    )
-                : alertStage === "success" || "error"
-                ? handleCloseAlert
-                : null
-            }
-            cancelbutton={alertStage === "confirm" ? handleCloseAlert : null}
-          />
-        </>
-      )}
+        <Alert
+          key={`${alertStage}-${showAlert}`}
+          type={alertType}
+          message={alertMessage}
+          showAlert={showAlert}
+          okbutton={
+            alertStage === "confirm"
+              ? () =>
+                  handleDeleteBranch(collegeCode, branchData[showIndex]?.b_code)
+              : alertStage === "success" || "cancel"
+              ? handleCloseAlert
+              : null
+          }
+          cancelbutton={alertStage === "confirm" ? handleCloseAlert : null}
+        />
+      </>
+      
     </div>
   );
 }

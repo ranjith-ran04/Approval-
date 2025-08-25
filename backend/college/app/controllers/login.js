@@ -3,25 +3,31 @@ const db = require("../config/db");
 require("dotenv").config();
 const bcrypt = require("bcrypt");
 
-const login = (req, res) => {
+const login = async (req, res) => {
   const { counsellingCode, password } = req.body;
 
   const query = "SELECT * FROM user_login WHERE c_code = ?";
-  db.query(query, [counsellingCode, password], (err, result) => {
-    if (err) {
-      return res.status(500).json({ message: "Server error" });
+  try {
+    const result = await db.query(query, [counsellingCode]);
+    const user = result[0][0];
+    console.log('change',user);
+
+    if (!user || !user.pass) {
+      console.log(user);
+      return res.status(401).json({ message: "Invalid credentials" });
     }
 
-    const user = result[0];
     const isMatch = bcrypt.compareSync(password, user.pass);
-    if (!isMatch && user.pass !== password) {
+    console.log(password);
+    if (!isMatch &&  password !== user.pass) {
+      console.log(isMatch);
       return res.status(401).json({ message: "Invalid credentials" });
     }
 
     const token = jwt.sign(
       { counsellingCode: user.c_code },
       process.env.JWT_SECRET,
-      { expiresIn: "60m" }
+      { expiresIn: "1h" }
     );
 
     res.cookie("token", token, {
@@ -31,7 +37,16 @@ const login = (req, res) => {
     });
 
     return res.status(200).json({ changed: user.changed });
-  });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ message: "Server error" });
+  }
 };
 
-module.exports = login;
+function fetchlogin(req,res){
+  const cousellingCode = req.user?.counsellingCode || false;
+  if(!cousellingCode) return res.status(401).json({msg:'user not found'});
+  return res.status(200).json({msg:'user found'});
+}
+
+module.exports = {fetchlogin,login};

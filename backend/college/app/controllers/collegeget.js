@@ -6,16 +6,31 @@ const columntofieldmap={};
 for(const [field,column] of Object.entries(fieldToColumnMap)){
     columntofieldmap[column]=field;
 }
-function collegeget(req,res){
-    const collegecode=req.user.counsellingCode;
+async function collegeget(req,res){
+    // const url = req.originalUrl;
+    // const isAdminRoute = url.includes("/api/admin");
+    // console.log(url);
+    // const collegecode = isAdminRoute ?  5901: req.user.counsellingCode;
+    var collegecode;
+    if(req.user.counsellingCode){
+     collegecode=req.user.counsellingCode;   
+     if(!collegecode){
+        return res.status(404).json({message:"Collegecode not found"})
+     }
+    }
+    else{
+        collegecode=req.body.collegecode;
+        if(!collegecode){
+        return res.status(404).json({message:"Collegecode not found"})
+     }
+    }
     console.log(collegecode);
     const query=`select * from college_info where c_code=${collegecode};`
+
     // const collegename=collegenames.get(collegecode);
-    db.query(query,[collegecode],(error,result)=>{
-        if(error){
-            console.log(error);
-            return res.status(500).json({message:"query error",error})
-        }
+    try{
+    const [result] = await db.query(query,[collegecode])
+        
         const data=result[0];
         const sendingdata={};
         for(const [column,value] of Object.entries(data)){
@@ -30,6 +45,9 @@ function collegeget(req,res){
         }
         console.log(sendingdata)
         return res.status(200).json({data:sendingdata})
-    })
+    }catch(err){
+        console.log(err);
+        return res.status(500).json({message:"query error",err})
+    }
 }
 module.exports=collegeget;

@@ -5,9 +5,9 @@ import { useNavigate } from "react-router-dom";
 import NavigationBar from "../../widgets/navigationBar/NavigationBar";
 import Alert from "../../widgets/alert/Alert";
 import axios from "axios";
-import {host} from '../../constants/backendpath';
+import { host ,adminhost} from "../../constants/backendpath";
 
-const LoginForm = () => {
+const LoginForm = ({ admin }) => {
   const [formData, setFormData] = useState({ regNo: "", pwd: "" });
   const [focusedField, setFocusedField] = useState(null);
   const [showAlert, setShowAlert] = useState(false);
@@ -24,19 +24,26 @@ const LoginForm = () => {
   useEffect(() => {
     validateForm();
   }, [formData, touched]);
-  useEffect(()=>{
-    async function fetchLogin(){
-    try{
-      const res = await axios.get(`${host}login`,{withCredentials:true});
-      if(res.status === 200){
-        console.log('successfully cleared');
+  useEffect(() => {
+    async function fetchLogin() {
+      try {
+        const res = await axios.get(
+          `${admin?adminhost:host}login`,
+          { withCredentials: true }
+        );
+        if (res.status === 200) {
+          navigate(`${admin ? "/admin/dashboard" : "/dashboard"}`, {
+            state: {
+              logged: true,
+            },
+          });
+        }
+      } catch (error) {
+        console.log("msg", error);
       }
     }
-    catch(error){
-      console.log('error',error);
-    }}
     fetchLogin();
-  },[])
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -46,7 +53,7 @@ const LoginForm = () => {
     if (Object.keys(validationErrors).length === 0) {
       try {
         const response = await axios.post(
-          "http://localhost:5000/api/login",
+          `${admin?adminhost:host}login`,
           {
             counsellingCode: formData.regNo,
             password: formData.pwd,
@@ -59,7 +66,6 @@ const LoginForm = () => {
         setAlertType("success");
         setAlertMessage("Logged in successfully.");
         setShowAlert(true);
-
       } catch (error) {
         setLoginStatus("error");
         setAlertType("error");
@@ -91,7 +97,7 @@ const LoginForm = () => {
     if (touched.regNo || forceTouch) {
       if (!formData.regNo.trim()) {
         newErrors.regNo = "*Counselling code is required";
-      } else if (!/^[0-9]+$/.test(formData.regNo.trim())) {
+      } else if (!/^[0-9]+$/.test(formData.regNo.trim()) && !admin) {
         newErrors.regNo = "*Counselling code must be numeric";
       }
     }
@@ -99,7 +105,7 @@ const LoginForm = () => {
     if (touched.pwd || forceTouch) {
       if (!formData.pwd) {
         newErrors.pwd = "*Password is required";
-      } else if (formData.pwd.length < 6) {
+      } else if (formData.pwd.length < 6 && !admin) {
         newErrors.pwd = "*Password must be at least 6 characters";
       }
     }
@@ -109,16 +115,16 @@ const LoginForm = () => {
 
   const handleCloseAlert = () => {
     if (changed === 0) {
-      navigate("/changePassword",{
-        state:{
-          logged:true
-        }
+      navigate("/changePassword", {
+        state: {
+          logged: true,
+        },
       });
     } else {
-      navigate("/dashboard",{
-        state:{
-          logged:true
-        }
+      navigate(`${admin ? "/admin/dashboard" : "/dashboard"}`, {
+        state: {
+          logged: true,
+        },
       });
     }
   };
@@ -142,13 +148,17 @@ Tamilnadu Lateral Entry Direct Second Year B.E/B.Tech.,Approval-2025`}
             <div id="login-logo"></div>
           </div>
           <form className="loginform" onSubmit={handleSubmit}>
-            <div className={`input-group ${focusedField === "register" ? "focused" : ""}`}>
+            <div
+              className={`input-group ${
+                focusedField === "register" ? "focused" : ""
+              }`}
+            >
               <span className="icon user-icon" />
               <input
                 className="logininput"
                 type="text"
                 name="regNo"
-                placeholder="Counselling Code"
+                placeholder={admin ? "Name" : "Counselling Code"}
                 value={formData.regNo}
                 onChange={handleChange}
                 onFocus={() => setFocusedField("register")}
@@ -157,7 +167,11 @@ Tamilnadu Lateral Entry Direct Second Year B.E/B.Tech.,Approval-2025`}
             </div>
             {errors.regNo && <p className="error">{errors.regNo}</p>}
 
-            <div className={`input-group ${focusedField === "password" ? "focused" : ""}`}>
+            <div
+              className={`input-group ${
+                focusedField === "password" ? "focused" : ""
+              }`}
+            >
               <span className="icon lock-icon" />
               <input
                 className="logininput"
@@ -172,13 +186,17 @@ Tamilnadu Lateral Entry Direct Second Year B.E/B.Tech.,Approval-2025`}
             </div>
             {errors.pwd && <p className="error">{errors.pwd}</p>}
 
-            <button type="submit" className="login-button">LOGIN</button>
+            <button type="submit" className="login-button">
+              LOGIN
+            </button>
 
             <Alert
               type={alertType}
               message={alertMessage}
               show={showAlert}
-              okbutton={loginStatus === "success" ? handleCloseAlert : handleInvalid}
+              okbutton={
+                loginStatus === "success" ? handleCloseAlert : handleInvalid
+              }
             />
           </form>
         </div>

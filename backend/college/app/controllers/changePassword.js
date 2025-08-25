@@ -1,13 +1,11 @@
 const db = require("../config/db");
 const bcrypt = require('bcrypt');
 
-function changePassword(req,res){
+async function changePassword(req,res){
     const {oldPassword,newPassword,collegeCode} = req.body;
-    var query = "select * from user_login where c_code = ?;"
-    db.query(query,[collegeCode],(err,results)=>{
-        if(err){
-            return res.status(500).json({msg:'error in change select query'});
-        }
+    var query = "select * from user_login where c_code = ?;";
+    try{
+    const results = await db.query(query,[collegeCode])
         const data = results[0];
         const isMatch = bcrypt.compareSync(oldPassword,data.pass);
         if(!isMatch && data.pass !== oldPassword){
@@ -15,14 +13,18 @@ function changePassword(req,res){
         }
         const hashedNewPassword = bcrypt.hashSync(newPassword,10);
         query = "update user_login set pass = ?,changed = ?  where c_code = ?;";
-        db.query(query,[hashedNewPassword,1,collegeCode],(err,results)=>{
-            if(err){
-                return res.status(500).json({msg:'error in change update query'});
-            }
-            if(results.affectedRows === 0) return res.status(500).json({msg:'error no affected rows'});
+        try{
+        const result = await db.query(query,[hashedNewPassword,1,collegeCode])
+            if(result.affectedRows === 0) return res.status(500).json({msg:'error no affected rows'});
             res.status(200).json({msg:'successfully updated'});
-        })
-    })
+        }catch(err){
+                return res.status(500).json({msg:'error in change update query'});
+
+        }
+    }catch(err){
+            return res.status(500).json({msg:'error in change select query'});
+
+    }
 }
 
 function fetchCode(req,res){

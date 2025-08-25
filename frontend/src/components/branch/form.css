@@ -35,7 +35,7 @@
 }
 
 .button-row {
-  /* margin-top: 20px; */
+  margin-top: 20px;
   display: flex;
   justify-content: center;
   gap: 40px;
@@ -50,8 +50,8 @@
 }
 
 .head {
-  /* margin-top: 13px; */
-  /* margin-bottom: 10px; */
+  margin-top: 13px;
+  margin-bottom: 10px;
   font-weight: bold;
   font-size: 18px;
   padding-bottom: 20px;
@@ -65,9 +65,28 @@
   gap: 20px;
 }
 
+.radio-err {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  
+}
+
 .branch-error {
   color: red;
   font-size: 0.85rem;
   margin-top: -8px;
   display: block;
+}
+
+.nba-row{
+  display: flex;
+  gap: 4%;
+  align-items: center;
+}
+
+.nba-label-group{
+  display: flex;
+  gap: 14%;
+  align-items: center;
 }

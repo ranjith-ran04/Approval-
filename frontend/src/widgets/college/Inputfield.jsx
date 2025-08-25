@@ -7,7 +7,7 @@ const Inputfield=({eltname,type,label,id,htmlfor,classname,radiolabel,options=[]
             <label>{radiolabel}</label>
                 {options.map((option)=>(
                     <label id="collegelabel2">
-                        <input key={option.value} type={type} name={eltname} value={option.value} onChange={onchange} disabled={disabled} />{option.value}
+                        <input key={option.value} type={type} name={eltname} value={option.value} onChange={onchange} disabled={disabled} checked={value === option.value}/>{option.value}
                     </label>
                 ))}
                 </div>
@@ -45,9 +45,7 @@ const Inputfield=({eltname,type,label,id,htmlfor,classname,radiolabel,options=[]
             </div>
         );
     }
-    else{
-        return null;
-    }
+
 }
 
 export default Inputfield;

@@ -1,11 +1,11 @@
-import Inputfield from "../../../src/widgets/college/Inputfield";
+import Inputfield from "../../widgets/college/Inputfield";
 import {useState} from 'react';
 import '../../components/College/CollegeInfo.css';
 import Alert from "../../widgets/alert/Alert";
 import Button from "../../widgets/button/Button";
-import tamilnaduDistricts from "../../../src/constants/Tndistricts"
+import tamilnaduDistricts from "../../constants/Tndistricts"
 
-const StudentForm = () => {
+const StudentForm = ({handleClear,appln_no}) => {
 const [studentData,setStudentData]=useState({});
 const [caste,setCastes]=useState([])
 const [showAlert, setShowAlert] = useState(false);
@@ -188,26 +188,26 @@ const handleDelete = (index) => {
 
 const handleChange = async(e) => {
   const { name, value } = e.target;
-  if(name=="Community"){
+  if(name==="Community"){
     try{
     let castelist=[];
     if(value==='BC'){
-      castelist=await import('../../../src/constants/bc.json');
+      castelist=await import('../../constants/bc.json');
     }
     else if(value==='BCM'){
-      castelist=await import('../../../src/constants/bcm.json')
+      castelist=await import('../../constants/bcm.json')
     }
     else if(value==='SC'){
-      castelist=await import('../../../src/constants/sc.json')
+      castelist=await import('../../constants/sc.json')
     }
     else if(value==='SCA'){
-      castelist=await import('../../../src/constants/sca.json')
+      castelist=await import('../../constants/sca.json')
     }
     else if(value==='ST'){
-      castelist=await import('../../../src/constants/st.json')
+      castelist=await import('../../constants/st.json')
     }
     else{
-      castelist=await import('../../../src/constants/mbc.json')
+      castelist=await import('../../constants/mbc.json')
     }
     setCastes(castelist.default);
     setStudentData((prev) => ({
@@ -256,42 +256,6 @@ const handleChange = async(e) => {
   })
 };
 
-// const handleCommunityChange=async(e)=>{
-//   const selectedCommunity=e.target.value;
-//   setStudentData((prev) => ({
-//     ...prev,
-//     community: selectedCommunity,
-//     caste: '', 
-//   }));
-//   delete error[e.target.name];
-//   try{
-//     let castelist=[];
-//     if(selectedCommunity==='BC'){
-//       castelist=await import('../../../src/constants/bc.json');
-//     }
-//     else if(selectedCommunity==='BCM'){
-//       castelist=await import('../../../src/constants/bcm.json')
-//     }
-//     else if(selectedCommunity==='SC'){
-//       castelist=await import('../../../src/constants/sc.json')
-//     }
-//     else if(selectedCommunity==='SCA'){
-//       castelist=await import('../../../src/constants/sca.json')
-//     }
-//     else if(selectedCommunity==='ST'){
-//       castelist=await import('../../../src/constants/st.json')
-//     }
-//     else{
-//       castelist=await import('../../../src/constants/mbc.json')
-//     }
-//     setCastes(castelist.default);
-
-//   }catch(err){
-//     console.log(err);
-//     setCastes([]);
-//   }
-// }
-
 const currentyear=new Date().getFullYear();
 const fromYear=1950;
 const Yearlist=[];
@@ -300,11 +264,24 @@ for (let year=fromYear;year<=currentyear;year++){
 }
   return (
     <div className="collegewholediv">
-      <div id="onlyppln">
-        <Inputfield name={"appln_no"} type={"text"} placeholder={"Application Number"} onchange={handleChange} value={studentData["appln_no"]} error={error["appln_no"]}/>
+      <div id="appln_no">
+        <Inputfield name={"appln_no"} type={"text"} placeholder={"Application Number"} onchange={handleChange} value={appln_no} disabled={true}/>
       </div>
-      <div id="category">
+      <div id="category" style={{gap:'50px'}}>
         <Inputfield label={"CATEGORY"} id={"CATEGORY"} eltname={"CATEGORY"} type={"dropdown"} htmlfor={"CATEGORY"} options={[{label:"Government",value:"Government"},{label:"Government-Aided",value:"Government-Aided"}]} value={studentData.CATEGORY} onchange={handleChange} error={error["CATEGORY"]}/>
+                  <div style={{display:'flex',gap:'10px'}}>
+          <Button
+            name={"ADD"}
+            style={{ width: "130px" }}
+          />
+          <Button
+            name={"CLEAR"}
+            style={{
+              width: "130px",
+              backgroundColor: "red", 
+            }}
+            onClick={handleClear}
+          /></div>
       </div>
       <div>
         <fieldset className="collegefieldset">
@@ -457,7 +434,7 @@ for (let year=fromYear;year<=currentyear;year++){
       </fieldset>
     </div>
     <div id="studentbutton">
-          <Button name={"ADD"} onClick={handleAddStudent}  />
+          <Button name={"UPDATE"} onClick={handleAddStudent}  />
           <Button name={"DELETE"} onClick={handleStuDelete}  />
           <Alert
           type={alertType}
