@@ -74,6 +74,7 @@ function StudentDetails({admin,supp}) {
   }
   const handleClear = () => {
     setClicked(0);
+    setAdd(false);
   };
 
   const deleteOne = (appln_no) => {
@@ -93,6 +94,7 @@ function StudentDetails({admin,supp}) {
             </option>
           ))}
         </select>
+        {selected != "" && (<Button name='ADD' onClick={()=>setAdd(true)}></Button>)}
         {admin && (
         <div id="studentButton">
           <Button
