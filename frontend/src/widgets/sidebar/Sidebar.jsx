@@ -43,8 +43,8 @@ function Sidebar({ setCurrent, admin }) {
       label: "Form C",
       action: () => handleForm("formc"),
     },
-    { id: 8, iconId: "formIcon", label: "Form D" },
-    { id: 9, iconId: "formIcon", label: "Form FG" },
+    { id: 8, iconId: "formIcon", label: "Form D", action: () => handleForm("formd")},
+    { id: 9, iconId: "formIcon", label: "Form FG", action: () => handleForm("formfg")},
     {
       id: 10,
       iconId: "formIcon",
@@ -53,40 +53,43 @@ function Sidebar({ setCurrent, admin }) {
     },
   ];
 
-  const adminMenuItems = [{ id: 0, label: "Approved Details By college" ,action: () => setCurrent(1)}];
+  const adminMenuItems = [{ id: 0, label: "Home",iconId: "homeIcon" ,action: () => setCurrent(0)},
+    { id: 1, label: "Approved Details By college",iconId: "studentIcon" ,action: () => setCurrent(1)}
+  ];
+  const collegeCode = '5901';
   const adminFormItems = [
-    { id: 2, label: "Form A" },
-    { id: 3, label: "Form B" },
-    { id: 4, label: "Form C" },
-    { id: 5, label: "Form D" },
-    { id: 6, label: "Form FG" },
-    { id: 7, label: "Abstract Form" },
-    { id: 8, label: "Note Order" },
-    { id: 9, label: "Note Order-Approved" },
-    { id: 10, label: "Note Order-Approved/Pending" },
-    { id: 11, label: "Principal/Letter" },
-    { id: 12, label: "Principal-Approved" },
-    { id: 13, label: "Principal-Not Approved" },
+    { id: 2, label: "Form A", iconId: "formIcon",action : () => handleForm("forma",true,collegeCode) },
+    { id: 3, label: "Form B", iconId: "formIcon",action : () => handleForm("formb",true,collegeCode) },
+    { id: 4, label: "Form C", iconId: "formIcon",action : () => handleForm("formc",true,collegeCode) },
+    { id: 5, label: "Form D", iconId: "formIcon",action : () => handleForm("formd",true,collegeCode)},
+    { id: 6, label: "Form FG",iconId: "formIcon",action : () => handleForm("formfg",true,collegeCode) },
+    { id: 7, label: "Abstract Form",iconId: "formIcon" },
+    { id: 8, label: "Note Order",iconId: "formIcon" },
+    { id: 9, label: "Note Order-Approved",iconId: "formIcon" },
+    { id: 10, label: "Note Order-Approved/Pending",iconId: "formIcon" },
+    { id: 11, label: "Principal/Letter",iconId: "formIcon" },
+    { id: 12, label: "Principal-Approved",iconId: "formIcon" },
+    { id: 13, label: "Principal-Not Approved",iconId: "formIcon" },
   ];
 
   const adminFgaItems = [
-    { id: 14, label: "OC/BCM/BC/MBC/DNC" },
-    { id: 15, label: "SC/SCA" },
-    { id: 16, label: "ST" },
+    { id: 14, label: "OC/BCM/BC/MBC/DNC",iconId: "formIcon", action : () => handleForm('fg_form',true,collegeCode,['oc','bc','bcm','mbc'],true)},
+    { id: 15, label: "SC/SCA",iconId: "formIcon", action : () => handleForm('fg_form',true,collegeCode,['sc','sca'],true)},
+    { id: 16, label: "ST",iconId: "formIcon", action : () => handleForm('fg_form',true,collegeCode,['st'],true)},
   ];
 
   const adminFgItems = [
-    { id: 17, label: "OC/BCM/BC/MBC/DNC" },
-    { id: 18, label: "SC/SCA" },
-    { id: 19, label: "ST" },
+    { id: 17, label: "OC/BCM/BC/MBC/DNC",iconId: "formIcon", action : () => handleForm('fg_form',true,collegeCode,['oc','bc','bcm','mbc'],false)},
+    { id: 18, label: "SC/SCA",iconId: "formIcon", action : () => handleForm('fg_form',true,collegeCode,['sc','sca'],false)},
+    { id: 19, label: "ST",iconId: "formIcon", action : () => handleForm('fg_form',true,collegeCode,['st'],false)},
   ];
 
-  const adminSubItems = [{ id: 20, label: "Student Details" }];
-  const adminFormsItems = [{ id: 21, label: "Note Order-Approved" }];
+  const adminSubItems = [{ id: 20, label: "Student Details",iconId: "studentIcon",action: () => setCurrent(2)}];
+  const adminFormsItems = [{ id: 21, label: "Note Order-Approved",iconId: "formIcon" }];
   const adminFGItems = [
-    { id: 22, label: "OC/BCM/BC/MBC/DNC" },
-    { id: 23, label: "SC/SCA" },
-    { id: 24, label: "ST" },
+    { id: 22, label: "OC/BCM/BC/MBC/DNC",iconId: "formIcon", action : () => handleForm('fg_form',true,collegeCode,['oc','bc','bcm','mbc'],true,true)},
+    { id: 23, label: "SC/SCA",iconId: "formIcon", action : () => handleForm('fg_form',true,collegeCode,['sc','sca'],true,true) },
+    { id: 24, label: "ST",iconId: "formIcon", action : () => handleForm('fg_form',true,collegeCode,['st'],true,true) },
   ];
 
   const sideBarList = [
@@ -100,7 +103,7 @@ function Sidebar({ setCurrent, admin }) {
   ];
 
   const [collapsed, setCollapsed] = useState(false);
-  const [activeAdminId, setActiveAdminId] = useState('');
+  const [activeAdminId, setActiveAdminId] = useState(0);
 
   const toggleSidebar = () => setCollapsed((prev) => !prev);
 
@@ -112,18 +115,16 @@ function Sidebar({ setCurrent, admin }) {
   };
 
   const handleAdminClick = (id, action) => {
-    if (id === 0 || id === 20) {
+    if (id === 0 || id === 1 || id === 20) {
       setActiveAdminId(id);
     }
     if (action) action();
   };
 
   return (
-    <div id="sidebar" className={collapsed ? "collapsed" : ""} >
+    <div id="sidebar" className={collapsed ? "collapsed" : ""} style={{paddingRight:admin?'0px':collapsed?'0px':'13px'}}>
       <div id="iconDiv" onClick={toggleSidebar}>
-        <div id="listIcon"></div>
-      </div>
-
+        <div id="listIcon"></div></div>
       {!admin ? (
         <>
           {items.map((item, index) => (
@@ -173,7 +174,7 @@ function Sidebar({ setCurrent, admin }) {
             <>
               <div id="sideCollegeDetails">COLLEGE DETAILS</div>
               <div id="buttonDiv">
-                <Button name="College Details Pdf" />
+                <Button name="College Details Pdf" onClick={()=>handleForm('collegeDetails',true,5901,true)} />
               </div>
             </>
           )}

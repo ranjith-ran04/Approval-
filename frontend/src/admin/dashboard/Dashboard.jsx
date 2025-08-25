@@ -80,6 +80,16 @@ function Dashboard() {
     }
   };
 
+  useEffect(()=>{
+    if(current === 2){
+      setSupp(true);
+    }else{
+      setSupp(false);
+    }
+  },[current]);
+
+console.log(supp);
+
   return logged ? (
     <div className="dashboard">
       <Sidebar setCurrent={setCurrent} admin={true} />
