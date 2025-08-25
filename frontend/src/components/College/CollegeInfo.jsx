@@ -4,7 +4,7 @@ import axios from 'axios';
 import Button from '../../widgets/button/Button';
 import Alert from '../../widgets/alert/Alert';
 import Inputfield from '../../widgets/college/Inputfield';
-import {host} from '../../../src/constants/backendpath';
+import {host} from '../../constants/backendpath';
 
 const CollegeInfo = () => {
   const [selectedSection,setSelectedSection]=useState('All')

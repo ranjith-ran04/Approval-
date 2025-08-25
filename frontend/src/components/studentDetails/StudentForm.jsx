@@ -930,21 +930,22 @@ const Addstudent = ({ handleClear, appln_no, index }) => {
           </div>
           <div>
             <Inputfield
-              eltname={"maths_studied"}
-              type={"radio"}
-              radiolabel={"Maths Studied in 12th or Degree Level"}
-              classname={"field-block"}
+              eltname="maths_studied"
+              type="radio"
+              radiolabel="Maths Studied in 12th or Degree Level"
+              classname="field-block"
               options={[
                 { label: "Yes", value: 1 },
                 { label: "No", value: 0 },
-              ]}
-              id={"mathsstudied"}
-              htmlfor={"mathsstudied"}
-              value={studentData.maths_studied}
-              onChange={handleChange}
-              error={error["mathsstudied"]}
+             ]}
+             id="maths_studied"
+             htmlfor="maths_studied"
+             value={studentData.maths_studied}
+             onChange={handleChange}
+             error={error["maths_studied"]}
             />
           </div>
+
         </fieldset>
 
         <fieldset className="collegefieldset">
