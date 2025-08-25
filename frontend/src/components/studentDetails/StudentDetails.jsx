@@ -1,13 +1,13 @@
 import "./studentDetails.css";
 import { useState, useEffect, useRef } from "react";
 import axios from "axios";
-import { host } from "../../constants/backendpath";
-import StudentForm from "./StudentForm";
+import { host } from "../../constants/backendpath.js";
+import StudentForm from './StudentForm.jsx';
 import "../college/CollegeInfo.css";
-import Button from "../../widgets/button/Button";
+import Button from "../../widgets/button/Button.jsx";
 import AddInput from '../../widgets/addinput/input.jsx';
 
-function StudentDetails({admin,supp}) {
+function StudentDetails({admin,supp,setCurrent}) {
   const [selected, setSelected] = useState("");
   const [branch, setBranch] = useState([]);
   const [students, setStudents] = useState([]);
@@ -22,6 +22,7 @@ function StudentDetails({admin,supp}) {
       var result;
       if(admin){
         result = await axios.post(`${host}collegeBranchFetch`,{collegeCode:collegeCode},{ withCredentials:true});
+        
       }
       else{
       result = await axios.get(`${host}collegeBranchFetch`, {
@@ -97,6 +98,7 @@ function StudentDetails({admin,supp}) {
           <Button
             name={"College Details"}
             style={{ width: "130px" }}
+            onClick={()=>setCurrent(3)}
           />
           <Button
             name={"Branch Details"}

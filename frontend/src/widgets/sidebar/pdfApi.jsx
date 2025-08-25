@@ -11,6 +11,7 @@ const handleForm = async (endpoint, admin, collegeCode, list,approved,supp) => {
       });
     } else {
       const body = { collegeCode, supp};
+      console.log(collegeCode);
 
       if (Array.isArray(list) && list.length > 0) {
         body.caste = list;
@@ -27,10 +28,12 @@ const handleForm = async (endpoint, admin, collegeCode, list,approved,supp) => {
         body.supp = false;
       }
       console.log(body);
+      console.log(list);
       res = await axios.post(
         `${list?adminhost:host}${endpoint}`,
         body,
         { withCredentials: true, responseType: "blob" }
+        
       );
     }
     if (res.status === 200) {

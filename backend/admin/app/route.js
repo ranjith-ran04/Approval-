@@ -20,8 +20,8 @@ router.post('/fg_form',verifyjwt,fg_form);
 router.post('/collegeDetails',verifyjwt,collegeDetails);
 router.post('/collegeadmin',verifyjwt,collegeget);
 router.put('/collegeadmin',verifyjwt,collegeinfo);
-router.get('/principal-approved',principal_approved);
-router.get('/principal-notapproved',principal_notapproved);
+router.post('/principal-approved',principal_approved);
+router.post('/principal-notapproved',principal_notapproved);
 
 
 

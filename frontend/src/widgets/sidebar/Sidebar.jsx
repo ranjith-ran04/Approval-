@@ -68,8 +68,8 @@ function Sidebar({ setCurrent, admin }) {
     { id: 9, label: "Note Order-Approved",iconId: "formIcon" },
     { id: 10, label: "Note Order-Approved/Pending",iconId: "formIcon" },
     { id: 11, label: "Principal/Letter",iconId: "formIcon" },
-   { id: 12, label: "Principal-Approved",action:()=>handleForm("principal-approved",admin)},
-    { id: 13, label: "Principal-Not Approved",action:()=>handleForm("principal-notapproved",admin) },
+   { id: 12, label: "Principal-Approved",action:()=>handleForm("principal-approved",true,collegeCode,true)},
+    { id: 13, label: "Principal-Not Approved",action:()=>handleForm("principal-notapproved",true,collegeCode,true) },
   ]
 
   const adminFgaItems = [

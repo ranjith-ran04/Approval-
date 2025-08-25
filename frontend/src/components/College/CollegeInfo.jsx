@@ -6,7 +6,7 @@ import Alert from '../../widgets/alert/Alert';
 import Inputfield from '../../widgets/college/Inputfield';
 import {adminhost, host} from '../../../src/constants/backendpath';
 
-const CollegeInfo = ({admin}) => {
+const CollegeInfo = ({admin,collegeCode}) => {
   const[selectedSection,setSelectedSection]=useState('All')
   const[showAlert, setShowAlert] = useState(false);
   const[alertType,setAlertType]=useState('');
@@ -135,10 +135,11 @@ const handleChange =(e)=>{
      
     useEffect(() => {
     const fetchCollegeData=async() => {
-      const collegecode=5901;
+
         try {
           var res;
           if(admin){
+          let collegecode=collegeCode;
           const res=await axios.post(`${adminhost}collegeadmin`,{collegecode:collegecode},{withCredentials:true});
           if(res.status===200){
             setFormdata(res.data.data);

@@ -1,6 +1,6 @@
 import "./dashboard.css";
 import Home from "./components/Home/Home.jsx";
-import CollegeInfo from "./components/College/CollegeInfo.jsx";
+import CollegeInfo from "./components/college/CollegeInfo.jsx";
 import Branch from "./components/branch/Branch.jsx";
 import AddBranch from "./components/branch/AddBranch.jsx";
 import NavigationBar from "./widgets/navigationBar/NavigationBar.jsx";
