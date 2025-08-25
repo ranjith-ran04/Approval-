@@ -41,13 +41,13 @@ function Notes() {
               delete option.
             </p>
 
-            <p>
+            {/* <p>
               • In Student details,{" "}
               <span style={{ color: "#32CD32" }}>Green colour field</span> denotes
               the students with complete details and{" "}
               <span style={{ color: "yellow" }}>yellow colour field</span>{" "}
               denotes the students with incomplete details.
-            </p>
+            </p> */}
 
             <p>
               • For Management students' Register number (Create your own

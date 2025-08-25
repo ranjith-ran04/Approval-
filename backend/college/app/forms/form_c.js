@@ -3,7 +3,7 @@ const db = require("../config/db");
 const path = require("path");
 const arialBold = path.join(__dirname, "../fonts/arial/G_ari_bd.TTF");
 const arial = path.join(__dirname, "../fonts/arial/arial.ttf");
-const { header, footer } = require("./pageFrame");
+const { footer } = require("./pageFrame");
 
 async function formc(req, res) {
     var collegeCode;
@@ -49,8 +49,6 @@ async function formc(req, res) {
     return res.status(500).json({ msg: "error in query" });
   }
   const freezed = collegeRows.length ? collegeRows[0].freezed : "0";
-
-  header("C", doc, collegeCode, freezed);
 
   const tableTop = 120;
   const widths = [
@@ -207,7 +205,6 @@ async function formc(req, res) {
 
     if (y > doc.page.height - 100) {
       doc.addPage();
-      header("C", doc, collegeCode, freezed);
       y = drawTableHeader(tableTop);
     }
 
@@ -221,7 +218,6 @@ async function formc(req, res) {
   const totalRow = ["", "TOTAL", totals[2], ...totals.slice(3)];
   if (y > doc.page.height - 100) {
     doc.addPage();
-    header("C", doc, collegeCode, freezed);
     y = drawTableHeader(tableTop);
   }
   drawRow(totalRow, y, true);
@@ -230,10 +226,9 @@ async function formc(req, res) {
   const extraSpaceNeeded = 150;
   if (remainingHeight < extraSpaceNeeded) {
     doc.addPage();
-    header("A", doc, collegeCode, freezed);
   }
 
-  footer(doc, collegeCode);
+  footer("C", doc, collegeCode, freezed);
   doc.end();
 }
 
