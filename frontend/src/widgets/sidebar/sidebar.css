@@ -120,8 +120,23 @@
 #collegeIcon {
   background-image: url("../../../public/assets/college1.svg");
 }
-#formIcon {
+#formAIcon {
   background-image: url("../../../public/assets/formAsvg.svg");
+}
+#formBIcon {
+  background-image: url("../../../public/assets/formBsvg.svg");
+}
+#formCIcon {
+  background-image: url("../../../public/assets/formCsvg.svg");
+}
+#formDIcon {
+  background-image: url("../../../public/assets/formDsvg.svg");
+}
+#formFGIcon {
+  background-image: url("../../../public/assets/formFGsvg.svg");
+}
+#formLEAIcon {
+  background-image: url("../../../public/assets/formLeasvg.svg");
 }
 #studentIcon {
   background-image: url("../../../public/assets/badge.svg");
