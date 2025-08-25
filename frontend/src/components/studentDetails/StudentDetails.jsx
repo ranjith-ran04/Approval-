@@ -93,7 +93,7 @@ function StudentDetails({admin,supp}) {
             </option>
           ))}
         </select>
-        {selected != "" && (<Button name='ADD' onClick={()=>setAdd(true)}></Button>)}
+        {selected != "" && (<Button name='ADD' onClick={()=>{setAdd(true); setClicked(0)}}></Button>)}
         {admin && (
         <div id="studentButton">
           <Button
