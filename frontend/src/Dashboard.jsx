@@ -12,7 +12,7 @@ import ScrollToTop from "./widgets/scrollToTop/ScrollToTop.jsx";
 import axios from "axios";
 import { host } from "./constants/backendpath.js";
 import { useNavigate, useLocation } from "react-router-dom";
-import StudentDetails from "./components/studentdetails/StudentDetails.jsx";
+import StudentDetails from "./components/studentDetails/StudentDetails.jsx";
 
 function Dashboard() {
   const [current, setCurrent] = useState(0);
