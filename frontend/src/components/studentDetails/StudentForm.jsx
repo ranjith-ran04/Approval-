@@ -1,10 +1,10 @@
-import Inputfield from "../../../src/widgets/college/Inputfield";
+import Inputfield from "../../widgets/college/Inputfield";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import "../../components/college/CollegeInfo.css";
+import "../college/CollegeInfo.css";
 import Alert from "../../widgets/alert/Alert";
 import Button from "../../widgets/button/Button";
-import tamilnaduDistricts from "../../../src/constants/Tndistricts";
+import tamilnaduDistricts from "../../constants/Tndistricts";
 import { host } from "../../constants/backendpath";
 import { useLoader } from "../../context/LoaderContext";
 import states from "../../constants/states";
@@ -85,22 +85,22 @@ const Addstudent = ({ handleClear, appln_no, index }) => {
     let casteListModule = [];
     switch (community) {
       case "BC":
-        casteListModule = ((await import("../../../src/constants/bc.json")).default);
+        casteListModule = ((await import("../../constants/bc.json")).default);
         break;
       case "BCM":
-        casteListModule = ((await import("../../../src/constants/bcm.json")).default);
+        casteListModule = ((await import("../../constants/bcm.json")).default);
         break;
       case "SC":
-        casteListModule = ((await import("../../../src/constants/sc.json")).default);
+        casteListModule = ((await import("../../constants/sc.json")).default);
         break;
       case "SCA":
-        casteListModule = ((await import("../../../src/constants/sca.json")).default);
+        casteListModule = ((await import("../../constants/sca.json")).default);
         break;
       case "ST":
-        casteListModule = ((await import("../../../src/constants/st.json")).default);
+        casteListModule = ((await import("../../constants/st.json")).default);
         break;
       case "MBC":
-        casteListModule = ((await import("../../../src/constants/mbc.json")).default);
+        casteListModule = ((await import("../../constants/mbc.json")).default);
         break;
       case "OC": // Only Others for Open Category
       default: // Only Others when nothing matches

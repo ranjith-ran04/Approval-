@@ -28,7 +28,6 @@ async function editBranch(req, res) {
         .status(400)
         .json({ err: "collegeCode and branch code is required" });
     }
-
     const keys = Object.keys(changedFields);
     if (keys.length === 0) {
       return res.status(400).json({ err: "No fields to update" });

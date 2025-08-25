@@ -68,9 +68,9 @@ function Sidebar({ setCurrent, admin }) {
     { id: 9, label: "Note Order-Approved",iconId: "formIcon" },
     { id: 10, label: "Note Order-Approved/Pending",iconId: "formIcon" },
     { id: 11, label: "Principal/Letter",iconId: "formIcon" },
-    { id: 12, label: "Principal-Approved",iconId: "formIcon" },
-    { id: 13, label: "Principal-Not Approved",iconId: "formIcon" },
-  ];
+   { id: 12, label: "Principal-Approved",action:()=>handleForm("principal-approved",admin)},
+    { id: 13, label: "Principal-Not Approved",action:()=>handleForm("principal-notapproved",admin) },
+  ]
 
   const adminFgaItems = [
     { id: 14, label: "OC/BCM/BC/MBC/DNC",iconId: "formIcon", action : () => handleForm('fg_form',true,collegeCode,['oc','bc','bcm','mbc'],true)},

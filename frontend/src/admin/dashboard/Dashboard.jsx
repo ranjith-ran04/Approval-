@@ -5,9 +5,10 @@ import { useState, useRef, useEffect } from "react";
 import axios from "axios";
 import { adminhost } from "../../constants/backendpath.js";
 import { useNavigate, useLocation } from "react-router-dom";
-import StudentDetails from "../../components/studentDetails/StudentDetails.jsx";
+import StudentDetails from "../../components/studentdetails/StudentDetails.jsx";
 import ScrollToTop from "../../widgets/scrollToTop/ScrollToTop.jsx";
 import Chart from "../../widgets/chart/PieChartsDashboard.js";
+import CollegeInfo from "../../components/college/CollegeInfo.jsx";
 
 function Dashboard() {
   const [current, setCurrent] = useState(0);
@@ -215,6 +216,7 @@ Tamilnadu Lateral Entry Direct Second Year B.E/B.Tech.,Approval-2025`}
               { isSubmit && current === 0 && <Chart collegeCode={collegeCode} key={submittedCode} />}
               {current === 1 && <StudentDetails admin={true} supp={supp} />}
               {current === 2 && <StudentDetails admin={true} supp={supp} />}
+              {current===3 && <CollegeInfo admin={true} supp={supp} />}
 
               <ScrollToTop scrollRef={scrollRef} />
             </>
