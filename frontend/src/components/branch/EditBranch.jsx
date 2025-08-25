@@ -54,9 +54,9 @@ function EditBranch({ state, setCurrent }) {
 
       const res = await axios.put(`${host}branch`, {
         ...changedFields,
-        collegeCode: state.c_code,
         b_code: state.b_code,
-      });
+        
+      },{withCredentials : true});
 
       if (res.status === 200 || res.status === 201) {
         setAlertType("success");

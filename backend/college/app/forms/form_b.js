@@ -6,14 +6,24 @@ const arial = path.join(__dirname, "../fonts/arial/arial.ttf");
 const branchCode = require("../json/branch");
 const { header, footer } = require("./pageFrame");
 
-function formb(req, res) {
-  const { collegeCode } = req.body;
+async function formb(req, res) {
+    var collegeCode;
+  if(req.user.counsellingCode){
+    console.log('code',req.user.cousellingCode);
+    collegeCode = req.user.counsellingCode;
+    if(!collegeCode) return res.status(404).json({msg:'collgecode not found'});
+  }else{
+    const name = req.user.name;
+    collegeCode = req.body?.collegeCode;
+    if(!name) return res.status(404).json({msg:'user not found'});
+  }
   const query = `SELECT ta.avg AS average, si.b_code AS branch, si.a_no AS appln_no, si.univ_reg_no AS reg_no, si.name AS name, si.nationality AS nat, si.community AS com, si.name_of_board AS board, si.obt_1, si.max_1, si.obt_2, si.max_2, si.obt_3, si.max_3, si.obt_4, si.max_4, si.obt_5, si.max_5, si.obt_6, si.max_6, si.obt_7, si.max_7, si.obt_8, si.max_8, si.fg AS fg, si.aicte_tfw AS afw FROM total_allotted ta JOIN student_info si ON ta.reg_no = si.a_no WHERE si.c_code = ? ORDER BY ta.avg;`;
-
-  db.query(query, [collegeCode], (err, result) => {
-    if (err) {
+   var result;
+  try{
+  [result] = await db.query(query, [collegeCode])
+    }catch(err){
       return res.status(500).json({ msg: "Error in query" });
-    }
+  }
     res.setHeader("Content-Type", "application/pdf");
     res.setHeader("Content-Disposition", 'inline; filename="formb.pdf"');
     const doc = new PDFDocument({
@@ -72,12 +82,12 @@ function formb(req, res) {
         { label: "COM", width: columnWidths.COM },
         { label: "BOARD", width: columnWidths.BOARD },
       ].forEach((item) => {
-        drawCell(item.label, x, y, item.width, headerHeight * 2);
+        drawCell(item.label, x, y, item.width, headerHeight * 2,false);
         x += item.width;
       });
 
       sems.forEach((sem) => {
-        drawCell(sem, x, y, columnWidths.SEM, headerHeight);
+        drawCell(sem, x, y, columnWidths.SEM, headerHeight,false);
         x += columnWidths.SEM;
       });
 
@@ -86,7 +96,7 @@ function formb(req, res) {
         { label: "FG", width: columnWidths.FG },
         { label: "AFW", width: columnWidths.AFW },
       ].forEach((item) => {
-        drawCell(item.label, x, y, item.width, headerHeight * 2);
+        drawCell(item.label, x, y, item.width, headerHeight * 2,false);
         x += item.width;
       });
 
@@ -104,18 +114,18 @@ function formb(req, res) {
       let semY = y + headerHeight;
 
       sems.forEach(() => {
-        drawCell("OBT", x, semY, columnWidths.SEM / 2, headerHeight);
+        drawCell("OBT", x, semY, columnWidths.SEM / 2, headerHeight,false);
         drawCell(
           "MAX",
           x + columnWidths.SEM / 2,
           semY,
           columnWidths.SEM / 2,
-          headerHeight
+          headerHeight,false
         );
         x += columnWidths.SEM;
       });
     }
-    function drawCell(text, x, y, width, height) {
+    function drawCell(text, x, y, width, height,font) {
       let textHeight = doc.heightOfString(text, {
         width: width - 4,
         align: "center",
@@ -125,7 +135,7 @@ function formb(req, res) {
         yOffset += 12;
       }
       doc.rect(x, y, width, height).stroke();
-      doc.fontSize(8).text(text, x + 2, yOffset, {
+      doc.font(font?"Arial":"Arial-Bold").fontSize(8).text(text, x + 2, yOffset, {
         width: width - 4,
         height: height - 10,
         align: "center",
@@ -201,20 +211,21 @@ function formb(req, res) {
         ];
 
         fields.forEach((item) => {
-          drawCell(String(item.value), x, y, columnWidths[item.key], rowHeight);
+          drawCell(String(item.value), x, y, columnWidths[item.key], rowHeight,true);
           x += columnWidths[item.key];
         });
 
         sems.forEach((sem, i) => {
           const obt = student[`obt_${i + 1}`] ?? 0;
           const max = student[`max_${i + 1}`] ?? 0;
-          drawCell(String(obt), x, y, columnWidths.SEM / 2, rowHeight);
+          drawCell(String(obt), x, y, columnWidths.SEM / 2, rowHeight,true);
           drawCell(
             String(max),
             x + columnWidths.SEM / 2,
             y,
             columnWidths.SEM / 2,
-            rowHeight
+            rowHeight,
+            true 
           );
           x += columnWidths.SEM;
         });
@@ -224,14 +235,15 @@ function formb(req, res) {
           x,
           y,
           columnWidths.PERCENT,
-          rowHeight
+          rowHeight,
+          true
         );
         x += columnWidths.PERCENT;
 
-        drawCell(student.fg ? "Y" : "N", x, y, columnWidths.FG, rowHeight);
+        drawCell(student.fg ? "Y" : "N", x, y, columnWidths.FG, rowHeight,true);
         x += columnWidths.FG;
 
-        drawCell(student.afw ? "Y" : "N", x, y, columnWidths.AFW, rowHeight);
+        drawCell(student.afw ? "Y" : "N", x, y, columnWidths.AFW, rowHeight,true);
       }
     });
     const remainingHeight = doc.page.height - doc.y - doc.page.margins.bottom;
@@ -241,9 +253,9 @@ function formb(req, res) {
       header("B", doc, collegeCode);
     }
     footer(doc);
+    console.log('form b completed')
 
     doc.end();
-  });
 }
 
 module.exports = formb;
