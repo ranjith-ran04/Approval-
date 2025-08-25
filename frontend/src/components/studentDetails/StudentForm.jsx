@@ -1269,7 +1269,7 @@ const Addstudent = ({ handleClear, appln_no, index }) => {
             <legend className="collegelegend">UPLOAD CERTIFICATES</legend>
             {certificates.map((cert, index) => (
               <div id="fileuploaddiv" className="field-row" key={cert.id}>
-                <label>{cert.name} (size-limit: 500kb)</label>
+                <label>{cert.name} (size-limit: 300kb)</label>
                 {cert.file ? (
                   <div className="viewdelbuttonupload">
                     <p className="status">File uploaded successfully</p>
