@@ -27,18 +27,12 @@ const headers = [
 async function fg_form(req, res) {
   let collegeCode;
   var approved,list,supp;
-  if (req.user.counsellingCode) {
-    // console.log("code", req.user.counsellingCode);
-    collegeCode = req.user.counsellingCode;
-    if (!collegeCode) return res.status(404).json({ msg: "collegecode not found" });
-  } else {
     const name = req.user.name;
     collegeCode = req.body?.collegeCode;
     approved = req.body?.approved || false;
     list = req.body?.caste || [];
     supp = req.body?.supp || false;
     if (!name) return res.status(404).json({ msg: "user not found" });
-  }
 
   const query = supp? `
 select a_no as appln_no,name,catogory as quota ,community,amount,b_code as branch from student_info 

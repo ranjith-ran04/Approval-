@@ -174,7 +174,7 @@ function Sidebar({ setCurrent, admin }) {
             <>
               <div id="sideCollegeDetails">COLLEGE DETAILS</div>
               <div id="buttonDiv">
-                <Button name="College Details Pdf" />
+                <Button name="College Details Pdf" onClick={()=>handleForm('collegeDetails',true,5901,true)} />
               </div>
             </>
           )}

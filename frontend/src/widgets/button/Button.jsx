@@ -22,6 +22,7 @@ function Button({ name, onClick, type = "button" ,style}) {
     
     if (onClick && type !== "submit") {
       console.log('buttn cliced');
+      console.log(typeof onClick);
       onClick();
     } 
   };
