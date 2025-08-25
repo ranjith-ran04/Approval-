@@ -1,6 +1,6 @@
 import "./dashboard.css";
-import Home from "./components/home/Home.jsx";
-import CollegeInfo from "./components/college/CollegeInfo.jsx";
+import Home from "./components/Home/Home.jsx";
+import CollegeInfo from "./components/College/CollegeInfo.jsx";
 import Branch from "./components/branch/Branch.jsx";
 import AddBranch from "./components/branch/AddBranch.jsx";
 import NavigationBar from "./widgets/navigationBar/NavigationBar.jsx";
@@ -12,7 +12,7 @@ import ScrollToTop from "./widgets/scrollToTop/ScrollToTop.jsx";
 import axios from "axios";
 import { host } from "./constants/backendpath.js";
 import { useNavigate, useLocation } from "react-router-dom";
-import StudentDetails from "./components/studentDetails/StudentDetails.jsx";
+import StudentDetails from "./components/studentdetails/StudentDetails.jsx";
 
 function Dashboard() {
   const [current, setCurrent] = useState(0);
