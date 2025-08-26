@@ -17,7 +17,7 @@ const CollegeInfo = ({admin,collegeCode}) => {
   const[changedFields,setchangedFields]=useState({})
   
 
-const requiredFields = ["chairman","chairmancontact","principalname","principalcontact","address","taluk","district","constituency","pincode","collegephone","collegeemail","websitecollege","antiraggingNo","bankaccountno","bankname","minoritystatus", "autonomousstatus","distance","nearestrailway","distancefromrailway","transportfacility","transport","mintransportcharge","maxtransportcharge","accomodationavailableboys","hostelstaytypeboys","typeofmessboys","messbillboys","roomrentboys","electricityboys","cautiondepositboys",
+const requiredFields = ["principalname","principalcontact","address","taluk","district","constituency","pincode","collegephone","collegeemail","websitecollege","antiraggingNo","bankaccountno","bankname","minoritystatus", "autonomousstatus","distance","nearestrailway","distancefromrailway","transportfacility","transport","mintransportcharge","maxtransportcharge","accomodationavailableboys","hostelstaytypeboys","typeofmessboys","messbillboys","roomrentboys","electricityboys","cautiondepositboys",
   "establishmentboys",
   "admissionfeesboys",
   "accomodationavailablegirls",
@@ -405,7 +405,7 @@ const handleChange =(e)=>{
           )}
 
           <div id="collegebutton">
-            <Button name={"SUBMIT"} onClick={handleSubmit}  />
+            <Button name={"SAVE"} onClick={handleSubmit}  />
           <Alert
           type={alertType}
           message={alertMessage}
