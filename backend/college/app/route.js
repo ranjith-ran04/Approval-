@@ -15,6 +15,8 @@ const collegeinfo = require("./controllers/collegeinfo");
 const {branch, editBranch, deleteBranch, addBranch} = require("./controllers/branch");
 const {collegeBranchFetch,studentDetails} = require('./controllers/studentDetails');
 const { student, editStudent, deleteStudent } = require("./controllers/studentInfo");
+const collegeget = require("./controllers/collegeget");
+const student_count = require("./controllers/input");
 
 router.get("/forma", verifyjwt,forma);
 router.post("/forma", verifyjwt,forma);
@@ -37,12 +39,14 @@ router.get("/branch", verifyjwt,branch);
 router.put("/branch", verifyjwt,editBranch);
 router.delete("/branch", verifyjwt,deleteBranch);
 router.post("/branch", verifyjwt,addBranch);
-router.post("/collegeinfo",collegeinfo);
+router.put("/collegeinfo",verifyjwt,collegeinfo);
+router.get("/collegeinfo",verifyjwt,collegeget)
 router.get('/collegeBranchFetch',verifyjwt,collegeBranchFetch);
 router.post('/collegeBranchFetch',verifyjwt,collegeBranchFetch);
 router.post('/studentBranch',verifyjwt,studentDetails);
 router.post("/student", verifyjwt,student);
 router.put("/student", verifyjwt, editStudent);
 router.delete("/student", verifyjwt, deleteStudent);
+router.post('/student-count', verifyjwt, student_count);
 
 module.exports = router;

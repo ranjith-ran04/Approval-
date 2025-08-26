@@ -27,27 +27,27 @@ function Sidebar({ setCurrent, admin }) {
     { id: 4, iconId: "discontinuedIcon", label: "Discontinued Details" },
     {
       id: 5,
-      iconId: "formIcon",
+      iconId: "formAIcon",
       label: "Form A",
       action: () => handleForm("forma"),
     },
     {
       id: 6,
-      iconId: "formIcon",
+      iconId: "formBIcon",
       label: "Form B",
       action: () => handleForm("formb"),
     },
     {
       id: 7,
-      iconId: "formIcon",
+      iconId: "formCIcon",
       label: "Form C",
       action: () => handleForm("formc"),
     },
-    { id: 8, iconId: "formIcon", label: "Form D", action: () => handleForm("formd")},
-    { id: 9, iconId: "formIcon", label: "Form FG", action: () => handleForm("formfg")},
+    { id: 8, iconId: "formDIcon", label: "Form D", action: () => handleForm("formd")},
+    { id: 9, iconId: "formFGIcon", label: "Form FG", action: () => handleForm("formfg")},
     {
       id: 10,
-      iconId: "formIcon",
+      iconId: "formLEAIcon",
       label: "Form LEA2025",
       action: () => handleForm("formlea"),
     },
@@ -68,9 +68,9 @@ function Sidebar({ setCurrent, admin }) {
     { id: 9, label: "Note Order-Approved",iconId: "formIcon" },
     { id: 10, label: "Note Order-Approved/Pending",iconId: "formIcon" },
     { id: 11, label: "Principal/Letter",iconId: "formIcon" },
-    { id: 12, label: "Principal-Approved",iconId: "formIcon" },
-    { id: 13, label: "Principal-Not Approved",iconId: "formIcon" },
-  ];
+   { id: 12, label: "Principal-Approved",action:()=>handleForm("principal-approved",admin)},
+    { id: 13, label: "Principal-Not Approved",action:()=>handleForm("principal-notapproved",admin) },
+  ]
 
   const adminFgaItems = [
     { id: 14, label: "OC/BCM/BC/MBC/DNC",iconId: "formIcon", action : () => handleForm('fg_form',true,collegeCode,['oc','bc','bcm','mbc'],true)},
