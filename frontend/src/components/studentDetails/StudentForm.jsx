@@ -542,7 +542,6 @@ const semesterRange = {
           error={error["CATEGORY"]}
         />
         <div style={{ display: "flex", gap: "10px" }}>
-          <Button name={"ADD"} style={{ width: "130px" }} />
           <Button
             name={"CLEAR"}
             style={{

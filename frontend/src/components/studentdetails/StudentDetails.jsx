@@ -1,13 +1,13 @@
 import "./studentDetails.css";
 import { useState, useEffect, useRef } from "react";
 import axios from "axios";
-import { host } from "../../constants/backendpath.js";
-import StudentForm from './StudentForm.jsx';
+import { host } from "../../constants/backendpath";
+import StudentForm from "./StudentForm";
 import "../college/CollegeInfo.css";
-import Button from "../../widgets/button/Button.jsx";
+import Button from "../../widgets/button/Button";
 import AddInput from '../../widgets/addinput/input.jsx';
 
-function StudentDetails({admin,supp,setCurrent}) {
+function StudentDetails({admin,supp}) {
   const [selected, setSelected] = useState("");
   const [branch, setBranch] = useState([]);
   const [students, setStudents] = useState([]);
@@ -22,7 +22,6 @@ function StudentDetails({admin,supp,setCurrent}) {
       var result;
       if(admin){
         result = await axios.post(`${host}collegeBranchFetch`,{collegeCode:collegeCode},{ withCredentials:true});
-        
       }
       else{
       result = await axios.get(`${host}collegeBranchFetch`, {
@@ -100,7 +99,6 @@ function StudentDetails({admin,supp,setCurrent}) {
           <Button
             name={"College Details"}
             style={{ width: "130px" }}
-            onClick={()=>setCurrent(3)}
           />
           <Button
             name={"Branch Details"}
@@ -110,8 +108,7 @@ function StudentDetails({admin,supp,setCurrent}) {
           />
         </div>)}
       </div>
-      {selected!='' && (
-              <div className="student-table">
+      <div className="student-table">
         <div className="student-row">
           <div className="student-header sno">S.No</div>
           <div className="student-header app_no">Application Number</div>
@@ -142,7 +139,6 @@ function StudentDetails({admin,supp,setCurrent}) {
           <div className="Unavailable">No Students Found</div>
         )}
       </div>
-      )}
       {clicked > 0 && (
         <div ref={formRef}>
           <StudentForm handleClear={handleClear} appln_no={appln_no} index={deleteOne}/>
