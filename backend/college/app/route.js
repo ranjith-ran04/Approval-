@@ -6,6 +6,7 @@ const formc = require("./forms/form_c");
 const formd = require('./forms/form_d');
 const formfg = require('./forms/form_fg');
 const form_tnlea = require("./forms/form_tnlea");
+const formApprv = require("./forms/formApprv");
 const home = require('../app/controllers/home');
 const {changePassword,fetchCode} = require('../app/controllers/changePassword');
 const {login,fetchlogin} = require('./controllers/login');
@@ -13,8 +14,8 @@ const verifyjwt = require('./middleware/verifyjwt')
 const logout = require('./controllers/logout')
 const collegeinfo = require("./controllers/collegeinfo");
 const {branch, editBranch, deleteBranch, addBranch} = require("./controllers/branch");
-const {collegeBranchFetch,studentDetails} = require('./controllers/studentDetails');
-const { student, editStudent, deleteStudent } = require("./controllers/studentInfo");
+const {collegeBranchFetch,studentDetails, discontinuedDetails} = require('./controllers/studentDetails');
+const { student, editStudent, deleteStudent, dicontinuedStudent, editDiscontinuedStudent, deleteDiscontinuedStudent } = require("./controllers/studentInfo");
 const collegeget = require("./controllers/collegeget");
 
 router.get("/forma", verifyjwt,forma);
@@ -28,6 +29,7 @@ router.post('/formd',verifyjwt,formd);
 router.get('/formfg',verifyjwt,formfg);
 router.post('/formfg',verifyjwt,formfg);
 router.get("/formlea",verifyjwt,form_tnlea);
+router.post("/formApprv",verifyjwt,formApprv);
 router.get("/home",verifyjwt,home);
 router.post("/changePassword",changePassword);
 router.get('/changePassword',verifyjwt,fetchCode);
@@ -43,7 +45,11 @@ router.get("/collegeinfo",verifyjwt,collegeget)
 router.get('/collegeBranchFetch',verifyjwt,collegeBranchFetch);
 router.post('/collegeBranchFetch',verifyjwt,collegeBranchFetch);
 router.post('/studentBranch',verifyjwt,studentDetails);
+router.post('/discontinuedBranch',verifyjwt,discontinuedDetails);
 router.post("/student", verifyjwt,student);
+router.post("/discontinued-student", verifyjwt,dicontinuedStudent);
+router.put("/discontinued-student", verifyjwt,editDiscontinuedStudent);
+router.delete("/discontinued-student", verifyjwt,deleteDiscontinuedStudent);
 router.put("/student", verifyjwt, editStudent);
 router.delete("/student", verifyjwt, deleteStudent);
 

@@ -56,4 +56,30 @@ async function studentDetails(req,res){
     }
 }
 
-module.exports = {collegeBranchFetch,studentDetails};
+async function discontinuedDetails(req,res) {
+    var collegeCode;
+    var name;
+    if(req.user.counsellingCode){
+     collegeCode = req.user.counsellingCode;
+    if(!collegeCode) return res.status(401).json({msg:'college not found'});
+    }
+    else{
+        name = req.user.name;
+        if(!name) return res.status(401).json({msg:'user not found'});
+        collegeCode = req.body.collegeCode;
+    }
+    const branch = req.body.branch;
+    const supp = req.body.supp;
+    const query = `select reg_no as app_no, name, approve_state, tc_state  from discontinued_info where collcode = ? and branch = ?`;
+    // const query = supp?`select name,reg_no as app_no from total_allotted where category ='SU' and (allot_coll_code =? and allot_branch = ?);`:`select name,a_no as app_no from student_info where c_code = ? and b_code = ?`;
+    // console.log(query);
+    try{
+    const [result] = await db.query(query,[collegeCode,branch]);
+        if(!result) return res.status(500).json({msg:'error in query'});
+        res.status(200).send(result);
+    }catch(err){
+        return res.status(500).json({msg:'error in query'});
+    }
+}
+
+module.exports = {collegeBranchFetch,studentDetails,discontinuedDetails};

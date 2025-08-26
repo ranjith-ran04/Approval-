@@ -16,6 +16,22 @@ async function student(req, res) {
   }
 }
 
+async function dicontinuedStudent(req, res) {
+  try {
+    const collegeCode = req.user.counsellingCode;
+    const appln_no = req.body.appln_no;
+
+    if (!collegeCode) {
+      return res.status(400).json({ err: "collegeCode is required" });
+    }
+    const stdQuery = `select NAME,CAST(APPROVE_STATE AS CHAR) as APPROVE_STATE, CAST(TC_STATE AS CHAR) as TC_STATE  from discontinued_info where collcode =? and reg_no = ?`;
+    const result = await db.query(stdQuery, [collegeCode, appln_no]);
+    res.status(200).send(result);
+  } catch (err) {
+    return res.status(500).json({ err: "Query error", sqlErr: err.message });
+  }
+}
+
 async function editStudent(req, res) {
   try {
     const collegeCode = req.user.counsellingCode;
@@ -31,12 +47,31 @@ async function editStudent(req, res) {
     if (keys.length === 0) {
       return res.status(400).json({ err: "No fields to update" });
     }
-    
     const setClause = keys.map((key) => `${key} = ?`).join(", ");
     const values = keys.map((key) => changedFields[key]);
     values.push(a_no);
     const editQuery = `update student_info set ${setClause} where a_no=?`;
-    await db.query(editQuery,values);
+    await db.query(editQuery, values);
+    res.status(200).json({ msg: "Student details updated successfully." });
+  } catch (err) {
+    return res.status(500).json({ err: "Query error", sqlErr: err.message });
+  }
+}
+
+async function editDiscontinuedStudent(req, res) {
+  try {
+    const collegeCode = req.user.counsellingCode;
+    const a_no = req.body.appln_no;
+    const { NAME, APPROVE_STATE, TC_STATE } = req.body.studentData;
+
+    if (!collegeCode || !a_no) {
+      return res
+        .status(400)
+        .json({ err: "collegeCode and application number is required" });
+    }
+    const values = [NAME, APPROVE_STATE, TC_STATE, a_no]
+    const editQuery = `update discontinued_info set NAME = ? ,APPROVE_STATE =? ,TC_STATE = ?  where reg_no=?`;
+    await db.query(editQuery, values);
     res.status(200).json({ msg: "Student details updated successfully." });
   } catch (err) {
     return res.status(500).json({ err: "Query error", sqlErr: err.message });
@@ -64,4 +99,25 @@ async function deleteStudent(req, res) {
   }
 }
 
-module.exports = { student, editStudent, deleteStudent };
+async function deleteDiscontinuedStudent(req, res) {
+  try {
+    const collegeCode = req.user.counsellingCode;
+    const a_no = req.body.appln_no;
+
+    if (!collegeCode || !a_no) {
+      return res
+        .status(400)
+        .json({
+          err: "collegeCode and application number is required",
+        });
+    }
+
+    const deleteQuery = `delete from discontinued_info where reg_no = ?`;
+    await db.query(deleteQuery, a_no);
+    res.status(200).json({ msg: "Student deleted Successfully." });
+  } catch (err) {
+    return res.status(500).json({ err: "Query error", sqlErr: err.message });
+  }
+}
+
+module.exports = { student, editStudent, deleteStudent, dicontinuedStudent, editDiscontinuedStudent, deleteDiscontinuedStudent };

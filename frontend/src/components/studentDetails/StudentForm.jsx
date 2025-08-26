@@ -24,7 +24,7 @@ const Addstudent = ({ handleClear, appln_no, index }) => {
   const [alertType, setAlertType] = useState("");
   const [alertMessage, setAlertMessage] = useState("");
   const [error, setError] = useState({});
-  const [alertOkAction, setAlertOkAction] = useState(() => () => {});
+  const [alertOkAction, setAlertOkAction] = useState(() => () => { });
   // const [error,setError] = useState('');
   const [certificates, setCertificates] = useState([
     { id: 1, name: "Community Certificate", file: null },
@@ -35,50 +35,54 @@ const Addstudent = ({ handleClear, appln_no, index }) => {
     { id: 6, name: "First Graduate Certificate", file: null },
   ]);
   const requiredFields = [
-    "appln_no",
-    "CATEGORY",
-    "candidatename",
+    "a_no",
+    "catogory",
+    "name",
     "dob",
-    "files",
+    // "files",
     "gender",
     "mobile",
     "email",
-    "Aadhar",
-    "Nationality",
-    "Nativity",
-    "Religion",
-    "Community",
-    "Caste Name",
-    "Parent Occupation",
+    "aadharno",
+    "nationality",
+    "nativity",
+    "religion",
+    "community",
+    "caste_name",
+    "parent_occupation",
     "state",
-    "district",
-    "otherStateName",
-    "studied in TN",
-    "Qualifying Examination",
-    "Year of Passing",
-    "Univ Reg Num",
-    "Board of Exam",
-    "coursetype",
-    "mathsstudied",
-    "Annual Income",
-    "First Graduate",
-    "AICTE Tuition fee",
-    "PMS",
-    "FG Cert Issued District",
-    "FG Certificate Number",
-    "fg fees",
-    "sem1max",
-    "sem1obt",
-    "sem2max",
-    "sem2obt",
-    "sem3max",
-    "sem3obt",
-    "sem4max",
-    "sem4obt",
-    "Remarks",
-    "overallmax",
-    "overallobt",
-    "Percentage",
+    // "district",
+    // "otherStateName",
+    "hsc_tn",
+    "qualifying_exam",
+    "year_of_passing",
+    "univ_reg_no",
+    "name_of_board",
+    "hsc_group",
+    "maths_studied",
+    "annual_income",
+    "fg",
+    "aicte_tfw",
+    "pms",
+    // "fg_district",
+    // "fg_no",
+    // "Amount",
+    "max_1",
+    "obt_1",
+    "max_2",
+    "obt_2",
+    "max_3",
+    "obt_3",
+    "max_4",
+    "obt_4",
+    "max_5",
+    "obt_5",
+    "max_6",
+    "obt_6",
+    "max_7",
+    "obt_7",
+    "max_8",
+    "obt_8",
   ];
 
   const caste_drop = async (community) => {
@@ -104,7 +108,7 @@ const Addstudent = ({ handleClear, appln_no, index }) => {
         break;
       case "OC": // Only Others for Open Category
       default: // Only Others when nothing matches
-        casteListModule = [{ code: "others" ,name : "" }];
+        casteListModule = [{ code: "others", name: "" }];
         setCastes(casteListModule);
         return;
     }
@@ -148,23 +152,26 @@ const Addstudent = ({ handleClear, appln_no, index }) => {
     // setAlertStage('')
   };
   const validateFields = () => {
-    console.log("Entered validation");
+
     const letterfields = [
-      "candidatename",
-      "Religion",
-      "Caste Name",
-      "Parent Occupation",
+      "name",
+      "religion",
+      "parent_occupation",
       "state",
       "district",
       "otherStateName",
-      "Board of Exam",
-      "FG Cert Issued District",
-      "Remarks",
+      "name_of_board",
+      "fg_district",
+      "remarks",
     ];
+
+    if (studentData['fg'] == 1) requiredFields.push("fg_no", "fg_district", "Amount")
+
+    const booleanFields = ["fg", "maths_studied"]
     const newErrors = {};
     requiredFields.forEach((field) => {
       const value = studentData[field];
-      if (!value || studentData[field] === "") {
+      if ((!value && !booleanFields.includes(field)) || studentData[field] === "") {
         newErrors[field] = "This field is required";
       } else {
         if (letterfields.includes(field) && /\d/.test(value)) {
@@ -181,36 +188,45 @@ const Addstudent = ({ handleClear, appln_no, index }) => {
           newErrors[field] = "Enter 10 digit valid mobile number";
         }
         const numericFields = [
-          "appln_no",
-          "Aadhar",
-          "Univ Reg Num",
-          "Annual Income",
-          "FG Certificate Number",
-          "sem1max",
-          "sem1obt",
-          "sem2max",
-          "sem2obt",
-          "sem3max",
-          "sem3obt",
-          "sem4max",
-          "sem4obt",
-          "overallmax",
-          "overallobt",
+          "aadharno",
+          "annual_income",
+          "max_1",
+          "obt_1",
+          "max_2",
+          "obt_2",
+          "max_3",
+          "obt_3",
+          "max_4",
+          "obt_4",
+          "max_5",
+          "obt_5",
+          "max_6",
+          "obt_6",
+          "max_7",
+          "obt_7",
+          "max_8",
+          "obt_8",
         ];
         if (numericFields.includes(field) && isNaN(value)) {
-          newErrors[field] = "Only numbers are allowed";
-        } else if (numericFields.includes(field) && value <= 0) {
+          newErrors[field] = "Only integer values are allowed";
+        } else if (numericFields.includes(field) && value < 0) {
           newErrors[field] = "Negative numbers not allowed";
         }
         const maxObtPairs = [
-          ["sem1max", "sem1obt"],
-          ["sem2max", "sem2obt"],
-          ["sem3max", "sem3obt"],
-          ["sem4max", "sem4obt"],
+          ["max_1", "obt_1"],
+          ["max_2", "obt_2"],
+          ["max_3", "obt_3"],
+          ["max_4", "obt_4"],
+          ["max_5", "obt_5"],
+          ["max_6", "obt_6"],
+          ["max_7", "obt_7"],
+          ["max_8", "obt_8"],
         ];
         maxObtPairs.forEach(([maxField, obtField]) => {
           const maxVal = parseFloat(studentData[maxField]);
           const obtVal = parseFloat(studentData[obtField]);
+
+          // alert(maxVal,obtVal)
 
           if (!isNaN(maxVal) && !isNaN(obtVal)) {
             if (maxVal < obtVal) {
@@ -222,6 +238,8 @@ const Addstudent = ({ handleClear, appln_no, index }) => {
       }
     });
     setError(newErrors);
+    console.log(newErrors);
+    
     if (Object.keys(newErrors).length === 0) {
       return true;
     } else {
@@ -267,6 +285,8 @@ const Addstudent = ({ handleClear, appln_no, index }) => {
         });
         return;
       }
+      // alert(validateFields());
+      if (!validateFields()) return;
       const response = await axios.put(
         `${host}student`,
         { changedFields, appln_no },
@@ -403,6 +423,7 @@ const Addstudent = ({ handleClear, appln_no, index }) => {
       updatedValue = value; // or value.split("-")[0] if you want only code
     }
 
+
     if (name === "community") {
       setStudentData((prev) => ({
         ...prev,
@@ -411,7 +432,10 @@ const Addstudent = ({ handleClear, appln_no, index }) => {
       }));
 
       await caste_drop(value);
-    } else {
+    } else if (name === "fg") {
+      setStudentData((prev) => ({ ...prev, [name]: parseInt(updatedValue) }));
+    }
+    else {
       setStudentData((prev) => ({ ...prev, [name]: updatedValue }));
     }
 
@@ -529,7 +553,7 @@ const Addstudent = ({ handleClear, appln_no, index }) => {
           ]}
           value={studentData.catogory}
           onChange={handleChange}
-          error={error["CATEGORY"]}
+          error={error["catogory"]}
         />
         <div style={{ display: "flex", gap: "10px" }}>
           <Button
@@ -554,7 +578,7 @@ const Addstudent = ({ handleClear, appln_no, index }) => {
               htmlfor={"candidatename"}
               classname={"field-block"}
               value={studentData.name}
-              error={error["candidatename"]}
+              error={error["name"]}
               onChange={handleChange}
             />
             <Inputfield
@@ -617,7 +641,7 @@ const Addstudent = ({ handleClear, appln_no, index }) => {
               onChange={handleChange}
               htmlfor={"Aadhar"}
               value={studentData.aadharno}
-              error={error["Aadhar"]}
+              error={error["aadharno"]}
             />
           </div>
         </fieldset>
@@ -638,7 +662,7 @@ const Addstudent = ({ handleClear, appln_no, index }) => {
               id={"Nationality"}
               htmlfor={"Nationality"}
               value={studentData.nationality}
-              error={error["Nationality"]}
+              error={error["nationality"]}
             />
             <Inputfield
               eltname={"nativity"}
@@ -653,7 +677,7 @@ const Addstudent = ({ handleClear, appln_no, index }) => {
               id={"Nativity"}
               htmlfor={"Nativity"}
               value={studentData.nativity}
-              error={error["Nativity"]}
+              error={error["nativity"]}
             />
           </div>
           <div className="field-row">
@@ -674,10 +698,32 @@ const Addstudent = ({ handleClear, appln_no, index }) => {
                 { label: "Others", value: "Others" },
               ]}
               value={studentData.religion}
-              error={error["Religion"]}
+              error={error["religion"]}
             />
             {(studentData.religion === "Hindu" ||
               studentData.religion === "Christian") && (
+                <Inputfield
+                  eltname={"community"}
+                  type={"dropdown"}
+                  label={"Community"}
+                  classname={"field-block"}
+                  id={"Community"}
+                  htmlfor={"Community"}
+                  options={[
+                    { label: "OC", key: "OC", value: "OC" },
+                    { label: "BC", key: "BC", value: "BC" },
+                    { label: "MBC", key: "MBC", value: "MBC" },
+                    { label: "SC", key: "SC", value: "SC" },
+                    { label: "ST", key: "ST", value: "ST" },
+                    { label: "SCA", key: "SCA", value: "SCA" },
+                    { label: "DNC", key: "DNC", value: "DNC" },
+                  ]}
+                  onChange={handleChange}
+                  value={studentData.community}
+                  error={error["community"]}
+                />
+              )}
+            {studentData.religion === "Muslim" && (
               <Inputfield
                 eltname={"community"}
                 type={"dropdown"}
@@ -687,30 +733,11 @@ const Addstudent = ({ handleClear, appln_no, index }) => {
                 htmlfor={"Community"}
                 options={[
                   { label: "OC", key: "OC", value: "OC" },
-                  { label: "BC", key: "BC", value: "BC" },
-                  { label: "MBC", key: "MBC", value: "MBC" },
-                  { label: "SC", key: "SC", value: "SC" },
-                  { label: "ST", key: "ST", value: "ST" },
-                  { label: "SCA", key: "SCA", value: "SCA" },
-                  { label: "DNC", key: "DNC", value: "DNC" },
+                  { label: "BCM", key: "BCM", value: "BCM" }
                 ]}
                 onChange={handleChange}
                 value={studentData.community}
                 error={error["community"]}
-              />
-            )}
-            {studentData.religion === "Muslim" && (
-              <Inputfield
-                eltname={"community"}
-                type={"dropdown"}
-                label={"Community"}
-                classname={"field-block"}
-                id={"Community"}
-                htmlfor={"Community"}
-                options={[{ label: "BCM", key: "BCM", value: "BCM" }]}
-                onChange={handleChange}
-                value={studentData.community}
-                error={error["Community"]}
               />
             )}
           </div>
@@ -729,7 +756,7 @@ const Addstudent = ({ handleClear, appln_no, index }) => {
               }))}
               onChange={handleChange}
               value={selectedValue}
-              error={error["Caste Name"]}
+              error={error["caste_name"]}
             />
             <Inputfield
               eltname={"parent_occupation"}
@@ -754,7 +781,7 @@ const Addstudent = ({ handleClear, appln_no, index }) => {
               htmlfor={"ParentOccupation"}
               value={studentData.parent_occupation}
               onChange={handleChange}
-              error={error["Parent Occupation"]}
+              error={error["parent_occupation"]}
             />
           </div>
           <div className="field-row">
@@ -826,7 +853,7 @@ const Addstudent = ({ handleClear, appln_no, index }) => {
               htmlfor={"studied in TN"}
               value={studentData.hsc_tn}
               onChange={handleChange}
-              error={error["studied in TN"]}
+              error={error.hsc_tn}
             />
           </div>
         </fieldset>
@@ -839,7 +866,7 @@ const Addstudent = ({ handleClear, appln_no, index }) => {
               label={"Qualifying Examination"}
               classname={"field-block"}
               options={[
-                { label: "Diplomo", key: "DIPLOMO", value: "DIP" },
+                { label: "Diploma", key: "Diploma", value: "DIP" },
                 { label: "BSc", key: "BSC", value: "B.Sc" },
                 { label: "Others", key: "OTHERS", value: "OTHERS" },
               ]}
@@ -847,7 +874,7 @@ const Addstudent = ({ handleClear, appln_no, index }) => {
               value={studentData.qualifying_exam}
               htmlfor={"QualifyingExam"}
               onChange={handleChange}
-              error={error["Qualifying Examination"]}
+              error={error.qualifying_exam}
             />
             <Inputfield
               eltname={"year_of_passing"}
@@ -859,7 +886,7 @@ const Addstudent = ({ handleClear, appln_no, index }) => {
               options={Yearlist}
               value={studentData.year_of_passing}
               onChange={handleChange}
-              error={error["Year of Passing"]}
+              error={error.year_of_passing}
             />
           </div>
           <div className="field-row">
@@ -872,7 +899,7 @@ const Addstudent = ({ handleClear, appln_no, index }) => {
               htmlfor={"UnivRegNum"}
               value={studentData.univ_reg_no}
               onChange={handleChange}
-              error={error["Univ Reg Num"]}
+              error={error.univ_reg_no}
             />
             <Inputfield
               eltname={"name_of_board"}
@@ -891,7 +918,7 @@ const Addstudent = ({ handleClear, appln_no, index }) => {
               ]}
               value={studentData.name_of_board}
               onChange={handleChange}
-              error={error["Board of Exam"]}
+              error={error.name_of_board}
             />
           </div>
           <div className="field-row">
@@ -924,7 +951,7 @@ const Addstudent = ({ handleClear, appln_no, index }) => {
               value={studentData.hsc_group}
               htmlfor={"QualifyingExam"}
               onChange={handleChange}
-              error={error["coursetype"]}
+              error={error.hsc_group}
             />
           </div>
           <div>
@@ -941,7 +968,7 @@ const Addstudent = ({ handleClear, appln_no, index }) => {
               htmlfor={"mathsstudied"}
               value={studentData.maths_studied}
               onChange={handleChange}
-              error={error["mathsstudied"]}
+              error={error.maths_studied}
             />
           </div>
         </fieldset>
@@ -958,7 +985,7 @@ const Addstudent = ({ handleClear, appln_no, index }) => {
               htmlfor={"AnnualIncome"}
               value={studentData.annual_income}
               onChange={handleChange}
-              error={error["Annual Income"]}
+              error={error.annual_income}
             />
             <Inputfield
               eltname={"fg"}
@@ -973,7 +1000,7 @@ const Addstudent = ({ handleClear, appln_no, index }) => {
               htmlfor={"FirstGraduate"}
               value={studentData.fg}
               onChange={handleChange}
-              error={error["First Graduate"]}
+              error={error.fg}
             />
           </div>
           <div className="field-row">
@@ -989,7 +1016,7 @@ const Addstudent = ({ handleClear, appln_no, index }) => {
               htmlfor={"AICTE Tuition Fee"}
               value={studentData.aicte_tfw}
               onChange={handleChange}
-              error={error["AICTE Tuition fee"]}
+              error={error.aicte_tfw}
             />
             <Inputfield
               eltname={"pms"}
@@ -1005,7 +1032,7 @@ const Addstudent = ({ handleClear, appln_no, index }) => {
               htmlfor={"PMS"}
               value={studentData.pms}
               onChange={handleChange}
-              error={error["PMS"]}
+              error={error.pms}
             />
           </div>
           <div className="field-row">
@@ -1019,7 +1046,7 @@ const Addstudent = ({ handleClear, appln_no, index }) => {
               options={tamilnaduDistricts}
               onChange={handleChange}
               value={studentData.fg_district}
-              error={error["FG Cert Issued District"]}
+              error={error.fg_district}
             />
             <Inputfield
               eltname={"fg_no"}
@@ -1030,7 +1057,7 @@ const Addstudent = ({ handleClear, appln_no, index }) => {
               htmlfor={"FGCertificateNumber"}
               value={studentData.fg_no}
               onChange={handleChange}
-              error={error["FG Certificate Number"]}
+              error={error.fg_no}
             />
           </div>
           <div className="field-row-single">
@@ -1043,13 +1070,18 @@ const Addstudent = ({ handleClear, appln_no, index }) => {
               htmlfor={"fg fees"}
               value={studentData.Amount}
               onChange={handleChange}
-              error={error["fg fees"]}
+              error={error.Amount}
             />
           </div>
         </fieldset>
         <fieldset className="collegefieldset">
           <legend className="collegelegend">MARK DETAILS</legend>
+          <div style={{ display: 'flex', gap: '40%', marginBottom: '2%' }}>
+            <h2 style={{ marginLeft: '15%' }}>Max Marks</h2>
+            <h2>Obtained Marks</h2>
+          </div>
           <div className="field-row">
+
             <Inputfield
               eltname={"max_1"}
               placeholder={"Maximum Marks"}
@@ -1060,7 +1092,7 @@ const Addstudent = ({ handleClear, appln_no, index }) => {
               htmlfor={"sem1max"}
               value={studentData.max_1}
               onChange={handleChange}
-              error={error["sem1max"]}
+              error={error["max_1"]}
             />
             <Inputfield
               eltname={"obt_1"}
@@ -1072,7 +1104,7 @@ const Addstudent = ({ handleClear, appln_no, index }) => {
               htmlfor={"sem1obt"}
               value={studentData.obt_1}
               onChange={handleChange}
-              error={error["sem1obt"]}
+              error={error["obt_1"]}
             />
           </div>
           <div className="field-row">
@@ -1086,7 +1118,7 @@ const Addstudent = ({ handleClear, appln_no, index }) => {
               htmlfor={"sem2max"}
               value={studentData.max_2}
               onChange={handleChange}
-              error={error["sem2max"]}
+              error={error["max_2"]}
             />
             <Inputfield
               eltname={"obt_2"}
@@ -1098,7 +1130,7 @@ const Addstudent = ({ handleClear, appln_no, index }) => {
               htmlfor={"sem2obt"}
               value={studentData.obt_2}
               onChange={handleChange}
-              error={error["sem2obt"]}
+              error={error["obt_2"]}
             />
           </div>
           <div className="field-row">
@@ -1112,7 +1144,7 @@ const Addstudent = ({ handleClear, appln_no, index }) => {
               htmlfor={"sem3max"}
               value={studentData.max_3}
               onChange={handleChange}
-              error={error["sem3max"]}
+              error={error["max_3"]}
             />
             <Inputfield
               eltname={"obt_3"}
@@ -1124,7 +1156,7 @@ const Addstudent = ({ handleClear, appln_no, index }) => {
               htmlfor={"sem3obt"}
               value={studentData.obt_3}
               onChange={handleChange}
-              error={error["sem3obt"]}
+              error={error["obt_3"]}
             />
           </div>
           <div className="field-row">
@@ -1138,7 +1170,7 @@ const Addstudent = ({ handleClear, appln_no, index }) => {
               htmlfor={"sem4max"}
               value={studentData["max_4"]}
               onChange={handleChange}
-              error={error["sem4max"]}
+              error={error["max_4"]}
             />
             <Inputfield
               eltname={"obt_4"}
@@ -1150,7 +1182,7 @@ const Addstudent = ({ handleClear, appln_no, index }) => {
               htmlfor={"sem4obt"}
               value={studentData["obt_4"]}
               onChange={handleChange}
-              error={error["sem4obt"]}
+              error={error["obt_4"]}
             />
           </div>
           <div className="field-row">
@@ -1164,7 +1196,7 @@ const Addstudent = ({ handleClear, appln_no, index }) => {
               htmlfor={"sem5max"}
               value={studentData.max_5}
               onChange={handleChange}
-              error={error["sem5max"]}
+              error={error["max_5"]}
             />
             <Inputfield
               eltname={"obt_5"}
@@ -1176,7 +1208,7 @@ const Addstudent = ({ handleClear, appln_no, index }) => {
               htmlfor={"sem5obt"}
               value={studentData.obt_5}
               onChange={handleChange}
-              error={error["sem5obt"]}
+              error={error["obt_5"]}
             />
           </div>
           <div className="field-row">
@@ -1190,7 +1222,7 @@ const Addstudent = ({ handleClear, appln_no, index }) => {
               htmlfor={"sem6max"}
               value={studentData.max_6}
               onChange={handleChange}
-              error={error["sem6max"]}
+              error={error["max_6"]}
             />
             <Inputfield
               eltname={"obt_6"}
@@ -1202,7 +1234,7 @@ const Addstudent = ({ handleClear, appln_no, index }) => {
               htmlfor={"sem6obt"}
               value={studentData["obt_6"]}
               onChange={handleChange}
-              error={error["sem6obt"]}
+              error={error["obt_6"]}
             />
           </div>
           <div className="field-row">
@@ -1216,7 +1248,7 @@ const Addstudent = ({ handleClear, appln_no, index }) => {
               htmlfor={"sem7max"}
               value={studentData.max_7}
               onChange={handleChange}
-              error={error["sem7max"]}
+              error={error["max_7"]}
             />
             <Inputfield
               eltname={"obt_7"}
@@ -1228,7 +1260,7 @@ const Addstudent = ({ handleClear, appln_no, index }) => {
               htmlfor={"sem7obt"}
               value={studentData["obt_7"]}
               onChange={handleChange}
-              error={error["sem7obt"]}
+              error={error["obt_7"]}
             />
           </div>
           <div className="field-row">
@@ -1242,7 +1274,7 @@ const Addstudent = ({ handleClear, appln_no, index }) => {
               htmlfor={"sem8max"}
               value={studentData.max_8}
               onChange={handleChange}
-              error={error["sem8max"]}
+              error={error["max_8"]}
             />
             <Inputfield
               eltname={"obt_8"}
@@ -1254,7 +1286,7 @@ const Addstudent = ({ handleClear, appln_no, index }) => {
               htmlfor={"sem8obt"}
               value={studentData["obt_8"]}
               onChange={handleChange}
-              error={error["sem8obt"]}
+              error={error["obt_8"]}
             />
           </div>
         </fieldset>
@@ -1340,8 +1372,8 @@ const Addstudent = ({ handleClear, appln_no, index }) => {
                 onChange={handleChange}
               ></textarea>
               <br></br>
-              {error["Remarks"] && (
-                <p className="error-message">{error["Remarks"]}</p>
+              {error["remarks"] && (
+                <p className="error-message">{error["remarks"]}</p>
               )}
             </fieldset>
           </div>
