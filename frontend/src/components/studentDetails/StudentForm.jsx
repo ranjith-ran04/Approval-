@@ -9,7 +9,7 @@ import { host } from "../../constants/backendpath";
 import { useLoader } from "../../context/LoaderContext";
 import states from "../../constants/states";
 
-const Addstudent = ({ handleClear, appln_no, index }) => {
+const Addstudent = ({ handleClear, appln_no,b_code, index }) => {
   // console.log(index);
   const {showLoader, hideLoader } = useLoader();
   const [pendingDeleteIndex, setPendingDeleteIndex] = useState(null);
@@ -156,113 +156,136 @@ const semesterRange = {
     setShowAlert(false);
     // setAlertStage('')
   };
-  const validateFields = () => {
-    console.log("Entered validation");
-    const letterfields = [
-      "candidatename",
-      "Religion",
-      "Caste Name",
-      "Parent Occupation",
-      "state",
-      "district",
-      "otherStateName",
-      "Board of Exam",
-      "FG Cert Issued District",
-      "Remarks",
-    ];
-    const newErrors = {};
-    requiredFields.forEach((field) => {
-      const value = studentData[field];
-      if (!value || studentData[field] === "") {
-        newErrors[field] = "This field is required";
-      } else {
-        if (letterfields.includes(field) && /\d/.test(value)) {
-          newErrors[field] = "Only letters are allowed";
-        } else if (letterfields.includes(field) && /[!@#$%]/.test(value)) {
-          newErrors[field] = "Special characters not allowed";
-        }
-        if (field === "email" && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
-          newErrors[field] = "Enter correct email format";
-        }
-        if (field === "mobile" && isNaN(value)) {
-          newErrors[field] = "Only numbers are allowed";
-        } else if (field === "mobile" && !/^\d{10}$/.test(value)) {
-          newErrors[field] = "Enter 10 digit valid mobile number";
-        }
-        const numericFields = [
-          "appln_no",
-          "Aadhar",
-          "Univ Reg Num",
-          "Annual Income",
-          "FG Certificate Number",
-          "sem1max",
-          "sem1obt",
-          "sem2max",
-          "sem2obt",
-          "sem3max",
-          "sem3obt",
-          "sem4max",
-          "sem4obt",
-          "overallmax",
-          "overallobt",
-        ];
-        if (numericFields.includes(field) && isNaN(value)) {
-          newErrors[field] = "Only numbers are allowed";
-        } else if (numericFields.includes(field) && value <= 0) {
-          newErrors[field] = "Negative numbers not allowed";
-        }
-        const maxObtPairs = [
-          ["sem1max", "sem1obt"],
-          ["sem2max", "sem2obt"],
-          ["sem3max", "sem3obt"],
-          ["sem4max", "sem4obt"],
-        ];
-        maxObtPairs.forEach(([maxField, obtField]) => {
-          const maxVal = parseFloat(studentData[maxField]);
-          const obtVal = parseFloat(studentData[obtField]);
+  // const validateFields = () => {
+  //   console.log("Entered validation");
+  //   const letterfields = [
+  //     "candidatename",
+  //     "Religion",
+  //     "Caste Name",
+  //     "Parent Occupation",
+  //     "state",
+  //     "district",
+  //     "otherStateName",
+  //     "Board of Exam",
+  //     "FG Cert Issued District",
+  //     "Remarks",
+  //   ];
+  //   const newErrors = {};
+  //   requiredFields.forEach((field) => {
+  //     const value = studentData[field];
+  //     if (!value || studentData[field] === "") {
+  //       newErrors[field] = "This field is required";
+  //     } else {
+  //       if (letterfields.includes(field) && /\d/.test(value)) {
+  //         newErrors[field] = "Only letters are allowed";
+  //       } else if (letterfields.includes(field) && /[!@#$%]/.test(value)) {
+  //         newErrors[field] = "Special characters not allowed";
+  //       }
+  //       if (field === "email" && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+  //         newErrors[field] = "Enter correct email format";
+  //       }
+  //       if (field === "mobile" && isNaN(value)) {
+  //         newErrors[field] = "Only numbers are allowed";
+  //       } else if (field === "mobile" && !/^\d{10}$/.test(value)) {
+  //         newErrors[field] = "Enter 10 digit valid mobile number";
+  //       }
+  //       const numericFields = [
+  //         "appln_no",
+  //         "Aadhar",
+  //         "Univ Reg Num",
+  //         "Annual Income",
+  //         "FG Certificate Number",
+  //         "sem1max",
+  //         "sem1obt",
+  //         "sem2max",
+  //         "sem2obt",
+  //         "sem3max",
+  //         "sem3obt",
+  //         "sem4max",
+  //         "sem4obt",
+  //         "overallmax",
+  //         "overallobt",
+  //       ];
+  //       if (numericFields.includes(field) && isNaN(value)) {
+  //         newErrors[field] = "Only numbers are allowed";
+  //       } else if (numericFields.includes(field) && value <= 0) {
+  //         newErrors[field] = "Negative numbers not allowed";
+  //       }
+  //       const maxObtPairs = [
+  //         ["sem1max", "sem1obt"],
+  //         ["sem2max", "sem2obt"],
+  //         ["sem3max", "sem3obt"],
+  //         ["sem4max", "sem4obt"],
+  //       ];
+  //       maxObtPairs.forEach(([maxField, obtField]) => {
+  //         const maxVal = parseFloat(studentData[maxField]);
+  //         const obtVal = parseFloat(studentData[obtField]);
 
-          if (!isNaN(maxVal) && !isNaN(obtVal)) {
-            if (maxVal < obtVal) {
-              newErrors[maxField] =
-                "Maximum marks should be greater than or equal to obtained marks";
-            }
-          }
-        });
-      }
-    });
-    setError(newErrors);
-    if (Object.keys(newErrors).length === 0) {
-      return true;
-    } else {
-      return false;
-    }
-  };
-  const handleAddStudent = () => {
-    const noerrors = validateFields();
-    if (noerrors) {
-      setShowAlert(true);
-      setAlertStage("confirm");
-      setAlertMessage("Confirm to Add");
-      setAlertType("warning");
-      setAlertOkAction(() => () => {
+  //         if (!isNaN(maxVal) && !isNaN(obtVal)) {
+  //           if (maxVal < obtVal) {
+  //             newErrors[maxField] =
+  //               "Maximum marks should be greater than or equal to obtained marks";
+  //           }
+  //         }
+  //       });
+  //     }
+  //   });
+  //   setError(newErrors);
+  //   if (Object.keys(newErrors).length === 0) {
+  //     return true;
+  //   } else {
+  //     return false;
+  //   }
+  // };
+  const handleAddStudent = async () => {
+  // const noErrors = validateFields();
+    
+  // if (noErrors) {
+    setShowAlert(true);
+    setAlertStage("confirm");
+    setAlertMessage("Confirm to Add");
+    setAlertType("warning");
+
+    setAlertOkAction(() => async () => {
+      try {
+        const res = await axios.post(
+          `${host}studentadd`,{app_no:appln_no,b_code,studentData:studentData},
+          { withCredentials: true }
+        );
+
+        if (res.status === 200) {
+          setStudentData({});
+
+          setShowAlert(true);
+          setAlertStage("success");
+          setAlertMessage("Student Added Successfully");
+          setAlertType("success");
+          setAlertOkAction(() => () => {
+            setShowAlert(false);
+          });
+        }
+      } catch (error) {
+        console.log(error);
         setShowAlert(true);
-        setAlertMessage("Updated Successfully");
-        setAlertStage("success");
-        setAlertType("success");
+        setAlertMessage("Unable to connect to server...");
+        setAlertStage("error");
+        setAlertType("error");
         setAlertOkAction(() => () => {
           setShowAlert(false);
         });
-      });
-    } else {
-      setShowAlert(true);
-      setAlertStage("success");
-      setAlertMessage("You have errors");
-      setAlertType("warning");
-      setAlertOkAction(() => () => {
-        setShowAlert(false);
-      });
-    }
-  };
+      }
+    });
+  // } else {
+    // setShowAlert(true);
+    // setAlertStage("error");
+    // setAlertMessage("You have errors in the form");
+    // setAlertType("warning");
+    // setAlertOkAction(() => () => {
+    //   setShowAlert(false);
+    // });
+  // }
+};
+
   const handleUpdate = async () => {
     setShowAlert(false);
     try {
@@ -406,7 +429,7 @@ const semesterRange = {
     : "";
   const handleChange = async (e) => {
     const { name, value } = e.target;
-
+    
     // For caste_name, you might want to store only the code in backend format
     let updatedValue = value;
 
@@ -719,7 +742,6 @@ const semesterRange = {
                 onChange={handleChange}
                 value={studentData.community}
                 error={error["Community"]}
-                disabled={true}
               />
             )}
           </div>
@@ -1065,13 +1087,13 @@ const semesterRange = {
           )} */}
           <div className="field-container">
   {(() => {
-    const range = semesterRange[studentData.hsc_group] || { start: 0, end: 0 };
-
+    const range = semesterRange[studentData.hsc_group] || { start: 0, end: -1};
+   
+    
     const semesters = Array.from(
-      { length: range.end - range.start + 1 },
+      { length: range.end - range.start+1 },
       (_, i) => range.start + i
     );
-
     const allInputs = semesters.flatMap((sem) => [
       <Inputfield
         key={`max_${sem}`}
@@ -1100,7 +1122,7 @@ const semesterRange = {
         error={error[`sem${sem}obt`]}
       />,
     ]);
-
+    
     const groupedRows = [];
     for (let i = 0; i < allInputs.length; i += 2) {
       groupedRows.push(
@@ -1202,6 +1224,13 @@ const semesterRange = {
                 <p className="error-message">{error["Remarks"]}</p>
               )}
             </fieldset>
+          </div>
+          <div id='studentbutton'>
+            <Button name={"ADD"} onClick={handleAddStudent}/>
+            <Alert type={alertType} message={alertMessage} show={showAlert} okbutton={alertOkAction} cancelbutton={alertStage==="confirm"
+              ?handlecloseAlert:null
+            }/>
+
           </div>
           <div id="studentbutton">
             <Button name={"UPDATE"} onClick={handleUpdate} />

@@ -1,11 +1,20 @@
 import React, { useState } from "react";
 import "./input.css";
 import Button from "../button/Button";
+import { host } from "../../constants/backendpath";
+import axios from "axios";
+import Alert from "../../widgets/alert/Alert";
 
 const Input = ({add,clicked,click,appln_no}) => {
   const [input, setInput] = useState("");
   const [touched, setTouched] = useState(false);
   const [visibleIndexes, setVisibleIndexes] = useState([]);
+
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertStage, setAlertStage] = useState("");
+  const [alertType, setAlertType] = useState("");
+  const [alertMessage, setAlertMessage] = useState("");
+  const [alertOkAction, setAlertOkAction] = useState(() => () => {});
 
   const validations = [
     {
@@ -48,10 +57,36 @@ const Input = ({add,clicked,click,appln_no}) => {
     add(false);
     clicked(click+1);
   }
-  function handleConfirm(){
-    add(false);
-    clicked(click+1);
-    appln_no(input);
+  async function handleConfirm(){
+    try{
+      const result = await axios.post(
+        `${host}checkApplnNo`,
+        { appln_no: input },
+        { withCredentials: true }
+      );
+      if(result.data.valid){
+        add(false);
+      clicked(click+1);
+      appln_no(input);
+      }
+      else{
+        setShowAlert(true);
+        setAlertMessage("Application Number Already Exists");
+        setAlertType("warning");
+        setAlertStage("warning");
+        setAlertOkAction(() => () => {
+          
+          setShowAlert(false);
+        });
+        
+      }
+    }
+    catch(err){
+      console.log(err);
+    }
+    
+      
+    
   }
 
 
@@ -97,7 +132,15 @@ const Input = ({add,clicked,click,appln_no}) => {
               backgroundColor: "red", 
             }}
             onClick={handleCancel}
-          /></div>
+          />
+          <Alert
+              type={alertType}
+              message={alertMessage}
+              show={showAlert}
+              okbutton={alertOkAction}
+              cancelbutton={ null}
+            />
+          </div>
     </div>
   );
 };

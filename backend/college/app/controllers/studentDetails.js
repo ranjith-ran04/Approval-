@@ -46,7 +46,7 @@ async function studentDetails(req,res){
     const branch = req.body.branch;
     const supp = req.body.supp;
     const query = supp?`select name,reg_no as app_no from total_allotted where category ='SU' and (allot_coll_code =? and allot_branch = ?);`:`select name,a_no as app_no from student_info where c_code = ? and b_code = ?`;
-    console.log(query);
+    // console.log(query,branch,collegeCode);
     try{
     const [result] = await db.query(query,[collegeCode,branch]);
         if(!result) return res.status(500).json({msg:'error in query'});

@@ -93,7 +93,7 @@ function StudentDetails({admin,supp}) {
             </option>
           ))}
         </select>
-        {selected != "" && (<Button name='ADD' onClick={()=>{setAdd(true); setClicked(0)}}></Button>)}
+        {selected !== "" && (<Button name='ADD' onClick={()=>{setAdd(true); setClicked(0)}}></Button>)}
         {admin && (
         <div id="studentButton">
           <Button
@@ -108,7 +108,7 @@ function StudentDetails({admin,supp}) {
           />
         </div>)}
       </div>
-      {selected!="" &&(
+      {selected!=="" &&(
             <div className="student-table">
         <div className="student-row">
           <div className="student-header sno">S.No</div>
@@ -144,7 +144,7 @@ function StudentDetails({admin,supp}) {
   
       {clicked > 0 && (
         <div ref={formRef}>
-          <StudentForm handleClear={handleClear} appln_no={appln_no} index={deleteOne}/>
+          <StudentForm handleClear={handleClear} appln_no={appln_no} b_code={selected} index={deleteOne} />
         </div>
       )}
       {add && (
