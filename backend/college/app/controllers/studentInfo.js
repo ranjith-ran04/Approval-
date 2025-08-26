@@ -1,3 +1,4 @@
+const { listStudentFiles } = require("../../../common/uploadHelper");
 const db = require("../config/db");
 
 async function student(req, res) {
@@ -9,8 +10,32 @@ async function student(req, res) {
       return res.status(400).json({ err: "collegeCode is required" });
     }
     const stdQuery = `select * from student_info where c_code =? and a_no = ?`;
-    const result = await db.query(stdQuery, [collegeCode, appln_no]);
-    res.status(200).send(result);
+    const studentResult = await db.query(stdQuery, [collegeCode, appln_no]);
+    const student = studentResult[0] || {};
+
+    const certQuery = `SELECT * FROM approval_certificates WHERE c_code = ? AND a_no = ?`;
+    const certResult = await db.query(certQuery, [collegeCode, appln_no]);
+    const certFlags = certResult[0] || {};
+
+    const files = student.mobile
+      ? listStudentFiles(student.mobile, appln_no)
+      : [];
+
+    const certificatesList = [
+      { id: 1, name: "Community Certificate", key: "community" },
+      {id: 2,name: "Provisional/Degree Certificate",key: "provisionalCertificate",},
+      { id: 3, name: "Consolidated Mark Sheet", key: "consolidate" },
+      { id: 4, name: "Transfer Certificate", key: "transferCert" },
+      {id: 5,name: "First Graduate Certificate",key: "fg",},
+    ].map((cert) => {
+      const file = files.find((f) => f.suffix === cert.key.split("_")[0]);
+      return {
+        ...cert,
+        uploaded: certFlags[cert.key] === 1,
+        fileUrl: file?.url || null,
+      };
+    });
+    res.status(200).send({ student, certificates: certificatesList });
   } catch (err) {
     return res.status(500).json({ err: "Query error", sqlErr: err.message });
   }
@@ -31,12 +56,12 @@ async function editStudent(req, res) {
     if (keys.length === 0) {
       return res.status(400).json({ err: "No fields to update" });
     }
-    
+
     const setClause = keys.map((key) => `${key} = ?`).join(", ");
     const values = keys.map((key) => changedFields[key]);
     values.push(a_no);
     const editQuery = `update student_info set ${setClause} where a_no=?`;
-    await db.query(editQuery,values);
+    await db.query(editQuery, values);
     res.status(200).json({ msg: "Student details updated successfully." });
   } catch (err) {
     return res.status(500).json({ err: "Query error", sqlErr: err.message });
@@ -49,11 +74,9 @@ async function deleteStudent(req, res) {
     const a_no = req.body.appln_no;
 
     if (!collegeCode || !a_no) {
-      return res
-        .status(400)
-        .json({
-          err: "collegeCode and application number is required",
-        });
+      return res.status(400).json({
+        err: "collegeCode and application number is required",
+      });
     }
 
     const deleteQuery = `delete from student_info where a_no = ?`;

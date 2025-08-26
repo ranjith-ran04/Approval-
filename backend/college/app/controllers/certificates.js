@@ -1,12 +1,13 @@
-import path from "path";
-import {
+const {
   uploadsRoot,
   upload,
   listStudentFiles,
   deleteByType,
   cleanSamePrefix,
   encryptValue,
-} from "../../../common/uploadHelper";
+  fileSuffixMapping,
+} = require("../../../common/uploadHelper");
+const db = require("../config/db");
 
 const getCert = async (req, res) => {
   try {
@@ -16,7 +17,7 @@ const getCert = async (req, res) => {
         .status(400)
         .json({ error: "mobile and application number are required" });
     const files = listStudentFiles(mobile, appln);
-    return res.json(files);
+    return res.status(200).json(files);
   } catch (err) {
     return res.status(500).json({ error: err.message });
   }
@@ -24,18 +25,32 @@ const getCert = async (req, res) => {
 
 const uploadCert = async (req, res) => {
   const handler = upload.single("file");
-
-  handler(req, res, (err) => {
+//   console.log("inside uloader");
+  handler(req, res, async (err) => {
+    // console.log("inside handler");
     if (err) return res.status(400).json({ error: err.message });
     try {
-        const {mobile, appln, type } = req.body;
-        if(!mobile || !appln || !type) return res.status(400).json({error : "mobile,appln,type are required"});
+    // console.log("inside try");
+      const { mobile, appln, type } = req.body;
+    //   console.log(mobile);
+      if (!mobile || !appln || !type)
+        return res
+          .status(400)
+          .json({ error: "mobile,appln,type are required" });
 
-        cleanSamePrefix(mobile, appln,type,req.file.filename);
+      cleanSamePrefix(mobile, appln, type, req.file.filename);
+      const column = certMap[type];
+      updateCertQ = `update approval_certificates set ${column} = 1 where a_no=?`;
+      await db.query(updateCertQ, [appln]);
 
-        return res.json({success:true,
-            file:req.file.filename,
-            url: `api/uploads/${mobile}_${encryptValue(mobile)}/${req.file.filename}`,
+      return res
+        .status(200)
+        .json({
+          success: true,
+          file: req.file.filename,
+          url: `uploads/${mobile}_${encryptValue(mobile)}/${
+            req.file.filename
+          }`,
         });
     } catch (e) {
       return res.status(500).json({ error: e.message });
@@ -43,17 +58,29 @@ const uploadCert = async (req, res) => {
   });
 };
 
-const deleteCert= (req, res) => {
-    const {mobile, appln, type} =req.body;
-    if(!mobile || !appln || !type) return res.status(400).json({ error: "mobile,appln,type are required"});
-    
-    try{
-        const ok = deleteByType(mobile,appln,type);
-        if(!ok) return res.status(404).json({error : "File not found"});
-        return res.json({success : true});
-    }catch(e){
-        return res.status(500).json({error : e.message});
-    }
-}
+const deleteCert = async (req, res) => {
+  const { mobile, appln, type } = req.body;
+  if (!mobile || !appln || !type)
+    return res.status(400).json({ error: "mobile,appln,type are required" });
 
-module.exports = {getCert, uploadCert,deleteCert};
+  try {
+    const ok = deleteByType(mobile, appln, type);
+    if (!ok) return res.status(404).json({ error: "File not found" });
+    const column = certMap[type];
+    delCertQ = `update approval_certificates set ${column} = 0 where a_no=?`;
+    await db.query(delCertQ, [appln]);
+    return res.status(200).json({ success: true });
+  } catch (e) {
+    return res.status(500).json({ error: e.message });
+  }
+};
+
+const certMap = {
+  community: "community_certificate",
+  provisionalCertificate: "pro_degree_certificate",
+  consolidate: "consolidate_marksheet",
+  fg: "first_graduate_certificate",
+  transferCert: "transfer_certificate",
+};
+
+module.exports = { getCert, uploadCert, deleteCert };

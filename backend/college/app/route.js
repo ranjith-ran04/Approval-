@@ -53,8 +53,8 @@ router.post("/student", verifyjwt,student);
 router.put("/student", verifyjwt, editStudent);
 router.delete("/student", verifyjwt, deleteStudent);
 
-router.get("/cert",verifyjwt,getCert);
-router.post("/cert",verifyjwt, uploadCert);
+router.post("/cert",verifyjwt,getCert);
+router.post("/certUpl",verifyjwt, uploadCert);
 router.delete("/cert",verifyjwt,deleteCert);
 
 module.exports = router;

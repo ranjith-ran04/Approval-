@@ -4,7 +4,7 @@ const cookieParser = require("cookie-parser");
 const appRouter = require("./app/route"); 
 const app = express();
 const PORT = 5000;
-const {uploadsRoot} = require("../../common/uploadHelper");
+const {uploadsRoot} = require("../common/uploadHelper");
 
 app.use(express.json());
 app.use(cookieParser());

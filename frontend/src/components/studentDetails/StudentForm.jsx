@@ -26,14 +26,7 @@ const Addstudent = ({ handleClear, appln_no, index }) => {
   const [error, setError] = useState({});
   const [alertOkAction, setAlertOkAction] = useState(() => () => {});
   // const [error,setError] = useState('');
-  const [certificates, setCertificates] = useState([
-    { id: 1, name: "Community Certificate", file: null },
-    { id: 2, name: "Provisional/Degree Certificate", file: null },
-    { id: 3, name: "Consolidated Mark Sheet", file: null },
-    { id: 4, name: "Transfer Certificate", file: null },
-    { id: 5, name: "Equivalency", file: null },
-    { id: 6, name: "First Graduate Certificate", file: null },
-  ]);
+  const [certificates, setCertificates] = useState([]);
   const requiredFields = [
     "appln_no",
     "CATEGORY",
@@ -85,26 +78,26 @@ const Addstudent = ({ handleClear, appln_no, index }) => {
     let casteListModule = [];
     switch (community) {
       case "BC":
-        casteListModule = ((await import("../../constants/bc.json")).default);
+        casteListModule = (await import("../../constants/bc.json")).default;
         break;
       case "BCM":
-        casteListModule = ((await import("../../constants/bcm.json")).default);
+        casteListModule = (await import("../../constants/bcm.json")).default;
         break;
       case "SC":
-        casteListModule = ((await import("../../constants/sc.json")).default);
+        casteListModule = (await import("../../constants/sc.json")).default;
         break;
       case "SCA":
-        casteListModule = ((await import("../../constants/sca.json")).default);
+        casteListModule = (await import("../../constants/sca.json")).default;
         break;
       case "ST":
-        casteListModule = ((await import("../../constants/st.json")).default);
+        casteListModule = (await import("../../constants/st.json")).default;
         break;
       case "MBC":
-        casteListModule = ((await import("../../constants/mbc.json")).default);
+        casteListModule = (await import("../../constants/mbc.json")).default;
         break;
       case "OC": // Only Others for Open Category
       default: // Only Others when nothing matches
-        casteListModule = [{ code: "others" ,name : "" }];
+        casteListModule = [{ code: "others", name: "" }];
         setCastes(casteListModule);
         return;
     }
@@ -119,19 +112,36 @@ const Addstudent = ({ handleClear, appln_no, index }) => {
         { appln_no: appln_no },
         { withCredentials: true }
       );
-      const raw = result.data?.[0]?.[0];
-      // console.log("Raw API:", raw);
-      // console.log("API catogory:", raw.catogory);
-      // console.log(result.data?.[0]?.[0]);
-      if (!raw) {
+      const { student, certificates } = result.data;
+      if (!student) {
         console.warn("No student found in response", result.data);
         setStudentData({});
         return;
       }
-
+      setCertificates(certificates);
+      setStudentData(student[0]);
+      // console.log(certificates);
+      // console.log("Student raw:", student[0]);
       // console.log(result.data?.[0]?.[0]);
-      setStudentData(raw);
-      await caste_drop(raw.community);
+      const getCert = await axios.post(
+        `${host}cert`,
+        { appln: appln_no, mobile: student[0]?.mobile },
+        { withCredentials: true }
+      );
+      // console.log(getCert.data);
+      const uploaded = getCert.data;
+
+      const merged = certificates.map((cert) => {
+        const match = uploaded.find((f) => f.suffix === cert.key);
+        return {
+          ...cert,
+          uploaded: !!match,
+          fileUrl: match ? match.url : null,
+        };
+      });
+      setCertificates(merged);
+      // console.log(merged);
+      await caste_drop(student.community);
     } catch (err) {
       console.log(err);
     } finally {
@@ -148,7 +158,7 @@ const Addstudent = ({ handleClear, appln_no, index }) => {
     // setAlertStage('')
   };
   const validateFields = () => {
-    console.log("Entered validation");
+    // console.log("Entered validation");
     const letterfields = [
       "candidatename",
       "Religion",
@@ -339,48 +349,92 @@ const Addstudent = ({ handleClear, appln_no, index }) => {
     }
   };
 
-  const handleFileChange = (e, index) => {
+  const handleFileChange = async (e, key) => {
+    setShowAlert(false);
     const file = e.target.files[0];
-    setCertificates((prev) => {
-      const updated = [...prev];
-      updated[index].file = file;
-      return updated;
-    });
-    setShowAlert(true);
-    setAlertMessage("File Uploaded Successfully");
-    setAlertType("success");
-    setAlertStage("success");
-    setAlertOkAction(() => () => {
-      setShowAlert(false);
-    });
-  };
+    if (!file) return;
 
-  const handleView = (file) => {
-    if (file) {
-      const url = URL.createObjectURL(file);
-      window.open(url, "_blank");
-    }
-  };
+    const formData = new FormData();
+    const mobile = studentData.mobile;
+    formData.append("mobile", mobile);
+    formData.append("appln", appln_no);
+    formData.append("type", key);
+    formData.append("file", file);
 
-  const handleDelete = (index) => {
-    setCertificates((prev) => {
-      const updated = [...prev];
-      updated[index].file = null;
-      return updated;
-    });
-    setShowAlert(true);
-    setAlertMessage("Confirm to Delete");
-    setAlertStage("confirm");
-    setAlertType("warning");
-    setAlertOkAction(() => () => {
+    try {
+      const res = await axios.post(`${host}certUpl`, formData, {
+        withCredentials: true,
+      });
+      setCertificates((prev) =>
+        prev.map((cert) =>
+          cert.key === key
+            ? { ...cert, uploaded: true, fileUrl: res.data.url }
+            : cert
+        )
+      );
       setShowAlert(true);
-      setAlertMessage("File Deleted Successfully");
-      setAlertStage("success");
+      setAlertMessage("File Uploaded Successfully");
       setAlertType("success");
+      setAlertStage("success");
       setAlertOkAction(() => () => {
         setShowAlert(false);
       });
-    });
+    } catch (err) {
+      console.log("Upload Failed!", err);
+
+      setCertificates((prev) =>
+        prev.map((cert) =>
+          cert.key === key ? { ...cert, uploaded: false, fileUrl: null } : cert
+        )
+      );
+      e.target.value = "";
+      setAlertType("error");
+      setAlertStage("error");
+      setAlertMessage("Upload Failed!");
+      setAlertOkAction(() => () => {
+        setShowAlert(false);
+      });
+    }
+  };
+
+  const handleDelete = async (index) => {
+    setShowAlert(false);
+    try {
+      setShowAlert(true);
+      setAlertMessage("Confirm to Delete");
+      setAlertStage("confirm");
+      setAlertType("warning");
+      setAlertOkAction(() => async () => {
+        const res = await axios.delete(`${host}cert`, {
+          data: { mobile: studentData.mobile, appln: appln_no, type: index },
+          withCredentials: true,
+        });
+        if (res.status === 200) {
+          setShowAlert(true);
+          setAlertMessage("File Deleted Successfully");
+          setAlertStage("success");
+          setAlertType("success");
+          setCertificates((prev) =>
+            prev.map((cert) =>
+              cert.key === index
+                ? { ...cert, uploaded: false, fileUrl: null }
+                : cert
+            )
+          );
+        }
+        setAlertOkAction(() => () => {
+          setShowAlert(false);
+        });
+      });
+    } catch (err) {
+      console.error("Delete File Failed", err);
+      setAlertType("error");
+      setAlertStage("error");
+      setAlertMessage("Failed to Delete File!");
+      setAlertOkAction(() => () => {
+        setShowAlert(false);
+      });
+    }
   };
   // Extract just the code from backend value
   const casteCodeFromBackend = studentData.caste_name?.split("-")[0];
@@ -1270,20 +1324,22 @@ const Addstudent = ({ handleClear, appln_no, index }) => {
             {certificates.map((cert, index) => (
               <div id="fileuploaddiv" className="field-row" key={cert.id}>
                 <label>{cert.name} (size-limit: 300kb)</label>
-                {cert.file ? (
+                {cert.uploaded ? (
                   <div className="viewdelbuttonupload">
                     <p className="status">File uploaded successfully</p>
                     <button
                       className="view"
                       type="button"
-                      onClick={() => handleView(cert.file)}
+                      onClick={() =>
+                        window.open(`${host}${cert.fileUrl}`, "_blank")
+                      }
                     >
                       View
                     </button>
                     <button
                       className="remove"
                       type="button"
-                      onClick={() => handleDelete(index)}
+                      onClick={() => handleDelete(cert.key)}
                     >
                       Remove
                     </button>
@@ -1316,7 +1372,7 @@ const Addstudent = ({ handleClear, appln_no, index }) => {
                     <input
                       type="file"
                       name="files"
-                      onChange={(e) => handleFileChange(e, index)}
+                      onChange={(e) => handleFileChange(e, cert.key)}
                     />
                     <br></br>
                     {error["files"] && (

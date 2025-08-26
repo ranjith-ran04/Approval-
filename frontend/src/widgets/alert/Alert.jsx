@@ -2,7 +2,7 @@ import './Alert.css';
 const Alert = ({ type = 'success', message, show,cancelbutton, okbutton }) => {
   
   const renderIcon = () => {
-    console.log(show);
+    // console.log(show);
       if (type === 'success') {
       return (
         <svg className='alerticon' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52" width="80" height="80">

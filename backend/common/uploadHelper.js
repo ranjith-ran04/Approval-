@@ -1,32 +1,32 @@
-import path from "path";
-import fs from "fs";
-import crypto from "crypto";
-import multer from "multer";
-import { fileURLToPath } from "url";
+const path =require( "path");
+const fs = require("fs");
+const crypto = require("crypto");
+const multer = require("../college/node_modules/multer");
+const { fileURLToPath } = require("url");
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+// const __filename = fileURLToPath(import.meta.url);
+// const __dirname = path.dirname(__filename);
 
-export const uploadsRoot = path.resolve(__dirname, "..", "uploads");
+const uploadsRoot = path.resolve(__dirname, "..", "uploads");
 
 if (!fs.existsSync(uploadsRoot)) {
   fs.mkdirSync(uploadsRoot, { recursive: true });
 }
 
-export const encryptValue = (value) => {
+const encryptValue = (value) => {
   hash = crypto.createHash("sha256").update(value).digest("hex");
   return hash.substring(0, 10);
 };
 
-export const fileSuffixMapping = {
+const fileSuffixMapping = {
   photo: "photo",
   signature: "signature",
-  communityCertificate: "community",
+  community: "community",
   nativityCertificate: "nativity",
   tenthMarksheet: "tenthMarkSheet",
   twelfthMarksheet: "twelfthMarkSheet",
   provisionalCertificate: "provisionalCertificate",
-  consolidatedMarksheet: "consolidate",
+  consolidate: "consolidate",
   semesterOne: "semester1",
   semesterTwo: "semester2",
   semesterThree: "semester3",
@@ -35,9 +35,9 @@ export const fileSuffixMapping = {
   semesterSix: "semester6",
   semesterSeven: "semester7",
   semesterEight: "semester8",
-  transferCertificate: "transferCert",
+  transferCert: "transferCert",
   aadhar: "aadhar",
-  firstGraduate: "fg",
+  fg: "fg",
   sportsCertificate6: "sportCert6",
   sportsCertificate5: "sportCert5",
   sportsCertificate4: "sportCert4",
@@ -83,13 +83,13 @@ const fileFilter = (req, file, cb) => {
   cb(null, true);
 };
 
-export const upload = multer({
+const upload = multer({
   storage,
   fileFilter,
   limits: { fileSize: 300 * 1024 },
 });
 
-export const listStudentFiles = (mobile, appln) => {
+const listStudentFiles = (mobile, appln) => {
   const mobileHash = encryptValue(mobile);
   const applnHash = encryptValue(appln);
   const mob = `${mobile}_${mobileHash}`;
@@ -102,12 +102,12 @@ export const listStudentFiles = (mobile, appln) => {
     .filter((f) => f.startsWith(applnHash + "-"))
     .map((f) => ({
       name: f,
-      url: `/api/uploads/${mob}/${f}`,
+      url: `uploads/${mob}/${f}`,
       suffix: f.split("-")[1]?.split(".")[0] || "",
     }));
 };
 
-export const deleteByType = (mobile, appln, type) => {
+const deleteByType = (mobile, appln, type) => {
   if (!fileSuffixMapping[type]) throw new Error("Invalid type");
   const mobileHash = encryptValue(mobile);
   const applnHash = encryptValue(appln);
@@ -124,7 +124,7 @@ export const deleteByType = (mobile, appln, type) => {
   return true;
 };
 
-export const cleanSamePrefix = (mobile, appln, type, keepFilename) => {
+const cleanSamePrefix = (mobile, appln, type, keepFilename) => {
   const mobileHash = encryptValue(mobile);
   const applnHash = encryptValue(appln);
   const suffix = fileSuffixMapping[type];
@@ -137,3 +137,6 @@ export const cleanSamePrefix = (mobile, appln, type, keepFilename) => {
     .filter((f) => f.startsWith(prefix) && f !== keepFilename)
     .forEach((f) => fs.unlinkSync(path.join(dir, f)));
 };
+
+
+module.exports = ({uploadsRoot, fileSuffixMapping,encryptValue,upload,listStudentFiles,deleteByType,cleanSamePrefix});
