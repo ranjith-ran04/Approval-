@@ -65,6 +65,18 @@ function Sidebar({ setCurrent, admin }) {
   const items = [
     { id: 0, iconId: "homeIcon", label: "Home", action: () => setCurrent(0) },
     {
+      id: 11,
+      iconId: "formApproved",
+      label: "Approved Details",
+      action: () => handleForm("formApprv", undefined, undefined, undefined, undefined, undefined, 1),
+    },
+    {
+      id: 12,
+      iconId: "formNotApproved",
+      label: "Not Approved Details",
+      action: () => handleForm("formApprv",undefined, undefined, undefined, undefined, undefined, 0),
+    },
+    {
       id: 1,
       iconId: "collegeIcon",
       label: "College Details",
@@ -82,7 +94,7 @@ function Sidebar({ setCurrent, admin }) {
       label: "Student Details",
       action: () => setCurrent(5),
     },
-    { id: 4, iconId: "discontinuedIcon", label: "Discontinued Details" },
+    { id: 4, iconId: "discontinuedIcon", label: "Discontinued Details", action: () => setCurrent(6) },
     {
       id: 5,
       iconId: "formAIcon",

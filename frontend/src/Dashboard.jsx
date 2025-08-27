@@ -13,6 +13,7 @@ import axios from "axios";
 import { host } from "./constants/backendpath.js";
 import { useNavigate, useLocation } from "react-router-dom";
 import StudentDetails from "./components/studentDetails/StudentDetails.jsx";
+import Discontinued from "./components/discontinued/Discontinued.jsx";
 
 function Dashboard() {
   const [current, setCurrent] = useState(0);
@@ -76,6 +77,7 @@ Tamilnadu Lateral Entry Direct Second Year B.E/B.Tech., Admissions Approval-2025
             )}
             {current === 0 && <Notes />}
             {current === 5 && <StudentDetails />}
+            {current === 6 && <Discontinued/>}
             <ScrollToTop scrollRef={scrollRef} />
           </>
         </div>
