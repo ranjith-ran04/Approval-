@@ -5,48 +5,53 @@ import { host } from "../../constants/backendpath";
 import StudentForm from "./StudentForm";
 import "../college/CollegeInfo.css";
 import Button from "../../widgets/button/Button";
-import AddInput from '../../widgets/addinput/input.jsx';
+import AddInput from "../../widgets/addinput/Input.jsx";
 
-function StudentDetails({admin,supp}) {
+function StudentDetails({ admin, supp }) {
   const [selected, setSelected] = useState("");
   const [branch, setBranch] = useState([]);
   const [students, setStudents] = useState([]);
   const [appln_no, setAppln_no] = useState(false);
   const [clicked, setClicked] = useState(0);
-  const [add,setAdd] = useState('');
+  const [add, setAdd] = useState("");
   const formRef = useRef(null);
   const addRef = useRef(null);
-  const collegeCode = 5901;
+  // const collegeCode = 5901;
+
   async function handleFetch() {
     try {
-      var result;
-      if(admin){
-        result = await axios.post(`${host}collegeBranchFetch`,{collegeCode:collegeCode},{ withCredentials:true});
+      let result;
+      if (admin) {
+        result = await axios.post(
+          `${host}collegeBranchFetch`,
+          { withCredentials: true }
+        );
+      } else {
+        result = await axios.get(`${host}collegeBranchFetch`, {
+          withCredentials: true,
+        });
       }
-      else{
-      result = await axios.get(`${host}collegeBranchFetch`, {
-        withCredentials: true,
-      });}
       if (result.status === 200) {
-        // console.log(result.data);
         setBranch(result.data);
       }
     } catch (error) {
       console.log(error);
     }
   }
+
   useEffect(() => {
     handleFetch();
   }, []);
+
   useEffect(() => {
     if (clicked > 0 && formRef.current) {
       formRef.current.scrollIntoView({ behavior: "smooth" });
     }
   }, [clicked]);
 
-  useEffect(()=>{
-    if(add){
-      addRef.current.scrollIntoView({ behavior:'smooth'});
+  useEffect(() => {
+    if (add) {
+      addRef.current.scrollIntoView({ behavior: "smooth" });
     }
   }, [add]);
 
@@ -61,7 +66,7 @@ function StudentDetails({admin,supp}) {
       console.log(supp);
       const result = await axios.post(
         `${host}studentBranch`,
-        { branch: branch , ...(admin && {collegeCode:collegeCode}),supp:supp?true:false},
+        { branch: branch, ...(admin ), supp: supp ? true : false },
         { withCredentials: true }
       );
       if (result.status === 200) {
@@ -71,16 +76,17 @@ function StudentDetails({admin,supp}) {
       console.log(error);
     }
   }
+
   const handleClear = () => {
     setClicked(0);
     setAdd(false);
   };
 
   const deleteOne = (appln_no) => {
-    setStudents(prev => prev.filter( students => students.app_no !== appln_no));
+    setStudents((prev) => prev.filter((students) => students.app_no !== appln_no));
     setClicked(0);
   };
-  // console.log(students);
+
   return (
     <div className="student-container">
       <div className="head-studentdropdown">
@@ -93,21 +99,17 @@ function StudentDetails({admin,supp}) {
             </option>
           ))}
         </select>
-        {selected != "" && (<Button name='ADD' onClick={()=>{setAdd(true); setClicked(0)}}></Button>)}
+        {selected !== "" && (
+          <Button name="ADD" onClick={() => { setAdd(true); setClicked(0); }} />
+        )}
         {admin && (
-        <div id="studentButton">
-          <Button
-            name={"College Details"}
-            style={{ width: "130px" }}
-          />
-          <Button
-            name={"Branch Details"}
-            style={{
-              width: "130px",
-            }}
-          />
-        </div>)}
+          <div id="studentButton">
+            <Button name={"College Details"} style={{ width: "130px" }} />
+            <Button name={"Branch Details"} style={{ width: "130px" }} />
+          </div>
+        )}
       </div>
+
       <div className="student-table">
         <div className="student-row">
           <div className="student-header sno">S.No</div>
@@ -125,6 +127,7 @@ function StudentDetails({admin,supp}) {
               <button
                 className="student-button"
                 onClick={() => {
+                  localStorage.setItem("fromView", "true");
                   setAdd(false);
                   setAppln_no(item.app_no);
                   setClicked(clicked + 1);
@@ -135,21 +138,29 @@ function StudentDetails({admin,supp}) {
             </div>
           </div>
         ))}
+
         {students.length === 0 && (
           <div className="Unavailable">No Students Found</div>
         )}
       </div>
+
       {clicked > 0 && (
         <div ref={formRef}>
-          <StudentForm handleClear={handleClear} appln_no={appln_no} index={deleteOne}/>
+          <StudentForm handleClear={handleClear} appln_no={appln_no} index={deleteOne} />
         </div>
       )}
+
       {add && (
-        <div ref={addRef} >
-        <AddInput add={setAdd} clicked={setClicked} click={clicked} appln_no={setAppln_no}/>
+        <div ref={addRef}>
+          <AddInput 
+            add={setAdd} 
+            clicked={setClicked} 
+            click={clicked} 
+            appln_no={setAppln_no} 
+            branchCode={selected}   // ✅ passing selected branch code
+          />
         </div>
-      )
-      }
+      )}
     </div>
   );
 }

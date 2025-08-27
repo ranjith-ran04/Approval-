@@ -26,7 +26,7 @@ function Branch({ setCurrent, setState }) {
   const handleCloseAlert = () => {
     setShowAlert(false);
   };
-  const collegeCode = "1";
+  // const collegeCode = "1";
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     const fetchData = async () => {
@@ -46,10 +46,10 @@ function Branch({ setCurrent, setState }) {
     fetchData();
   }, []);
 
-  const handleDeleteBranch = async (collegeCode, branch_code) => {
+  const handleDeleteBranch = async ( branch_code) => {
     try {
       const res = await axios.delete(`${host}branch`, {
-        data: { collegeCode, b_code: branch_code },withCredentials:true
+        data: {  b_code: branch_code },withCredentials:true
       });
 
       if (res.status === 200) {
@@ -159,7 +159,7 @@ function Branch({ setCurrent, setState }) {
           okbutton={
             alertStage === "confirm"
               ? () =>
-                  handleDeleteBranch(collegeCode, branchData[showIndex]?.b_code)
+                  handleDeleteBranch( branchData[showIndex]?.b_code)
               : alertStage === "success" || "cancel"
               ? handleCloseAlert
               : null

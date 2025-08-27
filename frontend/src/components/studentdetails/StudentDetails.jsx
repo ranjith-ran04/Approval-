@@ -16,7 +16,7 @@ function StudentDetails({ admin, supp }) {
   const [add, setAdd] = useState("");
   const formRef = useRef(null);
   const addRef = useRef(null);
-  const collegeCode = 5901;
+  // const collegeCode = 5901;
 
   async function handleFetch() {
     try {
@@ -24,7 +24,6 @@ function StudentDetails({ admin, supp }) {
       if (admin) {
         result = await axios.post(
           `${host}collegeBranchFetch`,
-          { collegeCode: collegeCode },
           { withCredentials: true }
         );
       } else {
@@ -67,7 +66,7 @@ function StudentDetails({ admin, supp }) {
       console.log(supp);
       const result = await axios.post(
         `${host}studentBranch`,
-        { branch: branch, ...(admin && { collegeCode: collegeCode }), supp: supp ? true : false },
+        { branch: branch, ...(admin ), supp: supp ? true : false },
         { withCredentials: true }
       );
       if (result.status === 200) {
@@ -128,6 +127,7 @@ function StudentDetails({ admin, supp }) {
               <button
                 className="student-button"
                 onClick={() => {
+                  localStorage.setItem("fromView", "true");
                   setAdd(false);
                   setAppln_no(item.app_no);
                   setClicked(clicked + 1);

@@ -55,7 +55,7 @@ function Dashboard() {
         <NavigationBar
           text={`GOVERNMENT OF TAMILNADU
 DIRECTORATE OF TECHNICAL EDUCATION
-Tamilnadu Lateral Entry Direct Second Year B.E/B.Tech.,Approval-2025`}
+Tamilnadu Lateral Entry Direct Second Year B.E/B.Tech., Admission Approval-2025`}
           profile={true}
           bool={false}
           setCurrent={setCurrent}

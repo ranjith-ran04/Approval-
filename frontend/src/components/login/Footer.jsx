@@ -8,11 +8,11 @@ const Footer = () => {
         <h4>Contact Us</h4>
         <p>+91 94436 61901</p>
         <p>THE SECRETARY</p>
-        <p>LATERAL ENTRY ADMISSIONS - 2024</p>
+        <p>LATERAL ENTRY ADMISSIONS - 2025</p>
       </div>
       <div className="footer-section">
         <h4>Email</h4>
-        <p>tnleaapproval@gmail.com</p>
+        <p>tnleaapproval25@gmail.com</p>
       </div>
       <div className="footer-section">
         <h4>Address</h4>

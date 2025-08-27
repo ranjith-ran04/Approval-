@@ -103,6 +103,7 @@ const Input = ({ add, clicked, click, appln_no, collegeCode, branchCode }) => {
       return;
     }
     appln_no(input); // send value to parent
+    localStorage.setItem("fromAdd","true");
     add(false);
     clicked(click + 1);
   }

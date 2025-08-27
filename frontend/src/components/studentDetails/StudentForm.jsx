@@ -9,6 +9,43 @@ import { host } from "../../constants/backendpath";
 import { useLoader } from "../../context/LoaderContext";
 import states from "../../constants/states";
 
+const CategorySection = ({ studentData, handleChange, error }) => {
+  const [options, setOptions] = useState([
+    { label: "GOVERNMENT", value: "GOVERNMENT" },
+    { label: "MANAGEMENT", value: "MANAGEMENT" },
+    { label: "LAP", value: "LAP" },
+    { label: "MIN", value: "MIN" },
+    { label: "GOI", value: "GOI" },
+    { label: "FOR", value: "FOR" },
+    { label: "NRI", value: "NRI" },
+  ]);
+
+  useEffect(() => {
+    const fromAdd = localStorage.getItem("fromAdd") === "true";
+    const fromView = localStorage.getItem("fromView") === "true";
+    if (fromAdd && !fromView) {
+      setOptions((prev) => prev.filter((opt) => opt.value !== "GOVERNMENT")); 
+    }
+    localStorage.removeItem("fromAdd");
+    localStorage.removeItem("fromView");
+  }, []);
+
+  return (
+    <Inputfield
+      label={"CATEGORY"}
+      id={"CATEGORY"}
+      eltname={"catogory"}
+      type={"dropdown"}
+      htmlfor={"CATEGORY"}
+      options={options}
+      value={studentData.catogory}
+      onChange={handleChange}
+      error={error["CATEGORY"]}
+    />
+  );
+};
+
+
 const Addstudent = ({ handleClear, appln_no, index }) => {
   // console.log(index);
   const { showLoader, hideLoader } = useLoader();
@@ -18,6 +55,7 @@ const Addstudent = ({ handleClear, appln_no, index }) => {
     nationality: "",
     nativity: "",
   });
+  
   const [caste, setCastes] = useState([]);
   const [showAlert, setShowAlert] = useState(false);
   const [alertStage, setAlertStage] = useState("");
@@ -294,7 +332,7 @@ const Addstudent = ({ handleClear, appln_no, index }) => {
     } catch (error) {
       console.log(error);
       setShowAlert(true);
-      setAlertMessage("Unable to connnect to server...");
+      setAlertMessage("Unable to update kindly try again...");
       setAlertStage("error");
       setAlertType("error");
       setAlertOkAction(() => () => {
@@ -330,7 +368,7 @@ const Addstudent = ({ handleClear, appln_no, index }) => {
     } catch (error) {
       console.log(error);
       setShowAlert(true);
-      setAlertMessage("Unable to connnect to server...");
+      setAlertMessage("Unable to delete kindly try again...");
       setAlertStage("error");
       setAlertType("error");
       setAlertOkAction(() => () => {
@@ -411,7 +449,26 @@ const Addstudent = ({ handleClear, appln_no, index }) => {
       }));
 
       await caste_drop(value);
-    } else {
+    }
+    else if(name=="fg") {
+      setStudentData((prev) => ({ ...prev, [name]:parseInt (updatedValue) }));
+
+    }
+     else {
+      // if (
+      //   (name ==="max_3" || name ==="max_4" || name ==="max_5" || name ==="max_6")
+      //   && value ==="0" 
+      // ) {
+      //   setError((prev) => ({
+      //     ...prev,
+      //     [name]:"Maximum marks cannot be 0",
+      //   }));
+      // } else {
+      //   setError((prev) => ({
+      //     ...prev,
+      //     [name]:"",
+      //   }));
+      // }
       setStudentData((prev) => ({ ...prev, [name]: updatedValue }));
     }
 
@@ -497,6 +554,14 @@ const Addstudent = ({ handleClear, appln_no, index }) => {
     });
   }
   // console.log("Before render catogory:", studentData.catogory);
+  useEffect(() => {
+    if (studentData.course_type !== "bsc" && studentData.maths_studied) {
+      setStudentData((prev) => ({ ...prev, maths_studied: "" }));
+    }
+  }, [studentData.course_type]);
+
+  
+
 
   return (
     <div className="collegewholediv">
@@ -512,24 +577,10 @@ const Addstudent = ({ handleClear, appln_no, index }) => {
       </div>
 
       <div id="category" style={{ gap: "50px" }}>
-        <Inputfield
-          label={"CATEGORY"}
-          id={"CATEGORY"}
-          eltname={"catogory"}
-          type={"dropdown"}
-          htmlfor={"CATEGORY"}
-          options={[
-            { label: "GOVERNMENT", value: "GOVERNMENT" },
-            { label: "MANAGEMENT", value: "MANAGEMENT" },
-            { label: "LAP", value: "LAP" },
-            { label: "MIN", value: "MIN" },
-            { label: "GOI", value: "GOI" },
-            { label: "FOR", value: "FOR" },
-            { label: "NRI", value: "NRI" },
-          ]}
-          value={studentData.catogory}
-          onChange={handleChange}
-          error={error["CATEGORY"]}
+        <CategorySection
+          studentData={studentData}
+          handleChange={handleChange}
+          error={error}
         />
         <div style={{ display: "flex", gap: "10px" }}>
           <Button
@@ -579,7 +630,7 @@ const Addstudent = ({ handleClear, appln_no, index }) => {
               options={[
                 { label: "Male", value: "MALE" },
                 { label: "Female", value: "FEMALE" },
-                { label: "Transgender", value: "Transgender" },
+                { label: "Others", value: "Transgender" },
               ]}
               value={studentData.gender}
               error={error["gender"]}
@@ -669,8 +720,8 @@ const Addstudent = ({ handleClear, appln_no, index }) => {
                 { label: "Hindu", key: "Hindu", value: "Hindu" },
                 { label: "Muslim", key: "Muslim", value: "Muslim" },
                 { label: "Christian", key: "Christian", value: "Christian" },
-                { label: "Sikhism", value: "Sikhism" },
-                { label: "Jainism", value: "Jainism" },
+                // { label: "Sikhism", value: "Sikhism" },
+                // { label: "Jainism", value: "Jainism" },
                 { label: "Others", value: "Others" },
               ]}
               value={studentData.religion}
@@ -885,8 +936,8 @@ const Addstudent = ({ handleClear, appln_no, index }) => {
                 { label: "DOTE", key: "DOTE", value: "DOTE" },
                 { label: "Autonomous", key: "Autonomous", value: "AUTONOMOUS" },
                 { label: "University", key: "University", value: "UNIVERSITY" },
-                { label: "UIT", key: "UIT", value: "UIT" },
-                { label: "UIO", key: "UIO", value: "UIO" },
+                // { label: "UIT", key: "UIT", value: "UIT" },
+                // { label: "UIO", key: "UIO", value: "UIO" },
                 { label: "Others", key: "Others", value: "others" },
               ]}
               value={studentData.name_of_board}
@@ -898,8 +949,12 @@ const Addstudent = ({ handleClear, appln_no, index }) => {
             <Inputfield
               eltname={"hsc_group"}
               type={"radio"}
+              // id="course_type"
+              // value={studentData.course_type}
+              // htmlfor="course_type"
               radiolabel={"Course Type"}
               classname={"field-block"}
+              // onChange={handleChange}
               options={[
                 { label: "Regular", key: "Regular", value: "DIP-Regular" },
                 { label: "Lateral", key: "Lateral", value: "DIP-Lateral" },
@@ -918,7 +973,17 @@ const Addstudent = ({ handleClear, appln_no, index }) => {
                   key: "Sandwich (8 Semesters)",
                   value: "DIP-Sandwich_8",
                 },
-                { label: "BSc", key: "BSC", value: "Bsc" },
+                {
+                  label: "Sandwich (Lateral 7 Semesters)",
+                  key: "Sandwich (7 Semesters)_lat",
+                  value: "DIP-Sandwich_7_lat",
+                },
+                {
+                  label: "Sandwich (Lateral 8 Semesters)",
+                  key: "Sandwich (8 Semesters)_lat",
+                  value: "DIP-Sandwich_8_lat",
+                },
+                { label: "BSc", key: "BSC", value: "bsc" },
               ]}
               id={"QualifyingExam"}
               value={studentData.hsc_group}
@@ -937,11 +1002,21 @@ const Addstudent = ({ handleClear, appln_no, index }) => {
                 { label: "Yes", value: '1' },
                 { label: "No", value: '0' },
              ]}
-             id="maths_studied"
-             htmlfor="maths_studied"
+             id="mathsstudied"
+             htmlfor="mathsstudied"
              value={studentData.maths_studied}
              onChange={handleChange}
-             error={error["maths_studied"]}
+             error={error["mathsstudied"]}
+             disabled={[
+              "DIP-Regular",
+              "DIP-Lateral",
+              "DIP-Part_time",
+              "DIP-Sandwich_7",
+              "DIP-Sandwich_8",
+              "DIP-Sandwich_7_lat",
+              "DIP-Sandwich_8_lat"
+            ].includes(studentData.hsc_group)}
+
             />
           </div>
 
@@ -977,7 +1052,7 @@ const Addstudent = ({ handleClear, appln_no, index }) => {
               error={error["First Graduate"]}
             />
           </div>
-          <div className="field-row">
+          {/* <div className="field-row">
             <Inputfield
               eltname={"aicte_tfw"}
               type={"radio"}
@@ -1008,7 +1083,7 @@ const Addstudent = ({ handleClear, appln_no, index }) => {
               onChange={handleChange}
               error={error["PMS"]}
             />
-          </div>
+          </div> */}
           <div className="field-row">
             <Inputfield
               eltname={"fg_district"}
@@ -1021,6 +1096,7 @@ const Addstudent = ({ handleClear, appln_no, index }) => {
               onChange={handleChange}
               value={studentData.fg_district}
               error={error["FG Cert Issued District"]}
+              disabled={studentData.fg === 0}
             />
             <Inputfield
               eltname={"fg_no"}
@@ -1032,6 +1108,7 @@ const Addstudent = ({ handleClear, appln_no, index }) => {
               value={studentData.fg_no}
               onChange={handleChange}
               error={error["FG Certificate Number"]}
+              disabled={studentData.fg === 0}
             />
           </div>
           <div className="field-row-single">
@@ -1045,6 +1122,7 @@ const Addstudent = ({ handleClear, appln_no, index }) => {
               value={studentData.Amount}
               onChange={handleChange}
               error={error["fg fees"]}
+              disabled={studentData.fg === 0}
             />
           </div>
         </fieldset>
