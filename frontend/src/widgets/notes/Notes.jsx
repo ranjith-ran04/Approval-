@@ -50,13 +50,13 @@ function Notes() {
             </p> */}
 
             <p>
-              • For Management students' Register number (Create your own
+              • For Management students' Register number (Create on your own
               11-digit number), Fill the Application number in valid format:
               <br />
               (First 4 digits → your college code, next 2 digits → your branch
-              code, next 2 digits → 24 (Year), last 3 digits → unique number).
+              code, next 2 digits → 25 (Year), last 3 digits → unique number).
               <br />
-              <b>Eg:</b> 5901CS24001
+              <b>Eg:</b> 5901CS25001
             </p>
           </div>
         </div>

@@ -37,7 +37,7 @@ function Sidebar({ setCurrent, admin }) {
   const handleSubmit = () => {
     setShowAlert(true);
     setAlertMessage(
-      "Are you sure you want to submit? You cannot edit after this."
+      "Are you sure you want to submit? You cannot EDIT after this!!!"
     );
     setAlertStage("confirm");
     setAlertType("warning");

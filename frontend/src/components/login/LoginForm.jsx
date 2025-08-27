@@ -137,7 +137,7 @@ const LoginForm = ({ admin }) => {
     <div className="login-page">
       <NavigationBar
         text={`GOVERNMENT OF TAMILNADU
-Tamilnadu Lateral Entry Direct Second Year B.E/B.Tech.,Approval-2025`}
+Tamilnadu Lateral Entry Direct Second Year B.E/B.Tech., Admissions Approval-2025`}
         profile={true}
         bool={true}
         login={true}

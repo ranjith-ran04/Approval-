@@ -975,7 +975,7 @@ const Addstudent = ({ handleClear, appln_no, index }) => {
           </div>
           <div className="field-row">
             <Inputfield
-              eltname={"hsc_group"}
+              eltname={"hsc_group"} 
               type={"radio"}
               radiolabel={"Course Type"}
               classname={"field-block"}

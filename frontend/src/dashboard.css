@@ -37,11 +37,6 @@
 
 }
 
-.full-loader-wrapper {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100%;           /* ensures it takes full height of the box */
-  min-height: 400px;      /* fallback height if content is small */
-  width: 100%;
+.navBar{
+  font-size: 5px;
 }
