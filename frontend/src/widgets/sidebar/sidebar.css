@@ -111,7 +111,9 @@
 #formCIcon,
 #formDIcon,
 #formLEAIcon,
-#formFGIcon {
+#formFGIcon,
+#formNotApproved,
+#formApproved {
   height: 15px;
   width: 15px;
   background-repeat: no-repeat;
@@ -143,6 +145,12 @@
 }
 #formLEAIcon {
   background-image: url("../../../public/assets/formLeasvg.svg");
+}
+#formNotApproved {
+  background-image: url("../../../public/assets/formIcon.svg");
+}
+#formApproved {
+  background-image: url("../../../public/assets/formIcon.svg");
 }
 #studentIcon {
   background-image: url("../../../public/assets/badge.svg");

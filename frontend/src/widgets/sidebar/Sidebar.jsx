@@ -18,21 +18,23 @@ function Sidebar({ setCurrent, admin }) {
     setShowAlert(false);
   };
 
-  const getFreezed = async() => {
-    try{
-      const result = await axios.get(`${host}getFreezed`,{withCredentials:true});
-      console.log("getFreezed ",result.data[0].freezed);
-      if(result.data[0].freezed === "1" ){
+  const getFreezed = async () => {
+    try {
+      const result = await axios.get(`${host}getFreezed`, {
+        withCredentials: true,
+      });
+      console.log("getFreezed ", result.data[0].freezed);
+      if (result.data[0].freezed === "1") {
         setSubmitted(true);
       }
-    }catch(err){
-      console.error("Cannot retreieve Freezed state : ",err);
+    } catch (err) {
+      console.error("Cannot retreieve Freezed state : ", err);
     }
-  }
+  };
 
-  useEffect( () => {
+  useEffect(() => {
     getFreezed();
-  },[]);
+  }, []);
 
   const handleSubmit = () => {
     setShowAlert(true);
@@ -44,7 +46,7 @@ function Sidebar({ setCurrent, admin }) {
 
     setAlertOkAction(() => async () => {
       try {
-        await axios.post(`${host}submit`,{}, { withCredentials: true });
+        await axios.post(`${host}submit`, {}, { withCredentials: true });
 
         setSubmitted(true);
         setCurrent(0);
@@ -65,18 +67,6 @@ function Sidebar({ setCurrent, admin }) {
   const items = [
     { id: 0, iconId: "homeIcon", label: "Home", action: () => setCurrent(0) },
     {
-      id: 11,
-      iconId: "formApproved",
-      label: "Approved Details",
-      action: () => handleForm("formApprv", undefined, undefined, undefined, undefined, undefined, 1),
-    },
-    {
-      id: 12,
-      iconId: "formNotApproved",
-      label: "Not Approved Details",
-      action: () => handleForm("formApprv",undefined, undefined, undefined, undefined, undefined, 0),
-    },
-    {
       id: 1,
       iconId: "collegeIcon",
       label: "College Details",
@@ -94,7 +84,12 @@ function Sidebar({ setCurrent, admin }) {
       label: "Student Details",
       action: () => setCurrent(5),
     },
-    { id: 4, iconId: "discontinuedIcon", label: "Discontinued Details", action: () => setCurrent(6) },
+    {
+      id: 4,
+      iconId: "discontinuedIcon",
+      label: "Discontinued Details",
+      action: () => setCurrent(6),
+    },
     {
       id: 5,
       iconId: "formAIcon",
@@ -130,6 +125,36 @@ function Sidebar({ setCurrent, admin }) {
       iconId: "formLEAIcon",
       label: "Form LEA2025",
       action: () => handleForm("formlea"),
+    },
+    {
+      id: 11,
+      iconId: "formApproved",
+      label: "Approved Details",
+      action: () =>
+        handleForm(
+          "formApprv",
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          1
+        ),
+    },
+    {
+      id: 12,
+      iconId: "formNotApproved",
+      label: "Not Approved Details",
+      action: () =>
+        handleForm(
+          "formApprv",
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          0
+        ),
     },
   ];
 
@@ -332,16 +357,24 @@ function Sidebar({ setCurrent, admin }) {
       {!admin ? (
         <>
           {items
-            .filter((item) =>
-              submitted
-                ? ![
-                    "collegeIcon",
-                    "branchIcon",
-                    "studentIcon",
-                    "discontinuedIcon",
-                  ].includes(item.iconId)
-                : true
-            )
+            .filter((item) => {
+              if (submitted) {
+                if (
+                  item.id === 1 ||
+                  item.id === 2 ||
+                  item.id === 3 ||
+                  item.id === 4
+                ) {
+                  return false;
+                }
+                return true;
+              } else {
+                if (item.id === 11 || item.id === 12) {
+                  return false;
+                }
+                return true;
+              }
+            })
             .map((item, index) => (
               <div
                 style={{ fontWeight: "bold" }}
