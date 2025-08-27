@@ -23,8 +23,8 @@ const Addstudent = ({ handleClear, appln_no, index }) => {
   const [alertStage, setAlertStage] = useState("");
   const [alertType, setAlertType] = useState("");
   const [alertMessage, setAlertMessage] = useState("");
-  const [error, setError] = useState({});
   const [alertOkAction, setAlertOkAction] = useState(() => () => {});
+  const [error, setError] = useState({});
   // const [error,setError] = useState('');
   const [certificates, setCertificates] = useState([]);
   const requiredFields = [
@@ -382,18 +382,39 @@ const Addstudent = ({ handleClear, appln_no, index }) => {
     } catch (err) {
       console.log("Upload Failed!", err);
 
+      let msg = "Upload Failed!";
+      if (err.response?.data) {
+        if (typeof err.response.data === "string") {
+          msg = err.response.data;
+        } else if (err.response.data.error) {
+          msg = err.response.data.error;
+        }
+      }
+
       setCertificates((prev) =>
         prev.map((cert) =>
           cert.key === key ? { ...cert, uploaded: false, fileUrl: null } : cert
         )
       );
-      e.target.value = "";
-      setAlertType("error");
-      setAlertStage("error");
-      setAlertMessage("Upload Failed!");
-      setAlertOkAction(() => () => {
-        setShowAlert(false);
-      });
+      const input = document.getElementById(`file-input-${key}`);
+      if (input) input.value = "";
+      if (err.response.status === 400) {
+        setShowAlert(true);
+        setAlertType("warning");
+        setAlertStage("warning");
+        setAlertMessage(msg);
+        setAlertOkAction(() => () => {
+          setShowAlert(false);
+        });
+      } else {
+        setShowAlert(true);
+        setAlertType("error");
+        setAlertStage("error");
+        setAlertMessage(msg);
+        setAlertOkAction(() => () => {
+          setShowAlert(false);
+        });
+      }
     }
   };
 
@@ -410,10 +431,6 @@ const Addstudent = ({ handleClear, appln_no, index }) => {
           withCredentials: true,
         });
         if (res.status === 200) {
-          setShowAlert(true);
-          setAlertMessage("File Deleted Successfully");
-          setAlertStage("success");
-          setAlertType("success");
           setCertificates((prev) =>
             prev.map((cert) =>
               cert.key === index
@@ -421,10 +438,18 @@ const Addstudent = ({ handleClear, appln_no, index }) => {
                 : cert
             )
           );
+          const input = document.getElementById(`file-input-${index}`);
+          if (input) input.value = "";
+
+          // setShowAlert(false);
+          // setTimeout(() => {
+          // setShowAlert(true);
+          setAlertMessage("File Deleted Successfully");
+          setAlertStage("success");
+          setAlertType("success");
+          setAlertOkAction(() => () => setShowAlert(false));
+          setShowAlert(true);
         }
-        setAlertOkAction(() => () => {
-          setShowAlert(false);
-        });
       });
     } catch (err) {
       console.error("Delete File Failed", err);
@@ -1344,20 +1369,12 @@ const Addstudent = ({ handleClear, appln_no, index }) => {
                       Remove
                     </button>
                     <input
-                      id="studentfiles"
+                      id={`file-input-${cert.key}`}
                       style={{ color: "blue" }}
                       type="file"
+                      name="files"
                       disabled
-                      onChange={handleChange}
-                    />
-                    <Alert
-                      type={alertType}
-                      message={alertMessage}
-                      show={showAlert}
-                      okbutton={alertOkAction}
-                      cancelbutton={
-                        alertStage === "confirm" ? handlecloseAlert : null
-                      }
+                      onChange={(e) => handleFileChange(e, cert.key)}
                     />
                   </div>
                 ) : (
@@ -1370,6 +1387,7 @@ const Addstudent = ({ handleClear, appln_no, index }) => {
                       Remove
                     </button>
                     <input
+                      id={`file-input-${cert.key}`}
                       type="file"
                       name="files"
                       onChange={(e) => handleFileChange(e, cert.key)}
@@ -1382,6 +1400,13 @@ const Addstudent = ({ handleClear, appln_no, index }) => {
                 )}
               </div>
             ))}
+            <Alert
+              type={alertType}
+              message={alertMessage}
+              show={showAlert}
+              okbutton={alertOkAction}
+              cancelbutton={alertStage === "confirm" ? handlecloseAlert : null}
+            />
           </fieldset>
           <div>
             <fieldset className="collegefieldset">

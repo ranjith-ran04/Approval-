@@ -105,7 +105,13 @@
 #formIcon,
 #studentIcon,
 #branchIcon,
-#discontinuedIcon {
+#discontinuedIcon,
+#formAIcon,
+#formBIcon,
+#formCIcon,
+#formDIcon,
+#formLEAIcon,
+#formFGIcon {
   height: 15px;
   width: 15px;
   background-repeat: no-repeat;
