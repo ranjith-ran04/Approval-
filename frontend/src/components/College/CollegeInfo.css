@@ -147,7 +147,7 @@
   justify-content: space-between;
   margin-bottom: 15px;
   gap: 20px; 
-  width:560px;
+  width:575px;
   /* width:calc(100%-200px); */
 }
 .error-message{

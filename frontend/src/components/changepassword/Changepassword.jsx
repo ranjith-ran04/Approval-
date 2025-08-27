@@ -74,7 +74,7 @@ function Changepassword() {
       formData.oldPassword=""
     }
     else{
-      navigate('/dashboard');
+      navigate('/dashboard',{state:{logged:true}});
     }
     
   };
@@ -132,7 +132,7 @@ function Changepassword() {
     const validationErrors = validateForm(name);
     setErrors(validationErrors);
   };
-  return logged?(
+  return(
     <div className="change-page">
       <NavigationBar
         text={`GOVERNMENT OF TAMILNADU
@@ -223,7 +223,7 @@ Tamilnadu Lateral Entry Direct Second Year B.E/B.Tech.,Approval-2025`}
         </div>
       </div>
     </div>
-  ):null;
+  );
 }
 
 export default Changepassword;

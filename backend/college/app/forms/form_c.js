@@ -6,17 +6,25 @@ const arial = path.join(__dirname, "../fonts/arial/arial.ttf");
 const { header, footer } = require("./pageFrame");
 
 async function formc(req, res) {
-  const collegeCode = req.user.counsellingCode;
-  
-  if (!collegeCode)
-    return res.status(400).json({ error: "collegeCode is required" });
-
-  const [branches] = await db
-    .promise()
-    .query(
+    var collegeCode;
+  if(req.user.counsellingCode){
+    console.log('code',req.user.cousellingCode);
+    collegeCode = req.user.counsellingCode;
+    if(!collegeCode) return res.status(404).json({msg:'collgecode not found'});
+  }else{
+    const name = req.user.name;
+    collegeCode = req.body?.collegeCode;
+    if(!name) return res.status(404).json({msg:'user not found'});
+  }
+  var branches;
+  try {
+    [branches] = await db.query(
       "SELECT b_code, branch_name, approved_in_take FROM branch_info WHERE c_code = ?",
       [collegeCode]
     );
+  } catch (err) {
+    return res.status(500).json({ msg: "error in query" });
+  }
 
   res.setHeader("Content-Type", "application/pdf");
   res.setHeader("Content-Disposition", 'inline; filename="formc.pdf"');
@@ -31,10 +39,15 @@ async function formc(req, res) {
   doc.pipe(res);
   doc.registerFont("Arial-Bold", arialBold);
   doc.registerFont("Arial", arial);
-
-  const [collegeRows] = await db
-    .promise()
-    .query("SELECT freezed FROM college_info WHERE c_code = ?", [collegeCode]);
+  var collegeRows;
+  try {
+    [collegeRows] = await db.query(
+      "SELECT freezed FROM college_info WHERE c_code = ?",
+      [collegeCode]
+    );
+  } catch (err) {
+    return res.status(500).json({ msg: "error in query" });
+  }
   const freezed = collegeRows.length ? collegeRows[0].freezed : "0";
 
   header("C", doc, collegeCode, freezed);
@@ -64,7 +77,7 @@ async function formc(req, res) {
 
   const startX = (doc.page.width - widths.reduce((a, b) => a + b, 0)) / 2;
 
-  const communities = ["OC", "BC", "BCM", "MBC", "SC", "SCA", "ST"];    
+  const communities = ["OC", "BC", "BCM", "MBC", "SC", "SCA", "ST"];
 
   function drawTableHeader(y) {
     const heights = [18, 17]; // Main and sub-header heights
@@ -160,13 +173,17 @@ async function formc(req, res) {
   const totals = Array(widths.length).fill(0);
 
   for (const b of branches) {
-    const [stuRows] = await db.promise().query(
+    var stuRows;
+    try{
+    [stuRows] = await db.query(
       `SELECT community, gender, COUNT(*) as count 
          FROM student_info 
          WHERE c_code = ? AND b_code = ? 
          GROUP BY community, gender`,
       [collegeCode, b.b_code]
-    );
+    );}catch(err){
+      return res.status(500).json({msg:'error in query'});
+    }
 
     const counts = {};
     for (const c of communities) counts[c] = { MALE: 0, FEMALE: 0 };
