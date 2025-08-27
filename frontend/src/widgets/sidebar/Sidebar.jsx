@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./sidebar.css";
 import Button from "../button/Button";
 import handleForm from "../sidebar/pdfApi";
@@ -17,6 +17,22 @@ function Sidebar({ setCurrent, admin }) {
   const handlecloseAlert = () => {
     setShowAlert(false);
   };
+
+  const getFreezed = async() => {
+    try{
+      const result = await axios.get(`${host}getFreezed`,{withCredentials:true});
+      console.log("getFreezed ",result.data[0].freezed);
+      if(result.data[0].freezed === "1" ){
+        setSubmitted(true);
+      }
+    }catch(err){
+      console.error("Cannot retreieve Freezed state : ",err);
+    }
+  }
+
+  useEffect( () => {
+    getFreezed();
+  },[]);
 
   const handleSubmit = () => {
     setShowAlert(true);
@@ -329,7 +345,7 @@ function Sidebar({ setCurrent, admin }) {
             ))}
           {!collapsed && !submitted && (
             <div id="buttonDiv">
-              <Button name="SUBMIT" onClick={handleSubmit} />
+              <Button name="FREEZE" onClick={handleSubmit} />
             </div>
           )}
         </>

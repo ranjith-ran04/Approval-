@@ -17,7 +17,7 @@ const {collegeBranchFetch,studentDetails} = require('./controllers/studentDetail
 const { student, editStudent, deleteStudent } = require("./controllers/studentInfo");
 const collegeget = require("./controllers/collegeget");
 const {getCert, uploadCert, deleteCert} = require("./controllers/certificates");
-const { submit } = require("./controllers/submit");
+const { submit, getFreezed } = require("./controllers/submit");
 
 router.get("/forma", verifyjwt,forma);
 router.post("/forma", verifyjwt,forma);
@@ -58,6 +58,7 @@ router.post("/cert",verifyjwt,getCert);
 router.post("/certUpl",verifyjwt, uploadCert);
 router.delete("/cert",verifyjwt,deleteCert);
 
+router.get("/getFreezed",verifyjwt,getFreezed);
 router.post("/submit",verifyjwt,submit);
 
 module.exports = router;
