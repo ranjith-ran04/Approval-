@@ -14,7 +14,7 @@ const logout = require('./controllers/logout')
 const collegeinfo = require("./controllers/collegeinfo");
 const {branch, editBranch, deleteBranch, addBranch} = require("./controllers/branch");
 const {collegeBranchFetch,studentDetails} = require('./controllers/studentDetails');
-const { student, editStudent, deleteStudent } = require("./controllers/studentInfo");
+const { checkApplnNo,student, editStudent, deleteStudent, addStudentinfo } = require("./controllers/studentInfo");
 const collegeget = require("./controllers/collegeget");
 const {getCert, uploadCert, deleteCert} = require("./controllers/certificates");
 const { submit, getFreezed } = require("./controllers/submit");
@@ -52,7 +52,9 @@ router.post('/collegeBranchFetch',verifyjwt,collegeBranchFetch);
 router.post('/studentBranch',verifyjwt,studentDetails);
 router.post("/student", verifyjwt,student);
 router.put("/student", verifyjwt, editStudent);
+router.post("/checkApplnNo", verifyjwt, checkApplnNo)
 router.delete("/student", verifyjwt, deleteStudent);
+router.post('/studentadd',verifyjwt,addStudentinfo);
 
 router.post("/cert",verifyjwt,getCert);
 router.post("/certUpl",verifyjwt, uploadCert);

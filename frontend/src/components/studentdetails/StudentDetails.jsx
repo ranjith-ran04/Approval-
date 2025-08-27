@@ -1,10 +1,10 @@
 import "./studentDetails.css";
 import { useState, useEffect, useRef } from "react";
 import axios from "axios";
-import { host } from "../../constants/backendpath";
-import StudentForm from "./StudentForm";
+import { host } from "../../constants/backendpath.js";
+import StudentForm from "./StudentForm.jsx";
 import "../college/CollegeInfo.css";
-import Button from "../../widgets/button/Button";
+import Button from "../../widgets/button/Button.jsx";
 import AddInput from '../../widgets/addinput/input.jsx';
 
 function StudentDetails({admin,supp}) {
@@ -108,7 +108,8 @@ function StudentDetails({admin,supp}) {
           />
         </div>)}
       </div>
-      <div className="student-table">
+      {selected!=="" &&(
+            <div className="student-table">
         <div className="student-row">
           <div className="student-header sno">S.No</div>
           <div className="student-header app_no">Application Number</div>
@@ -127,7 +128,7 @@ function StudentDetails({admin,supp}) {
                 onClick={() => {
                   setAdd(false);
                   setAppln_no(item.app_no);
-                  setClicked(clicked + 1);
+                  setClicked(1);
                 }}
               >
                 view
@@ -139,9 +140,11 @@ function StudentDetails({admin,supp}) {
           <div className="Unavailable">No Students Found</div>
         )}
       </div>
+      )}
+  
       {clicked > 0 && (
         <div ref={formRef}>
-          <StudentForm handleClear={handleClear} appln_no={appln_no} index={deleteOne}/>
+          <StudentForm handleClear={handleClear} appln_no={appln_no} b_code={selected} index={deleteOne} clicked={clicked}/>
         </div>
       )}
       {add && (

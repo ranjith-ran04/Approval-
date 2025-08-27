@@ -14,7 +14,7 @@ const getCert = async (req, res) => {
     const { mobile, appln } = req.body;
     if (!mobile || !appln)
       return res
-        .status(400)
+        .status(200)
         .json({ error: "mobile and application number are required" });
     const files = listStudentFiles(mobile, appln);
     return res.status(200).json(files);

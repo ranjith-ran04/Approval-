@@ -22,7 +22,7 @@ async function collegeinfo(req, res) {
     //     }
     // }
 const collegecode = req.user.counsellingCode?req.user.counsellingCode:req.body.collegecode;
-console.log(collegecode);
+// console.log(collegecode);
 
 
 if (!collegecode) {
@@ -31,11 +31,11 @@ if (!collegecode) {
 
     // console.log(collegecode);
     const data = req.body.changedFields;
-    console.log(data);
+    // console.log(data);
     if (!data || Object.keys(data).length === 0) {
         return res.status(400).json({ success: false, message: "No data provided" });
     } 
-    console.log("hi")
+    // console.log("hi")
     const dbData = {};
     for (const [field, value] of Object.entries(data)) {
         const column = fieldToColumnMap[field];
@@ -53,7 +53,7 @@ if (!collegecode) {
     
     const setClause = Object.keys(dbData).map(col => `${col} = ?`).join(", ");
     const values = Object.values(dbData);
-    console.log(setClause);
+    // console.log(setClause);
     const query = `UPDATE college_info SET ${setClause} WHERE c_code =${collegecode}`;
     values.push(collegecode);
     try{

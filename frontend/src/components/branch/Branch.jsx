@@ -71,7 +71,9 @@ function Branch({ setCurrent, setState }) {
       prev.filter((b) => b.b_code !== branchData[showIndex].b_code)
     );
   };
-
+const displayval=(val)=>{
+  return val === 0 || val === "0" ? "-" : val;
+}
   return (
     <div className="box">
       
@@ -118,6 +120,7 @@ function Branch({ setCurrent, setState }) {
           ) : (
             branchData.map((branch, index) => (
               <div className="table-row" key={index} data-id={index}>
+                
                 <div>
                   <button
                     className="edit-btn"
@@ -129,7 +132,7 @@ function Branch({ setCurrent, setState }) {
                     Edit
                   </button>
                 </div>
-                <div>{branch.b_code}</div>
+                <div>{branch.b_code }</div>
                 <div>{branch.branch_name}</div>
                 <div>{branch.approved_in_take}</div>
                 <div>{branch.first_year_admitted}</div>
@@ -137,9 +140,9 @@ function Branch({ setCurrent, setState }) {
                 <div>{branch.transfered_from}</div>
                 <div>{branch.transfered_to}</div>
                 <div>{branch.LAP}</div>
-                <div>{branch.year_of_start}</div>
+                <div>{displayval(branch.year_of_start)}</div>
                 <div>{branch.accredition_valid_upto}</div>
-                <div>{branch.NBA_2020 === 1 ? "yes" : "no"}</div>
+                <div>{branch.NBA_2020 === 1 ? "YES" : "NO"}</div>
                 <div>
                   <button
                     className="delete-btn"

@@ -9,9 +9,10 @@ import { host } from "../../constants/backendpath";
 import { useLoader } from "../../context/LoaderContext";
 import states from "../../constants/states";
 
-const Addstudent = ({ handleClear, appln_no, index }) => {
+const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
   // console.log(index);
   const { showLoader, hideLoader } = useLoader();
+  const [pendingDeleteIndex, setPendingDeleteIndex] = useState(null);
   const [changedFields, setchangedFields] = useState({});
   const [studentData, setStudentData] = useState({
     gender: "",
@@ -73,6 +74,14 @@ const Addstudent = ({ handleClear, appln_no, index }) => {
     "overallobt",
     "Percentage",
   ];
+  const semesterRange = {
+    "DIP-Regular": { start: 1, end: 6 },
+    "DIP-Lateral": { start: 3, end: 6 },
+    "DIP-Part_time": { start: 1, end: 8 },
+    "DIP-Sandwich_7": { start: 1, end: 7 },
+    "DIP-Sandwich_8": { start: 1, end: 8 },
+    Bsc: { start: 1, end: 6 },
+  };
 
   const caste_drop = async (community) => {
     let casteListModule = [];
@@ -113,12 +122,13 @@ const Addstudent = ({ handleClear, appln_no, index }) => {
         { withCredentials: true }
       );
       const { student, certificates } = result.data;
-      if (!student) {
+
+      setCertificates(certificates);
+      if (!student[0]) {
         console.warn("No student found in response", result.data);
         setStudentData({});
         return;
       }
-      setCertificates(certificates);
       setStudentData(student[0]);
       // console.log(certificates);
       // console.log("Student raw:", student[0]);
@@ -157,113 +167,128 @@ const Addstudent = ({ handleClear, appln_no, index }) => {
     setShowAlert(false);
     // setAlertStage('')
   };
-  const validateFields = () => {
-    // console.log("Entered validation");
-    const letterfields = [
-      "candidatename",
-      "Religion",
-      "Caste Name",
-      "Parent Occupation",
-      "state",
-      "district",
-      "otherStateName",
-      "Board of Exam",
-      "FG Cert Issued District",
-      "Remarks",
-    ];
-    const newErrors = {};
-    requiredFields.forEach((field) => {
-      const value = studentData[field];
-      if (!value || studentData[field] === "") {
-        newErrors[field] = "This field is required";
-      } else {
-        if (letterfields.includes(field) && /\d/.test(value)) {
-          newErrors[field] = "Only letters are allowed";
-        } else if (letterfields.includes(field) && /[!@#$%]/.test(value)) {
-          newErrors[field] = "Special characters not allowed";
-        }
-        if (field === "email" && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
-          newErrors[field] = "Enter correct email format";
-        }
-        if (field === "mobile" && isNaN(value)) {
-          newErrors[field] = "Only numbers are allowed";
-        } else if (field === "mobile" && !/^\d{10}$/.test(value)) {
-          newErrors[field] = "Enter 10 digit valid mobile number";
-        }
-        const numericFields = [
-          "appln_no",
-          "Aadhar",
-          "Univ Reg Num",
-          "Annual Income",
-          "FG Certificate Number",
-          "sem1max",
-          "sem1obt",
-          "sem2max",
-          "sem2obt",
-          "sem3max",
-          "sem3obt",
-          "sem4max",
-          "sem4obt",
-          "overallmax",
-          "overallobt",
-        ];
-        if (numericFields.includes(field) && isNaN(value)) {
-          newErrors[field] = "Only numbers are allowed";
-        } else if (numericFields.includes(field) && value <= 0) {
-          newErrors[field] = "Negative numbers not allowed";
-        }
-        const maxObtPairs = [
-          ["sem1max", "sem1obt"],
-          ["sem2max", "sem2obt"],
-          ["sem3max", "sem3obt"],
-          ["sem4max", "sem4obt"],
-        ];
-        maxObtPairs.forEach(([maxField, obtField]) => {
-          const maxVal = parseFloat(studentData[maxField]);
-          const obtVal = parseFloat(studentData[obtField]);
+  // const validateFields = () => {
+  //   console.log("Entered validation");
+  //   const letterfields = [
+  //     "candidatename",
+  //     "Religion",
+  //     "Caste Name",
+  //     "Parent Occupation",
+  //     "state",
+  //     "district",
+  //     "otherStateName",
+  //     "Board of Exam",
+  //     "FG Cert Issued District",
+  //     "Remarks",
+  //   ];
+  //   const newErrors = {};
+  //   requiredFields.forEach((field) => {
+  //     const value = studentData[field];
+  //     if (!value || studentData[field] === "") {
+  //       newErrors[field] = "This field is required";
+  //     } else {
+  //       if (letterfields.includes(field) && /\d/.test(value)) {
+  //         newErrors[field] = "Only letters are allowed";
+  //       } else if (letterfields.includes(field) && /[!@#$%]/.test(value)) {
+  //         newErrors[field] = "Special characters not allowed";
+  //       }
+  //       if (field === "email" && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+  //         newErrors[field] = "Enter correct email format";
+  //       }
+  //       if (field === "mobile" && isNaN(value)) {
+  //         newErrors[field] = "Only numbers are allowed";
+  //       } else if (field === "mobile" && !/^\d{10}$/.test(value)) {
+  //         newErrors[field] = "Enter 10 digit valid mobile number";
+  //       }
+  //       const numericFields = [
+  //         "appln_no",
+  //         "Aadhar",
+  //         "Univ Reg Num",
+  //         "Annual Income",
+  //         "FG Certificate Number",
+  //         "sem1max",
+  //         "sem1obt",
+  //         "sem2max",
+  //         "sem2obt",
+  //         "sem3max",
+  //         "sem3obt",
+  //         "sem4max",
+  //         "sem4obt",
+  //         "overallmax",
+  //         "overallobt",
+  //       ];
+  //       if (numericFields.includes(field) && isNaN(value)) {
+  //         newErrors[field] = "Only numbers are allowed";
+  //       } else if (numericFields.includes(field) && value <= 0) {
+  //         newErrors[field] = "Negative numbers not allowed";
+  //       }
+  //       const maxObtPairs = [
+  //         ["sem1max", "sem1obt"],
+  //         ["sem2max", "sem2obt"],
+  //         ["sem3max", "sem3obt"],
+  //         ["sem4max", "sem4obt"],
+  //       ];
+  //       maxObtPairs.forEach(([maxField, obtField]) => {
+  //         const maxVal = parseFloat(studentData[maxField]);
+  //         const obtVal = parseFloat(studentData[obtField]);
 
-          if (!isNaN(maxVal) && !isNaN(obtVal)) {
-            if (maxVal < obtVal) {
-              newErrors[maxField] =
-                "Maximum marks should be greater than or equal to obtained marks";
-            }
-          }
-        });
-      }
-    });
-    setError(newErrors);
-    if (Object.keys(newErrors).length === 0) {
-      return true;
-    } else {
-      return false;
-    }
-  };
-  const handleAddStudent = () => {
-    const noerrors = validateFields();
-    if (noerrors) {
-      setShowAlert(true);
-      setAlertStage("confirm");
-      setAlertMessage("Confirm to Add");
-      setAlertType("warning");
-      setAlertOkAction(() => () => {
+  //         if (!isNaN(maxVal) && !isNaN(obtVal)) {
+  //           if (maxVal < obtVal) {
+  //             newErrors[maxField] =
+  //               "Maximum marks should be greater than or equal to obtained marks";
+  //           }
+  //         }
+  //       });
+  //     }
+  //   });
+  //   setError(newErrors);
+  //   if (Object.keys(newErrors).length === 0) {
+  //     return true;
+  //   } else {
+  //     return false;
+  //   }
+  // };
+  const handleAddStudent = async () => {
+    // const noErrors = validateFields();
+
+    // if (noErrors) {
+    setShowAlert(true);
+    setAlertStage("confirm");
+    setAlertMessage("Confirm to Add");
+    setAlertType("warning");
+
+    setAlertOkAction(() => async () => {
+      try {
+        const res = await axios.post(
+          `${host}studentadd`,
+          { app_no: appln_no, b_code, studentData: studentData },
+          { withCredentials: true }
+        );
+
+        if (res.status === 200) {
+          setStudentData({});
+
+          setShowAlert(true);
+          setAlertStage("success");
+          setAlertMessage("Student Added Successfully");
+          setAlertType("success");
+          setAlertOkAction(() => () => {
+            setShowAlert(false);
+          });
+        }
+      } catch (error) {
+        console.log(error);
         setShowAlert(true);
-        setAlertMessage("Updated Successfully");
-        setAlertStage("success");
-        setAlertType("success");
+        setAlertMessage("Unable to connect to server...");
+        setAlertStage("error");
+        setAlertType("error");
         setAlertOkAction(() => () => {
           setShowAlert(false);
         });
-      });
-    } else {
-      setShowAlert(true);
-      setAlertStage("success");
-      setAlertMessage("You have errors");
-      setAlertType("warning");
-      setAlertOkAction(() => () => {
-        setShowAlert(false);
-      });
-    }
+      }
+    });
   };
+
   const handleUpdate = async () => {
     setShowAlert(false);
     try {
@@ -441,9 +466,6 @@ const Addstudent = ({ handleClear, appln_no, index }) => {
           const input = document.getElementById(`file-input-${index}`);
           if (input) input.value = "";
 
-          // setShowAlert(false);
-          // setTimeout(() => {
-          // setShowAlert(true);
           setAlertMessage("File Deleted Successfully");
           setAlertStage("success");
           setAlertType("success");
@@ -477,9 +499,8 @@ const Addstudent = ({ handleClear, appln_no, index }) => {
     // For caste_name, you might want to store only the code in backend format
     let updatedValue = value;
 
-    // Example: store as "101-name" if your backend expects that
     if (name === "caste_name") {
-      updatedValue = value; // or value.split("-")[0] if you want only code
+      updatedValue = value;
     }
 
     if (name === "community") {
@@ -507,8 +528,6 @@ const Addstudent = ({ handleClear, appln_no, index }) => {
         if (value.trim() === "") {
           isValid = false;
         }
-
-        // String fields should not contain digits
         const stringFields = [
           "candidatename",
           "Religion",
@@ -579,9 +598,10 @@ const Addstudent = ({ handleClear, appln_no, index }) => {
 
   return (
     <div className="collegewholediv">
-      <div id="appln_no">
+      <div id="appln_no" style={{ fontSize: "20px", gap: "30px" }}>
         <Inputfield
           name={"appln_no"}
+          label={"Application Number"}
           type={"text"}
           placeholder={"Application Number"}
           onChange={handleChange}
@@ -658,7 +678,7 @@ const Addstudent = ({ handleClear, appln_no, index }) => {
               options={[
                 { label: "Male", value: "MALE" },
                 { label: "Female", value: "FEMALE" },
-                { label: "Transgender", value: "Transgender" },
+                { label: "Others", value: "Others" },
               ]}
               value={studentData.gender}
               error={error["gender"]}
@@ -748,8 +768,6 @@ const Addstudent = ({ handleClear, appln_no, index }) => {
                 { label: "Hindu", key: "Hindu", value: "Hindu" },
                 { label: "Muslim", key: "Muslim", value: "Muslim" },
                 { label: "Christian", key: "Christian", value: "Christian" },
-                { label: "Sikhism", value: "Sikhism" },
-                { label: "Jainism", value: "Jainism" },
                 { label: "Others", value: "Others" },
               ]}
               value={studentData.religion}
@@ -975,7 +993,7 @@ const Addstudent = ({ handleClear, appln_no, index }) => {
           </div>
           <div className="field-row">
             <Inputfield
-              eltname={"hsc_group"} 
+              eltname={"hsc_group"}
               type={"radio"}
               radiolabel={"Course Type"}
               classname={"field-block"}
@@ -1128,213 +1146,61 @@ const Addstudent = ({ handleClear, appln_no, index }) => {
         </fieldset>
         <fieldset className="collegefieldset">
           <legend className="collegelegend">MARK DETAILS</legend>
-          <div className="field-row">
-            <Inputfield
-              eltname={"max_1"}
-              placeholder={"Maximum Marks"}
-              type={"text"}
-              label={"SEMESTER 1"}
-              classname={"field-block"}
-              id={"sem1max"}
-              htmlfor={"sem1max"}
-              value={studentData.max_1}
-              onChange={handleChange}
-              error={error["sem1max"]}
-            />
-            <Inputfield
-              eltname={"obt_1"}
-              placeholder={"Obtained Marks"}
-              type={"text"}
-              label={"SEMESTER 1"}
-              classname={"field-block"}
-              id={"sem1obt"}
-              htmlfor={"sem1obt"}
-              value={studentData.obt_1}
-              onChange={handleChange}
-              error={error["sem1obt"]}
-            />
-          </div>
-          <div className="field-row">
-            <Inputfield
-              eltname={"max_2"}
-              placeholder={"Maximum Marks"}
-              type={"text"}
-              label={"SEMESTER 2"}
-              classname={"field-block"}
-              id={"sem2max"}
-              htmlfor={"sem2max"}
-              value={studentData.max_2}
-              onChange={handleChange}
-              error={error["sem2max"]}
-            />
-            <Inputfield
-              eltname={"obt_2"}
-              placeholder={"Obtained Marks"}
-              type={"text"}
-              label={"SEMESTER 2"}
-              classname={"field-block"}
-              id={"sem2obt"}
-              htmlfor={"sem2obt"}
-              value={studentData.obt_2}
-              onChange={handleChange}
-              error={error["sem2obt"]}
-            />
-          </div>
-          <div className="field-row">
-            <Inputfield
-              eltname={"max_3"}
-              placeholder={"Maximum Marks"}
-              type={"text"}
-              label={"SEMESTER 3"}
-              classname={"field-block"}
-              id={"sem3max"}
-              htmlfor={"sem3max"}
-              value={studentData.max_3}
-              onChange={handleChange}
-              error={error["sem3max"]}
-            />
-            <Inputfield
-              eltname={"obt_3"}
-              placeholder={"Obtained Marks"}
-              type={"text"}
-              classname={"field-block"}
-              label={"SEMESTER 3"}
-              id={"sem3obt"}
-              htmlfor={"sem3obt"}
-              value={studentData.obt_3}
-              onChange={handleChange}
-              error={error["sem3obt"]}
-            />
-          </div>
-          <div className="field-row">
-            <Inputfield
-              eltname={"max_4"}
-              placeholder={"Maximum Marks"}
-              type={"text"}
-              label={"SEMESTER 4"}
-              classname={"field-block"}
-              id={"sem4max"}
-              htmlfor={"sem4max"}
-              value={studentData["max_4"]}
-              onChange={handleChange}
-              error={error["sem4max"]}
-            />
-            <Inputfield
-              eltname={"obt_4"}
-              placeholder={"Obtained Marks"}
-              type={"text"}
-              label={"SEMESTER 4"}
-              classname={"field-block"}
-              id={"sem4obt"}
-              htmlfor={"sem4obt"}
-              value={studentData["obt_4"]}
-              onChange={handleChange}
-              error={error["sem4obt"]}
-            />
-          </div>
-          <div className="field-row">
-            <Inputfield
-              eltname={"max_5"}
-              placeholder={"Obtained Marks"}
-              type={"text"}
-              label={"SEMESTER 5"}
-              classname={"field-block"}
-              id={"sem5max"}
-              htmlfor={"sem5max"}
-              value={studentData.max_5}
-              onChange={handleChange}
-              error={error["sem5max"]}
-            />
-            <Inputfield
-              eltname={"obt_5"}
-              placeholder={"Obtained Marks"}
-              type={"text"}
-              label={"SEMESTER 5"}
-              classname={"field-block"}
-              id={"sem5obt"}
-              htmlfor={"sem5obt"}
-              value={studentData.obt_5}
-              onChange={handleChange}
-              error={error["sem5obt"]}
-            />
-          </div>
-          <div className="field-row">
-            <Inputfield
-              eltname={"max_6"}
-              placeholder={"Obtained Marks"}
-              type={"text"}
-              label={"SEMESTER 6"}
-              classname={"field-block"}
-              id={"sem6max"}
-              htmlfor={"sem6max"}
-              value={studentData.max_6}
-              onChange={handleChange}
-              error={error["sem6max"]}
-            />
-            <Inputfield
-              eltname={"obt_6"}
-              placeholder={"Obtained Marks"}
-              type={"text"}
-              label={"SEMESTER 6"}
-              classname={"field-block"}
-              id={"sem6obt"}
-              htmlfor={"sem6obt"}
-              value={studentData["obt_6"]}
-              onChange={handleChange}
-              error={error["sem6obt"]}
-            />
-          </div>
-          <div className="field-row">
-            <Inputfield
-              eltname={"max_7"}
-              placeholder={"Obtained Marks"}
-              type={"text"}
-              label={"SEMESTER 7"}
-              classname={"field-block"}
-              id={"sem7max"}
-              htmlfor={"sem7max"}
-              value={studentData.max_7}
-              onChange={handleChange}
-              error={error["sem7max"]}
-            />
-            <Inputfield
-              eltname={"obt_7"}
-              placeholder={"Obtained Marks"}
-              type={"text"}
-              label={"SEMESTER 7"}
-              classname={"field-block"}
-              id={"sem7obt"}
-              htmlfor={"sem7obt"}
-              value={studentData["obt_7"]}
-              onChange={handleChange}
-              error={error["sem7obt"]}
-            />
-          </div>
-          <div className="field-row">
-            <Inputfield
-              eltname={"max_8"}
-              placeholder={"Obtained Marks"}
-              type={"text"}
-              label={"SEMESTER 8"}
-              classname={"field-block"}
-              id={"sem8max"}
-              htmlfor={"sem8max"}
-              value={studentData.max_8}
-              onChange={handleChange}
-              error={error["sem8max"]}
-            />
-            <Inputfield
-              eltname={"obt_8"}
-              placeholder={"Obtained Marks"}
-              type={"text"}
-              label={"SEMESTER 8"}
-              classname={"field-block"}
-              id={"sem8obt"}
-              htmlfor={"sem8obt"}
-              value={studentData["obt_8"]}
-              onChange={handleChange}
-              error={error["sem8obt"]}
-            />
+          {/* {studentData.hsc_group=='Regular'(
+            
+          )} */}
+          <div className="field-container">
+            {(() => {
+              const range = semesterRange[studentData.hsc_group] || {
+                start: 0,
+                end: -1,
+              };
+
+              const semesters = Array.from(
+                { length: range.end - range.start + 1 },
+                (_, i) => range.start + i
+              );
+              const allInputs = semesters.flatMap((sem) => [
+                <Inputfield
+                  key={`max_${sem}`}
+                  eltname={`max_${sem}`}
+                  placeholder={"Maximum Marks"}
+                  type={"text"}
+                  label={`SEMESTER ${sem}`}
+                  classname={"field-block"}
+                  id={`sem${sem}max`}
+                  htmlfor={`sem${sem}max`}
+                  value={studentData[`max_${sem}`]}
+                  onChange={handleChange}
+                  error={error[`sem${sem}max`]}
+                />,
+                <Inputfield
+                  key={`obt_${sem}`}
+                  eltname={`obt_${sem}`}
+                  placeholder={"Obtained Marks"}
+                  type={"text"}
+                  label={`SEMESTER ${sem}`}
+                  classname={"field-block"}
+                  id={`sem${sem}obt`}
+                  htmlfor={`sem${sem}obt`}
+                  value={studentData[`obt_${sem}`]}
+                  onChange={handleChange}
+                  error={error[`sem${sem}obt`]}
+                />,
+              ]);
+
+              const groupedRows = [];
+              for (let i = 0; i < allInputs.length; i += 2) {
+                groupedRows.push(
+                  <div className="field-row" key={i}>
+                    {allInputs[i]}
+                    {allInputs[i + 1]}
+                  </div>
+                );
+              }
+
+              return groupedRows;
+            })()}
           </div>
         </fieldset>
         <div>
@@ -1425,7 +1291,17 @@ const Addstudent = ({ handleClear, appln_no, index }) => {
                 <p className="error-message">{error["Remarks"]}</p>
               )}
             </fieldset>
-          </div>
+          </div>{clicked===2 ? (
+          <div id="studentbutton">
+            <Button name={"ADD"} onClick={handleAddStudent} />
+            <Alert
+              type={alertType}
+              message={alertMessage}
+              show={showAlert}
+              okbutton={alertOkAction}
+              cancelbutton={alertStage === "confirm" ? handlecloseAlert : null}
+            />
+          </div>) : (
           <div id="studentbutton">
             <Button name={"UPDATE"} onClick={handleUpdate} />
             <Button name={"DELETE"} onClick={handleStuDelete} />
@@ -1436,7 +1312,7 @@ const Addstudent = ({ handleClear, appln_no, index }) => {
               okbutton={alertOkAction}
               cancelbutton={alertStage === "confirm" ? handlecloseAlert : null}
             />
-          </div>
+          </div>)}
         </div>
       </div>
     </div>

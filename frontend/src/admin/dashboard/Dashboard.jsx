@@ -214,9 +214,9 @@ Tamilnadu Lateral Entry Direct Second Year B.E/B.Tech.,Approval-2025`}
           {isSubmit && (
             <>
               { isSubmit && current === 0 && <Chart collegeCode={collegeCode} key={submittedCode} />}
-              {current === 1 && <StudentDetails admin={true} supp={supp} />}
-              {current === 2 && <StudentDetails admin={true} supp={supp} />}
-              {current===3 && <CollegeInfo admin={true} supp={supp} />}
+              {current === 1 && <StudentDetails admin={true} supp={supp} setCurrent={setCurrent}/>}
+              {current === 2 && <StudentDetails admin={true} supp={supp} setCurrent={setCurrent}/>}
+              {current===3 && <CollegeInfo admin={true} collegeCode={collegeCode}/>}
 
               <ScrollToTop scrollRef={scrollRef} />
             </>

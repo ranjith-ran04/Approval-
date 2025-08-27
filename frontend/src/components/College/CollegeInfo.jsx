@@ -6,7 +6,7 @@ import Alert from '../../widgets/alert/Alert';
 import Inputfield from '../../widgets/college/Inputfield';
 import {adminhost, host} from '../../../src/constants/backendpath';
 
-const CollegeInfo = ({admin}) => {
+const CollegeInfo = ({admin,collegeCode}) => {
   const[selectedSection,setSelectedSection]=useState('All')
   const[showAlert, setShowAlert] = useState(false);
   const[alertType,setAlertType]=useState('');
@@ -17,7 +17,7 @@ const CollegeInfo = ({admin}) => {
   const[changedFields,setchangedFields]=useState({})
   
 
-const requiredFields = ["chairman","chairmancontact","principalname","principalcontact","address","taluk","district","constituency","pincode","collegephone","collegeemail","websitecollege","antiraggingNo","bankaccountno","bankname","minoritystatus", "autonomousstatus","distance","nearestrailway","distancefromrailway","transportfacility","transport","mintransportcharge","maxtransportcharge","accomodationavailableboys","hostelstaytypeboys","typeofmessboys","messbillboys","roomrentboys","electricityboys","cautiondepositboys",
+const requiredFields = ["principalname","principalcontact","address","taluk","district","constituency","pincode","collegephone","collegeemail","websitecollege","antiraggingNo","bankaccountno","bankname","minoritystatus", "autonomousstatus","distance","nearestrailway","distancefromrailway","transportfacility","transport","mintransportcharge","maxtransportcharge","accomodationavailableboys","hostelstaytypeboys","typeofmessboys","messbillboys","roomrentboys","electricityboys","cautiondepositboys",
   "establishmentboys",
   "admissionfeesboys",
   "accomodationavailablegirls",
@@ -135,10 +135,11 @@ const handleChange =(e)=>{
      
     useEffect(() => {
     const fetchCollegeData=async() => {
-      const collegecode=5901;
+
         try {
           var res;
           if(admin){
+          let collegecode=collegeCode;
           const res=await axios.post(`${adminhost}collegeadmin`,{collegecode:collegecode},{withCredentials:true});
           if(res.status===200){
             setFormdata(res.data.data);
@@ -404,7 +405,7 @@ const handleChange =(e)=>{
           )}
 
           <div id="collegebutton">
-            <Button name={"SUBMIT"} onClick={handleSubmit}  />
+            <Button name={"SAVE"} onClick={handleSubmit}  />
           <Alert
           type={alertType}
           message={alertMessage}
