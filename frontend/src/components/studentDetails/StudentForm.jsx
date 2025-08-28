@@ -1085,6 +1085,8 @@ const semesterRange = {
           {/* {studentData.hsc_group=='Regular'(
             
           )} */}
+          <h3 style={{display:"inline-block",marginLeft:'20px',marginBottom:"10px"}}>MAXIMUM MARKS</h3>
+          <h3 style={{display:"inline-block",marginLeft:'420px',marginBottom:"10px"}}>OBTAINED MARKS</h3>
           <div className="field-container">
   {(() => {
     const range = semesterRange[studentData.hsc_group] || { start: 0, end: -1};
@@ -1225,6 +1227,7 @@ const semesterRange = {
               )}
             </fieldset>
           </div>
+
           <div id='studentbutton'>
             <Button name={"ADD"} onClick={handleAddStudent}/>
             <Alert type={alertType} message={alertMessage} show={showAlert} okbutton={alertOkAction} cancelbutton={alertStage==="confirm"
