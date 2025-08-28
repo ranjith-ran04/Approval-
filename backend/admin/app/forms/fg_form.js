@@ -26,25 +26,28 @@ const headers = [
 
 async function fg_form(req, res) {
   let collegeCode;
-  var approved,list,supp;
-    const name = req.user.name;
-    collegeCode = req.body?.collegeCode;
-    approved = req.body?.approved || false;
-    list = req.body?.caste || [];
-    supp = req.body?.supp || false;
-    if (!name) return res.status(404).json({ msg: "user not found" });
+  var approved, list, supp;
+  const name = req.user.name;
+  collegeCode = req.body?.collegeCode;
+  approved = req.body?.approved || false;
+  list = req.body?.caste || [];
+  supp = req.body?.supp || false;
+  if (!name) return res.status(404).json({ msg: "user not found" });
 
-  const query = supp? `
+  const query = supp
+    ? `
 select a_no as appln_no,name,catogory as quota ,community,amount,b_code as branch from student_info 
-where fg_approved = ${approved?1:2} and community in (?) and c_code = ? and a_no in (select reg_no from lat_stu_cv_whole_supp);`:
-`select a_no as appln_no,name,catogory as quota ,community,amount,b_code as branch from student_info 
-where fg_approved = ${approved?1:2} and community in (?) and c_code = ?;
+where fg_approved = ${
+        approved ? 1 : 2
+      } and community in (?) and c_code = ? and a_no in (select reg_no from lat_stu_cv_whole_supp);`
+    : `select a_no as appln_no,name,catogory as quota ,community,amount,b_code as branch from student_info 
+where fg_approved = ${approved ? 1 : 2} and community in (?) and c_code = ?;
   `;
 
   let result;
   try {
-    [result] = await db.query(query, [list,collegeCode]);
-    // console.log(result);
+    [result] = await db.query(query, [list, collegeCode]);
+    // // console.log(result);
   } catch (err) {
     return res.status(500).json({ msg: "Error in query" });
   }
@@ -62,7 +65,7 @@ where fg_approved = ${approved?1:2} and community in (?) and c_code = ?;
   doc.pipe(res);
   doc.registerFont("Arial-Bold", arialBold);
   doc.registerFont("Arial", arial);
-  header(doc, collegeCode,false,list,approved);
+  header(doc, collegeCode, false, list, approved);
 
   const studentsByBranch = result.reduce((acc, student) => {
     const branch = student.branch;
@@ -101,75 +104,83 @@ where fg_approved = ${approved?1:2} and community in (?) and c_code = ?;
         align: "center",
       });
   }
-  if(result.length !== 0){
-  Object.entries(studentsByBranch).forEach(([branchCodeKey, students]) => {
-    const branchName = branchCode.get(branchCodeKey) || "Unknown Branch";
+  if (result.length !== 0) {
+    Object.entries(studentsByBranch).forEach(([branchCodeKey, students]) => {
+      const branchName = branchCode.get(branchCodeKey) || "Unknown Branch";
 
-    if (
-      doc.y + doc.heightOfString(branchName) >
-      doc.page.height - doc.page.margins.bottom - 30
-    ) {
-      doc.addPage();
-      header(doc, collegeCode,false,list,approved);
-      doc.moveDown();
-    }
-
-    doc.moveDown();
-    doc.font("Arial-Bold").fontSize(13).text(`${branchCodeKey} - ${branchName}`, 40);
-    doc.moveDown();
-    tableHeader();
-    let y = doc.y + 5;
-
-    students.forEach((student, index) => {
-      let rowHeight =
-        doc.heightOfString(student.name?.toString() || "", {
-          width: columnWidths.NAME - 4,
-          align: "center",
-        }) + 10;
-
-      drawStudentRow(student, index, rowHeight, y);
-      y += rowHeight;
-    });
-
-    function drawStudentRow(student, index, rowHeight) {
-      let x = 40;
-
-      if (doc.y + rowHeight > doc.page.height - doc.page.margins.bottom - 30) {
+      if (
+        doc.y + doc.heightOfString(branchName) >
+        doc.page.height - doc.page.margins.bottom - 30
+      ) {
         doc.addPage();
-        header(doc, collegeCode,false,list,approved);
+        header(doc, collegeCode, false, list, approved);
         doc.moveDown();
-        tableHeader();
-        y = doc.y + 5;
       }
 
-      const row = {
-        SNO: index + 1,
-        APPLN_NO: student.appln_no,
-        NAME: student.name,
-        QUOTA: "GOVT",
-        COMMUNITY: student.community,
-        AMOUNT: student.amount,
-      };
+      doc.moveDown();
+      doc
+        .font("Arial-Bold")
+        .fontSize(13)
+        .text(`${branchCodeKey} - ${branchName}`, 40);
+      doc.moveDown();
+      tableHeader();
+      let y = doc.y + 5;
 
-      headers.forEach((col) => {
-        const val = row[col.key] ?? "";
-        drawCell(String(val), x, y, columnWidths[col.key], rowHeight, true);
-        x += columnWidths[col.key];
+      students.forEach((student, index) => {
+        let rowHeight =
+          doc.heightOfString(student.name?.toString() || "", {
+            width: columnWidths.NAME - 4,
+            align: "center",
+          }) + 10;
+
+        drawStudentRow(student, index, rowHeight, y);
+        y += rowHeight;
       });
-    }
-    doc.moveDown();
-  });
 
-}else{
+      function drawStudentRow(student, index, rowHeight) {
+        let x = 40;
+
+        if (
+          doc.y + rowHeight >
+          doc.page.height - doc.page.margins.bottom - 30
+        ) {
+          doc.addPage();
+          header(doc, collegeCode, false, list, approved);
+          doc.moveDown();
+          tableHeader();
+          y = doc.y + 5;
+        }
+
+        const row = {
+          SNO: index + 1,
+          APPLN_NO: student.appln_no,
+          NAME: student.name,
+          QUOTA: "GOVT",
+          COMMUNITY: student.community,
+          AMOUNT: student.amount,
+        };
+
+        headers.forEach((col) => {
+          const val = row[col.key] ?? "";
+          drawCell(String(val), x, y, columnWidths[col.key], rowHeight, true);
+          x += columnWidths[col.key];
+        });
+      }
+      doc.moveDown();
+    });
+  } else {
     doc.moveDown();
-    doc.font(arialBold).fontSize(15).text('NO STUDENT FOUND',{align:'center'});
-}
+    doc
+      .font(arialBold)
+      .fontSize(15)
+      .text("NO STUDENT FOUND", { align: "center" });
+  }
 
   const remainingHeight = doc.page.height - doc.y - doc.page.margins.bottom;
   const extraSpaceNeeded = 150;
   if (remainingHeight < extraSpaceNeeded) {
     doc.addPage();
-    header(doc, collegeCode,false,list,approved);
+    header(doc, collegeCode, false, list, approved);
   }
   footer(doc);
 

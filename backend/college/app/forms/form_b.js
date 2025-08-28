@@ -9,7 +9,7 @@ const { footer } = require("./pageFrame");
 async function formb(req, res) {
   var collegeCode;
   if (req.user.counsellingCode) {
-    console.log("code", req.user.cousellingCode);
+    // console.log("code", req.user.cousellingCode);
     collegeCode = req.user.counsellingCode;
     if (!collegeCode)
       return res.status(404).json({ msg: "collgecode not found" });
@@ -34,7 +34,7 @@ async function formb(req, res) {
   } catch (err) {
     return res.status(500).json({ msg: "Error in query" });
   }
-  
+
   const freezed = collegeRows.length ? collegeRows[0].freezed : "0";
 
   res.setHeader("Content-Type", "application/pdf");
@@ -278,8 +278,8 @@ async function formb(req, res) {
   if (remainingHeight < extraSpaceNeeded) {
     doc.addPage();
   }
-  footer("B", doc, collegeCode,freezed);
-  console.log("form b completed");
+  footer("B", doc, collegeCode, freezed);
+  // console.log("form b completed");
 
   doc.end();
 }

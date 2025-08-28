@@ -17,7 +17,7 @@ async function form_tnlea(req, res) {
       "SELECT freezed FROM college_info WHERE c_code = ?",
       [allot_coll_code]
     );
-    // console.log(result)
+    // // console.log(result)
   } catch (err) {
     return res.status(500).json({ msg: "query error" });
   }
@@ -36,7 +36,7 @@ async function form_tnlea(req, res) {
     doc.pipe(res);
 
     doc.on("pageAdded", () => {
-      currentY = doc.page.margins.top +100;
+      currentY = doc.page.margins.top + 100;
     });
     // doc.fontSize(14).text("hii");
     doc.registerFont("Arial-Bold", arialBold);
@@ -72,8 +72,8 @@ async function form_tnlea(req, res) {
         }
       });
       maxHeight += 2 * padding;
-      // console.log(maxHeight)
-      // console.log(maxHeight)
+      // // console.log(maxHeight)
+      // // console.log(maxHeight)
       let x = doc.page.margins.left;
       columns.forEach((col) => {
         doc.rect(x + 10, yPosition, col.width, maxHeight).stroke();
@@ -171,7 +171,7 @@ async function form_tnlea(req, res) {
           doc.page.height - doc.page.margins.bottom
         ) {
           doc.addPage();
-          currentY = doc.page.margins.top + 100;  
+          currentY = doc.page.margins.top + 100;
         }
 
         doc
@@ -192,7 +192,7 @@ async function form_tnlea(req, res) {
         currentY + rowHeight + 30 > doc.page.height - doc.page.margins.bottom
       ) {
         doc.addPage();
-        currentY = doc.page.margins.top + 100;  
+        currentY = doc.page.margins.top + 100;
         doc
           .font("Arial-Bold")
           .fontSize(12)

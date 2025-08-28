@@ -6,15 +6,16 @@ const arial = path.join(__dirname, "../fonts/arial/arial.ttf");
 const { footer } = require("./pageFrame");
 
 async function formc(req, res) {
-    var collegeCode;
-  if(req.user.counsellingCode){
-    console.log('code',req.user.cousellingCode);
+  var collegeCode;
+  if (req.user.counsellingCode) {
+    // console.log('code',req.user.cousellingCode);
     collegeCode = req.user.counsellingCode;
-    if(!collegeCode) return res.status(404).json({msg:'collgecode not found'});
-  }else{
+    if (!collegeCode)
+      return res.status(404).json({ msg: "collgecode not found" });
+  } else {
     const name = req.user.name;
     collegeCode = req.body?.collegeCode;
-    if(!name) return res.status(404).json({msg:'user not found'});
+    if (!name) return res.status(404).json({ msg: "user not found" });
   }
   var branches;
   try {
@@ -172,15 +173,16 @@ async function formc(req, res) {
 
   for (const b of branches) {
     var stuRows;
-    try{
-    [stuRows] = await db.query(
-      `SELECT community, gender, COUNT(*) as count 
+    try {
+      [stuRows] = await db.query(
+        `SELECT community, gender, COUNT(*) as count 
          FROM student_info 
          WHERE c_code = ? AND b_code = ? 
          GROUP BY community, gender`,
-      [collegeCode, b.b_code]
-    );}catch(err){
-      return res.status(500).json({msg:'error in query'});
+        [collegeCode, b.b_code]
+      );
+    } catch (err) {
+      return res.status(500).json({ msg: "error in query" });
     }
 
     const counts = {};

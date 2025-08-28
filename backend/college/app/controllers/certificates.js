@@ -25,14 +25,14 @@ const getCert = async (req, res) => {
 
 const uploadCert = async (req, res) => {
   const handler = upload.single("file");
-//   console.log("inside uloader");
+  //   // console.log("inside uloader");
   handler(req, res, async (err) => {
-    // console.log("inside handler");
+    // // console.log("inside handler");
     if (err) return res.status(400).json({ error: err.message });
     try {
-    // console.log("inside try");
+      // // console.log("inside try");
       const { mobile, appln, type } = req.body;
-    //   console.log(mobile);
+      //   // console.log(mobile);
       if (!mobile || !appln || !type)
         return res
           .status(400)
@@ -43,15 +43,11 @@ const uploadCert = async (req, res) => {
       updateCertQ = `update approval_certificates set ${column} = 1 where a_no=?`;
       await db.query(updateCertQ, [appln]);
 
-      return res
-        .status(200)
-        .json({
-          success: true,
-          file: req.file.filename,
-          url: `uploads/${mobile}_${encryptValue(mobile)}/${
-            req.file.filename
-          }`,
-        });
+      return res.status(200).json({
+        success: true,
+        file: req.file.filename,
+        url: `uploads/${mobile}_${encryptValue(mobile)}/${req.file.filename}`,
+      });
     } catch (e) {
       return res.status(500).json({ error: e.message });
     }
