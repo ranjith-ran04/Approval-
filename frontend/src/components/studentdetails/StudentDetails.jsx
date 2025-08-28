@@ -150,7 +150,7 @@ function StudentDetails({admin,supp}) {
       )}
       {add && (
         <div ref={addRef} >
-        <AddInput add={setAdd} clicked={setClicked} click={clicked} appln_no={setAppln_no}/>
+        <AddInput add={setAdd} clicked={setClicked} click={clicked} appln_no={setAppln_no} branchCode={selected}/>
         </div>
       )
       }
