@@ -21,33 +21,6 @@ function Dashboard() {
   const location = useLocation();
   const logged = location.state?.logged || false;
 
-  const [details, setDetails] = useState({
-    taluk: "",
-    district: "",
-    constituency: "",
-    pincode: "",
-    chairman: "",
-    principalName: "",
-    collegeContact: "",
-  });
-  const navigate = useNavigate();
-  async function fetch() {
-    try {
-      const res = await axios.get(`${host}home`, {
-        withCredentials: true,
-      });
-      if (res.status === 200) {
-        // console.log('dashboard',res.data);
-        setDetails(res.data[0]);
-      }
-    } catch (error) {
-      navigate("/");
-    }
-  }
-  useEffect(() => {
-    fetch();
-  }, []);
-
   return logged ? (
     <div className="dashboard">
       <Sidebar setCurrent={setCurrent} admin={false} />
@@ -65,7 +38,7 @@ Tamilnadu Lateral Entry Direct Second Year B.E/B.Tech.,Approval-2025`}
 
         <div className="dashboard-body" ref={scrollRef}>
           <>
-            {current === 0 && <Home details={details} />}
+            {current === 0 && <Home />}
             {current === 1 && <CollegeInfo />}
             {current === 2 && (
               <Branch setCurrent={setCurrent} setState={setState} />
