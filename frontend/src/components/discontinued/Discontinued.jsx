@@ -32,10 +32,15 @@ const Discontinued = ({ admin, supp }) => {
     const handleChange = (e) => {
         const { name, value } = e.target;
 
+        if (name == 'appln_no') {
+            setAppln_no(value);
+        }
+
         setStudentData((prev) => {
             return { ...prev, [name]: value }
         })
     }
+
 
     const handlecloseAlert = () => {
         setShowAlert(false);
@@ -47,6 +52,10 @@ const Discontinued = ({ admin, supp }) => {
     };
 
     const confirmUpdate = async () => {
+        if (studentData.NAME == '' || studentData.APPROVE_STATE == '' || studentData.TC_STATE == '') {
+            alert('Fill all the details');
+            return;
+        }
         setShowAlert(true);
         setAlertMessage("Confirm to update");
         setAlertType("warning");
@@ -68,7 +77,7 @@ const Discontinued = ({ admin, supp }) => {
         try {
             const response = await axios.put(
                 `${host}discontinued-student`,
-                { appln_no, studentData },
+                { appln_no, studentData, selected },
                 {
                     withCredentials: true,
                 }
@@ -80,6 +89,7 @@ const Discontinued = ({ admin, supp }) => {
                 setAlertType("success");
                 setAlertOkAction(() => () => {
                     setShowAlert(false);
+                    handleSelect('');
                 });
                 setAlertCancelAction(null)
             }
@@ -148,6 +158,8 @@ const Discontinued = ({ admin, supp }) => {
 
     async function handleSelect(branch) {
         setSelected(branch);
+        setAdd(false);
+        setAppln_no(0);
         if (branch === "") {
             setClicked(0);
             setStudents([]);
@@ -169,7 +181,7 @@ const Discontinued = ({ admin, supp }) => {
     }
 
 
-    async function studentInfo() {
+    async function studentInfo(appln_no) {
         showLoader();
         try {
             const result = await axios.post(
@@ -200,9 +212,7 @@ const Discontinued = ({ admin, supp }) => {
         handleFetch();
     }, []);
 
-    useEffect(() => {
-        if (appln_no != 0) studentInfo();
-    }, [appln_no])
+
 
 
 
@@ -218,49 +228,64 @@ const Discontinued = ({ admin, supp }) => {
                         </option>
                     ))}
                 </select>
-                {/* {selected != "" && (<Button name='ADD' onClick={() => { setAdd(true); setClicked(0) }}></Button>)} */}
-            </div>
-            <div className="student-table">
-                <div className="student-row">
-                    <div className="student-header sno">S.No</div>
-                    <div className="student-header app_no">Application Number</div>
-                    <div className="student-header name">Name</div>
-                    <div className="student-header action">Action</div>
-                </div>
+                {selected != "" && (<Button name='ADD' onClick={() => {
+                    setAdd(true); setClicked(0); setStudentData({
+                        NAME: "",
+                        APPROVE_STATE: "",
+                        TC_STATE: ""
+                    }
+                    );
+                    setAppln_no('');
 
-                {students.map((item, index) => (
-                    <div key={index} className="student-row cell">
-                        <div className="student-cell sno">{index + 1}</div>
-                        <div className="student-cell app_no">{item.app_no}</div>
-                        <div className="student-cell name">{item.name}</div>
-                        <div className="student-cell action">
-                            <button
-                                className="student-button"
-                                onClick={() => {
-                                    setAdd(false);
-                                    setAppln_no(item.app_no);
-                                }}
-                            >
-                                view
-                            </button>
-                        </div>
-                    </div>
-                ))}
-                {students.length === 0 && (
-                    <div className="Unavailable">No Students Found</div>
-                )}
+                }}></Button>)}
             </div>
             {
-                appln_no != 0 && (
+                !add && (
+                    <div className="student-table">
+                        <div className="student-row">
+                            <div className="student-header sno">S.No</div>
+                            <div className="student-header app_no">Application Number</div>
+                            <div className="student-header name">Name</div>
+                            <div className="student-header action">Action</div>
+                        </div>
+
+                        {students.map((item, index) => (
+                            <div key={index} className="student-row cell">
+                                <div className="student-cell sno">{index + 1}</div>
+                                <div className="student-cell app_no">{item.app_no}</div>
+                                <div className="student-cell name">{item.name}</div>
+                                <div className="student-cell action">
+                                    <button
+                                        className="student-button"
+                                        onClick={() => {
+                                            setAdd(false);
+                                            setAppln_no(item.app_no);
+                                            studentInfo(item.app_no);
+                                        }}
+                                    >
+                                        view
+                                    </button>
+                                </div>
+                            </div>
+                        ))}
+                        {students.length === 0 && (
+                            <div className="Unavailable">No Students Found</div>
+                        )}
+                    </div>
+                )
+            }
+
+            {
+                (appln_no != 0 || add) && (
                     <div >
                         <div id="appln_no" style={{ display: 'flex', gap: '8%' }}>
                             <Inputfield
-                                name={"appln_no"}
+                                eltname={"appln_no"}
                                 type={"text"}
                                 placeholder={"Application Number"}
                                 onChange={handleChange}
                                 value={appln_no}
-                                disabled={true}
+                                disabled={!add}
                             />
                             <div style={{ marginTop: '20px' }}>
                                 <Button
@@ -269,7 +294,7 @@ const Discontinued = ({ admin, supp }) => {
                                         width: "130px",
                                         backgroundColor: "red",
                                     }}
-                                    onClick={() => setAppln_no(0)}
+                                    onClick={() => { setAppln_no(0); setAdd(false) }}
                                 />
                             </div>
                         </div>
@@ -341,7 +366,7 @@ const Discontinued = ({ admin, supp }) => {
                 okbutton={alertOkAction}
                 cancelbutton={alertCancelAction}
             />
-        </div>
+        </div >
     )
 }
 
