@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "./Input.css";
+import "./input.css";
 import Button from "../button/Button";
 import axios from 'axios';
 import {host} from '../../constants/backendpath'
