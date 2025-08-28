@@ -62,6 +62,7 @@ const LoginForm = ({ admin }) => {
         );
         const changeFlag = response.data.changed;
         setChanged(changeFlag);
+        localStorage.setItem("collegeCode", formData.regNo);
         setLoginStatus("success");
         setAlertType("success");
         setAlertMessage("Logged in successfully.");

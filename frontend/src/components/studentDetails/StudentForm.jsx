@@ -9,8 +9,45 @@ import { host } from "../../constants/backendpath";
 import { useLoader } from "../../context/LoaderContext";
 import states from "../../constants/states";
 
-const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
-  // console.log(index);
+const CategorySection = ({ studentData, handleChange, error }) => {
+  const [options, setOptions] = useState([
+    { label: "GOVERNMENT", value: "GOVERNMENT" },
+    { label: "MANAGEMENT", value: "MANAGEMENT" },
+    { label: "LAP", value: "LAP" },
+    { label: "MIN", value: "MIN" },
+    { label: "GOI", value: "GOI" },
+    { label: "FOR", value: "FOR" },
+    { label: "NRI", value: "NRI" },
+  ]);
+
+  useEffect(() => {
+    const fromAdd = localStorage.getItem("fromAdd") === "true";
+    const fromView = localStorage.getItem("fromView") === "true";
+    if (fromAdd && !fromView) {
+      setOptions((prev) => prev.filter((opt) => opt.value !== "GOVERNMENT")); 
+    }
+    localStorage.removeItem("fromAdd");
+    localStorage.removeItem("fromView");
+  }, []);
+
+  return (
+    <Inputfield
+      label={"CATEGORY"}
+      id={"CATEGORY"}
+      eltname={"catogory"}
+      type={"dropdown"}
+      htmlfor={"CATEGORY"}
+      options={options}
+      value={studentData.catogory}
+      onChange={handleChange}
+      error={error["CATEGORY"]}
+    />
+  );
+};
+
+
+const Addstudent = ({ handleClear, appln_no,b_code, index, clicked }) => {
+  // console.log(clicked);
   const { showLoader, hideLoader } = useLoader();
   const [pendingDeleteIndex, setPendingDeleteIndex] = useState(null);
   const [changedFields, setchangedFields] = useState({});
@@ -19,6 +56,7 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
     nationality: "",
     nativity: "",
   });
+  
   const [caste, setCastes] = useState([]);
   const [showAlert, setShowAlert] = useState(false);
   const [alertStage, setAlertStage] = useState("");
@@ -26,7 +64,6 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
   const [alertMessage, setAlertMessage] = useState("");
   const [alertOkAction, setAlertOkAction] = useState(() => () => {});
   const [error, setError] = useState({});
-  // const [error,setError] = useState('');
   const [certificates, setCertificates] = useState([]);
   const requiredFields = [
     "a_no",
@@ -335,7 +372,7 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
     } catch (error) {
       console.log(error);
       setShowAlert(true);
-      setAlertMessage("Unable to connnect to server...");
+      setAlertMessage("Unable to update kindly try again...");
       setAlertStage("error");
       setAlertType("error");
       setAlertOkAction(() => () => {
@@ -371,7 +408,7 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
     } catch (error) {
       console.log(error);
       setShowAlert(true);
-      setAlertMessage("Unable to connnect to server...");
+      setAlertMessage("Unable to delete kindly try again...");
       setAlertStage("error");
       setAlertType("error");
       setAlertOkAction(() => () => {
@@ -501,7 +538,7 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
     : "";
   const handleChange = async (e) => {
     const { name, value } = e.target;
-
+    // alert(value)
     // For caste_name, you might want to store only the code in backend format
     let updatedValue = value;
 
@@ -518,10 +555,12 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
       }));
 
       await caste_drop(value);
-    } else if (name === "fg") {
-      setStudentData((prev) => ({ ...prev, [name]: parseInt(updatedValue) }));
     }
-    else {
+    else if(name=="fg") {
+      setStudentData((prev) => ({ ...prev, [name]:parseInt (updatedValue) }));
+
+    }
+     else {
       setStudentData((prev) => ({ ...prev, [name]: updatedValue }));
     }
 
@@ -605,6 +644,14 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
     });
   }
   // console.log("Before render catogory:", studentData.catogory);
+  useEffect(() => {
+    if (studentData.course_type !== "bsc" && studentData.maths_studied) {
+      setStudentData((prev) => ({ ...prev, maths_studied: "" }));
+    }
+  }, [studentData.course_type]);
+
+  
+
 
   return (
     <div className="collegewholediv">
@@ -621,24 +668,10 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
       </div>
 
       <div id="category" style={{ gap: "50px" }}>
-        <Inputfield
-          label={"CATEGORY"}
-          id={"CATEGORY"}
-          eltname={"catogory"}
-          type={"dropdown"}
-          htmlfor={"CATEGORY"}
-          options={[
-            { label: "GOVERNMENT", value: "GOVERNMENT" },
-            { label: "MANAGEMENT", value: "MANAGEMENT" },
-            { label: "LAP", value: "LAP" },
-            { label: "MIN", value: "MIN" },
-            { label: "GOI", value: "GOI" },
-            { label: "FOR", value: "FOR" },
-            { label: "NRI", value: "NRI" },
-          ]}
-          value={studentData.catogory}
-          onChange={handleChange}
-          error={error["catogory"]}
+        <CategorySection
+          studentData={studentData}
+          handleChange={handleChange}
+          error={error}
         />
         <div style={{ display: "flex", gap: "10px" }}>
           <Button
@@ -995,8 +1028,8 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
                 { label: "DOTE", key: "DOTE", value: "DOTE" },
                 { label: "Autonomous", key: "Autonomous", value: "AUTONOMOUS" },
                 { label: "University", key: "University", value: "UNIVERSITY" },
-                { label: "UIT", key: "UIT", value: "UIT" },
-                { label: "UIO", key: "UIO", value: "UIO" },
+                // { label: "UIT", key: "UIT", value: "UIT" },
+                // { label: "UIO", key: "UIO", value: "UIO" },
                 { label: "Others", key: "Others", value: "others" },
               ]}
               value={studentData.name_of_board}
@@ -1008,8 +1041,12 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
             <Inputfield
               eltname={"hsc_group"}
               type={"radio"}
+              // id="course_type"
+              // value={studentData.course_type}
+              // htmlfor="course_type"
               radiolabel={"Course Type"}
               classname={"field-block"}
+              // onChange={handleChange}
               options={[
                 { label: "Regular", key: "Regular", value: "DIP-Regular" },
                 { label: "Lateral", key: "Lateral", value: "DIP-Lateral" },
@@ -1028,7 +1065,17 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
                   key: "Sandwich (8 Semesters)",
                   value: "DIP-Sandwich_8",
                 },
-                { label: "BSc", key: "BSC", value: "Bsc" },
+                {
+                  label: "Sandwich (Lateral 7 Semesters)",
+                  key: "Sandwich (7 Semesters)_lat",
+                  value: "DIP-Sandwich_7_lat",
+                },
+                {
+                  label: "Sandwich (Lateral 8 Semesters)",
+                  key: "Sandwich (8 Semesters)_lat",
+                  value: "DIP-Sandwich_8_lat",
+                },
+                { label: "BSc", key: "BSC", value: "bsc" },
               ]}
               id={"QualifyingExam"}
               value={studentData.hsc_group}
@@ -1039,21 +1086,32 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
           </div>
           <div>
             <Inputfield
-              eltname={"maths_studied"}
-              type={"radio"}
-              radiolabel={"Maths Studied in 12th or Degree Level"}
-              classname={"field-block"}
+              eltname="maths_studied"
+              type="radio"
+              radiolabel="Maths Studied in 12th or Degree Level"
+              classname="field-block"
               options={[
-                { label: "Yes", value: 1 },
-                { label: "No", value: 0 },
-              ]}
-              id={"mathsstudied"}
-              htmlfor={"mathsstudied"}
-              value={studentData.maths_studied}
-              onChange={handleChange}
-              error={error.maths_studied}
+                { label: "Yes", value: '1' },
+                { label: "No", value: '0' },
+             ]}
+             id="mathsstudied"
+             htmlfor="mathsstudied"
+             value={studentData.maths_studied}
+             onChange={handleChange}
+             error={error["mathsstudied"]}
+             disabled={[
+              "DIP-Regular",
+              "DIP-Lateral",
+              "DIP-Part_time",
+              "DIP-Sandwich_7",
+              "DIP-Sandwich_8",
+              "DIP-Sandwich_7_lat",
+              "DIP-Sandwich_8_lat"
+            ].includes(studentData.hsc_group)}
+
             />
           </div>
+
         </fieldset>
 
         <fieldset className="collegefieldset">
@@ -1086,7 +1144,7 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
               error={error.fg}
             />
           </div>
-          <div className="field-row">
+          {/* <div className="field-row">
             <Inputfield
               eltname={"aicte_tfw"}
               type={"radio"}
@@ -1117,7 +1175,7 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
               onChange={handleChange}
               error={error.pms}
             />
-          </div>
+          </div> */}
           <div className="field-row">
             <Inputfield
               eltname={"fg_district"}
@@ -1129,7 +1187,8 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
               options={tamilnaduDistricts}
               onChange={handleChange}
               value={studentData.fg_district}
-              error={error.fg_district}
+              error={error["FG Cert Issued District"]}
+              disabled={studentData.fg === 0}
             />
             <Inputfield
               eltname={"fg_no"}
@@ -1140,7 +1199,8 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
               htmlfor={"FGCertificateNumber"}
               value={studentData.fg_no}
               onChange={handleChange}
-              error={error.fg_no}
+              error={error["FG Certificate Number"]}
+              disabled={studentData.fg === 0}
             />
           </div>
           <div className="field-row-single">
@@ -1153,7 +1213,8 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
               htmlfor={"fg fees"}
               value={studentData.Amount}
               onChange={handleChange}
-              error={error.Amount}
+              error={error["fg fees"]}
+              disabled={studentData.fg === 0}
             />
           </div>
         </fieldset>

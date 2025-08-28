@@ -40,10 +40,10 @@ const validateFields = () => {
       return; 
     }
 
-    if (["collegenameWithdistrict", "chairman", "principalname", "district", "taluk", "constituency", "nearestrailway"].includes(field) &&/\d/.test(value)) {
+    if (["collegenameWithdistrict", "principalname", "district", "taluk", "constituency", "nearestrailway"].includes(field) &&/\d/.test(value)) {
       newErrors[field] = "Only letters are allowed";
     }
-    const telephone=["chairmancontact", "principalcontact", "collegephone"];
+    const telephone=["principalcontact", "collegephone"];
     if(telephone.includes(field)&&isNaN(value)){
       newErrors[field]="Only numbers are allowed";
     }
@@ -95,7 +95,7 @@ const handleChange =(e)=>{
       if(["collegenameWithdistrict", "chairman", "principalname", "district", "taluk", "constituency", "nearestrailway"].includes(name) &&/\d/.test(value)){
         isValid = false;
       }
-      const telephone = ["chairmancontact", "principalcontact", "collegephone"];
+      const telephone = ["principalcontact", "collegephone"];
       if (telephone.includes(name)) {
         if (isNaN(value) || !/^\d{10}$/.test(value)) {
           isValid = false;
@@ -255,7 +255,7 @@ const handleChange =(e)=>{
                 </div>
                 <div className="field-row">
                 <Inputfield eltname={"chairman"} type={"text"} label={"Name of the Chairman"} id={"chairman"} htmlfor={"chairman"}  classname={"field-block"} onchange={handleChange} error={error["chairman"]} value={formdata?.chairman||""}/>
-                <Inputfield eltname={"chairmancontact"} type={"text"} label={"chairman's contact"} id={"chairmancontact"} htmlfor={"chairmancontact"}  classname={"field-block"} error={error["chairmancontact"]} onchange={handleChange} value={formdata?.chairmancontact||""}/>
+                <Inputfield eltname={"chairmancontact"} type={"text"} label={"Chairman's contact"} id={"chairmancontact"} htmlfor={"chairmancontact"}  classname={"field-block"} error={error["chairmancontact"]} onchange={handleChange} value={formdata?.chairmancontact||""}/>
                 </div>
               <div className='field-row'>
                 <Inputfield eltname={"principalname"} type={"text"} label={"Name of the principal"} id={"principal"} htmlfor={"principal"}  classname={"field-block"} error={error["principalname"]} onchange={handleChange} value={formdata?.principalname||""}/>

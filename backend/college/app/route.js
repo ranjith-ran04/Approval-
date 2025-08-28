@@ -19,6 +19,7 @@ const { checkApplnNo,student,addStudentinfo, editStudent, deleteStudent, diconti
 const collegeget = require("./controllers/collegeget");
 const {getCert, uploadCert, deleteCert} = require("./controllers/certificates");
 const { submit, getFreezed } = require("./controllers/submit");
+const student_count = require("./controllers/input");
 
 router.get("/forma", verifyjwt,forma);
 router.post("/forma", verifyjwt,forma);
@@ -68,5 +69,6 @@ router.delete("/cert",verifyjwt,deleteCert);
 
 router.get("/getFreezed",verifyjwt,getFreezed);
 router.post("/submit",verifyjwt,submit);
+router.post('/student-count', verifyjwt, student_count);
 
 module.exports = router;
