@@ -40,10 +40,10 @@ async function form_tnlea(req,res){
             { label: "NAME", width: 130 },
             { label: "COMM", width: 50 },
             { label: "FIRST GRADUATE", width: 60 },
-            { label: "FEE CONSESSION", width:70 },
-            { label: "AICTE TFW", width: 40 },
+            { label: "FEE CONSESSION", width:90 },
+            // { label: "AICTE TFW", width: 40 },
             { label: "AGGR %", width: 40 },
-            { label: "CATEGORY", width: 60 }
+            { label: "CATEGORY", width: 70 }
         ];
 const padding = 3;
 let currentY = doc.y;
@@ -88,7 +88,7 @@ function drawDataRow(row, serial, yPosition) {
         row.community,
         row.fg === 1 ? "YES" : "NO",
         row.Availed_fg === 1 ?"YES":"NO",
-        row.aicte_tfw === 1 ? "YES" : "NO",
+        // row.aicte_tfw === 1 ? "YES" : "NO",
         aggr,
         row.hsc_group
     ];

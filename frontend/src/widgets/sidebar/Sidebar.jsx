@@ -121,7 +121,7 @@ function Sidebar({ setCurrent, admin }) {
 
   const handleItemClick = (index, action) => {
     if (!admin) {
-      if (index < 5) setActiveAdminId(index);
+      if (index < 7) setActiveAdminId(index);
       if (action) action();
     }
   };

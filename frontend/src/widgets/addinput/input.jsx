@@ -46,7 +46,7 @@ const Input = ({add,clicked,click,appln_no}) => {
   };
   function handleCancel(){
     add(false);
-    clicked(click+1);
+    clicked(0);
   }
   function handleConfirm(){
     add(false);

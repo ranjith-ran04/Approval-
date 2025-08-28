@@ -52,16 +52,16 @@ async function formb(req, res) {
       COM: 28,
       BOARD: 40,
       SEM: 50,
-      PERCENT: 20,
-      FG: 20,
-      AFW: 25,
+      PERCENT: 30,
+      FG: 30,
+      // AFW: 25,
     };
     const sems = [
       "SEM-1",
       "SEM-2",
       "SEM-3",
       "SEM-4",
-      "SEM-5",
+      "SEM-5",  
       "SEM-6",
       "SEM-7",
       "SEM-8",
@@ -94,7 +94,7 @@ async function formb(req, res) {
       [
         { label: "%", width: columnWidths.PERCENT },
         { label: "FG", width: columnWidths.FG },
-        { label: "AFW", width: columnWidths.AFW },
+        // { label: "AFW", width: columnWidths.AFW },
       ].forEach((item) => {
         drawCell(item.label, x, y, item.width, headerHeight * 2,false);
         x += item.width;
@@ -243,7 +243,7 @@ async function formb(req, res) {
         drawCell(student.fg ? "Y" : "N", x, y, columnWidths.FG, rowHeight,true);
         x += columnWidths.FG;
 
-        drawCell(student.afw ? "Y" : "N", x, y, columnWidths.AFW, rowHeight,true);
+        // drawCell(student.afw ? "Y" : "N", x, y, columnWidths.AFW, rowHeight,true);
       }
     });
     const remainingHeight = doc.page.height - doc.y - doc.page.margins.bottom;

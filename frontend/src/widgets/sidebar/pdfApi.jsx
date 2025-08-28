@@ -1,12 +1,13 @@
 import { host, adminhost } from "../../constants/backendpath";
 import axios from "axios";
 
+
 const handleForm = async (endpoint, admin, collegeCode, list, approved, supp, data) => {
   try {
     var res;
-    const body = { data }
     // alert(endpoint)
     if (endpoint == "formApprv") {
+      const body = { data }
       res = await axios.post(`${host}${endpoint}`, body, {
         withCredentials: true,
         responseType: "blob",
@@ -47,6 +48,9 @@ const handleForm = async (endpoint, admin, collegeCode, list, approved, supp, da
       window.open(url, "_blank");
     }
   } catch (error) {
+    if(error.response.status === 404){
+      alert("No details found")
+    }
     console.log("error failed to send request", error);
   }
 };
