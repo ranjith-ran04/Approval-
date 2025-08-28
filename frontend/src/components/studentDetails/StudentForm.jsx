@@ -9,44 +9,7 @@ import { host } from "../../constants/backendpath";
 import { useLoader } from "../../context/LoaderContext";
 import states from "../../constants/states";
 
-const CategorySection = ({ studentData, handleChange, error }) => {
-  const [options, setOptions] = useState([
-    { label: "GOVERNMENT", value: "GOVERNMENT" },
-    { label: "MANAGEMENT", value: "MANAGEMENT" },
-    { label: "LAP", value: "LAP" },
-    { label: "MIN", value: "MIN" },
-    { label: "GOI", value: "GOI" },
-    { label: "FOR", value: "FOR" },
-    { label: "NRI", value: "NRI" },
-  ]);
-
-  useEffect(() => {
-    const fromAdd = localStorage.getItem("fromAdd") === "true";
-    const fromView = localStorage.getItem("fromView") === "true";
-    if (fromAdd && !fromView) {
-      setOptions((prev) => prev.filter((opt) => opt.value !== "GOVERNMENT")); 
-    }
-    localStorage.removeItem("fromAdd");
-    localStorage.removeItem("fromView");
-  }, []);
-
-  return (
-    <Inputfield
-      label={"CATEGORY"}
-      id={"CATEGORY"}
-      eltname={"catogory"}
-      type={"dropdown"}
-      htmlfor={"CATEGORY"}
-      options={options}
-      value={studentData.catogory}
-      onChange={handleChange}
-      error={error["CATEGORY"]}
-    />
-  );
-};
-
-
-const Addstudent = ({ handleClear, appln_no,b_code, index, clicked }) => {
+const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
   // console.log(clicked);
   const { showLoader, hideLoader } = useLoader();
   const [pendingDeleteIndex, setPendingDeleteIndex] = useState(null);
@@ -56,7 +19,7 @@ const Addstudent = ({ handleClear, appln_no,b_code, index, clicked }) => {
     nationality: "",
     nativity: "",
   });
-  
+
   const [caste, setCastes] = useState([]);
   const [showAlert, setShowAlert] = useState(false);
   const [alertStage, setAlertStage] = useState("");
@@ -121,7 +84,7 @@ const Addstudent = ({ handleClear, appln_no,b_code, index, clicked }) => {
     "DIP-Part_time": { start: 1, end: 8 },
     "DIP-Sandwich_7": { start: 1, end: 7 },
     "DIP-Sandwich_8": { start: 1, end: 8 },
-    Bsc: { start: 1, end: 6 },
+    "Bsc": { start: 1, end: 6 },
   };
 
   const caste_drop = async (community) => {
@@ -209,7 +172,6 @@ const Addstudent = ({ handleClear, appln_no,b_code, index, clicked }) => {
     // setAlertStage('')
   };
   const validateFields = () => {
-
     const letterfields = [
       "name",
       "religion",
@@ -222,13 +184,17 @@ const Addstudent = ({ handleClear, appln_no,b_code, index, clicked }) => {
       "remarks",
     ];
 
-    if (studentData['fg'] == 1) requiredFields.push("fg_no", "fg_district", "Amount")
+    if (studentData["fg"] == 1)
+      requiredFields.push("fg_no", "fg_district", "Amount");
 
-    const booleanFields = ["fg", "maths_studied"]
+    const booleanFields = ["fg", "maths_studied"];
     const newErrors = {};
     requiredFields.forEach((field) => {
       const value = studentData[field];
-      if ((!value && !booleanFields.includes(field)) || studentData[field] === "") {
+      if (
+        (!value && !booleanFields.includes(field)) ||
+        studentData[field] === ""
+      ) {
         newErrors[field] = "This field is required";
       } else {
         if (letterfields.includes(field) && /\d/.test(value)) {
@@ -296,7 +262,7 @@ const Addstudent = ({ handleClear, appln_no,b_code, index, clicked }) => {
     });
     setError(newErrors);
     console.log(newErrors);
-    
+
     if (Object.keys(newErrors).length === 0) {
       return true;
     } else {
@@ -331,6 +297,7 @@ const Addstudent = ({ handleClear, appln_no,b_code, index, clicked }) => {
   };
 
   const handleUpdate = async () => {
+    // console.log("inside handle update");
     setShowAlert(false);
     try {
       if (Object.keys(changedFields).length === 0) {
@@ -344,30 +311,31 @@ const Addstudent = ({ handleClear, appln_no,b_code, index, clicked }) => {
         return;
       }
       // alert(validateFields());
-      if (!validateFields()) return;
-      const response = await axios.put(
-        `${host}student`,
-        { changedFields, appln_no },
-        {
-          withCredentials: true,
-        }
-      );
-      if (response.status === 200) {
-        setchangedFields({});
+      if (!validateFields()) {
+        const response = await axios.put(
+          `${host}student`,
+          { changedFields, appln_no },
+          {
+            withCredentials: true,
+          }
+        );
+        if (response.status === 200) {
+          setchangedFields({});
 
-        setShowAlert(true);
-        setAlertStage("confirm");
-        setAlertMessage("Confirm to update");
-        setAlertType("warning");
-        setAlertOkAction(() => () => {
           setShowAlert(true);
-          setAlertMessage("Updated Successfully");
-          setAlertStage("success");
-          setAlertType("success");
+          setAlertStage("confirm");
+          setAlertMessage("Confirm to update");
+          setAlertType("warning");
           setAlertOkAction(() => () => {
-            setShowAlert(false);
+            setShowAlert(true);
+            setAlertMessage("Updated Successfully");
+            setAlertStage("success");
+            setAlertType("success");
+            setAlertOkAction(() => () => {
+              setShowAlert(false);
+            });
           });
-        });
+        }
       }
     } catch (error) {
       console.log(error);
@@ -546,7 +514,6 @@ const Addstudent = ({ handleClear, appln_no,b_code, index, clicked }) => {
       updatedValue = value;
     }
 
-
     if (name === "community") {
       setStudentData((prev) => ({
         ...prev,
@@ -555,12 +522,9 @@ const Addstudent = ({ handleClear, appln_no,b_code, index, clicked }) => {
       }));
 
       await caste_drop(value);
-    }
-    else if(name=="fg") {
-      setStudentData((prev) => ({ ...prev, [name]:parseInt (updatedValue) }));
-
-    }
-     else {
+    } else if (name == "fg") {
+      setStudentData((prev) => ({ ...prev, [name]: parseInt(updatedValue) }));
+    } else {
       setStudentData((prev) => ({ ...prev, [name]: updatedValue }));
     }
 
@@ -645,13 +609,10 @@ const Addstudent = ({ handleClear, appln_no,b_code, index, clicked }) => {
   }
   // console.log("Before render catogory:", studentData.catogory);
   useEffect(() => {
-    if (studentData.course_type !== "bsc" && studentData.maths_studied) {
+    if (studentData.course_type !== "Bsc" && studentData.maths_studied) {
       setStudentData((prev) => ({ ...prev, maths_studied: "" }));
     }
   }, [studentData.course_type]);
-
-  
-
 
   return (
     <div className="collegewholediv">
@@ -672,6 +633,7 @@ const Addstudent = ({ handleClear, appln_no,b_code, index, clicked }) => {
           studentData={studentData}
           handleChange={handleChange}
           error={error}
+          clicked={clicked}
         />
         <div style={{ display: "flex", gap: "10px" }}>
           <Button
@@ -818,27 +780,27 @@ const Addstudent = ({ handleClear, appln_no,b_code, index, clicked }) => {
             />
             {(studentData.religion === "Hindu" ||
               studentData.religion === "Christian") && (
-                <Inputfield
-                  eltname={"community"}
-                  type={"dropdown"}
-                  label={"Community"}
-                  classname={"field-block"}
-                  id={"Community"}
-                  htmlfor={"Community"}
-                  options={[
-                    { label: "OC", key: "OC", value: "OC" },
-                    { label: "BC", key: "BC", value: "BC" },
-                    { label: "MBC", key: "MBC", value: "MBC" },
-                    { label: "SC", key: "SC", value: "SC" },
-                    { label: "ST", key: "ST", value: "ST" },
-                    { label: "SCA", key: "SCA", value: "SCA" },
-                    { label: "DNC", key: "DNC", value: "DNC" },
-                  ]}
-                  onChange={handleChange}
-                  value={studentData.community}
-                  error={error["community"]}
-                />
-              )}
+              <Inputfield
+                eltname={"community"}
+                type={"dropdown"}
+                label={"Community"}
+                classname={"field-block"}
+                id={"Community"}
+                htmlfor={"Community"}
+                options={[
+                  { label: "OC", key: "OC", value: "OC" },
+                  { label: "BC", key: "BC", value: "BC" },
+                  { label: "MBC", key: "MBC", value: "MBC" },
+                  { label: "SC", key: "SC", value: "SC" },
+                  { label: "ST", key: "ST", value: "ST" },
+                  { label: "SCA", key: "SCA", value: "SCA" },
+                  { label: "DNC", key: "DNC", value: "DNC" },
+                ]}
+                onChange={handleChange}
+                value={studentData.community}
+                error={error["community"]}
+              />
+            )}
             {studentData.religion === "Muslim" && (
               <Inputfield
                 eltname={"community"}
@@ -849,7 +811,7 @@ const Addstudent = ({ handleClear, appln_no,b_code, index, clicked }) => {
                 htmlfor={"Community"}
                 options={[
                   { label: "OC", key: "OC", value: "OC" },
-                  { label: "BCM", key: "BCM", value: "BCM" }
+                  { label: "BCM", key: "BCM", value: "BCM" },
                 ]}
                 onChange={handleChange}
                 value={studentData.community}
@@ -983,7 +945,7 @@ const Addstudent = ({ handleClear, appln_no,b_code, index, clicked }) => {
               classname={"field-block"}
               options={[
                 { label: "Diploma", key: "Diploma", value: "DIP" },
-                { label: "BSc", key: "BSC", value: "B.Sc" },
+                { label: "BSc", key: "BSC", value: "Bsc" },
                 { label: "Others", key: "OTHERS", value: "OTHERS" },
               ]}
               id={"QualifyingExam"}
@@ -1075,7 +1037,7 @@ const Addstudent = ({ handleClear, appln_no,b_code, index, clicked }) => {
                   key: "Sandwich (8 Semesters)_lat",
                   value: "DIP-Sandwich_8_lat",
                 },
-                { label: "BSc", key: "BSC", value: "bsc" },
+                { label: "BSc", key: "BSC", value: "Bsc" },
               ]}
               id={"QualifyingExam"}
               value={studentData.hsc_group}
@@ -1091,27 +1053,25 @@ const Addstudent = ({ handleClear, appln_no,b_code, index, clicked }) => {
               radiolabel="Maths Studied in 12th or Degree Level"
               classname="field-block"
               options={[
-                { label: "Yes", value: '1' },
-                { label: "No", value: '0' },
-             ]}
-             id="mathsstudied"
-             htmlfor="mathsstudied"
-             value={studentData.maths_studied}
-             onChange={handleChange}
-             error={error["mathsstudied"]}
-             disabled={[
-              "DIP-Regular",
-              "DIP-Lateral",
-              "DIP-Part_time",
-              "DIP-Sandwich_7",
-              "DIP-Sandwich_8",
-              "DIP-Sandwich_7_lat",
-              "DIP-Sandwich_8_lat"
-            ].includes(studentData.hsc_group)}
-
+                { label: "Yes", value: "1" },
+                { label: "No", value: "0" },
+              ]}
+              id="mathsstudied"
+              htmlfor="mathsstudied"
+              value={studentData.maths_studied}
+              onChange={handleChange}
+              error={error["mathsstudied"]}
+              disabled={[
+                "DIP-Regular",
+                "DIP-Lateral",
+                "DIP-Part_time",
+                "DIP-Sandwich_7",
+                "DIP-Sandwich_8",
+                "DIP-Sandwich_7_lat",
+                "DIP-Sandwich_8_lat",
+              ].includes(studentData.hsc_group)}
             />
           </div>
-
         </fieldset>
 
         <fieldset className="collegefieldset">
@@ -1220,6 +1180,8 @@ const Addstudent = ({ handleClear, appln_no,b_code, index, clicked }) => {
         </fieldset>
         <fieldset className="collegefieldset">
           <legend className="collegelegend">MARK DETAILS</legend>
+          <h3 style={{ display: "inline-block", marginLeft: "20px",marginBottom:"10px" }}>MAXIMUM MARKS</h3>
+          <h3 style={{ display: "inline-block", marginLeft: "420px",marginBottom:"10px" }}>OBTAINED MARKS</h3>
           {/* {studentData.hsc_group=='Regular'(
             
           )} */}
@@ -1365,31 +1327,77 @@ const Addstudent = ({ handleClear, appln_no,b_code, index, clicked }) => {
                 <p className="error-message">{error["remarks"]}</p>
               )}
             </fieldset>
-          </div>{clicked===2 ? (
-          <div id="studentbutton">
-            <Button name={"ADD"} onClick={handleAddStudent} />
-            <Alert
-              type={alertType}
-              message={alertMessage}
-              show={showAlert}
-              okbutton={alertOkAction}
-              cancelbutton={alertStage === "confirm" ? handlecloseAlert : null}
-            />
-          </div>) : (
-          <div id="studentbutton">
-            <Button name={"UPDATE"} onClick={handleUpdate} />
-            <Button name={"DELETE"} onClick={handleStuDelete} />
-            <Alert
-              type={alertType}
-              message={alertMessage}
-              show={showAlert}
-              okbutton={alertOkAction}
-              cancelbutton={alertStage === "confirm" ? handlecloseAlert : null}
-            />
-          </div>)}
+          </div>
+          {clicked === 2 ? (
+            <div id="studentbutton">
+              <Button name={"ADD"} onClick={handleAddStudent} />
+              <Alert
+                type={alertType}
+                message={alertMessage}
+                show={showAlert}
+                okbutton={alertOkAction}
+                cancelbutton={
+                  alertStage === "confirm" ? handlecloseAlert : null
+                }
+              />
+            </div>
+          ) : (
+            <div id="studentbutton">
+              <Button name={"UPDATE"} onClick={handleUpdate} />
+              <Button name={"DELETE"} onClick={handleStuDelete} />
+              <Alert
+                type={alertType}
+                message={alertMessage}
+                show={showAlert}
+                okbutton={alertOkAction}
+                cancelbutton={
+                  alertStage === "confirm" ? handlecloseAlert : null
+                }
+              />
+            </div>
+          )}
         </div>
       </div>
     </div>
   );
 };
+
+const CategorySection = ({ studentData, handleChange, error, clicked }) => {
+  // console.log(clicked);
+
+  const options =
+    clicked !== 2
+      ? [
+          { label: "GOVERNMENT", value: "GOVERNMENT" },
+          { label: "MANAGEMENT", value: "MANAGEMENT" },
+          { label: "LAP", value: "LAP" },
+          { label: "MIN", value: "MIN" },
+          { label: "GOI", value: "GOI" },
+          { label: "FOR", value: "FOR" },
+          { label: "NRI", value: "NRI" },
+        ]
+      : [
+          { label: "MANAGEMENT", value: "MANAGEMENT" },
+          { label: "LAP", value: "LAP" },
+          { label: "MIN", value: "MIN" },
+          { label: "GOI", value: "GOI" },
+          { label: "FOR", value: "FOR" },
+          { label: "NRI", value: "NRI" },
+        ];
+
+  return (
+    <Inputfield
+      label={"CATEGORY"}
+      id={"CATEGORY"}
+      eltname={"catogory"}
+      type={"dropdown"}
+      htmlfor={"CATEGORY"}
+      options={options}
+      value={studentData.catogory}
+      onChange={handleChange}
+      error={error["CATEGORY"]}
+    />
+  );
+};
+
 export default Addstudent;

@@ -126,7 +126,7 @@ function StudentDetails({admin,supp}) {
               <button
                 className="student-button"
                 onClick={() => {
-                  localStorage.setItem("fromView","true");
+                  // localStorage.setItem("fromView","true");
                   setAdd(false);
                   setAppln_no(item.app_no);
                   setClicked(1);

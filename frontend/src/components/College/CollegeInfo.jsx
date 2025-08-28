@@ -325,7 +325,7 @@ const handleChange =(e)=>{
               <legend className="collegelegend">Transport Facility</legend>
               <div className='field-row'>
                 <Inputfield eltname={"transportfacility"} type={"radio"} radiolabel={"Transport Facility"} classname={"field-block"} options={[{ label: "Yes", value: "Yes" }, { label: "No", value: "No" }]} error={error["transportfacility"]} onchange={handleChange} value={formdata?.transportfacility||""}/>
-                <Inputfield eltname={"transport"} type={"radio"} radiolabel={"Transport"} classname={"field-block"} options={[{ label: "Optional", value: "Optional" }, { label: "Compulsory", value: "Compulsory" }]} error={error["transport"]} onchange={handleChange} value={formdata?.transport||""}/>
+                <Inputfield eltname={"transport"} type={"radio"} radiolabel={"Transport"} classname={"field-block"} options={[{ label: "Optional", value: "Optional" }, { label: "Compulsory", value: "Compulsory" }]} error={error["transport"]} onchange={handleChange} value={formdata?.transport||""} />
                 </div>
 
               <div className='field-row'>

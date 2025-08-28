@@ -27,13 +27,13 @@ const login = async (req, res) => {
     const token = jwt.sign(
       { counsellingCode: user.c_code },
       process.env.JWT_SECRET,
-      { expiresIn: "24h" }
+      { expiresIn: "10m" }
     );
 
     res.cookie("token", token, {
       httpOnly: true,
       secure: false,
-      maxAge: 24 * 60 * 60 * 1000,
+      maxAge: 10 * 60 * 1000,
     });
 
     return res.status(200).json({ changed: user.changed });

@@ -137,7 +137,7 @@ const Input = ({ add, clicked, click, appln_no, collegeCode, branchCode }) => {
       return;
     }
     appln_no(input); // send value to parent
-    localStorage.setItem("fromAdd", "true");
+    // localStorage.setItem("fromAdd", "true");
     add(false);
     clicked(2);
   }
@@ -169,7 +169,6 @@ const Input = ({ add, clicked, click, appln_no, collegeCode, branchCode }) => {
           );
         })}
       </ul>
-
       <br />
       <div style={{ display: "flex", gap: "10px" }}>
         <Button
