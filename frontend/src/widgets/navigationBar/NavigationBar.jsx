@@ -28,6 +28,9 @@ function NavigationBar({ text, profile, bool,setCurrent,login,admin,style}) {
     else{
       setVisible(false)
     }
+    if(admin){
+      handleLogOut();
+    }
   };
 
   const handleClicksoverlay = () => {
@@ -47,11 +50,10 @@ function NavigationBar({ text, profile, bool,setCurrent,login,admin,style}) {
         </div>
       </div>
       {profile && <div id="person-icon" onClick={handleClicks}></div>}
-      {visible && (
+      {(visible && !admin) && (
         <div id="overlay1" onClick={handleClicksoverlay}>
           <div id="list" style={style}>
-          {!admin &&
-            (<div className="item" onClick={()=>Navigate('/changePassword')}>Change Password</div>)}
+            <div className="item" onClick={()=>Navigate('/changePassword')}>Change Password</div>
             <div className="item" onClick={handleLogOut}>
               Logout
             </div>

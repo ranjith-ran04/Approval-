@@ -17,7 +17,8 @@ import StudentDetails from "./components/studentDetails/StudentDetails.jsx";
 function Dashboard() {
   const [current, setCurrent] = useState(0);
   const [state, setState] = useState({});
-  const scrollRef = useRef();  const location = useLocation();
+  const scrollRef = useRef();
+  const location = useLocation();
   const logged = location.state?.logged || false;
 
   const [details, setDetails] = useState({
@@ -36,7 +37,7 @@ function Dashboard() {
         withCredentials: true,
       });
       if (res.status === 200) {
-        console.log('dashboard',res.data);
+        // console.log('dashboard',res.data);
         setDetails(res.data[0]);
       }
     } catch (error) {
@@ -73,8 +74,8 @@ Tamilnadu Lateral Entry Direct Second Year B.E/B.Tech.,Approval-2025`}
             {current === 4 && (
               <EditBranch setCurrent={setCurrent} state={state} />
             )}
-           {current === 0 && <Notes/>}
-          {current === 5 && <StudentDetails/>}
+            {current === 0 && <Notes />}
+            {current === 5 && <StudentDetails />}
             <ScrollToTop scrollRef={scrollRef} />
           </>
         </div>

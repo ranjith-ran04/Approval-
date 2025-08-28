@@ -9,10 +9,10 @@ const login = async (req, res) => {
   try {
     const result = await db.query(query, [counsellingCode]);
     const user = result[0][0];
-    console.log('change',user);
+    // console.log('change',user);
 
     if (!user || !user.pass) {
-      console.log(user);
+      // console.log(user);
       return res.status(401).json({ message: "Invalid credentials" });
     }
 
@@ -44,7 +44,7 @@ const login = async (req, res) => {
 
 function fetchlogin(req,res){
   const name = req.user?.name || false;
-  console.log(req.user);
+  // console.log(req.user);
   if(!name) return res.status(401).json({msg:'user not found'});
   return res.status(200).json({msg:'user found'});
 }

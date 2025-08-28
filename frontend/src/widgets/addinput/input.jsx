@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "./input.css";
 import Button from "../button/Button";
 
-const Input = ({add,clicked,click,appln_no}) => {
+const Input = ({ add, clicked, click, appln_no }) => {
   const [input, setInput] = useState("");
   const [touched, setTouched] = useState(false);
   const [visibleIndexes, setVisibleIndexes] = useState([]);
@@ -40,20 +40,19 @@ const Input = ({add,clicked,click,appln_no}) => {
       validations.forEach((_, index) => {
         setTimeout(() => {
           setVisibleIndexes((prev) => [...prev, index]);
-        }, index * 400); // show one by one
+        }, index * 400);
       });
     }
   };
-  function handleCancel(){
+  function handleCancel() {
     add(false);
-    clicked(click+1);
+    clicked(0);
   }
-  function handleConfirm(){
+  function handleConfirm() {
     add(false);
-    clicked(click+1);
+    clicked(click + 1);
     appln_no(input);
   }
-
 
   return (
     <div className="input-container">
@@ -68,7 +67,9 @@ const Input = ({add,clicked,click,appln_no}) => {
 
       <ul className="validation-list">
         {validations.map((item, index) => {
-          {/* if (!visibleIndexes.includes(index)) return null; */}
+          {
+            /* if (!visibleIndexes.includes(index)) return null; */
+          }
           const passed = item.check(input);
           return (
             <li
@@ -83,21 +84,22 @@ const Input = ({add,clicked,click,appln_no}) => {
           );
         })}
       </ul>
-      <br/>
-                  <div style={{display:'flex',gap:'10px'}}>
-          <Button
-            name={"ADD"}
-            style={{ width: "130px" }}
-            onClick={handleConfirm}
-          />
-          <Button
-            name={"CANCEL"}
-            style={{
-              width: "130px",
-              backgroundColor: "red", 
-            }}
-            onClick={handleCancel}
-          /></div>
+      <br />
+      <div style={{ display: "flex", gap: "10px" }}>
+        <Button
+          name={"ADD"}
+          style={{ width: "130px" }}
+          onClick={handleConfirm}
+        />
+        <Button
+          name={"CANCEL"}
+          style={{
+            width: "130px",
+            backgroundColor: "red",
+          }}
+          onClick={handleCancel}
+        />
+      </div>
     </div>
   );
 };

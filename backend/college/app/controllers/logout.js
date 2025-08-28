@@ -1,6 +1,6 @@
 function logout(req,res){
   const token = req.cookies.token;
-  console.log(token)
+  // console.log(token)
   if(!token) return res.status(200).json({msg:'token not found'});
   res.clearCookie("token", {
     httpOnly: true,

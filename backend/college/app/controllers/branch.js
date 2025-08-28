@@ -5,30 +5,29 @@ const db = require("../config/db");
 async function branch(req, res) {
   try {
     const collegeCode = req.user.counsellingCode;
-    console.log(collegeCode);
+    
     if (!collegeCode) {
       return res.status(400).json({ err: "collegeCode is required" });
     }
     const selectQuery = "select * from branch_info where c_code=?";
     const [result] = await db.query(selectQuery, [collegeCode]);
-    console.log('hi');
-    console.log(result);
+    
     res.status(200).send(result);
   } catch (err) {
-    res.status(500).json({ err: "Query error", sqlErr: err });
+    res.status(500).json({ err: "Query error", sqlErr: err.message });
   }
 }
 
 async function editBranch(req, res) {
   try {
-    const { collegeCode, b_code, ...changedFields } = req.body;
+    const collegeCode = req.user.counsellingCode;
+    const { b_code, ...changedFields } = req.body;
 
     if (!collegeCode || !b_code) {
       return res
         .status(400)
         .json({ err: "collegeCode and branch code is required" });
     }
-
     const keys = Object.keys(changedFields);
     if (keys.length === 0) {
       return res.status(400).json({ err: "No fields to update" });
@@ -41,7 +40,7 @@ async function editBranch(req, res) {
     await db.query(editQuery, values);
     res.status(200).json({ msg: "Branch updated successfully!!!" });
   } catch (err) {
-    return res.status(500).json({ err: "Query error", sqlErr: err });
+    return res.status(500).json({ err: "Query error", sqlErr: err.message });
   }
 }
 
@@ -49,7 +48,6 @@ async function deleteBranch(req, res) {
   try {
     const collegeCode = req.user.counsellingCode;
     const { b_code } = req.body;
-    console.log(collegeCode,b_code);
     
     if (!collegeCode || !b_code) {
       return res
@@ -62,14 +60,14 @@ async function deleteBranch(req, res) {
       .status(200)
       .json({ success: true, msg: "Branch deleted successfully!!!" });
   } catch (err) {
-    return res.status(500).json({ err: "Query error", sqlErr: err });
+    return res.status(500).json({ err: "Query error", sqlErr: err.message });
   }
 }
 
 async function addBranch(req, res) {
   try {
+    const collegeCode = req.user.counsellingCode;
     const {
-      collegeCode,
       b_code,
       branch_name,
       approved_in_take,
@@ -100,8 +98,7 @@ async function addBranch(req, res) {
       Amount,
     ];
     const checkQuery = `select * from branch_info where c_code = ? and b_code = ?`;
-
-    const existing = await db.query(checkQuery, [collegeCode, b_code]);
+    const [existing] = await db.query(checkQuery, [collegeCode, b_code]);
     if (existing.length > 0) {
       return res
         .status(409)
@@ -111,7 +108,7 @@ async function addBranch(req, res) {
     await db.query(addQuery, values);
     res.status(201).json({ msg: "Branch Added Successfully!!!" });
   } catch (err) {
-    return res.status(500).json({ err: "Query error", sqlErr: err });
+    return res.status(500).json({ err: "Query error", sqlErr: err.message });
   }
 }
 

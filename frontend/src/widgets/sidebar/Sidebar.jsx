@@ -27,27 +27,27 @@ function Sidebar({ setCurrent, admin }) {
     { id: 4, iconId: "discontinuedIcon", label: "Discontinued Details" },
     {
       id: 5,
-      iconId: "formIcon",
+      iconId: "formAIcon",
       label: "Form A",
       action: () => handleForm("forma"),
     },
     {
       id: 6,
-      iconId: "formIcon",
+      iconId: "formBIcon",
       label: "Form B",
       action: () => handleForm("formb"),
     },
     {
       id: 7,
-      iconId: "formIcon",
+      iconId: "formCIcon",
       label: "Form C",
       action: () => handleForm("formc"),
     },
-    { id: 8, iconId: "formIcon", label: "Form D", action: () => handleForm("formd")},
-    { id: 9, iconId: "formIcon", label: "Form FG", action: () => handleForm("formfg")},
+    { id: 8, iconId: "formDIcon", label: "Form D", action: () => handleForm("formd")},
+    { id: 9, iconId: "formFGIcon", label: "Form FG", action: () => handleForm("formfg")},
     {
       id: 10,
-      iconId: "formIcon",
+      iconId: "formLEAIcon",
       label: "Form LEA2025",
       action: () => handleForm("formlea"),
     },
@@ -68,28 +68,28 @@ function Sidebar({ setCurrent, admin }) {
     { id: 9, label: "Note Order-Approved",iconId: "formIcon" },
     { id: 10, label: "Note Order-Approved/Pending",iconId: "formIcon" },
     { id: 11, label: "Principal/Letter",iconId: "formIcon" },
-    { id: 12, label: "Principal-Approved",iconId: "formIcon" },
-    { id: 13, label: "Principal-Not Approved",iconId: "formIcon" },
-  ];
+   { id: 12, label: "Principal-Approved",action:()=>handleForm("principal-approved",admin)},
+    { id: 13, label: "Principal-Not Approved",action:()=>handleForm("principal-notapproved",admin) },
+  ]
 
   const adminFgaItems = [
-    { id: 14, label: "OC/BCM/BC/MBC/DNC",iconId: "formIcon" },
-    { id: 15, label: "SC/SCA",iconId: "formIcon" },
-    { id: 16, label: "ST",iconId: "formIcon" },
+    { id: 14, label: "OC/BCM/BC/MBC/DNC",iconId: "formIcon", action : () => handleForm('fg_form',true,collegeCode,['oc','bc','bcm','mbc'],true)},
+    { id: 15, label: "SC/SCA",iconId: "formIcon", action : () => handleForm('fg_form',true,collegeCode,['sc','sca'],true)},
+    { id: 16, label: "ST",iconId: "formIcon", action : () => handleForm('fg_form',true,collegeCode,['st'],true)},
   ];
 
   const adminFgItems = [
-    { id: 17, label: "OC/BCM/BC/MBC/DNC",iconId: "formIcon" },
-    { id: 18, label: "SC/SCA",iconId: "formIcon" },
-    { id: 19, label: "ST",iconId: "formIcon" },
+    { id: 17, label: "OC/BCM/BC/MBC/DNC",iconId: "formIcon", action : () => handleForm('fg_form',true,collegeCode,['oc','bc','bcm','mbc'],false)},
+    { id: 18, label: "SC/SCA",iconId: "formIcon", action : () => handleForm('fg_form',true,collegeCode,['sc','sca'],false)},
+    { id: 19, label: "ST",iconId: "formIcon", action : () => handleForm('fg_form',true,collegeCode,['st'],false)},
   ];
 
   const adminSubItems = [{ id: 20, label: "Student Details",iconId: "studentIcon",action: () => setCurrent(2)}];
   const adminFormsItems = [{ id: 21, label: "Note Order-Approved",iconId: "formIcon" }];
   const adminFGItems = [
-    { id: 22, label: "OC/BCM/BC/MBC/DNC",iconId: "formIcon"},
-    { id: 23, label: "SC/SCA",iconId: "formIcon" },
-    { id: 24, label: "ST",iconId: "formIcon" },
+    { id: 22, label: "OC/BCM/BC/MBC/DNC",iconId: "formIcon", action : () => handleForm('fg_form',true,collegeCode,['oc','bc','bcm','mbc'],true,true)},
+    { id: 23, label: "SC/SCA",iconId: "formIcon", action : () => handleForm('fg_form',true,collegeCode,['sc','sca'],true,true) },
+    { id: 24, label: "ST",iconId: "formIcon", action : () => handleForm('fg_form',true,collegeCode,['st'],true,true) },
   ];
 
   const sideBarList = [
@@ -174,7 +174,7 @@ function Sidebar({ setCurrent, admin }) {
             <>
               <div id="sideCollegeDetails">COLLEGE DETAILS</div>
               <div id="buttonDiv">
-                <Button name="College Details Pdf" />
+                <Button name="College Details Pdf" onClick={()=>handleForm('collegeDetails',true,5901,true)} />
               </div>
             </>
           )}
