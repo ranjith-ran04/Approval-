@@ -5,6 +5,7 @@ import { LoaderProvider} from "./context/LoaderContext.jsx";
 import LoaderOverlay from "./widgets/loader/LoaderOverlay.jsx";
 import Changepassword from './components/changepassword/Changepassword.jsx';
 import AdminDashboard from './admin/dashboard/Dashboard.jsx'
+import Resetpassword from "./components/changepassword/Resetpassword.jsx";
 
 function AppContent() {
   return (
@@ -12,6 +13,7 @@ function AppContent() {
        <Routes>
         <Route path='/' element={<Login admin={false}/>} />
         <Route path='/dashboard' element={<Dashboard/>}/>
+        <Route path='/resetPassword' element={<Resetpassword/>}/>
         <Route path='/changePassword' element={<Changepassword/>}/>
         <Route path='/admin/login' element={<Login admin={true}/>}/>
         <Route path='/admin/dashboard' element={<AdminDashboard/>}/>

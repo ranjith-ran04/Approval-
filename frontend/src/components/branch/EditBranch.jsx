@@ -52,16 +52,19 @@ function EditBranch({ state, setCurrent }) {
         }
       }
 
-      const res = await axios.put(`${host}branch`, {
-        ...changedFields,
-        b_code: state.b_code,
-        
-      },{withCredentials : true});
+      const res = await axios.put(
+        `${host}branch`,
+        {
+          ...changedFields,
+          b_code: state.b_code,
+        },
+        { withCredentials: true }
+      );
 
       if (res.status === 200 || res.status === 201) {
         setAlertType("success");
         setAlertMessage("Branch Edited Successfully");
-        console.log("Branch Edited Successfully");
+        // console.log("Branch Edited Successfully");
       } else {
         setAlertType("error");
         setAlertMessage("Something went wrong.");

@@ -28,11 +28,11 @@ function StudentDetails({admin,supp}) {
         withCredentials: true,
       });}
       if (result.status === 200) {
-        // console.log(result.data);
+        // // console.log(result.data);
         setBranch(result.data);
       }
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     }
   }
   useEffect(() => {
@@ -58,7 +58,7 @@ function StudentDetails({admin,supp}) {
       return;
     }
     try {
-      console.log(supp);
+      // console.log(supp);
       const result = await axios.post(
         `${host}studentBranch`,
         { branch: branch , ...(admin && {collegeCode:collegeCode}),supp:supp?true:false},
@@ -68,7 +68,7 @@ function StudentDetails({admin,supp}) {
         setStudents(result.data);
       }
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     }
   }
   const handleClear = () => {
@@ -80,7 +80,7 @@ function StudentDetails({admin,supp}) {
     setStudents(prev => prev.filter( students => students.app_no !== appln_no));
     setClicked(0);
   };
-  // console.log(students);
+  // // console.log(students);
   return (
     <div className="student-container">
       <div className="head-studentdropdown">
