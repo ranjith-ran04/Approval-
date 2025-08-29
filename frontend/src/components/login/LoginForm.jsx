@@ -19,7 +19,7 @@ const LoginForm = ({ admin }) => {
   const [touched, setTouched] = useState({});
   const [changed, setChanged] = useState(0);
   const [loginStatus, setLoginStatus] = useState(null);
-  const [showPassword, setShowPassword] = useState(false)
+  const [showPassword, setShowPassword] = useState(false);
 
   const navigate = useNavigate();
   const fieldsOrder = ["regNo", "pwd"];

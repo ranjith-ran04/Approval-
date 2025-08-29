@@ -231,7 +231,8 @@ const Discontinued = ({ admin, supp }) => {
     return (
         <div className="student-container">
             <div className="head-studentdropdown">
-                <label>Branch Name</label>
+               <label>DISCONTINUED DETAILS : </label><br />
+                <label >Branch Name</label>
                 <select onChange={(e) => handleSelect(e.target.value)} value={selected}>
                     <option value="">--select--</option>
                     {branch.map((item, index) => (

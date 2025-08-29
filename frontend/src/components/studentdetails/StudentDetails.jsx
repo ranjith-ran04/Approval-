@@ -92,6 +92,7 @@ function StudentDetails({admin,supp}) {
   return (
     <div className="student-container">
       <div className="head-studentdropdown">
+        <label>STUDENT DETAILS : </label><br />
         <label>Branch Name</label>
         <select onChange={(e) => handleSelect(e.target.value)} value={selected}>
           <option value="">--select--</option>
