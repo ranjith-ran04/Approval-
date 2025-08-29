@@ -55,10 +55,10 @@ const validateFields = () => {
     if(telephone.includes(field)&&isNaN(value)){
       newErrors[field]="Only numbers are allowed";
     }
-    else if(telephone.includes(field) &&!/^[0-9]{8,12}$/.test(value)) {
-      newErrors[field] = "Enter a valid 10-digit phone number";
+    else if(telephone.includes(field) && !/^[0-9]{10,12}$/.test(value)) {
+      newErrors[field] = "Enter a valid phone number";
     }
-    if(field === "collegephone" && !/^[0-9]{3}-[0-9]{3,10}$/.test(value)){
+    if(field === "collegephone" && !/^[0-9]{10,12}$/.test(value)){
       newErrors[field] = "Enter a valid phone number";
     }
     if (field === "collegeemail" && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
@@ -140,7 +140,7 @@ const handleChange =(e)=>{
       if (value.trim() === "") {
         isValid = false;
       }
-          if(name === "collegephone" && !/^[0-9]{3,8}$/.test(value)){
+          if(name === "collegephone" && !/^[0-9]{10,12}$/.test(value)){
       isValid = false;
     }
       if(["collegenameWithdistrict", "principalname", "district", "taluk", "constituency", "nearestrailway"].includes(name) &&/\d/.test(value)){
@@ -148,7 +148,7 @@ const handleChange =(e)=>{
       }
       const telephone = ["principalcontact"];
       if (telephone.includes(name)) {
-        if (!/^[0-9]{8,12}$/.test(value)) {
+        if (!/^[0-9]{10,12}$/.test(value)) {
           isValid = false;
         }
       }

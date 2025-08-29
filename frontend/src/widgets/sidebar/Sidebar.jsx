@@ -207,12 +207,12 @@ function Sidebar({ setCurrent, admin ,current }) {
     {
       id: 12,
       label: "Principal-Approved",
-      action: () => handleForm("principal-approved", admin),
+      action: () => handleForm("principal-approved", admin,collegeCode,true),
     },
     {
       id: 13,
       label: "Principal-Not Approved",
-      action: () => handleForm("principal-notapproved", admin),
+      action: () => handleForm("principal-notapproved", admin,collegeCode,true),
     },
   ];
 
