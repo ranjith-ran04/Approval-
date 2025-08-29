@@ -42,7 +42,6 @@ const Input = ({ add, clicked, click, appln_no, collegeCode, branchCode }) => {
     }
   }, [effectiveCollegeCode, branchCode]);
 
-  // ✅ Expected appln number (preview)
   const expectedAppln =
     count !== null
       ? `${effectiveCollegeCode}${branchCode}25${String(count + 1).padStart(
