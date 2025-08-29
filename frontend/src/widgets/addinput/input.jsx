@@ -1,32 +1,87 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./input.css";
 import Button from "../button/Button";
+import { host } from "../../constants/backendpath";
+import axios from "axios";
+import Alert from "../alert/Alert";
 
-const Input = ({ add, clicked, click, appln_no }) => {
+const Input = ({ add, clicked, click, appln_no, collegeCode, branchCode }) => {
   const [input, setInput] = useState("");
   const [touched, setTouched] = useState(false);
   const [visibleIndexes, setVisibleIndexes] = useState([]);
+  const [count, setCount] = useState(null); // ✅ start with null (loading)
+
+  // ✅ Get effective college code (from localStorage if exists)
+  const savedCollegeCode = localStorage.getItem("collegeCode");
+  const effectiveCollegeCode = savedCollegeCode || collegeCode;
+
+  // 🔹 Fetch count from backend on mount
+  useEffect(() => {
+    const fetchCount = async () => {
+      try {
+        const res = await axios.post(
+          `${host}student-count`,
+          { b_code: branchCode },
+          { withCredentials: true }
+        );
+        if (res.status === 200) {
+          // console.log(res.data.count);
+          setCount(res.data.count); // ✅ set backend count
+        } else {
+          console.error("Failed to fetch count");
+          setCount(0);
+        }
+      } catch (err) {
+        console.error("Fetch error:", err);
+        setCount(0);
+      }
+    };
+
+    if (effectiveCollegeCode && branchCode) {
+      fetchCount();
+    }
+  }, [effectiveCollegeCode, branchCode]);
+
+  // ✅ Expected appln number (preview)
+  const expectedAppln =
+    count !== null
+      ? `${effectiveCollegeCode}${branchCode}25${String(count + 1).padStart(
+          3,
+          "0"
+        )}`
+      : "";
+
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertStage, setAlertStage] = useState("");
+  const [alertType, setAlertType] = useState("");
+  const [alertMessage, setAlertMessage] = useState("");
+  const [alertOkAction, setAlertOkAction] = useState(() => () => {});
 
   const validations = [
     {
       key: "collegeCode",
-      text: "Enter Correct College Code",
-      check: (val) => /^\d{4}/.test(val),
+      text: `College Code must be ${effectiveCollegeCode}`,
+      check: (val) => new RegExp(`^${effectiveCollegeCode}`).test(val),
     },
     {
       key: "branchCode",
-      text: "Enter Correct Branch Code",
-      check: (val) => /^\d{4}[A-Z]{2}/.test(val),
+      text: `Branch Code must be ${branchCode}`,
+      check: (val) =>
+        new RegExp(`^${effectiveCollegeCode}${branchCode}`).test(val),
     },
     {
-      key: "year24",
-      text: "Enter digit 24 (year - 2024)",
-      check: (val) => /^\d{4}[A-Z]{2}24/.test(val),
+      key: "year25",
+      text: "Must contain '25' after branch code (for year 2025)",
+      check: (val) =>
+        new RegExp(`^${effectiveCollegeCode}${branchCode}25`).test(val),
     },
     {
       key: "uniqueNumber",
-      text: "Enter Valid Number (Eg: 5901CS24001)",
-      check: (val) => /^\d{4}[A-Z]{2}24\d{3}$/.test(val),
+      text: `Last three digits must be ${String(count + 1).padStart(3, "0")}`,
+      check: (val) => {
+        const match = val.match(/\d{2}(\d{3})$/); // last 3 digits
+        return match && parseInt(match[1], 10) === count + 1;
+      },
     },
   ];
 
@@ -44,14 +99,47 @@ const Input = ({ add, clicked, click, appln_no }) => {
       });
     }
   };
+
   function handleCancel() {
     add(false);
-    clicked(0);
+    // clicked(click+1);
   }
+  async function handleConfirm() {
+    try {
+      const result = await axios.post(
+        `${host}checkApplnNo`,
+        { appln_no: input },
+        { withCredentials: true }
+      );
+      if (result.data.valid) {
+        add(false);
+        clicked(2);
+        appln_no(input);
+      } else {
+        setShowAlert(true);
+        setAlertMessage("Application Number Already Exists");
+        setAlertType("warning");
+        setAlertStage("warning");
+        setAlertOkAction(() => () => {
+          setShowAlert(false);
+        });
+      }
+    } catch (err) {
+      // console.log(err);
+    }
+  }
+
   function handleConfirm() {
+    // ✅ ensure all validations passed
+    const allValid = validations.every((rule) => rule.check(input));
+    if (!allValid) {
+      alert("Please fix validation errors before confirming.");
+      return;
+    }
+    appln_no(input); // send value to parent
+    // localStorage.setItem("fromAdd", "true");
     add(false);
-    clicked(click + 1);
-    appln_no(input);
+    clicked(2);
   }
 
   return (
@@ -61,15 +149,12 @@ const Input = ({ add, clicked, click, appln_no }) => {
         value={input}
         onChange={handleChange}
         onFocus={handleFocus}
-        placeholder="Eg: 5901CS24001"
+        placeholder={expectedAppln ? `Eg: ${expectedAppln}` : "Loading..."}
         className="input-box"
       />
 
       <ul className="validation-list">
-        {validations.map((item, index) => {
-          {
-            /* if (!visibleIndexes.includes(index)) return null; */
-          }
+        {validations.map((item) => {
           const passed = item.check(input);
           return (
             <li
@@ -90,14 +175,19 @@ const Input = ({ add, clicked, click, appln_no }) => {
           name={"ADD"}
           style={{ width: "130px" }}
           onClick={handleConfirm}
+          disabled={!validations.every((rule) => rule.check(input))} // disable if invalid
         />
         <Button
           name={"CANCEL"}
-          style={{
-            width: "130px",
-            backgroundColor: "red",
-          }}
+          style={{ width: "130px", backgroundColor: "red" }}
           onClick={handleCancel}
+        />
+        <Alert
+          type={alertType}
+          message={alertMessage}
+          show={showAlert}
+          okbutton={alertOkAction}
+          cancelbutton={null}
         />
       </div>
     </div>

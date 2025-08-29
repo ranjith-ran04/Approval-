@@ -3,7 +3,7 @@ const db = require("../config/db");
 const path = require("path");
 const arialBold = path.join(__dirname, "../fonts/arial/G_ari_bd.TTF");
 const arial = path.join(__dirname, "../fonts/arial/arial.ttf");
-const { header, footer } = require("./pageFrame");
+const { footer } = require("./pageFrame");
 
 async function forma(req, res) {
   var collegeCode;
@@ -48,8 +48,6 @@ async function forma(req, res) {
   }
 
   const freezed = collegeRows.length ? collegeRows[0].freezed : "0";
-
-  header("A", doc, collegeCode, freezed);
 
   const tableTop = 120;
   const columns = [
@@ -212,7 +210,6 @@ async function forma(req, res) {
 
     if (y > doc.page.height - 100) {
       doc.addPage();
-      header("A", doc, collegeCode, freezed);
       drawTableHeader(tableTop);
       y = tableTop + 31;
     }
@@ -244,10 +241,9 @@ async function forma(req, res) {
   const extraSpaceNeeded = 150;
   if (remainingHeight < extraSpaceNeeded) {
     doc.addPage();
-    header("A", doc, collegeCode, freezed);
   }
 
-  footer(doc, collegeCode);
+  footer("A", doc, collegeCode, freezed);
 
   doc.end();
 }

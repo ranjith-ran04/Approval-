@@ -17,22 +17,24 @@ function Branch({ setCurrent, setState }) {
 
   const handleCancel = (index) => {
     setShowIndex(index);
-    // console.log(showIndex);
+    // // console.log(showIndex);
     setShowAlert(true);
+    // console.log("del");
     setAlertMessage("Confirm to Delete");
+    // console.log("sdfsd");
     setAlertType("warning");
     setAlertStage("confirm");
   };
   const handleCloseAlert = () => {
     setShowAlert(false);
   };
-  const collegeCode = "1";
+  // const collegeCode = "1";
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     const fetchData = async () => {
       showLoader();
       try {
-        const res = await axios.get(`${host}branch`,{withCredentials : true});
+        const res = await axios.get(`${host}branch`, { withCredentials: true });
         setBranchData(res.data);
         setError(false);
       } catch (err) {
@@ -46,10 +48,11 @@ function Branch({ setCurrent, setState }) {
     fetchData();
   }, []);
 
-  const handleDeleteBranch = async (collegeCode, branch_code) => {
+  const handleDeleteBranch = async (branch_code) => {
     try {
       const res = await axios.delete(`${host}branch`, {
-        data: { collegeCode, b_code: branch_code },withCredentials:true
+        data: { b_code: branch_code },
+        withCredentials: true,
       });
 
       if (res.status === 200) {
@@ -69,10 +72,11 @@ function Branch({ setCurrent, setState }) {
       prev.filter((b) => b.b_code !== branchData[showIndex].b_code)
     );
   };
-
+  const displayval = (val) => {
+    return val === 0 || val === "0" ? "-" : val;
+  };
   return (
     <div className="box">
-      
       <>
         <div className="first">
           <h2 className="heading">BRANCH DETAILS</h2>
@@ -135,9 +139,9 @@ function Branch({ setCurrent, setState }) {
                 <div>{branch.transfered_from}</div>
                 <div>{branch.transfered_to}</div>
                 <div>{branch.LAP}</div>
-                <div>{branch.year_of_start}</div>
+                <div>{displayval(branch.year_of_start)}</div>
                 <div>{branch.accredition_valid_upto}</div>
-                <div>{branch.NBA_2020 === 1 ? "yes" : "no"}</div>
+                <div>{branch.NBA_2020 === 1 ? "YES" : "NO"}</div>
                 <div>
                   <button
                     className="delete-btn"
@@ -158,8 +162,7 @@ function Branch({ setCurrent, setState }) {
           show={showAlert}
           okbutton={
             alertStage === "confirm"
-              ? () =>
-                  handleDeleteBranch(collegeCode, branchData[showIndex]?.b_code)
+              ? () => handleDeleteBranch(branchData[showIndex]?.b_code)
               : alertStage === "success" || "cancel"
               ? handleCloseAlert
               : null
@@ -167,7 +170,6 @@ function Branch({ setCurrent, setState }) {
           cancelbutton={alertStage === "confirm" ? handleCloseAlert : null}
         />
       </>
-      
     </div>
   );
 }

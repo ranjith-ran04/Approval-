@@ -19,7 +19,7 @@ function Dashboard() {
   const [supp, setSupp] = useState(false);
   const scrollRef = useRef();
   const location = useLocation();
-  // console.log(location.state);
+  // // console.log(location.state);
   const logged = location.state?.logged || false;
 
   const navigate = useNavigate();
@@ -40,9 +40,7 @@ function Dashboard() {
     }
   }
 
-  const handleChange = (e) => {
-
-  }
+  const handleChange = (e) => {};
 
   const updateDetails = async () => {
     try {
@@ -54,7 +52,7 @@ function Dashboard() {
       if (res.status === 200) {
       }
     } catch (err) {
-      console.log(err);
+      // console.log(err);
     }
   };
 
@@ -81,15 +79,15 @@ function Dashboard() {
     }
   };
 
-  useEffect(()=>{
-    if(current === 2){
+  useEffect(() => {
+    if (current === 2) {
       setSupp(true);
-    }else{
+    } else {
       setSupp(false);
     }
-  },[current]);
+  }, [current]);
 
-console.log(supp);
+  // console.log(supp);
 
   return logged ? (
     <div className="dashboard">
@@ -213,10 +211,26 @@ Tamilnadu Lateral Entry Direct Second Year B.E/B.Tech.,Approval-2025`}
           </div>
           {isSubmit && (
             <>
-              { isSubmit && current === 0 && <Chart collegeCode={collegeCode} key={submittedCode} />}
-              {current === 1 && <StudentDetails admin={true} supp={supp} />}
-              {current === 2 && <StudentDetails admin={true} supp={supp} />}
-              {current===3 && <CollegeInfo admin={true} supp={supp} />}
+              {isSubmit && current === 0 && (
+                <Chart collegeCode={collegeCode} key={submittedCode} />
+              )}
+              {current === 1 && (
+                <StudentDetails
+                  admin={true}
+                  supp={supp}
+                  setCurrent={setCurrent}
+                />
+              )}
+              {current === 2 && (
+                <StudentDetails
+                  admin={true}
+                  supp={supp}
+                  setCurrent={setCurrent}
+                />
+              )}
+              {current === 3 && (
+                <CollegeInfo admin={true} collegeCode={collegeCode} />
+              )}
 
               <ScrollToTop scrollRef={scrollRef} />
             </>

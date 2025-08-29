@@ -1,15 +1,15 @@
-import './button.css';
-import { useRef } from 'react';
+import "./button.css";
+import { useRef } from "react";
 
-function Button({ name, onClick, type = "button" ,style}) {
+function Button({ name, onClick, type = "button", style }) {
   const buttonRef = useRef(null);
 
   const createRipple = (event) => {
     const button = buttonRef.current;
-    const circle = document.createElement('div');
-    circle.classList.add('ripple');
+    const circle = document.createElement("div");
+    circle.classList.add("ripple");
 
-    const ripple = document.getElementsByClassName('ripple')[0];
+    const ripple = document.getElementsByClassName("ripple")[0];
     if (ripple) {
       ripple.remove();
     }
@@ -19,12 +19,12 @@ function Button({ name, onClick, type = "button" ,style}) {
 
   const handleClick = (e) => {
     // createRipple(e);
-    
+
     if (onClick && type !== "submit") {
-      console.log('buttn cliced');
-      console.log(typeof onClick);
+      // console.log('buttn cliced');
+      // console.log(typeof onClick);
       onClick();
-    } 
+    }
   };
 
   return (
@@ -35,7 +35,7 @@ function Button({ name, onClick, type = "button" ,style}) {
       onClick={handleClick}
       type={type}
       style={style}
-      >
+    >
       {name}
     </button>
   );

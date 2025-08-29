@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
 import "./LoginForm.css";
 import Footer from "./Footer";
-import { useNavigate } from "react-router-dom";
+import { useAsyncError, useNavigate } from "react-router-dom";
 import NavigationBar from "../../widgets/navigationBar/NavigationBar";
 import Alert from "../../widgets/alert/Alert";
 import axios from "axios";
-import { host ,adminhost} from "../../constants/backendpath";
+import { host, adminhost } from "../../constants/backendpath";
 
 const LoginForm = ({ admin }) => {
   const [formData, setFormData] = useState({ regNo: "", pwd: "" });
@@ -17,6 +17,7 @@ const LoginForm = ({ admin }) => {
   const [touched, setTouched] = useState({});
   const [changed, setChanged] = useState(0);
   const [loginStatus, setLoginStatus] = useState(null);
+  const [showPassword, setShowPassword] = useState(false)
 
   const navigate = useNavigate();
   const fieldsOrder = ["regNo", "pwd"];
@@ -27,10 +28,12 @@ const LoginForm = ({ admin }) => {
   useEffect(() => {
     async function fetchLogin() {
       try {
-        const res = await axios.get(
-          `${admin?adminhost:host}login`,
-          { withCredentials: true }
-        );
+        const res = await axios.get(`${admin ? adminhost : host}login`, {
+          withCredentials: true,
+        });
+        if(res.status === 250 ){
+          navigate("/");
+        }
         if (res.status === 200) {
           navigate(`${admin ? "/admin/dashboard" : "/dashboard"}`, {
             state: {
@@ -39,7 +42,7 @@ const LoginForm = ({ admin }) => {
           });
         }
       } catch (error) {
-        console.log("msg", error);
+        console.warn(error);
       }
     }
     fetchLogin();
@@ -53,7 +56,7 @@ const LoginForm = ({ admin }) => {
     if (Object.keys(validationErrors).length === 0) {
       try {
         const response = await axios.post(
-          `${admin?adminhost:host}login`,
+          `${admin ? adminhost : host}login`,
           {
             counsellingCode: formData.regNo,
             password: formData.pwd,
@@ -62,6 +65,7 @@ const LoginForm = ({ admin }) => {
         );
         const changeFlag = response.data.changed;
         setChanged(changeFlag);
+        localStorage.setItem("collegeCode", formData.regNo);
         setLoginStatus("success");
         setAlertType("success");
         setAlertMessage("Logged in successfully.");
@@ -115,12 +119,18 @@ const LoginForm = ({ admin }) => {
 
   const handleCloseAlert = () => {
     if (changed === 0) {
-      navigate("/changePassword", {
+      navigate("/resetPassword", {
+        state: {
+          collegeCode: formData.regNo,
+        },
+      });
+    } else if (changed === 2) {
+      navigate(`${admin ? "/admin/dashboard" : "/dashboard"}`, {
         state: {
           logged: true,
         },
       });
-    } else {
+    }else {
       navigate(`${admin ? "/admin/dashboard" : "/dashboard"}`, {
         state: {
           logged: true,
@@ -137,7 +147,7 @@ const LoginForm = ({ admin }) => {
     <div className="login-page">
       <NavigationBar
         text={`GOVERNMENT OF TAMILNADU
-Tamilnadu Lateral Entry Direct Second Year B.E/B.Tech.,Approval-2025`}
+Tamilnadu Lateral Entry Direct Second Year B.E/B.Tech., Admissions Approval-2025`}
         profile={true}
         bool={true}
         login={true}
@@ -149,9 +159,8 @@ Tamilnadu Lateral Entry Direct Second Year B.E/B.Tech.,Approval-2025`}
           </div>
           <form className="loginform" onSubmit={handleSubmit}>
             <div
-              className={`input-group ${
-                focusedField === "register" ? "focused" : ""
-              }`}
+              className={`input-group ${focusedField === "register" ? "focused" : ""
+                }`}
             >
               <span className="icon user-icon" />
               <input
@@ -168,21 +177,30 @@ Tamilnadu Lateral Entry Direct Second Year B.E/B.Tech.,Approval-2025`}
             {errors.regNo && <p className="error">{errors.regNo}</p>}
 
             <div
-              className={`input-group ${
-                focusedField === "password" ? "focused" : ""
-              }`}
+              className={`input-group ${focusedField === "password" ? "focused" : ""
+                }`}
             >
               <span className="icon lock-icon" />
-              <input
-                className="logininput"
-                type="password"
-                name="pwd"
-                placeholder="Password"
-                value={formData.pwd}
-                onChange={handleChange}
-                onFocus={() => setFocusedField("password")}
-                onBlur={() => setFocusedField(null)}
-              />
+              <div>
+                <input
+                  className="logininput"
+                  type={showPassword ? "text" : "password"}
+                  name="pwd"
+                  placeholder="Password"
+                  value={formData.pwd}
+                  onChange={handleChange}
+                  onFocus={() => setFocusedField("password")}
+                  onBlur={() => setFocusedField(null)}
+                />
+                <button
+                  type="button"
+                  className="toggle-password"
+                  onClick={() => setShowPassword(!showPassword)}
+                  aria-label={showPassword ? 'Hide Password' : 'Show Password'}
+                >
+                  <img src={showPassword ? process.env.PUBLIC_URL + '/assets/view.png' : process.env.PUBLIC_URL + '/assets/hide.png'} alt="" srcset="" />
+                </button>
+              </div>
             </div>
             {errors.pwd && <p className="error">{errors.pwd}</p>}
 

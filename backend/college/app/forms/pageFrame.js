@@ -2,19 +2,12 @@ const college = require("../json/college");
 
 function header(c, doc, collegeCode, freezed) {
   const collegeName = college.get(collegeCode.toString()) || "Unknown College";
-  doc
-    .rect(
-      doc.page.margins.left,
-      doc.page.margins.top,
-      doc.page.width - doc.page.margins.left - doc.page.margins.right,
-      doc.page.height - doc.page.margins.top - doc.page.margins.bottom
-    )
-    .stroke();
+
   doc.moveDown();
   const pageWidth = doc.page.width;
 
   // Title on the left
-  doc.font("Arial-Bold").fontSize(13).text("Second Year : 2024-2025", 20, 35);
+  doc.font("Arial-Bold").fontSize(13).text("Second Year : 2025-2026", 20, 35);
 
   // Conditional right-side label
   if (freezed === "0") {
@@ -44,12 +37,23 @@ function header(c, doc, collegeCode, freezed) {
   doc.moveDown();
 }
 
-function footer(doc) {
+function footer(c, doc, collegeCode, freezed) {
   const pageCount = doc.bufferedPageRange().count;
 
   for (let i = 0; i < pageCount; i++) {
     doc.switchToPage(i);
 
+    doc
+      .rect(
+        doc.page.margins.left,
+        doc.page.margins.top,
+        doc.page.width - doc.page.margins.left - doc.page.margins.right,
+        doc.page.height - doc.page.margins.top - doc.page.margins.bottom
+      )
+      .stroke();
+
+    header(c, doc, collegeCode, freezed);
+      doc.y = 120;
     const pageWidth = doc.page.width;
     const y = doc.page.height - 80;
     const margin = 50;

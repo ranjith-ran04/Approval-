@@ -1,6 +1,6 @@
 import "./changepassword.css";
 import { useState, useEffect } from "react";
-import { useNavigate,useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import NavigationBar from "../../widgets/navigationBar/NavigationBar";
 import Alert from "../../widgets/alert/Alert";
 import axios from "axios";
@@ -18,10 +18,9 @@ function Changepassword() {
   const [alertType, setAlertType] = useState("");
   const [alertMessage, setAlertMessage] = useState("");
   const [errors, setErrors] = useState({});
-  const [collegeCode,setCollegeCode] = useState(null);
+  const [collegeCode, setCollegeCode] = useState(null);
   const location = useLocation();
   const logged = location.state?.logged || false;
-
 
   useEffect(() => {
     changeFetch();
@@ -37,8 +36,8 @@ function Changepassword() {
         setCollegeCode(c_code);
       }
     } catch (error) {
-      console.log(error);
-      navigate('/');
+      // console.log(error);
+      navigate("/");
     }
   }
 
@@ -49,34 +48,42 @@ function Changepassword() {
 
     if (Object.values(validationErrors).every((val) => val === "")) {
       try {
-        const res = await axios.post(`${host}changePassword`,{oldPassword:formData.oldPassword,newPassword:formData.newPassword,collegeCode:collegeCode}, {
-          withCredentials: true,
-        });
+        const res = await axios.post(
+          `${host}changePassword`,
+          {
+            oldPassword: formData.oldPassword,
+            newPassword: formData.newPassword,
+            collegeCode: collegeCode,
+          },
+          {
+            withCredentials: true,
+          }
+        );
         if (res.status === 200) {
           setAlertType("success");
           setAlertMessage("Password changed successfully.");
           setShowAlert(true);
         }
       } catch (error) {
-        console.log(error);
+        // console.log(error);
         setAlertType("error");
-        setAlertMessage(error.response?.data?.message || "Password change failed");
+        setAlertMessage(
+          error.response?.data?.message || "Password change failed"
+        );
         setShowAlert(true);
       }
     }
   };
 
   const handleCloseAlert = () => {
-    if(alertType === "error"){
+    if (alertType === "error") {
       setShowAlert(false);
-      formData.confirmPassword=""
-      formData.newPassword=""
-      formData.oldPassword=""
+      formData.confirmPassword = "";
+      formData.newPassword = "";
+      formData.oldPassword = "";
+    } else {
+      navigate("/dashboard", { state: { logged: true } });
     }
-    else{
-      navigate('/dashboard',{state:{logged:true}});
-    }
-    
   };
 
   const validateForm = (name) => {
@@ -132,7 +139,7 @@ function Changepassword() {
     const validationErrors = validateForm(name);
     setErrors(validationErrors);
   };
-  return(
+  return (
     <div className="change-page">
       <NavigationBar
         text={`GOVERNMENT OF TAMILNADU

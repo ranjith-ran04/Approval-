@@ -1,11 +1,11 @@
 import "./studentDetails.css";
 import { useState, useEffect, useRef } from "react";
 import axios from "axios";
-import { host } from "../../constants/backendpath";
-import StudentForm from "./StudentForm";
+import { host } from "../../constants/backendpath.js";
+import StudentForm from "./StudentForm.jsx";
 import "../college/CollegeInfo.css";
-import Button from "../../widgets/button/Button";
-import AddInput from '../../widgets/addinput/input.jsx';
+import Button from "../../widgets/button/Button.jsx";
+import AddInput from '../../widgets/addinput/Input.jsx';
 
 function StudentDetails({admin,supp}) {
   const [selected, setSelected] = useState("");
@@ -28,11 +28,11 @@ function StudentDetails({admin,supp}) {
         withCredentials: true,
       });}
       if (result.status === 200) {
-        // console.log(result.data);
+        // // console.log(result.data);
         setBranch(result.data);
       }
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     }
   }
   useEffect(() => {
@@ -58,7 +58,7 @@ function StudentDetails({admin,supp}) {
       return;
     }
     try {
-      console.log(supp);
+      // console.log(supp);
       const result = await axios.post(
         `${host}studentBranch`,
         { branch: branch , ...(admin && {collegeCode:collegeCode}),supp:supp?true:false},
@@ -68,7 +68,7 @@ function StudentDetails({admin,supp}) {
         setStudents(result.data);
       }
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     }
   }
   const handleClear = () => {
@@ -80,7 +80,7 @@ function StudentDetails({admin,supp}) {
     setStudents(prev => prev.filter( students => students.app_no !== appln_no));
     setClicked(0);
   };
-  // console.log(students);
+  // // console.log(students);
   return (
     <div className="student-container">
       <div className="head-studentdropdown">
@@ -108,7 +108,8 @@ function StudentDetails({admin,supp}) {
           />
         </div>)}
       </div>
-      <div className="student-table">
+      {selected!=="" &&(
+            <div className="student-table">
         <div className="student-row">
           <div className="student-header sno">S.No</div>
           <div className="student-header app_no">Application Number</div>
@@ -125,9 +126,10 @@ function StudentDetails({admin,supp}) {
               <button
                 className="student-button"
                 onClick={() => {
+                  // localStorage.setItem("fromView","true");
                   setAdd(false);
                   setAppln_no(item.app_no);
-                  setClicked(clicked + 1);
+                  setClicked(1);
                 }}
               >
                 view
@@ -139,14 +141,16 @@ function StudentDetails({admin,supp}) {
           <div className="Unavailable">No Students Found</div>
         )}
       </div>
+      )}
+  
       {clicked > 0 && (
         <div ref={formRef}>
-          <StudentForm handleClear={handleClear} appln_no={appln_no} index={deleteOne}/>
+          <StudentForm handleClear={handleClear} appln_no={appln_no} b_code={selected} index={deleteOne} clicked={clicked}/>
         </div>
       )}
       {add && (
         <div ref={addRef} >
-        <AddInput add={setAdd} clicked={setClicked} click={clicked} appln_no={setAppln_no}/>
+        <AddInput add={setAdd} clicked={setClicked} click={clicked} appln_no={setAppln_no} branchCode={selected}/>
         </div>
       )
       }

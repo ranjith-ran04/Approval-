@@ -6,16 +6,22 @@ const formc = require("./forms/form_c");
 const formd = require('./forms/form_d');
 const formfg = require('./forms/form_fg');
 const form_tnlea = require("./forms/form_tnlea");
+const formApprv = require("./forms/formApprv");
 const home = require('../app/controllers/home');
-const {changePassword,fetchCode} = require('../app/controllers/changePassword');
+const {changePassword,fetchCode, resetpass} = require('../app/controllers/changePassword');
 const {login,fetchlogin} = require('./controllers/login');
 const verifyjwt = require('./middleware/verifyjwt')
 const logout = require('./controllers/logout')
 const collegeinfo = require("./controllers/collegeinfo");
 const {branch, editBranch, deleteBranch, addBranch} = require("./controllers/branch");
-const {collegeBranchFetch,studentDetails} = require('./controllers/studentDetails');
-const { student, editStudent, deleteStudent } = require("./controllers/studentInfo");
+const {collegeBranchFetch,studentDetails, discontinuedDetails} = require('./controllers/studentDetails');
+const { checkApplnNo,student,addStudentinfo, editStudent, deleteStudent, dicontinuedStudent, editDiscontinuedStudent, deleteDiscontinuedStudent } = require("./controllers/studentInfo");
 const collegeget = require("./controllers/collegeget");
+const {getCert, uploadCert, deleteCert} = require("./controllers/certificates");
+const { submit, getFreezed } = require("./controllers/submit");
+const student_count = require("./controllers/input");
+
+router.post("/resetPassword",resetpass);
 
 router.get("/forma", verifyjwt,forma);
 router.post("/forma", verifyjwt,forma);
@@ -28,23 +34,43 @@ router.post('/formd',verifyjwt,formd);
 router.get('/formfg',verifyjwt,formfg);
 router.post('/formfg',verifyjwt,formfg);
 router.get("/formlea",verifyjwt,form_tnlea);
+router.post("/formApprv",verifyjwt,formApprv);
+
 router.get("/home",verifyjwt,home);
 router.post("/changePassword",changePassword);
 router.get('/changePassword',verifyjwt,fetchCode);
 router.post("/login",login)
 router.get('/logout',logout);
 router.get('/login',verifyjwt,fetchlogin);
+
 router.get("/branch", verifyjwt,branch);
 router.put("/branch", verifyjwt,editBranch);
 router.delete("/branch", verifyjwt,deleteBranch);
 router.post("/branch", verifyjwt,addBranch);
+
 router.put("/collegeinfo",verifyjwt,collegeinfo);
-router.get("/collegeinfo",verifyjwt,collegeget)
+router.get("/collegeinfo",verifyjwt,collegeget);
+
 router.get('/collegeBranchFetch',verifyjwt,collegeBranchFetch);
 router.post('/collegeBranchFetch',verifyjwt,collegeBranchFetch);
+
 router.post('/studentBranch',verifyjwt,studentDetails);
+router.post('/discontinuedBranch',verifyjwt,discontinuedDetails);
 router.post("/student", verifyjwt,student);
+router.post("/discontinued-student", verifyjwt,dicontinuedStudent);
+router.put("/discontinued-student", verifyjwt,editDiscontinuedStudent);
+router.delete("/discontinued-student", verifyjwt,deleteDiscontinuedStudent);
 router.put("/student", verifyjwt, editStudent);
+router.post("/checkApplnNo", verifyjwt, checkApplnNo)
 router.delete("/student", verifyjwt, deleteStudent);
+router.post('/studentadd',verifyjwt,addStudentinfo);
+
+router.post("/cert",verifyjwt,getCert);
+router.post("/certUpl",verifyjwt, uploadCert);
+router.delete("/cert",verifyjwt,deleteCert);
+
+router.get("/getFreezed",verifyjwt,getFreezed);
+router.post("/submit",verifyjwt,submit);
+router.post('/student-count', verifyjwt, student_count);
 
 module.exports = router;

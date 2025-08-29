@@ -1,16 +1,15 @@
-import { useState, useEffect} from "react";
+import { useState, useEffect } from "react";
 import "./scrollToTop.css";
 
-function ScrollToTop({scrollRef}) {
+function ScrollToTop({ scrollRef }) {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-     
     const container = scrollRef?.current;
-    // console.log("Scrolled: ", container);
+    // // console.log("Scrolled: ", container);
     const toggleVisibility = () => {
       const scrollTop = container.scrollTop;
-      if (scrollTop  > 300) {
+      if (scrollTop > 300) {
         setVisible(true);
       } else {
         setVisible(false);
@@ -22,10 +21,10 @@ function ScrollToTop({scrollRef}) {
   }, [scrollRef]);
 
   const backToTop = () => {
-     const container = scrollRef?.current;
-     if(container){
-      container.scrollTo({top: 0,behavior : "smooth"});
-     }
+    const container = scrollRef?.current;
+    if (container) {
+      container.scrollTo({ top: 0, behavior: "smooth" });
+    }
   };
 
   return (
