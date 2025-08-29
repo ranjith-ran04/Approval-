@@ -78,14 +78,16 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
     // "max_8",
     // "obt_8",
   ];
-  const semesterRange = {
-    "DIP-Regular": { start: 1, end: 6 },
-    "DIP-Lateral": { start: 3, end: 6 },
-    "DIP-Part_time": { start: 1, end: 8 },
-    "DIP-Sandwich_7": { start: 1, end: 7 },
-    "DIP-Sandwich_8": { start: 1, end: 8 },
-    "Bsc": { start: 1, end: 6 },
-  };
+    const semesterRange = {
+      "DIP-Regular": { start: 1, end: 6 },
+      "DIP-Lateral": { start: 3, end: 6 },
+      "DIP-Part_time": { start: 1, end: 8 },
+      "DIP-Sandwich_7": { start: 1, end: 7 },
+      "DIP-Sandwich_8": { start: 1, end: 8 },
+      "DIP-Sandwich_7_lat":{start:3,end:7},
+      "DIP-Sandwich_8_lat":{start:3,end:8},
+      "Bsc": { start: 1, end: 6 },
+    };
 
   const caste_drop = async (community) => {
     console.log(community);
@@ -300,30 +302,32 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
       });
     }
   };
-
 const handleUpdate = async () => {
   setShowAlert(false);
+
   try {
     if (Object.keys(changedFields).length === 0) {
       setShowAlert(true);
       setAlertMessage("No Changes detected.");
       setAlertType("warning");
-      setAlertOkAction(() => () => {
-        setShowAlert(false);
-      });
+      setAlertOkAction(() => () => setShowAlert(false));
       return;
     }
 
     const range = semesterRange[studentData.hsc_group] || { start: 0, end: -1 };
-    const filteredData = { ...changedFields };
+    const updatedData = { ...changedFields };
 
-    Object.keys(filteredData).forEach((key) => {
-      if (key.startsWith("max_") || key.startsWith("obt_")) {
-        const semNum = parseInt(key.split("_")[1], 10);
-        if (semNum < range.start || semNum > range.end) {
-          filteredData[key] = 0; 
+    const allSemesterNums = Array.from({ length: 8 }, (_, i) => i + 1);
+
+    allSemesterNums.forEach((sem) => {
+      ["max_", "obt_"].forEach((prefix) => {
+        const key = `${prefix}${sem}`;
+        if (sem < range.start || sem > range.end) {
+          updatedData[key] = 0; 
+        } else if (!(key in updatedData)) {
+          updatedData[key] = studentData[key] || 0;
         }
-      }
+      });
     });
 
     if (!validateFields()) {
@@ -331,43 +335,40 @@ const handleUpdate = async () => {
       setAlertStage("warning");
       setAlertMessage("Please fill the details correctly!");
       setAlertType("warning");
-      setAlertOkAction(() => () => {
-        setShowAlert(false);
-      });
-    } else {
-      const response = await axios.put(
-        `${host}student`,
-        { changedFields: filteredData,appln_no: appln_no },
-        { withCredentials: true }
-      );
+      setAlertOkAction(() => () => setShowAlert(false));
+      return;
+    }
 
-      if (response.status === 200) {
-        setchangedFields({});
+    const response = await axios.put(
+      `${host}student`,
+      { changedFields: updatedData, appln_no },
+      { withCredentials: true }
+    );
+
+    if (response.status === 200) {
+      setchangedFields({});
+      setShowAlert(true);
+      setAlertStage("confirm");
+      setAlertMessage("Confirm to update");
+      setAlertType("warning");
+      setAlertOkAction(() => () => {
         setShowAlert(true);
-        setAlertStage("confirm");
-        setAlertMessage("Confirm to update");
-        setAlertType("warning");
-        setAlertOkAction(() => () => {
-          setShowAlert(true);
-          setAlertMessage("Updated Successfully");
-          setAlertStage("success");
-          setAlertType("success");
-          setAlertOkAction(() => () => {
-            setShowAlert(false);
-          });
-        });
-      }
+        setAlertMessage("Updated Successfully");
+        setAlertStage("success");
+        setAlertType("success");
+        setAlertOkAction(() => () => setShowAlert(false));
+      });
     }
   } catch (error) {
     setShowAlert(true);
     setAlertMessage("Unable to update kindly try again...");
     setAlertStage("error");
     setAlertType("error");
-    setAlertOkAction(() => () => {
-      setShowAlert(false);
-    });
+    setAlertOkAction(() => () => setShowAlert(false));
   }
 };
+
+
 
   const handleStuDelete = async () => {
     setShowAlert(false);
@@ -636,22 +637,22 @@ const handleUpdate = async () => {
       setStudentData((prev) => ({ ...prev, maths_studied: "" }));
     }
   }, [studentData.course_type]);
-//   useEffect(() => {
-//   const range = semesterRange[studentData.hsc_group] || { start: 0, end: -1 };
-//   const newStudentData = { ...studentData };
+  useEffect(() => {
+  const range = semesterRange[studentData.hsc_group] || { start: 0, end: -1 };
+  const newStudentData = { ...studentData };
 
-//   Object.keys(studentData).forEach((key) => {
-//     const semMatch = key.match(/_(\d+)$/);
-//     if (semMatch) {
-//       const sem = parseInt(semMatch[1], 10);
-//       if (sem < range.start || sem > range.end) {
-//         delete newStudentData[key];
-//       }
-//     }
-//   });
+  Object.keys(studentData).forEach((key) => {
+    const semMatch = key.match(/_(\d+)$/);
+    if (semMatch) {
+      const sem = parseInt(semMatch[1], 10);
+      if (sem < range.start || sem > range.end) {
+        delete newStudentData[key];
+      }
+    }
+  });
 
-//   setStudentData(newStudentData);
-// }, [studentData.hsc_group]);
+  setStudentData(newStudentData);
+}, [studentData.hsc_group]);
 
   return (
     <div className="collegewholediv">
