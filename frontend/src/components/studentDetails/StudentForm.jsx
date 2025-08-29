@@ -301,68 +301,74 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
     }
   };
 
-  const handleUpdate = async () => {
-    // // console.log("inside handle update");
-    setShowAlert(false);
-    try {
-      if (Object.keys(changedFields).length === 0) {
-        setShowAlert(true);
-        setAlertMessage("No Changes detected.");
-        // setAlertStage("success");
-        setAlertType("warning");
-        setAlertOkAction(() => () => {
-          setShowAlert(false);
-        });
-        return;
-      }
-      alert(validateFields());
-      if (!validateFields()) {
-        setShowAlert(true);
-        setAlertStage("warnin");
-        setAlertMessage("Please fill the details correctly!");
-        setAlertType("warning");
-        setAlertOkAction(() => () => {
-          setShowAlert(false);
-        });
-      } else {
-        const response = await axios.put(
-          `${host}student`,
-          { changedFields, appln_no },
-          {
-            withCredentials: true,
-          }
-        );
-
-        if (response.status === 200) {
-          setchangedFields({});
-
-          setShowAlert(true);
-          setAlertStage("confirm");
-          setAlertMessage("Confirm to update");
-          setAlertType("warning");
-          setAlertOkAction(() => () => {
-            setShowAlert(true);
-            setAlertMessage("Updated Successfully");
-            setAlertStage("success");
-            setAlertType("success");
-            setAlertOkAction(() => () => {
-              setShowAlert(false);
-            });
-          });
-        }
-        console.log("error");
-      }
-    } catch (error) {
-      // console.log(error);
+const handleUpdate = async () => {
+  setShowAlert(false);
+  try {
+    if (Object.keys(changedFields).length === 0) {
       setShowAlert(true);
-      setAlertMessage("Unable to update kindly try again...");
-      setAlertStage("error");
-      setAlertType("error");
+      setAlertMessage("No Changes detected.");
+      setAlertType("warning");
       setAlertOkAction(() => () => {
         setShowAlert(false);
       });
+      return;
     }
-  };
+
+    const range = semesterRange[studentData.hsc_group] || { start: 0, end: -1 };
+    const filteredData = { ...changedFields };
+
+    Object.keys(filteredData).forEach((key) => {
+      if (key.startsWith("max_") || key.startsWith("obt_")) {
+        const semNum = parseInt(key.split("_")[1], 10);
+        if (semNum < range.start || semNum > range.end) {
+          filteredData[key] = 0; 
+        }
+      }
+    });
+
+    if (!validateFields()) {
+      setShowAlert(true);
+      setAlertStage("warning");
+      setAlertMessage("Please fill the details correctly!");
+      setAlertType("warning");
+      setAlertOkAction(() => () => {
+        setShowAlert(false);
+      });
+    } else {
+      const response = await axios.put(
+        `${host}student`,
+        { changedFields: filteredData,appln_no: appln_no },
+        { withCredentials: true }
+      );
+
+      if (response.status === 200) {
+        setchangedFields({});
+        setShowAlert(true);
+        setAlertStage("confirm");
+        setAlertMessage("Confirm to update");
+        setAlertType("warning");
+        setAlertOkAction(() => () => {
+          setShowAlert(true);
+          setAlertMessage("Updated Successfully");
+          setAlertStage("success");
+          setAlertType("success");
+          setAlertOkAction(() => () => {
+            setShowAlert(false);
+          });
+        });
+      }
+    }
+  } catch (error) {
+    setShowAlert(true);
+    setAlertMessage("Unable to update kindly try again...");
+    setAlertStage("error");
+    setAlertType("error");
+    setAlertOkAction(() => () => {
+      setShowAlert(false);
+    });
+  }
+};
+
   const handleStuDelete = async () => {
     setShowAlert(false);
     try {
@@ -630,6 +636,22 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
       setStudentData((prev) => ({ ...prev, maths_studied: "" }));
     }
   }, [studentData.course_type]);
+//   useEffect(() => {
+//   const range = semesterRange[studentData.hsc_group] || { start: 0, end: -1 };
+//   const newStudentData = { ...studentData };
+
+//   Object.keys(studentData).forEach((key) => {
+//     const semMatch = key.match(/_(\d+)$/);
+//     if (semMatch) {
+//       const sem = parseInt(semMatch[1], 10);
+//       if (sem < range.start || sem > range.end) {
+//         delete newStudentData[key];
+//       }
+//     }
+//   });
+
+//   setStudentData(newStudentData);
+// }, [studentData.hsc_group]);
 
   return (
     <div className="collegewholediv">
@@ -1197,7 +1219,7 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
         </fieldset>
         <fieldset className="collegefieldset">
           <legend className="collegelegend">MARK DETAILS</legend>
-          <h3
+          {/* <h3
             style={{
               display: "inline-block",
               marginLeft: "20px",
@@ -1214,7 +1236,7 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
             }}
           >
             OBTAINED MARKS
-          </h3>
+          </h3> */}
           {/* {studentData.hsc_group=='Regular'(
             
           )} */}
