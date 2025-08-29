@@ -20,28 +20,55 @@ async function editStudent(req, res) {
   try {
     const collegeCode = req.user.counsellingCode;
     const a_no = req.body.appln_no;
-    const { changedFields } = req.body;
+    let { changedFields } = req.body;
 
     if (!collegeCode || !a_no) {
       return res
         .status(400)
         .json({ err: "collegeCode and application number is required" });
     }
+
+    // Ensure dependent fields are handled when fg = 0
+    if (changedFields.fg === 0 || changedFields.fg === "0") {
+      changedFields = {
+        ...changedFields,
+        fg_district: null,
+        fg_no: null,
+        Amount: 0,
+      };
+    }
+
+    if (changedFields.nativity === "TN") {
+      changedFields.state = "TAMILNADU";
+      // Always reset district properly
+      changedFields.district = req.body.changedFields.district;
+    } else if (changedFields.nativity === "OTHERS") {
+      // Always take state from frontend or fallback empty
+      changedFields.state = req.body.changedFields.state;
+      // Force clear district
+      changedFields.district = null;
+    }
+
+    const validColumns = ["nativity", "state", "district", "fg", "fg_district", "fg_no", "Amount"];
     const keys = Object.keys(changedFields);
     if (keys.length === 0) {
       return res.status(400).json({ err: "No fields to update" });
     }
-    
+
     const setClause = keys.map((key) => `${key} = ?`).join(", ");
     const values = keys.map((key) => changedFields[key]);
     values.push(a_no);
-    const editQuery = `update student_info set ${setClause} where a_no=?`;
-    await db.query(editQuery,values);
+
+    const editQuery = `UPDATE student_info SET ${setClause} WHERE a_no = ?`;
+    await db.query(editQuery, values);
+
     res.status(200).json({ msg: "Student details updated successfully." });
   } catch (err) {
     return res.status(500).json({ err: "Query error", sqlErr: err.message });
   }
 }
+
+
 
 async function deleteStudent(req, res) {
   try {

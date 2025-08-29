@@ -432,6 +432,7 @@ const Addstudent = ({ handleClear, appln_no, index }) => {
     : "";
   const handleChange = async (e) => {
     const { name, value } = e.target;
+    console.log(value)
     // alert(value)
     // For caste_name, you might want to store only the code in backend format
     let updatedValue = value;
@@ -451,7 +452,19 @@ const Addstudent = ({ handleClear, appln_no, index }) => {
       await caste_drop(value);
     }
     else if(name=="fg") {
-      setStudentData((prev) => ({ ...prev, [name]:parseInt (updatedValue) }));
+      setchangedFields((prev) => ({ ...prev, [name]: value }));
+      setStudentData((prev) => {
+        let updated = { ...prev, [name]: parseInt(updatedValue) };
+
+        // If FG is "No" (0), clear dependent fields
+        if (parseInt(updatedValue) === 0) {
+          updated.fg_district = "";
+          updated.fg_no = "";
+          updated.Amount = "0";
+        }
+
+        return updated;
+      });
 
     }
      else {
@@ -559,6 +572,16 @@ const Addstudent = ({ handleClear, appln_no, index }) => {
       setStudentData((prev) => ({ ...prev, maths_studied: "" }));
     }
   }, [studentData.course_type]);
+
+  function handleDistrict (e){
+    console.log(e);
+         setStudentData((prev) => ({
+                  ...prev,
+                  state: e.target.value,
+                  district: "", // reset district when state changes
+                }));
+                handleChange(e);
+  }
 
   
 
@@ -695,7 +718,42 @@ const Addstudent = ({ handleClear, appln_no, index }) => {
               eltname={"nativity"}
               type={"radio"}
               radiolabel={"Nativity :"}
-              onChange={handleChange}
+              onChange={(e) => {
+                const value = e.target.value;
+                console.log("Nativity changed to:", value);
+
+                if (value === "TN") {
+                  // Tamil Nadu → auto-set state, district remains selectable
+                  setStudentData((prev) => ({
+                    ...prev,
+                    nativity: value,
+                    state: "TAMILNADU",
+                    district: prev.district || ""
+                  }));
+
+                  setchangedFields((prev) => ({
+                    ...prev,
+                    nativity: value,
+                    state: "TAMILNADU",
+                    district: studentData.district || ""
+                  }));
+                } else {
+                  // Others → state is from dropdown, district cleared
+                  setStudentData((prev) => ({
+                    ...prev,
+                    nativity: value,
+                    state: prev.state || "", // let them pick a state
+                    district: null
+                  }));
+
+                  setchangedFields((prev) => ({
+                    ...prev,
+                    nativity: value,
+                    state: studentData.state || "",
+                    district: null
+                  }));
+                }
+              }}
               options={[
                 { label: "Tamilnadu", value: "TN" },
                 { label: "Others", value: "OTHERS" },
@@ -704,8 +762,8 @@ const Addstudent = ({ handleClear, appln_no, index }) => {
               id={"Nativity"}
               htmlfor={"Nativity"}
               value={studentData.nativity}
-              error={error["Nativity"]}
             />
+
           </div>
           <div className="field-row">
             <Inputfield
@@ -815,19 +873,20 @@ const Addstudent = ({ handleClear, appln_no, index }) => {
               id={"state"}
               label={"State"}
               htmlfor={"state"}
-              options={states}
-              onChange={(e) =>
-                setStudentData({
-                  ...studentData,
-                  state: e.target.value,
-                  district: "",
-                })
+              options={
+                studentData.nativity === "OTHERS"
+                  ? states.filter((s) => s.value !== "TAMILNADU")
+                  : [{ label: "Tamil Nadu", value: "TAMILNADU" }]
               }
+              onChange={(e) => handleDistrict(e)}
               classname={"field-block"}
               value={studentData.state}
               error={error["state"]}
+              disabled={studentData.nativity === "TN"}
             />
-            {studentData.state === "TAMILNADU" && (
+
+            {/* District Dropdown (only for Tamil Nadu) */}
+            {studentData.nativity === "TN" && (
               <Inputfield
                 eltname={"district"}
                 type={"dropdown"}
@@ -835,33 +894,13 @@ const Addstudent = ({ handleClear, appln_no, index }) => {
                 label={"District"}
                 htmlfor={"district"}
                 options={tamilnaduDistricts}
-                onChange={(e) =>
-                  setStudentData({ ...studentData, district: e.target.value })
-                }
+                onChange={handleDistrict}
                 classname={"field-block"}
                 value={studentData.district}
                 error={error["district"]}
               />
             )}
 
-            {studentData["state"] === "Others" && (
-              <Inputfield
-                eltname={"otherState"}
-                type={"text"}
-                id={"otherState"}
-                label={"State Name"}
-                htmlfor={"otherState"}
-                onChange={(e) =>
-                  setStudentData({
-                    ...studentData,
-                    otherStateName: e.target.value,
-                  })
-                }
-                classname={"field-block"}
-                value={studentData["otherState"]}
-                error={error["otherState"]}
-              />
-            )}
           </div>
           <div className="field-row">
             <Inputfield

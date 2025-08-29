@@ -29,16 +29,20 @@ const Inputfield = ({
                 name={eltname}
                 disabled={disabled}
                 value={option.value}
+                checked={String(value) === String(option.value)}  // ✅ match numbers/strings
+                onChange={onChange} 
                 // only set checked if value is explicitly provided (controlled)
-                {...(value !== undefined
-                  ? { checked: value === option.value }
-                  : {})}
+                // {...(value !== undefined
+                //   ? { checked: value === option.value }
+                //   : {})}
+                // checked={parseInt(value) === parseInt(option.value)}
+                // onChange={onChange}
                 // only attach onChange if provided; if checked is present but no onChange, make it explicit readOnly
-                {...(onChange
-                  ? { onChange: handleChange }
-                  : value !== undefined
-                  ? { readOnly: true } // suppress warning if someone passed value but forgot onChange
-                  : {})}
+                // {...(onChange
+                //   ? { onChange: handleChange }
+                //   : value !== undefined
+                //   ? { readOnly: true } // suppress warning if someone passed value but forgot onChange
+                //   : {})}
               />
               {option.label}
             </label>

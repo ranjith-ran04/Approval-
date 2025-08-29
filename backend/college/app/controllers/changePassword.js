@@ -16,7 +16,6 @@ async function changePassword(req, res) {
     console.log(hashedNewPassword);
     query = "update user_login set pass = ?,changed = ? where c_code = ?;";
     try {
-        console.log('hi');
       const [result] = await db.query(query, [hashedNewPassword, 1, collegeCode]);
       console.log(result);
       if (result.affectedRows === 0)
