@@ -27,13 +27,18 @@ const Discontinued = ({ admin, supp }) => {
   const [alertOkAction, setAlertOkAction] = useState(() => () => {});
   const [alertCancelAction, setAlertCancelAction] = useState(() => () => {});
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
+    const handleChange = (e) => {
+        const { name, value } = e.target;
 
-    setStudentData((prev) => {
-      return { ...prev, [name]: value };
-    });
-  };
+        if (name == 'appln_no') {
+            setAppln_no(value);
+        }
+
+        setStudentData((prev) => {
+            return { ...prev, [name]: value }
+        })
+    }
+
 
   const handlecloseAlert = () => {
     setShowAlert(false);
@@ -46,13 +51,18 @@ const Discontinued = ({ admin, supp }) => {
     setClicked(0);
   };
 
-  const confirmUpdate = async () => {
-    setShowAlert(true);
-    setAlertMessage("Confirm to update");
-    setAlertType("warning");
-    setAlertOkAction(() => handleUpdate);
-    setAlertCancelAction(() => () => setShowAlert(false));
-  };
+    const confirmUpdate = async () => {
+        if (studentData.NAME == '' || studentData.APPROVE_STATE == '' || studentData.TC_STATE == '') {
+            alert('Fill all the details');
+            return;
+        }
+        setShowAlert(true);
+        setAlertMessage("Confirm to update");
+        setAlertType("warning");
+        setAlertOkAction(() => handleUpdate);
+        setAlertCancelAction(() => () => setShowAlert(false))
+    }
+
 
   const confirmDelete = async () => {
     setShowAlert(true);
@@ -62,36 +72,38 @@ const Discontinued = ({ admin, supp }) => {
     setAlertCancelAction(() => () => setShowAlert(false));
   };
 
-  const handleUpdate = async () => {
-    try {
-      const response = await axios.put(
-        `${host}discontinued-student`,
-        { appln_no, studentData },
-        {
-          withCredentials: true,
-        }
-      );
+    const handleUpdate = async () => {
+        try {
+            const response = await axios.put(
+                `${host}discontinued-student`,
+                { appln_no, studentData, selected },
+                {
+                    withCredentials: true,
+                }
+            );
 
-      if (response.status === 200) {
-        setShowAlert(true);
-        setAlertMessage("Updated Successfully");
-        setAlertType("success");
-        setAlertOkAction(() => () => {
-          setShowAlert(false);
-        });
-        setAlertCancelAction(null);
-      }
-    } catch (error) {
-      // console.log(error);
-      setShowAlert(true);
-      setAlertMessage("Unable to connnect to server...");
-      setAlertType("error");
-      setAlertOkAction(() => () => {
-        setShowAlert(false);
-      });
-      setAlertCancelAction(null);
+            if (response.status === 200) {
+                setShowAlert(true);
+                setAlertMessage("Updated Successfully");
+                setAlertType("success");
+                setAlertOkAction(() => () => {
+                    setShowAlert(false);
+                    handleSelect('');
+                });
+                setAlertCancelAction(null)
+            }
+        } catch (error) {
+            console.log(error);
+            setShowAlert(true);
+            setAlertMessage("Unable to connnect to server...");
+            setAlertType("error");
+            setAlertOkAction(() => () => {
+                setShowAlert(false);
+            });
+            setAlertCancelAction(null)
+        }
     }
-  };
+  
 
   const handleDelete = async () => {
     try {
@@ -144,49 +156,48 @@ const Discontinued = ({ admin, supp }) => {
     }
   }
 
-  async function handleSelect(branch) {
-    setSelected(branch);
-    if (branch === "") {
-      setClicked(0);
-      setStudents([]);
-      return;
+    async function handleSelect(branch) {
+        setSelected(branch);
+        setAdd(false);
+        setAppln_no(0);
+        if (branch === "") {
+            setClicked(0);
+            setStudents([]);
+            return;
+        }
+        try {
+            // console.log(supp);
+            const result = await axios.post(
+                `${host}discontinuedBranch`,
+                { branch: branch, ...(admin && { collegeCode: collegeCode }), supp: supp ? true : false },
+                { withCredentials: true }
+            );
+            if (result.status === 200) {
+                setStudents(result.data);
+            }
+        } catch (error) {
+            console.log(error);
+        }
     }
-    try {
-      // // console.log(supp);
-      const result = await axios.post(
-        `${host}discontinuedBranch`,
-        {
-          branch: branch,
-          ...(admin && { collegeCode: collegeCode }),
-          supp: supp ? true : false,
-        },
-        { withCredentials: true }
-      );
-      if (result.status === 200) {
-        setStudents(result.data);
-      }
-    } catch (error) {
-      // console.log(error);
-    }
-  }
 
-  async function studentInfo() {
-    showLoader();
-    try {
-      const result = await axios.post(
-        `${host}discontinued-student`,
-        { appln_no: appln_no },
-        { withCredentials: true }
-      );
-      const raw = result.data?.[0]?.[0];
-      // // console.log("Raw API:", raw);
-      // // console.log("API catogory:", raw.catogory);
-      // // console.log(result.data?.[0]?.[0]);
-      if (!raw) {
-        console.warn("No student found in response", result.data);
-        setStudentData({});
-        return;
-      }
+
+    async function studentInfo(appln_no) {
+        showLoader();
+        try {
+            const result = await axios.post(
+                `${host}discontinued-student`,
+                { appln_no: appln_no },
+                { withCredentials: true }
+            );
+            const raw = result.data?.[0]?.[0];
+            // console.log("Raw API:", raw);
+            // console.log("API catogory:", raw.catogory);
+            // console.log(result.data?.[0]?.[0]);
+            if (!raw) {
+                console.warn("No student found in response", result.data);
+                setStudentData({});
+                return;
+            }
 
       // // console.log(result.data?.[0]?.[0]);
       setStudentData(raw);
@@ -201,144 +212,162 @@ const Discontinued = ({ admin, supp }) => {
     handleFetch();
   }, []);
 
-  useEffect(() => {
-    if (appln_no != 0) studentInfo();
-  }, [appln_no]);
 
-  return (
-    <div className="student-container">
-      <div className="head-studentdropdown">
-        <label>Branch Name</label>
-        <select onChange={(e) => handleSelect(e.target.value)} value={selected}>
-          <option value="">--select--</option>
-          {branch.map((item, index) => (
-            <option key={index} value={String(item.slice(-2))}>
-              {item}
-            </option>
-          ))}
-        </select>
-        {/* {selected != "" && (<Button name='ADD' onClick={() => { setAdd(true); setClicked(0) }}></Button>)} */}
-      </div>
-      <div className="student-table">
-        <div className="student-row">
-          <div className="student-header sno">S.No</div>
-          <div className="student-header app_no">Application Number</div>
-          <div className="student-header name">Name</div>
-          <div className="student-header action">Action</div>
-        </div>
 
-        {students.map((item, index) => (
-          <div key={index} className="student-row cell">
-            <div className="student-cell sno">{index + 1}</div>
-            <div className="student-cell app_no">{item.app_no}</div>
-            <div className="student-cell name">{item.name}</div>
-            <div className="student-cell action">
-              <button
-                className="student-button"
-                onClick={() => {
-                  setAdd(false);
-                  setAppln_no(item.app_no);
-                }}
-              >
-                view
-              </button>
+
+
+    return (
+        <div className="student-container">
+            <div className="head-studentdropdown">
+                <label>Branch Name</label>
+                <select onChange={(e) => handleSelect(e.target.value)} value={selected}>
+                    <option value="">--select--</option>
+                    {branch.map((item, index) => (
+                        <option key={index} value={String(item.slice(-2))}>
+                            {item}
+                        </option>
+                    ))}
+                </select>
+                {selected != "" && (<Button name='ADD' onClick={() => {
+                    setAdd(true); setClicked(0); setStudentData({
+                        NAME: "",
+                        APPROVE_STATE: "",
+                        TC_STATE: ""
+                    }
+                    );
+                    setAppln_no('');
+
+                }}></Button>)}
             </div>
-          </div>
-        ))}
-        {students.length === 0 && (
-          <div className="Unavailable">No Students Found</div>
-        )}
-      </div>
-      {appln_no != 0 && (
-        <div>
-          <div id="appln_no" style={{ display: "flex", gap: "8%" }}>
-            <Inputfield
-              name={"appln_no"}
-              type={"text"}
-              placeholder={"Application Number"}
-              onChange={handleChange}
-              value={appln_no}
-              disabled={true}
+            {
+                !add && (
+                    <div className="student-table">
+                        <div className="student-row">
+                            <div className="student-header sno">S.No</div>
+                            <div className="student-header app_no">Application Number</div>
+                            <div className="student-header name">Name</div>
+                            <div className="student-header action">Action</div>
+                        </div>
+
+                        {students.map((item, index) => (
+                            <div key={index} className="student-row cell">
+                                <div className="student-cell sno">{index + 1}</div>
+                                <div className="student-cell app_no">{item.app_no}</div>
+                                <div className="student-cell name">{item.name}</div>
+                                <div className="student-cell action">
+                                    <button
+                                        className="student-button"
+                                        onClick={() => {
+                                            setAdd(false);
+                                            setAppln_no(item.app_no);
+                                            studentInfo(item.app_no);
+                                        }}
+                                    >
+                                        view
+                                    </button>
+                                </div>
+                            </div>
+                        ))}
+                        {students.length === 0 && (
+                            <div className="Unavailable">No Students Found</div>
+                        )}
+                    </div>
+                )
+            }
+
+            {
+                (appln_no != 0 || add) && (
+                    <div >
+                        <div id="appln_no" style={{ display: 'flex', gap: '8%' }}>
+                            <Inputfield
+                                eltname={"appln_no"}
+                                type={"text"}
+                                placeholder={"Application Number"}
+                                onChange={handleChange}
+                                value={appln_no}
+                                disabled={!add}
+                            />
+                            <div style={{ marginTop: '20px' }}>
+                                <Button
+                                    name={"CLEAR"}
+                                    style={{
+                                        width: "130px",
+                                        backgroundColor: "red",
+                                    }}
+                                    onClick={() => { setAppln_no(0); setAdd(false) }}
+                                />
+                            </div>
+                        </div>
+                        <div>
+                            <fieldset className="collegefieldset">
+                                <legend className="collegelegend">DISCONTINUED DETAILS</legend>
+                                <div className="field-row-single">
+                                    <Inputfield
+                                        label={"Candidate's Name"}
+                                        id={"candidatename"}
+                                        eltname={"NAME"}
+                                        type={"text"}
+                                        htmlfor={"candidatename"}
+                                        classname={"field-block"}
+                                        value={studentData.NAME}
+                                        // error={error["candidatename"]}
+                                        required={true}
+                                        onChange={handleChange}
+                                    />
+                                </div>
+                                <div className="field-row">
+                                    <Inputfield
+                                        eltname={"APPROVE_STATE"}
+                                        type={"radio"}
+                                        radiolabel={"Whether Approved By Dote ?"}
+                                        onChange={handleChange}
+                                        classname={"field-block"}
+                                        options={[
+                                            { label: "Yes", value: "1" },
+                                            { label: "No", value: "0" },
+                                        ]}
+                                        id={"appr-dote"}
+                                        htmlfor={"appr-dote"}
+                                        required={true}
+                                        value={studentData.APPROVE_STATE}
+                                    // error={error["Nationality"]}
+                                    />
+                                    <Inputfield
+                                        eltname={"TC_STATE"}
+                                        type={"radio"}
+                                        radiolabel={"Whether TC issued ?"}
+                                        onChange={handleChange}
+                                        classname={"field-block"}
+                                        options={[
+                                            { label: "Yes", value: "1" },
+                                            { label: "No", value: "0" },
+                                        ]}
+                                        id={"tc-issued"}
+                                        htmlfor={"tc-issued"}
+                                        required={true}
+                                        value={studentData.TC_STATE}
+                                    // error={error["Nationality"]}
+                                    />
+                                </div>
+                            </fieldset>
+                            <div id="studentbutton">
+                                <Button name={"UPDATE"} onClick={confirmUpdate} />
+                                <Button name={"DELETE"} onClick={confirmDelete} />
+                            </div>
+                        </div>
+
+                    </div>
+                )
+            }
+            <Alert
+                type={alertType}
+                message={alertMessage}
+                show={showAlert}
+                okbutton={alertOkAction}
+                cancelbutton={alertCancelAction}
             />
-            <div style={{ marginTop: "20px" }}>
-              <Button
-                name={"CLEAR"}
-                style={{
-                  width: "130px",
-                  backgroundColor: "red",
-                }}
-                onClick={() => setAppln_no(0)}
-              />
-            </div>
-          </div>
-          <div>
-            <fieldset className="collegefieldset">
-              <legend className="collegelegend">DISCONTINUED DETAILS</legend>
-              <div className="field-row-single">
-                <Inputfield
-                  label={"Candidate's Name"}
-                  id={"candidatename"}
-                  eltname={"NAME"}
-                  type={"text"}
-                  htmlfor={"candidatename"}
-                  classname={"field-block"}
-                  value={studentData.NAME}
-                  // error={error["candidatename"]}
-                  required={true}
-                  onChange={handleChange}
-                />
-              </div>
-              <div className="field-row">
-                <Inputfield
-                  eltname={"APPROVE_STATE"}
-                  type={"radio"}
-                  radiolabel={"Whether Approved By Dote ?"}
-                  onChange={handleChange}
-                  classname={"field-block"}
-                  options={[
-                    { label: "Yes", value: "1" },
-                    { label: "No", value: "0" },
-                  ]}
-                  id={"appr-dote"}
-                  htmlfor={"appr-dote"}
-                  required={true}
-                  value={studentData.APPROVE_STATE}
-                  // error={error["Nationality"]}
-                />
-                <Inputfield
-                  eltname={"TC_STATE"}
-                  type={"radio"}
-                  radiolabel={"Whether TC issued ?"}
-                  onChange={handleChange}
-                  classname={"field-block"}
-                  options={[
-                    { label: "Yes", value: "1" },
-                    { label: "No", value: "0" },
-                  ]}
-                  id={"tc-issued"}
-                  htmlfor={"tc-issued"}
-                  required={true}
-                  value={studentData.TC_STATE}
-                  // error={error["Nationality"]}
-                />
-              </div>
-            </fieldset>
-            <div id="studentbutton">
-              <Button name={"UPDATE"} onClick={confirmUpdate} />
-              <Button name={"DELETE"} onClick={confirmDelete} />
-            </div>
-          </div>
-        </div>
-      )}
-      <Alert
-        type={alertType}
-        message={alertMessage}
-        show={showAlert}
-        okbutton={alertOkAction}
-        cancelbutton={alertCancelAction}
-      />
-    </div>
-  );
-};
+        </div >
+    )
+}
 
 export default Discontinued;
