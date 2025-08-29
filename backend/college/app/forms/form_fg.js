@@ -7,7 +7,7 @@ const { footer } = require("./pageFrame");
 
 const columnWidths = {
   sno: 30,
-  applno: 60,
+  applno: 80,
   name: 200,
   quota: 60,
   community: 70,
@@ -30,7 +30,7 @@ const getCollegeInfo = async (c_code) => {
 
 function drawTableHeader(doc, y) {
   doc.font("Arial-Bold", arialBold).fontSize(11);
-  const headers = ["S.no", "Applno", "Name", "Quota", "Community", "Amount"];
+  const headers = ["S.no", "Appln_no", "Name", "Quota", "Community", "Amount"];
   let x = leftMargin;
   Object.entries(columnWidths).forEach(([key, width], i) => {
     doc.rect(x, y, width, rowHeight).stroke();

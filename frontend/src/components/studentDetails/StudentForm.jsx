@@ -121,7 +121,9 @@ const Addstudent = ({ handleClear, appln_no,b_code, index, clicked }) => {
     "DIP-Part_time": { start: 1, end: 8 },
     "DIP-Sandwich_7": { start: 1, end: 7 },
     "DIP-Sandwich_8": { start: 1, end: 8 },
-    Bsc: { start: 1, end: 6 },
+    "DIP-Sandwich_7_lat":{start:3,end:7},
+    "DIP-Sandwich_8_lat":{start:3,end:8},
+    "Bsc": { start: 1, end: 6 },
   };
 
   const caste_drop = async (community) => {
@@ -344,7 +346,9 @@ const Addstudent = ({ handleClear, appln_no,b_code, index, clicked }) => {
         return;
       }
       // alert(validateFields());
-      if (!validateFields()) return;
+      if (!validateFields()) {
+        
+      };
       const response = await axios.put(
         `${host}student`,
         { changedFields, appln_no },
@@ -354,7 +358,6 @@ const Addstudent = ({ handleClear, appln_no,b_code, index, clicked }) => {
       );
       if (response.status === 200) {
         setchangedFields({});
-
         setShowAlert(true);
         setAlertStage("confirm");
         setAlertMessage("Confirm to update");
@@ -983,7 +986,7 @@ const Addstudent = ({ handleClear, appln_no,b_code, index, clicked }) => {
               classname={"field-block"}
               options={[
                 { label: "Diploma", key: "Diploma", value: "DIP" },
-                { label: "BSc", key: "BSC", value: "B.Sc" },
+                { label: "BSc", key: "BSC", value: "Bsc" },
                 { label: "Others", key: "OTHERS", value: "OTHERS" },
               ]}
               id={"QualifyingExam"}
@@ -1075,7 +1078,7 @@ const Addstudent = ({ handleClear, appln_no,b_code, index, clicked }) => {
                   key: "Sandwich (8 Semesters)_lat",
                   value: "DIP-Sandwich_8_lat",
                 },
-                { label: "BSc", key: "BSC", value: "bsc" },
+                { label: "BSc", key: "BSC", value: "Bsc" },
               ]}
               id={"QualifyingExam"}
               value={studentData.hsc_group}
@@ -1223,6 +1226,8 @@ const Addstudent = ({ handleClear, appln_no,b_code, index, clicked }) => {
           {/* {studentData.hsc_group=='Regular'(
             
           )} */}
+          <h3 style={{ display: "inline-block", marginLeft: "20px",marginBottom:"10px" }}>MAXIMUM MARKS</h3>
+          <h3 style={{ display: "inline-block", marginLeft: "420px",marginBottom:"10px" }}>OBTAINED MARKS</h3>
           <div className="field-container">
             {(() => {
               const range = semesterRange[studentData.hsc_group] || {
@@ -1234,6 +1239,7 @@ const Addstudent = ({ handleClear, appln_no,b_code, index, clicked }) => {
                 { length: range.end - range.start + 1 },
                 (_, i) => range.start + i
               );
+              
               const allInputs = semesters.flatMap((sem) => [
                 <Inputfield
                   key={`max_${sem}`}

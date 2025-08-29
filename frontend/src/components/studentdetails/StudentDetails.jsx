@@ -5,7 +5,7 @@ import { host } from "../../constants/backendpath.js";
 import StudentForm from "./StudentForm.jsx";
 import "../college/CollegeInfo.css";
 import Button from "../../widgets/button/Button.jsx";
-import AddInput from '../../widgets/addinput/Input.jsx';
+import AddInput from '../../widgets/addinput/input.jsx';
 
 function StudentDetails({admin,supp}) {
   const [selected, setSelected] = useState("");
