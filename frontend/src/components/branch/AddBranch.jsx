@@ -3,8 +3,10 @@ import axios from "axios";
 import { host } from "../../constants/backendpath";
 import Alert from "../../widgets/alert/Alert";
 import { useState } from "react";
+import { useLoader } from "../../context/LoaderContext";
 
 function AddBranch({ setCurrent }) {
+  const {showLoader, hideLoader} = useLoader();
   const [showAlert, setShowAlert] = useState(false);
   const [alertType, setAlertType] = useState("");
   const [alertMessage, setAlertMessage] = useState("");
@@ -16,7 +18,7 @@ function AddBranch({ setCurrent }) {
 
   const handleAddSubmit = async (data) => {
     // // console.log("Data being sent:", data);
-
+    showLoader();
     try {
       const formData = {
         ...data,
@@ -44,6 +46,8 @@ function AddBranch({ setCurrent }) {
       }
       setShowAlert(true);
       console.error("Add Branch error: ", err);
+    }finally{
+      hideLoader();
     }
   };
   return (

@@ -6,8 +6,10 @@ import StudentForm from "./StudentForm.jsx";
 import "../college/CollegeInfo.css";
 import Button from "../../widgets/button/Button.jsx";
 import AddInput from '../../widgets/addinput/Input.jsx';
+import { useLoader } from "../../context/LoaderContext.jsx";
 
 function StudentDetails({admin,supp}) {
+  const { showLoader, hideLoader} = useLoader();
   const [selected, setSelected] = useState("");
   const [branch, setBranch] = useState([]);
   const [students, setStudents] = useState([]);
@@ -18,6 +20,7 @@ function StudentDetails({admin,supp}) {
   const addRef = useRef(null);
   const collegeCode = 5901;
   async function handleFetch() {
+    showLoader();
     try {
       var result;
       if(admin){
@@ -33,6 +36,8 @@ function StudentDetails({admin,supp}) {
       }
     } catch (error) {
       // console.log(error);
+    } finally {
+      hideLoader();
     }
   }
   useEffect(() => {
@@ -51,6 +56,7 @@ function StudentDetails({admin,supp}) {
   }, [add]);
 
   async function handleSelect(branch) {
+    showLoader();
     setSelected(branch);
     if (branch === "") {
       setClicked(0);
@@ -69,6 +75,8 @@ function StudentDetails({admin,supp}) {
       }
     } catch (error) {
       // console.log(error);
+    } finally {
+      hideLoader();
     }
   }
   const handleClear = () => {

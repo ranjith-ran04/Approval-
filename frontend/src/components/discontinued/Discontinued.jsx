@@ -73,6 +73,7 @@ const Discontinued = ({ admin, supp }) => {
   };
 
     const handleUpdate = async () => {
+        showLoader();
         try {
             const response = await axios.put(
                 `${host}discontinued-student`,
@@ -101,11 +102,14 @@ const Discontinued = ({ admin, supp }) => {
                 setShowAlert(false);
             });
             setAlertCancelAction(null)
+        } finally {
+            hideLoader();
         }
     }
   
 
   const handleDelete = async () => {
+    showLoader();
     try {
       const response = await axios.delete(`${host}discontinued-student`, {
         data: { appln_no },
@@ -131,10 +135,13 @@ const Discontinued = ({ admin, supp }) => {
         setShowAlert(false);
       });
       setAlertCancelAction(null);
+    } finally {
+        hideLoader();
     }
   };
 
   async function handleFetch() {
+    showLoader();
     try {
       var result;
       if (admin) {
@@ -153,10 +160,13 @@ const Discontinued = ({ admin, supp }) => {
       }
     } catch (error) {
       // console.log(error);
+    } finally {
+        hideLoader();
     }
   }
 
     async function handleSelect(branch) {
+        showLoader();
         setSelected(branch);
         setAdd(false);
         setAppln_no(0);
@@ -177,6 +187,8 @@ const Discontinued = ({ admin, supp }) => {
             }
         } catch (error) {
             console.log(error);
+        } finally {
+            hideLoader();
         }
     }
 

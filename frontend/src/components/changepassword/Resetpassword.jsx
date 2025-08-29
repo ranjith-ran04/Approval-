@@ -5,8 +5,10 @@ import NavigationBar from "../../widgets/navigationBar/NavigationBar";
 import Alert from "../../widgets/alert/Alert";
 import axios from "axios";
 import { host } from "../../constants/backendpath";
+import { useLoader } from "../../context/LoaderContext";
 
 function Resetpassword() {
+  const { showLoader , hideLoader} = useLoader();
   const location = useLocation();
   const collegeCode = location.state?.collegeCode || null;
   const [formData, setFormData] = useState({
@@ -27,6 +29,7 @@ function Resetpassword() {
     setErrors(validationErrors);
 
     if (Object.values(validationErrors).every((val) => val === "")) {
+      showLoader();
       try {
         const res = await axios.post(`${host}resetPassword`, {
           newPassword: formData.newPassword,
@@ -44,6 +47,8 @@ function Resetpassword() {
           error.response?.data?.message || "Password reset failed"
         );
         setShowAlert(true);
+      } finally {
+        hideLoader();
       }
     }
   };

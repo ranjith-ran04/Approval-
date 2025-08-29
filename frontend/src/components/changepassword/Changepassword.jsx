@@ -5,8 +5,10 @@ import NavigationBar from "../../widgets/navigationBar/NavigationBar";
 import Alert from "../../widgets/alert/Alert";
 import axios from "axios";
 import { host } from "../../constants/backendpath";
+import { useLoader } from "../../context/LoaderContext";
 
 function Changepassword() {
+  const {hideLoader, showLoader} = useLoader();
   const [formData, setFormData] = useState({
     oldPassword: "",
     newPassword: "",
@@ -27,6 +29,7 @@ function Changepassword() {
   }, []);
 
   async function changeFetch() {
+    showLoader();
     try {
       const res = await axios.get(`${host}changePassword`, {
         withCredentials: true,
@@ -38,6 +41,8 @@ function Changepassword() {
     } catch (error) {
       // console.log(error);
       navigate("/");
+    } finally{
+      hideLoader();
     }
   }
 
@@ -47,6 +52,7 @@ function Changepassword() {
     setErrors(validationErrors);
 
     if (Object.values(validationErrors).every((val) => val === "")) {
+      showLoader();
       try {
         const res = await axios.post(
           `${host}changePassword`,
@@ -71,6 +77,8 @@ function Changepassword() {
           error.response?.data?.message || "Password change failed"
         );
         setShowAlert(true);
+      } finally {
+        hideLoader();
       }
     }
   };

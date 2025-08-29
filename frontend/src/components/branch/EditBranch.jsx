@@ -3,8 +3,10 @@ import axios from "axios";
 import { host } from "../../constants/backendpath";
 import Alert from "../../widgets/alert/Alert";
 import { useState } from "react";
+import { useLoader } from "../../context/LoaderContext";
 
 function EditBranch({ state, setCurrent }) {
+  const {showLoader, hideLoader} = useLoader();
   const [showAlert, setShowAlert] = useState(false);
   const [alertType, setAlertType] = useState("");
   const [alertMessage, setAlertMessage] = useState("");
@@ -19,6 +21,7 @@ function EditBranch({ state, setCurrent }) {
   };
 
   const handleEditSubmit = async (data) => {
+    showLoader();
     try {
       const changedFields = {};
 
@@ -81,6 +84,8 @@ function EditBranch({ state, setCurrent }) {
       }
       setShowAlert(true);
       console.error("update failed : ", err);
+    } finally{
+      hideLoader();
     }
   };
 

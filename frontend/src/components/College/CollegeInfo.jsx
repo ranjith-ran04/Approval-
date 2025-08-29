@@ -5,8 +5,10 @@ import Button from "../../widgets/button/Button";
 import Alert from "../../widgets/alert/Alert";
 import Inputfield from "../../widgets/college/Inputfield";
 import { adminhost, host } from "../../constants/backendpath";
+import { useLoader } from "../../context/LoaderContext";
 
 const CollegeInfo = ({ admin, collegeCode }) => {
+  const { showLoader, hideLoader } = useLoader();
   const [selectedSection, setSelectedSection] = useState("All");
   const [showAlert, setShowAlert] = useState(false);
   const [alertType, setAlertType] = useState("");
@@ -219,6 +221,7 @@ const CollegeInfo = ({ admin, collegeCode }) => {
 
   useEffect(() => {
     const fetchCollegeData = async () => {
+      showLoader();
       try {
         var res;
         if (admin) {
@@ -245,12 +248,15 @@ const CollegeInfo = ({ admin, collegeCode }) => {
         // }
       } catch (err) {
         // console.log(err);
+      } finally {
+        hideLoader();
       }
     };
     fetchCollegeData();
   }, []);
   const handleconfirmAlert = async () => {
     setShowAlert(false);
+    showLoader();
     try {
       if (Object.keys(changedFields).length === 0) {
         setShowAlert(true);
@@ -302,6 +308,8 @@ const CollegeInfo = ({ admin, collegeCode }) => {
       setAlertMessage("Unable to connnect to server...");
       setAlertStage("error");
       setAlertType("error");
+    } finally {
+      hideLoader();
     }
   };
   const handleSubmit = (e) => {

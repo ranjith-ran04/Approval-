@@ -303,7 +303,7 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
   };
   const handleUpdate = async () => {
     setShowAlert(false);
-
+    showLoader();
     try {
       if (Object.keys(changedFields).length === 0) {
         setShowAlert(true);
@@ -364,11 +364,14 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
       setAlertStage("error");
       setAlertType("error");
       setAlertOkAction(() => () => setShowAlert(false));
+    } finally {
+      hideLoader();
     }
   };
 
   const handleStuDelete = async () => {
     setShowAlert(false);
+    showLoader();
     try {
       const response = await axios.delete(`${host}student`, {
         data: { changedFields, appln_no },
@@ -401,11 +404,15 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
       setAlertOkAction(() => () => {
         setShowAlert(false);
       });
+    } finally {
+      hideLoader();
     }
   };
 
   const handleFileChange = async (e, key) => {
     setShowAlert(false);
+    showLoader();
+
     const file = e.target.files[0];
     if (!file) return;
 
@@ -470,11 +477,14 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
           setShowAlert(false);
         });
       }
+    } finally {
+      hideLoader();
     }
   };
 
   const handleDelete = async (index) => {
     setShowAlert(false);
+    showLoader();
     try {
       setShowAlert(true);
       setAlertMessage("Confirm to Delete");
@@ -511,6 +521,8 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
       setAlertOkAction(() => () => {
         setShowAlert(false);
       });
+    } finally {
+      hideLoader();
     }
   };
   // Extract just the code from backend value

@@ -49,6 +49,7 @@ function Branch({ setCurrent, setState }) {
   }, []);
 
   const handleDeleteBranch = async (branch_code) => {
+    showLoader();
     try {
       const res = await axios.delete(`${host}branch`, {
         data: { b_code: branch_code },
@@ -67,6 +68,8 @@ function Branch({ setCurrent, setState }) {
       setAlertStage("error");
       setAlertMessage("Failed to Delete Branch!");
       setShowAlert(true);
+    }finally{
+      hideLoader();
     }
     setBranchData((prev) =>
       prev.filter((b) => b.b_code !== branchData[showIndex].b_code)
