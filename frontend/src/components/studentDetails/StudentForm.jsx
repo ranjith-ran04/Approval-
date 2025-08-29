@@ -563,7 +563,7 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
         }));
       }
     } else if (name == "fg") {
-      setStudentData((prev) => ({ ...prev, [name]: parseInt(updatedValue) , fg_approved : updatedValue }));
+      setStudentData((prev) => ({ ...prev, [name]: parseInt(updatedValue)}));
     } else {
       setStudentData((prev) => ({ ...prev, [name]: updatedValue }));
     }
