@@ -23,7 +23,7 @@ function Sidebar({ setCurrent, admin }) {
       const result = await axios.get(`${host}getFreezed`, {
         withCredentials: true,
       });
-      console.log("getFreezed ", result.data[0].freezed);
+      // console.log("getFreezed ", result.data[0].freezed);
       if (result.data[0].freezed === "1") {
         setSubmitted(true);
       }
@@ -333,7 +333,7 @@ function Sidebar({ setCurrent, admin }) {
 
   const handleItemClick = (index, action) => {
     if (!admin) {
-      if (index < 5) setActiveAdminId(index);
+      if (index < 7) setActiveAdminId(index);
       if (action) action();
     }
   };

@@ -38,7 +38,7 @@ function Dashboard(){
         withCredentials: true,
       });
       if (res.status === 200) {
-        // console.log('dashboard',res.data);
+        // // console.log('dashboard',res.data);
         setDetails(res.data[0]);
       }
     } catch (error) {
@@ -61,7 +61,7 @@ Tamilnadu Lateral Entry Direct Second Year B.E/B.Tech., Admissions Approval-2025
           bool={false}
           setCurrent={setCurrent}
           admin={false}
-          style={{height:'70px'}}
+          style={{ height: "70px" }}
         />
 
         <div className="dashboard-body" ref={scrollRef}>
@@ -77,7 +77,7 @@ Tamilnadu Lateral Entry Direct Second Year B.E/B.Tech., Admissions Approval-2025
             )}
             {current === 0 && <Notes />}
             {current === 5 && <StudentDetails />}
-            {current === 6 && <Discontinued/>}
+            {current === 6 && <Discontinued />}
             <ScrollToTop scrollRef={scrollRef} />
           </>
         </div>

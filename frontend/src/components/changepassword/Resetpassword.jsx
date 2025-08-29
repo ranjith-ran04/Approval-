@@ -6,9 +6,10 @@ import Alert from "../../widgets/alert/Alert";
 import axios from "axios";
 import { host } from "../../constants/backendpath";
 
-function Changepassword() {
+function Resetpassword() {
+  const location = useLocation();
+  const collegeCode = location.state?.collegeCode || null;
   const [formData, setFormData] = useState({
-    oldPassword: "",
     newPassword: "",
     confirmPassword: "",
   });
@@ -18,57 +19,29 @@ function Changepassword() {
   const [alertType, setAlertType] = useState("");
   const [alertMessage, setAlertMessage] = useState("");
   const [errors, setErrors] = useState({});
-  const [collegeCode, setCollegeCode] = useState(null);
-  const location = useLocation();
-  const logged = location.state?.logged || false;
-
-  useEffect(() => {
-    changeFetch();
-  }, []);
-
-  async function changeFetch() {
-    try {
-      const res = await axios.get(`${host}changePassword`, {
-        withCredentials: true,
-      });
-      if (res.status === 200) {
-        const c_code = res.data;
-        setCollegeCode(c_code);
-      }
-    } catch (error) {
-      // console.log(error);
-      navigate("/");
-    }
-  }
-
+//   console.log(collegeCode);
   const handleSubmit = async (e) => {
+    // console.log("inside hanlesubmit");
     e.preventDefault();
     const validationErrors = validateForm("All");
     setErrors(validationErrors);
 
     if (Object.values(validationErrors).every((val) => val === "")) {
       try {
-        const res = await axios.post(
-          `${host}changePassword`,
-          {
-            oldPassword: formData.oldPassword,
-            newPassword: formData.newPassword,
-            collegeCode: collegeCode,
-          },
-          {
-            withCredentials: true,
-          }
-        );
+        const res = await axios.post(`${host}resetPassword`, {
+          newPassword: formData.newPassword,
+          collegeCode: collegeCode,
+        });
+        // console.log(res);
         if (res.status === 200) {
           setAlertType("success");
-          setAlertMessage("Password changed successfully.");
+          setAlertMessage("Password reset successfully.");
           setShowAlert(true);
         }
       } catch (error) {
-        // console.log(error);
         setAlertType("error");
         setAlertMessage(
-          error.response?.data?.message || "Password change failed"
+          error.response?.data?.message || "Password reset failed"
         );
         setShowAlert(true);
       }
@@ -78,27 +51,14 @@ function Changepassword() {
   const handleCloseAlert = () => {
     if (alertType === "error") {
       setShowAlert(false);
-      formData.confirmPassword = "";
-      formData.newPassword = "";
-      formData.oldPassword = "";
+      setFormData({ newPassword: "", confirmPassword: "" });
     } else {
-      navigate("/dashboard", { state: { logged: true } });
+      navigate("/");
     }
   };
 
   const validateForm = (name) => {
     const newErrors = { ...errors };
-
-    if (name === "oldPassword" || name === "All") {
-      const oldPassword = formData.oldPassword.trim();
-      if (!oldPassword) {
-        newErrors.oldPassword = "*Old password is required";
-      } else if (oldPassword.length < 7) {
-        newErrors.oldPassword = "*Old password must be at least 7 characters";
-      } else {
-        newErrors.oldPassword = "";
-      }
-    }
 
     if (name === "newPassword" || name === "All") {
       const newPassword = formData.newPassword.trim();
@@ -139,6 +99,7 @@ function Changepassword() {
     const validationErrors = validateForm(name);
     setErrors(validationErrors);
   };
+
   return (
     <div className="change-page">
       <NavigationBar
@@ -154,27 +115,6 @@ Tamilnadu Lateral Entry Direct Second Year B.E/B.Tech.,Approval-2025`}
             <div id="change-logo"></div>
           </div>
           <form className="changeform" onSubmit={handleSubmit}>
-            <div
-              className={`change-input-group ${
-                focusedField === "oldPassword" ? "focused" : ""
-              }`}
-            >
-              <span className="change-icon old-icon" />
-              <input
-                className="changeinput"
-                type="password"
-                name="oldPassword"
-                placeholder="Old Password"
-                value={formData.oldPassword}
-                onChange={handleChange}
-                onFocus={() => setFocusedField("oldPassword")}
-                onBlur={() => setFocusedField(null)}
-              />
-            </div>
-            {errors.oldPassword && (
-              <p className="changeerror">{errors.oldPassword}</p>
-            )}
-
             <div
               className={`change-input-group ${
                 focusedField === "newPassword" ? "focused" : ""
@@ -195,6 +135,7 @@ Tamilnadu Lateral Entry Direct Second Year B.E/B.Tech.,Approval-2025`}
             {errors.newPassword && (
               <p className="changeerror">{errors.newPassword}</p>
             )}
+
             <div
               className={`change-input-group ${
                 focusedField === "confirmPassword" ? "focused" : ""
@@ -215,9 +156,10 @@ Tamilnadu Lateral Entry Direct Second Year B.E/B.Tech.,Approval-2025`}
             {errors.confirmPassword && (
               <p className="changeerror">{errors.confirmPassword}</p>
             )}
+
             <div>
               <button type="submit" className="login-button">
-                Change Password
+                Reset Password
               </button>
               <Alert
                 type={alertType}
@@ -233,4 +175,4 @@ Tamilnadu Lateral Entry Direct Second Year B.E/B.Tech.,Approval-2025`}
   );
 }
 
-export default Changepassword;
+export default Resetpassword;

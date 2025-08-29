@@ -17,11 +17,11 @@ function Branch({ setCurrent, setState }) {
 
   const handleCancel = (index) => {
     setShowIndex(index);
-    // console.log(showIndex);
+    // // console.log(showIndex);
     setShowAlert(true);
-    console.log("del");
+    // console.log("del");
     setAlertMessage("Confirm to Delete");
-    console.log("sdfsd");
+    // console.log("sdfsd");
     setAlertType("warning");
     setAlertStage("confirm");
   };
@@ -34,7 +34,7 @@ function Branch({ setCurrent, setState }) {
     const fetchData = async () => {
       showLoader();
       try {
-        const res = await axios.get(`${host}branch`,{withCredentials : true});
+        const res = await axios.get(`${host}branch`, { withCredentials: true });
         setBranchData(res.data);
         setError(false);
       } catch (err) {
@@ -48,10 +48,11 @@ function Branch({ setCurrent, setState }) {
     fetchData();
   }, []);
 
-  const handleDeleteBranch = async ( branch_code) => {
+  const handleDeleteBranch = async (branch_code) => {
     try {
       const res = await axios.delete(`${host}branch`, {
-        data: {  b_code: branch_code },withCredentials:true
+        data: { b_code: branch_code },
+        withCredentials: true,
       });
 
       if (res.status === 200) {
@@ -71,12 +72,11 @@ function Branch({ setCurrent, setState }) {
       prev.filter((b) => b.b_code !== branchData[showIndex].b_code)
     );
   };
-const displayval=(val)=>{
-  return val === 0 || val === "0" ? "-" : val;
-}
+  const displayval = (val) => {
+    return val === 0 || val === "0" ? "-" : val;
+  };
   return (
     <div className="box">
-      
       <>
         <div className="first">
           <h2 className="heading">BRANCH DETAILS</h2>
@@ -120,7 +120,6 @@ const displayval=(val)=>{
           ) : (
             branchData.map((branch, index) => (
               <div className="table-row" key={index} data-id={index}>
-                
                 <div>
                   <button
                     className="edit-btn"
@@ -132,7 +131,7 @@ const displayval=(val)=>{
                     Edit
                   </button>
                 </div>
-                <div>{branch.b_code }</div>
+                <div>{branch.b_code}</div>
                 <div>{branch.branch_name}</div>
                 <div>{branch.approved_in_take}</div>
                 <div>{branch.first_year_admitted}</div>
@@ -163,8 +162,7 @@ const displayval=(val)=>{
           show={showAlert}
           okbutton={
             alertStage === "confirm"
-              ? () =>
-                  handleDeleteBranch( branchData[showIndex]?.b_code)
+              ? () => handleDeleteBranch(branchData[showIndex]?.b_code)
               : alertStage === "success" || "cancel"
               ? handleCloseAlert
               : null
@@ -172,7 +170,6 @@ const displayval=(val)=>{
           cancelbutton={alertStage === "confirm" ? handleCloseAlert : null}
         />
       </>
-      
     </div>
   );
 }

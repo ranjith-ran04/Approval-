@@ -8,7 +8,7 @@ const formfg = require('./forms/form_fg');
 const form_tnlea = require("./forms/form_tnlea");
 const formApprv = require("./forms/formApprv");
 const home = require('../app/controllers/home');
-const {changePassword,fetchCode} = require('../app/controllers/changePassword');
+const {changePassword,fetchCode, resetpass} = require('../app/controllers/changePassword');
 const {login,fetchlogin} = require('./controllers/login');
 const verifyjwt = require('./middleware/verifyjwt')
 const logout = require('./controllers/logout')
@@ -20,6 +20,8 @@ const collegeget = require("./controllers/collegeget");
 const {getCert, uploadCert, deleteCert} = require("./controllers/certificates");
 const { submit, getFreezed } = require("./controllers/submit");
 const student_count = require("./controllers/input");
+
+router.post("/resetPassword",resetpass);
 
 router.get("/forma", verifyjwt,forma);
 router.post("/forma", verifyjwt,forma);

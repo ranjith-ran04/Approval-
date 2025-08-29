@@ -7,23 +7,29 @@ async function changePassword(req, res) {
   try {
     const [results] = await db.query(query, [collegeCode]);
     const data = results[0];
-    console.log(data);
+    // console.log(data);
     const isMatch = bcrypt.compareSync(oldPassword, data.pass);
     if (!isMatch && data.pass !== oldPassword) {
       return res.status(404).json({ msg: "user not found" });
     }
     const hashedNewPassword = bcrypt.hashSync(newPassword, 10);
-    console.log(hashedNewPassword);
+    // console.log(hashedNewPassword);
     query = "update user_login set pass = ?,changed = ? where c_code = ?;";
     try {
-        console.log('hi');
-      const [result] = await db.query(query, [hashedNewPassword, 1, collegeCode]);
-      console.log(result);
+      // console.log('hi');
+      const [result] = await db.query(query, [
+        hashedNewPassword,
+        1,
+        collegeCode,
+      ]);
+      // console.log(result);
       if (result.affectedRows === 0)
         return res.status(500).json({ msg: "error no affected rows" });
       res.status(200).json({ msg: "successfully updated" });
     } catch (err) {
-      return res.status(500).json({ msg: "error in change update query",err:err.message });
+      return res
+        .status(500)
+        .json({ msg: "error in change update query", err: err.message });
     }
   } catch (err) {
     return res.status(500).json({ msg: "error in change select query" });
@@ -39,4 +45,20 @@ function fetchCode(req, res) {
   }
 }
 
-module.exports = { changePassword, fetchCode };
+const resetpass = async (req, res) => {
+  try {
+    const { newPassword, collegeCode } = req.body;
+    const hashedNewPassword = bcrypt.hashSync(newPassword, 10);
+    // console.log(hashedNewPassword);
+    query = "update user_login set pass = ?,changed = ? where c_code = ?;";
+    const [result] = await db.query(query, [hashedNewPassword, 1, collegeCode]);
+    // console.log(db.query,[result]);
+    if (result.affectedRows === 0)
+      return res.status(500).json({ msg: "error no affected rows" });
+    res.clearCookie("token", { httpOnly: true, secure: false });
+    res.status(200).json({ msg: "successfully updated" });
+  } catch (err) {
+    return res.status(500).json({ sqlErr: "Query error", err: err });
+  }
+};
+module.exports = { changePassword, fetchCode, resetpass };

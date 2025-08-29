@@ -8,7 +8,7 @@ const { footer } = require("./pageFrame");
 const formd = async (req, res) => {
   var c_code;
   if (req.user.counsellingCode) {
-    console.log("code", req.user.cousellingCode);
+    // console.log("code", req.user.cousellingCode);
     c_code = req.user.counsellingCode;
     if (!c_code) return res.status(404).json({ msg: "collgecode not found" });
   } else {
@@ -58,7 +58,7 @@ const formd = async (req, res) => {
         `;
 
       const [students] = await db.query(studentQuery, [c_code, branch.BRANCH]);
-      console.log(students);
+      // console.log(students);
       branchData.push({
         branch_name: branch.NAME,
         students,

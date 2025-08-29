@@ -17,7 +17,7 @@ async function form_tnlea(req, res) {
       "SELECT freezed FROM college_info WHERE c_code = ?",
       [allot_coll_code]
     );
-    // console.log(result)
+    // // console.log(result)
   } catch (err) {
     return res.status(500).json({ msg: "query error" });
   }
@@ -36,7 +36,7 @@ async function form_tnlea(req, res) {
     doc.pipe(res);
 
     doc.on("pageAdded", () => {
-      currentY = doc.page.margins.top +100;
+      currentY = doc.page.margins.top + 100;
     });
     // doc.fontSize(14).text("hii");
     doc.registerFont("Arial-Bold", arialBold);
@@ -47,10 +47,10 @@ async function form_tnlea(req, res) {
       { label: "NAME", width: 130 },
       { label: "COMM", width: 50 },
       { label: "FIRST GRADUATE", width: 60 },
-      { label: "FEE CONSESSION", width: 70 },
-      { label: "AICTE TFW", width: 40 },
+      { label: "FEE CONSESSION", width: 90 },
+      // { label: "AICTE TFW", width: 40 },
       { label: "AGGR %", width: 40 },
-      { label: "CATEGORY", width: 60 },
+      { label: "CATEGORY", width: 70 },
     ];
     const freezed = collegeRows.length ? collegeRows[0].freezed : "0";
     const padding = 3;
@@ -72,8 +72,8 @@ async function form_tnlea(req, res) {
         }
       });
       maxHeight += 2 * padding;
-      // console.log(maxHeight)
-      // console.log(maxHeight)
+      // // console.log(maxHeight)
+      // // console.log(maxHeight)
       let x = doc.page.margins.left;
       columns.forEach((col) => {
         doc.rect(x + 10, yPosition, col.width, maxHeight).stroke();
@@ -115,7 +115,7 @@ async function form_tnlea(req, res) {
         row.community,
         row.fg === 1 ? "YES" : "NO",
         row.Availed_fg === 1 ? "YES" : "NO",
-        row.aicte_tfw === 1 ? "YES" : "NO",
+        // row.aicte_tfw === 1 ? "YES" : "NO",
         aggr,
         row.hsc_group,
       ];
@@ -171,7 +171,7 @@ async function form_tnlea(req, res) {
           doc.page.height - doc.page.margins.bottom
         ) {
           doc.addPage();
-          currentY = doc.page.margins.top + 100;  
+          currentY = doc.page.margins.top + 100;
         }
 
         doc
@@ -192,7 +192,7 @@ async function form_tnlea(req, res) {
         currentY + rowHeight + 30 > doc.page.height - doc.page.margins.bottom
       ) {
         doc.addPage();
-        currentY = doc.page.margins.top + 100;  
+        currentY = doc.page.margins.top + 100;
         doc
           .font("Arial-Bold")
           .fontSize(12)

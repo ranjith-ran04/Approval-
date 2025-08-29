@@ -9,7 +9,7 @@ const { footer } = require("./pageFrame");
 async function formb(req, res) {
   var collegeCode;
   if (req.user.counsellingCode) {
-    console.log("code", req.user.cousellingCode);
+    // console.log("code", req.user.cousellingCode);
     collegeCode = req.user.counsellingCode;
     if (!collegeCode)
       return res.status(404).json({ msg: "collgecode not found" });
@@ -34,7 +34,7 @@ async function formb(req, res) {
   } catch (err) {
     return res.status(500).json({ msg: "Error in query" });
   }
-  
+
   const freezed = collegeRows.length ? collegeRows[0].freezed : "0";
 
   res.setHeader("Content-Type", "application/pdf");
@@ -66,9 +66,9 @@ async function formb(req, res) {
     COM: 28,
     BOARD: 40,
     SEM: 50,
-    PERCENT: 20,
-    FG: 20,
-    AFW: 25,
+    PERCENT: 30,
+    FG: 30,
+    // AFW: 25,
   };
   const sems = [
     "SEM-1",
@@ -108,7 +108,7 @@ async function formb(req, res) {
     [
       { label: "%", width: columnWidths.PERCENT },
       { label: "FG", width: columnWidths.FG },
-      { label: "AFW", width: columnWidths.AFW },
+      // { label: "AFW", width: columnWidths.AFW },
     ].forEach((item) => {
       drawCell(item.label, x, y, item.width, headerHeight * 2, false);
       x += item.width;
@@ -263,14 +263,14 @@ async function formb(req, res) {
       drawCell(student.fg ? "Y" : "N", x, y, columnWidths.FG, rowHeight, true);
       x += columnWidths.FG;
 
-      drawCell(
-        student.afw ? "Y" : "N",
-        x,
-        y,
-        columnWidths.AFW,
-        rowHeight,
-        true
-      );
+      // drawCell(
+      //   student.afw ? "Y" : "N",
+      //   x,
+      //   y,
+      //   columnWidths.AFW,
+      //   rowHeight,
+      //   true
+      // );
     }
   });
   const remainingHeight = doc.page.height - doc.y - doc.page.margins.bottom;
@@ -278,8 +278,8 @@ async function formb(req, res) {
   if (remainingHeight < extraSpaceNeeded) {
     doc.addPage();
   }
-  footer("B", doc, collegeCode,freezed);
-  console.log("form b completed");
+  footer("B", doc, collegeCode, freezed);
+  // console.log("form b completed");
 
   doc.end();
 }

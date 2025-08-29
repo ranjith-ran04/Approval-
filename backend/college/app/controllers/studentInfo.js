@@ -11,12 +11,14 @@ async function checkApplnNo(req, res) {
     }
     const stdQuery = `select count(*) as count from student_info where c_code =? and a_no = ?`;
     const result = await db.query(stdQuery, [collegeCode, appln_no]);
-    // console.log("result",result[0][0].count);
-    if(result[0][0].count>0){
-      return res.status(200).json({message:"Appln_no already exists",valid:false});
+    // // console.log("result",result[0][0].count);
+    if (result[0][0].count > 0) {
+      return res
+        .status(200)
+        .json({ message: "Appln_no already exists", valid: false });
     }
-    
-    res.status(200).json({message:"Valid Appln_no",valid:true});
+
+    res.status(200).json({ message: "Valid Appln_no", valid: true });
   } catch (err) {
     return res.status(500).json({ err: "Query error", sqlErr: err.message });
   }
@@ -44,10 +46,14 @@ async function student(req, res) {
 
     const certificatesList = [
       { id: 1, name: "Community Certificate", key: "community" },
-      {id: 2,name: "Provisional/Degree Certificate",key: "provisionalCertificate",},
+      {
+        id: 2,
+        name: "Provisional/Degree Certificate",
+        key: "provisionalCertificate",
+      },
       { id: 3, name: "Consolidated Mark Sheet", key: "consolidate" },
       { id: 4, name: "Transfer Certificate", key: "transferCert" },
-      {id: 5,name: "First Graduate Certificate",key: "fg",},
+      { id: 5, name: "First Graduate Certificate", key: "fg" },
     ].map((cert) => {
       const file = files.find((f) => f.suffix === cert.key.split("_")[0]);
       return {
@@ -115,7 +121,7 @@ async function editDiscontinuedStudent(req, res) {
         .status(400)
         .json({ err: "collegeCode and application number is required" });
     }
-    const values = [NAME, APPROVE_STATE, TC_STATE, a_no]
+    const values = [NAME, APPROVE_STATE, TC_STATE, a_no];
     const editQuery = `update discontinued_info set NAME = ? ,APPROVE_STATE =? ,TC_STATE = ?  where reg_no=?`;
     await db.query(editQuery, values);
     res.status(200).json({ msg: "Student details updated successfully." });
@@ -149,11 +155,9 @@ async function deleteDiscontinuedStudent(req, res) {
     const a_no = req.body.appln_no;
 
     if (!collegeCode || !a_no) {
-      return res
-        .status(400)
-        .json({
-          err: "collegeCode and application number is required",
-        });
+      return res.status(400).json({
+        err: "collegeCode and application number is required",
+      });
     }
 
     const deleteQuery = `delete from discontinued_info where reg_no = ?`;
@@ -168,24 +172,32 @@ async function addStudentinfo(req, res) {
   try {
     const collegeCode = req.user.counsellingCode;
     const appln_no = req.body.app_no;
-    const b_code = req.body.b_code; 
-    const studentData = req.body.studentData; 
-    
-    
+    const b_code = req.body.b_code;
+    const studentData = req.body.studentData;
+
     if (!collegeCode || !appln_no || !studentData || !b_code) {
       return res
         .status(400)
-        .json({ err: "collegeCode, appln_no, and student details are required" });
+        .json({
+          err: "collegeCode, appln_no, and student details are required",
+        });
     }
-    
-    const insertData = { ...studentData, a_no: appln_no,b_code: b_code, c_code: collegeCode };
-    
+
+    const insertData = {
+      ...studentData,
+      a_no: appln_no,
+      b_code: b_code,
+      c_code: collegeCode,
+    };
+
     const keys = Object.keys(insertData);
     const values = Object.values(insertData);
-    
+
     const placeholders = keys.map(() => "?").join(", ");
-    const insertQuery = `INSERT INTO student_info (${keys.join(", ")}) VALUES (${placeholders})`;
-    
+    const insertQuery = `INSERT INTO student_info (${keys.join(
+      ", "
+    )}) VALUES (${placeholders})`;
+
     await db.query(insertQuery, values);
     res.status(200).json({ msg: "Student added successfully." });
   } catch (err) {
@@ -193,4 +205,13 @@ async function addStudentinfo(req, res) {
   }
 }
 
-module.exports = { checkApplnNo,student, editStudent, deleteStudent, addStudentinfo, dicontinuedStudent, editDiscontinuedStudent, deleteDiscontinuedStudent };
+module.exports = {
+  checkApplnNo,
+  student,
+  editStudent,
+  deleteStudent,
+  addStudentinfo,
+  dicontinuedStudent,
+  editDiscontinuedStudent,
+  deleteDiscontinuedStudent,
+};

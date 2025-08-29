@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import NavigationBar from "../../widgets/navigationBar/NavigationBar";
 import Alert from "../../widgets/alert/Alert";
 import axios from "axios";
-import { host ,adminhost} from "../../constants/backendpath";
+import { host, adminhost } from "../../constants/backendpath";
 
 const LoginForm = ({ admin }) => {
   const [formData, setFormData] = useState({ regNo: "", pwd: "" });
@@ -27,10 +27,12 @@ const LoginForm = ({ admin }) => {
   useEffect(() => {
     async function fetchLogin() {
       try {
-        const res = await axios.get(
-          `${admin?adminhost:host}login`,
-          { withCredentials: true }
-        );
+        const res = await axios.get(`${admin ? adminhost : host}login`, {
+          withCredentials: true,
+        });
+        if(res.status === 250 ){
+          navigate("/");
+        }
         if (res.status === 200) {
           navigate(`${admin ? "/admin/dashboard" : "/dashboard"}`, {
             state: {
@@ -39,7 +41,7 @@ const LoginForm = ({ admin }) => {
           });
         }
       } catch (error) {
-        console.log("msg", error);
+        console.warn(error);
       }
     }
     fetchLogin();
@@ -53,7 +55,7 @@ const LoginForm = ({ admin }) => {
     if (Object.keys(validationErrors).length === 0) {
       try {
         const response = await axios.post(
-          `${admin?adminhost:host}login`,
+          `${admin ? adminhost : host}login`,
           {
             counsellingCode: formData.regNo,
             password: formData.pwd,
@@ -116,12 +118,18 @@ const LoginForm = ({ admin }) => {
 
   const handleCloseAlert = () => {
     if (changed === 0) {
-      navigate("/changePassword", {
+      navigate("/resetPassword", {
+        state: {
+          collegeCode: formData.regNo,
+        },
+      });
+    } else if (changed === 2) {
+      navigate(`${admin ? "/admin/dashboard" : "/dashboard"}`, {
         state: {
           logged: true,
         },
       });
-    } else {
+    }else {
       navigate(`${admin ? "/admin/dashboard" : "/dashboard"}`, {
         state: {
           logged: true,

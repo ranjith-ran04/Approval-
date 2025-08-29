@@ -11,38 +11,39 @@ function AddBranch({ setCurrent }) {
 
   const handleCloseAlert = () => {
     setShowAlert(false);
-    if(alertType === "success") setCurrent(2);
+    if (alertType === "success") setCurrent(2);
   };
 
   const handleAddSubmit = async (data) => {
-    // console.log("Data being sent:", data);
+    // // console.log("Data being sent:", data);
 
     try {
-      
       const formData = {
         ...data,
       };
-      const res = await axios.post(`${host}branch`, formData,{withCredentials : true});
+      const res = await axios.post(`${host}branch`, formData, {
+        withCredentials: true,
+      });
 
       if (res.status === 200 || res.status === 201) {
-        console.log("Branch Added Successfully");
+        // console.log("Branch Added Successfully");
         setAlertType("success");
         setAlertMessage("Branch Added Successfully");
-      }else{
+      } else {
         setAlertType("error");
-        setAlertMessage("Something went wrong.");  
+        setAlertMessage("Something went wrong.");
       }
       setShowAlert(true);
     } catch (err) {
-      if(err.response?.status === 409){
+      if (err.response?.status === 409) {
         setAlertType("warning");
         setAlertMessage("Branch Already exists!");
-      }else{
-      setAlertType("error");
-      setAlertMessage("Server error. Please try again later.");
+      } else {
+        setAlertType("error");
+        setAlertMessage("Server error. Please try again later.");
       }
       setShowAlert(true);
-      console.error("Add Branch error: ",err);
+      console.error("Add Branch error: ", err);
     }
   };
   return (
