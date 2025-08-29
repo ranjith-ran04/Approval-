@@ -6,7 +6,7 @@ import Alert from "../alert/Alert";
 import { host } from "../../constants/backendpath";
 import axios from "axios";
 
-function Sidebar({ setCurrent, admin }) {
+function Sidebar({ setCurrent, admin ,current }) {
   const [submitted, setSubmitted] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
   const [alertStage, setAlertStage] = useState("");
@@ -327,14 +327,28 @@ function Sidebar({ setCurrent, admin }) {
   ];
 
   const [collapsed, setCollapsed] = useState(false);
-  const [activeAdminId, setActiveAdminId] = useState(0);
+const getActiveIdFromCurrent = (currentVal) => {
+  if (currentVal === 5) return 3;
+  if (currentVal === 6) return 4;
+  if (currentVal === 3 || currentVal === 4) return 2;
+  return currentVal;
+};
+
+const [activeAdminId, setActiveAdminId] = useState(
+  getActiveIdFromCurrent(Number(localStorage.getItem("current")) || 0)
+);
+
+useEffect(() => {
+  setActiveAdminId(getActiveIdFromCurrent(Number(current)));
+}, [current]);
+
 
   const toggleSidebar = () => setCollapsed((prev) => !prev);
 
   const handleItemClick = (index, action) => {
     if (!admin) {
       if(submitted){
-        if (index < 7) setActiveAdminId(index);
+        if (index === 0) setActiveAdminId(index);
       }
       else{
       if (index < 5) setActiveAdminId(index);}

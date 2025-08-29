@@ -9,22 +9,23 @@ import { useState, useRef, useEffect } from "react";
 import EditBranch from "./components/branch/EditBranch.jsx";
 import Notes from "./widgets/notes/Notes.jsx";
 import ScrollToTop from "./widgets/scrollToTop/ScrollToTop.jsx";
-import axios from "axios";
-import { host } from "./constants/backendpath.js";
 import { useNavigate, useLocation } from "react-router-dom";
 import StudentDetails from "./components/studentDetails/StudentDetails.jsx";
 import Discontinued from "./components/discontinued/Discontinued.jsx";
 
 function Dashboard() {
-  const [current, setCurrent] = useState(0);
+  const [current, setCurrent] = useState(Number(localStorage.getItem("current") || 0));
   const [state, setState] = useState({});
   const scrollRef = useRef();
   const location = useLocation();
   const logged = location.state?.logged || false;
+    useEffect(()=>{
+    localStorage.setItem("current",current)
+  },[current]);
 
   return logged ? (
     <div className="dashboard">
-      <Sidebar setCurrent={setCurrent} admin={false} />
+      <Sidebar setCurrent={setCurrent} admin={false} current={current}/>
       <div className="dashone">
         <NavigationBar
           text={`GOVERNMENT OF TAMILNADU

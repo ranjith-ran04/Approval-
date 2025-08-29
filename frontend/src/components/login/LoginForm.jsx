@@ -8,6 +8,7 @@ import axios from "axios";
 import { host, adminhost } from "../../constants/backendpath";
 
 const LoginForm = ({ admin }) => {
+  localStorage.setItem("current",0);
   const [formData, setFormData] = useState({ regNo: "", pwd: "" });
   const [focusedField, setFocusedField] = useState(null);
   const [showAlert, setShowAlert] = useState(false);
