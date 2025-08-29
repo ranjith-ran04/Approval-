@@ -84,6 +84,8 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
     "DIP-Part_time": { start: 1, end: 8 },
     "DIP-Sandwich_7": { start: 1, end: 7 },
     "DIP-Sandwich_8": { start: 1, end: 8 },
+    "DIP-Sandwich_7_lat": { start: 3, end: 7 },
+    "DIP-Sandwich_8_lat": { start: 3, end: 8 },
     BSC: { start: 1, end: 6 },
   };
 
@@ -99,7 +101,6 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
         casteListModule = (await import("../../constants/bcm.json")).default;
         break;
       case "SC":
-        console.log("sc");
         casteListModule = (await import("../../constants/sc.json")).default;
         break;
       case "SCA":
@@ -158,8 +159,8 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
       });
       setCertificates(merged);
       // // console.log(merged);
-      console.log(student[0].community);
-      console.log(studentData.maths_studied);
+      // console.log(student[0].community);
+      // console.log(studentData.maths_studied);
       await caste_drop(student[0].community);
     } catch (err) {
       // console.log(err);
@@ -300,69 +301,72 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
       });
     }
   };
-
   const handleUpdate = async () => {
-    // // console.log("inside handle update");
     setShowAlert(false);
+
     try {
       if (Object.keys(changedFields).length === 0) {
         setShowAlert(true);
         setAlertMessage("No Changes detected.");
-        // setAlertStage("success");
         setAlertType("warning");
-        setAlertOkAction(() => () => {
-          setShowAlert(false);
-        });
+        setAlertOkAction(() => () => setShowAlert(false));
         return;
       }
-      alert(validateFields());
+
+      const range = semesterRange[studentData.hsc_group] || {
+        start: 0,
+        end: -1,
+      };
+      const updatedData = { ...changedFields };
+
+      const allSemesterNums = Array.from({ length: 8 }, (_, i) => i + 1);
+
+      allSemesterNums.forEach((sem) => {
+        ["max_", "obt_"].forEach((prefix) => {
+          const key = `${prefix}${sem}`;
+          if (sem < range.start || sem > range.end) {
+            updatedData[key] = 0;
+          } else if (!(key in updatedData)) {
+            updatedData[key] = studentData[key] || 0;
+          }
+        });
+      });
+
       if (!validateFields()) {
         setShowAlert(true);
-        setAlertStage("warnin");
+        setAlertStage("warning");
         setAlertMessage("Please fill the details correctly!");
         setAlertType("warning");
-        setAlertOkAction(() => () => {
-          setShowAlert(false);
-        });
-      } else {
-        const response = await axios.put(
+        setAlertOkAction(() => () => setShowAlert(false));
+        return;
+      }
+      setShowAlert(true);
+      setAlertStage("confirm");
+      setAlertMessage("Confirm to update");
+      setAlertType("warning");
+      setAlertOkAction(() => async () => {
+        await axios.put(
           `${host}student`,
-          { changedFields, appln_no },
-          {
-            withCredentials: true,
-          }
+          { changedFields: updatedData, appln_no },
+          { withCredentials: true }
         );
 
-        if (response.status === 200) {
-          setchangedFields({});
-
-          setShowAlert(true);
-          setAlertStage("confirm");
-          setAlertMessage("Confirm to update");
-          setAlertType("warning");
-          setAlertOkAction(() => () => {
-            setShowAlert(true);
-            setAlertMessage("Updated Successfully");
-            setAlertStage("success");
-            setAlertType("success");
-            setAlertOkAction(() => () => {
-              setShowAlert(false);
-            });
-          });
-        }
-        console.log("error");
-      }
+        setchangedFields({});
+        setShowAlert(true);
+        setAlertMessage("Updated Successfully");
+        setAlertStage("success");
+        setAlertType("success");
+        setAlertOkAction(() => () => setShowAlert(false));
+      });
     } catch (error) {
-      // console.log(error);
       setShowAlert(true);
       setAlertMessage("Unable to update kindly try again...");
       setAlertStage("error");
       setAlertType("error");
-      setAlertOkAction(() => () => {
-        setShowAlert(false);
-      });
+      setAlertOkAction(() => () => setShowAlert(false));
     }
   };
+
   const handleStuDelete = async () => {
     setShowAlert(false);
     try {
@@ -543,11 +547,11 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
       if (/^\d*$/.test(value)) {
         setStudentData((prev) => ({
           ...prev,
-          [name]: String(updatedValue), 
+          [name]: String(updatedValue),
         }));
       }
     } else if (name == "fg") {
-      setStudentData((prev) => ({ ...prev, [name]: parseInt(updatedValue) }));
+      setStudentData((prev) => ({ ...prev, [name]: parseInt(updatedValue) , fg_approved : updatedValue }));
     } else {
       setStudentData((prev) => ({ ...prev, [name]: updatedValue }));
     }
@@ -637,6 +641,22 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
   //     setStudentData((prev) => ({ ...prev, maths_studied: "1" }));
   //   }
   // }, [studentData.course_type]);
+  useEffect(() => {
+    const range = semesterRange[studentData.hsc_group] || { start: 0, end: -1 };
+    const newStudentData = { ...studentData };
+
+    Object.keys(studentData).forEach((key) => {
+      const semMatch = key.match(/_(\d+)$/);
+      if (semMatch) {
+        const sem = parseInt(semMatch[1], 10);
+        if (sem < range.start || sem > range.end) {
+          delete newStudentData[key];
+        }
+      }
+    });
+
+    setStudentData(newStudentData);
+  }, [studentData.hsc_group]);
 
   return (
     <div className="collegewholediv">
@@ -1204,6 +1224,27 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
         </fieldset>
         <fieldset className="collegefieldset">
           <legend className="collegelegend">MARK DETAILS</legend>
+          {/* <h3
+            style={{
+              display: "inline-block",
+              marginLeft: "20px",
+              marginBottom: "10px",
+            }}
+          >
+            MAXIMUM MARKS
+          </h3>
+          <h3
+            style={{
+              display: "inline-block",
+              marginLeft: "420px",
+              marginBottom: "10px",
+            }}
+          >
+            OBTAINED MARKS
+          </h3> */}
+          {/* {studentData.hsc_group=='Regular'(
+            
+          )} */}
           <h3
             style={{
               display: "inline-block",
@@ -1222,9 +1263,6 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
           >
             OBTAINED MARKS
           </h3>
-          {/* {studentData.hsc_group=='Regular'(
-            
-          )} */}
           <div className="field-container">
             {(() => {
               const range = semesterRange[studentData.hsc_group] || {
@@ -1236,6 +1274,7 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
                 { length: range.end - range.start + 1 },
                 (_, i) => range.start + i
               );
+
               const allInputs = semesters.flatMap((sem) => [
                 <Inputfield
                   key={`max_${sem}`}

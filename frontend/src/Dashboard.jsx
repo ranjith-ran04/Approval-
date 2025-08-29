@@ -15,7 +15,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import StudentDetails from "./components/studentDetails/StudentDetails.jsx";
 import Discontinued from "./components/discontinued/Discontinued.jsx";
 
-function Dashboard() {
+function Dashboard(){
   const [current, setCurrent] = useState(0);
   const [state, setState] = useState({});
   const scrollRef = useRef();

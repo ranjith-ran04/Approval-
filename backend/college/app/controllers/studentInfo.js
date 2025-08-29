@@ -83,30 +83,46 @@ async function dicontinuedStudent(req, res) {
     return res.status(500).json({ err: "Query error", sqlErr: err.message });
   }
 }
-
 async function editStudent(req, res) {
   try {
     const collegeCode = req.user.counsellingCode;
     const a_no = req.body.appln_no;
-    const { changedFields } = req.body;
+    const changedFields = req.body.changedFields;
 
     if (!collegeCode || !a_no) {
-      return res
-        .status(400)
-        .json({ err: "collegeCode and application number is required" });
+      return res.status(400).json({
+        err: "collegeCode and application number are required",
+      });
     }
-    const keys = Object.keys(changedFields);
-    if (keys.length === 0) {
+
+    if (!changedFields || Object.keys(changedFields).length === 0) {
       return res.status(400).json({ err: "No fields to update" });
     }
+
+    const sanitizedFields = { ...changedFields };
+
+    const keys = Object.keys(sanitizedFields);
+    if (keys.length === 0) {
+      return res.status(400).json({ err: "No valid fields to update" });
+    }
+
     const setClause = keys.map((key) => `${key} = ?`).join(", ");
-    const values = keys.map((key) => changedFields[key]);
-    values.push(a_no);
-    const editQuery = `update student_info set ${setClause} where a_no=?`;
+    const values = keys.map((key) => sanitizedFields[key]);
+
+    values.push(a_no, collegeCode);
+
+    const editQuery = `UPDATE student_info 
+                       SET ${setClause} 
+                       WHERE a_no = ? AND c_code = ?`;
+
     await db.query(editQuery, values);
+
     res.status(200).json({ msg: "Student details updated successfully." });
   } catch (err) {
-    return res.status(500).json({ err: "Query error", sqlErr: err.message });
+    return res.status(500).json({
+      err: "Query error",
+      sqlErr: err.message,
+    });
   }
 }
 
