@@ -332,8 +332,11 @@ function Sidebar({ setCurrent, admin }) {
   const toggleSidebar = () => setCollapsed((prev) => !prev);
 
   const handleItemClick = (index, action) => {
-    if (!admin) {
-      if (index < 7) setActiveAdminId(index);
+    if (!admin && submitted) {
+      if (index < 1) setActiveAdminId(index);
+      if (action) action();
+    }else if(!admin) {
+      if (index < 5) setActiveAdminId(index);
       if (action) action();
     }
   };

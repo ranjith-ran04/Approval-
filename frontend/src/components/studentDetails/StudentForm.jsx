@@ -84,12 +84,12 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
     "DIP-Part_time": { start: 1, end: 8 },
     "DIP-Sandwich_7": { start: 1, end: 7 },
     "DIP-Sandwich_8": { start: 1, end: 8 },
-    "Bsc": { start: 1, end: 6 },
+    BSC: { start: 1, end: 6 },
   };
 
   const caste_drop = async (community) => {
     console.log(community);
-    
+
     let casteListModule = [];
     switch (community) {
       case "BC":
@@ -101,7 +101,6 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
       case "SC":
         console.log("sc");
         casteListModule = (await import("../../constants/sc.json")).default;
-        console.log(casteListModule);
         break;
       case "SCA":
         casteListModule = (await import("../../constants/sca.json")).default;
@@ -139,7 +138,7 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
       }
       setStudentData(student[0]);
       // // console.log(certificates);
-      console.log("Student raw:", student[0]);
+      // console.log("Student raw:", student[0]);
       // // console.log(result.data?.[0]?.[0]);
       const getCert = await axios.post(
         `${host}cert`,
@@ -160,6 +159,7 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
       setCertificates(merged);
       // // console.log(merged);
       console.log(student[0].community);
+      console.log(studentData.maths_studied);
       await caste_drop(student[0].community);
     } catch (err) {
       // console.log(err);
@@ -511,12 +511,12 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
   };
   // Extract just the code from backend value
   const casteCodeFromBackend = studentData.caste_name;
-  console.log(casteCodeFromBackend);
-  
+  // console.log(casteCodeFromBackend);
+
   // Find matching caste in JSON
   const matchedCaste = caste.find((c) => c.code === casteCodeFromBackend);
-  console.log(matchedCaste);
-  
+  // console.log(matchedCaste);
+
   // Build the value in CODE-NAME format from JSON
   const selectedValue = matchedCaste
     ? `${matchedCaste.code}-${matchedCaste.name}`
@@ -539,6 +539,13 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
       }));
 
       await caste_drop(value);
+    } else if (name === "annual_income") {
+      if (/^\d*$/.test(value)) {
+        setStudentData((prev) => ({
+          ...prev,
+          [name]: String(updatedValue), 
+        }));
+      }
     } else if (name == "fg") {
       setStudentData((prev) => ({ ...prev, [name]: parseInt(updatedValue) }));
     } else {
@@ -625,11 +632,11 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
     });
   }
   // // console.log("Before render catogory:", studentData.catogory);
-  useEffect(() => {
-    if (studentData.course_type !== "Bsc" && studentData.maths_studied) {
-      setStudentData((prev) => ({ ...prev, maths_studied: "" }));
-    }
-  }, [studentData.course_type]);
+  // useEffect(() => {
+  //   if (studentData.course_type !== "BSC" && studentData.maths_studied) {
+  //     setStudentData((prev) => ({ ...prev, maths_studied: "1" }));
+  //   }
+  // }, [studentData.course_type]);
 
   return (
     <div className="collegewholediv">
@@ -929,7 +936,7 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
                   })
                 }
                 classname={"field-block"}
-                value={studentData["otherState"]}
+                value={studentData.state}
                 error={error["otherState"]}
               />
             )}
@@ -962,7 +969,7 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
               classname={"field-block"}
               options={[
                 { label: "Diploma", key: "Diploma", value: "DIP" },
-                { label: "BSc", key: "BSC", value: "Bsc" },
+                { label: "BSc", key: "BSC", value: "BSC" },
                 { label: "Others", key: "OTHERS", value: "OTHERS" },
               ]}
               id={"QualifyingExam"}
@@ -1009,7 +1016,7 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
                 { label: "University", key: "University", value: "UNIVERSITY" },
                 // { label: "UIT", key: "UIT", value: "UIT" },
                 // { label: "UIO", key: "UIO", value: "UIO" },
-                { label: "Others", key: "Others", value: "others" },
+                { label: "Others", key: "Others", value: "OTHERS" },
               ]}
               value={studentData.name_of_board}
               onChange={handleChange}
@@ -1054,7 +1061,7 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
                   key: "Sandwich (8 Semesters)_lat",
                   value: "DIP-Sandwich_8_lat",
                 },
-                { label: "BSc", key: "BSC", value: "Bsc" },
+                { label: "BSc", key: "BSC", value: "BSC" },
               ]}
               id={"QualifyingExam"}
               value={studentData.hsc_group}
@@ -1070,8 +1077,8 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
               radiolabel="Maths Studied in 12th or Degree Level"
               classname="field-block"
               options={[
-                { label: "Yes", value: "1" },
-                { label: "No", value: "0" },
+                { label: "Yes", value: 1 },
+                { label: "No", value: 0 },
               ]}
               id="mathsstudied"
               htmlfor="mathsstudied"

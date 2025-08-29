@@ -32,7 +32,7 @@ async function formb(req, res) {
       [collegeCode]
     );
   } catch (err) {
-    return res.status(500).json({ msg: "Error in query" });
+    return res.status(500).json({ msg: "Error in query" , sqlErr : err});
   }
 
   const freezed = collegeRows.length ? collegeRows[0].freezed : "0";
