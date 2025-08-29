@@ -53,6 +53,7 @@ if (!collegecode) {
     
     const setClause = Object.keys(dbData).map(col => `${col} = ?`).join(", ");
     const values = Object.values(dbData);
+    console.log(values);
     console.log(setClause);
     const query = `UPDATE college_info SET ${setClause} WHERE c_code =${collegecode}`;
     values.push(collegecode);

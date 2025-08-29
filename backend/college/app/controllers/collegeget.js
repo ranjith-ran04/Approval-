@@ -37,7 +37,7 @@ async function collegeget(req,res){
             const field =columntofieldmap[column];
             if (field) {
                 if (["minority_status", "autonomous_status", "transport_facility", "b_accomodation", "g_accomodation"].includes(column)) {
-                    sendingdata[field] = value === 1 ? "Yes" : "No";
+                    sendingdata[field] = value == 1 ? "Yes" : "No";
                 } else {
                     sendingdata[field]=value;
                 }

@@ -17,7 +17,7 @@ const CollegeInfo = ({admin}) => {
   const[changedFields,setchangedFields]=useState({})
   
 
-const requiredFields = ["chairman","chairmancontact","principalname","principalcontact","address","taluk","district","constituency","pincode","collegephone","collegeemail","websitecollege","antiraggingNo","bankaccountno","bankname","minoritystatus", "autonomousstatus","distance","nearestrailway","distancefromrailway","transportfacility","transport","mintransportcharge","maxtransportcharge","accomodationavailableboys","hostelstaytypeboys","typeofmessboys","messbillboys","roomrentboys","electricityboys","cautiondepositboys",
+const requiredFields = ["principalname","principalcontact","address","taluk","district","constituency","pincode","collegephone","collegeemail","websitecollege","antiraggingNo","bankaccountno","bankname","minoritystatus", "autonomousstatus","distance","nearestrailway","distancefromrailway","transportfacility","transport","mintransportcharge","maxtransportcharge","accomodationavailableboys","hostelstaytypeboys","typeofmessboys","messbillboys","roomrentboys","electricityboys","cautiondepositboys",
   "establishmentboys",
   "admissionfeesboys",
   "accomodationavailablegirls",
@@ -30,48 +30,65 @@ const requiredFields = ["chairman","chairmancontact","principalname","principalc
   "establishmentgirls",
   "admissionfeesgirls"
 ];
+    const numericFieldsBoys = [
+      "messbillboys", "roomrentboys", "electricityboys", "cautiondepositboys", "establishmentboys", "admissionfeesboys"]
+      const numericFieldsGirls = [
+      "messbillgirls", "roomrentgirls", "electricitygirls", "cautiondepositgirls", "establishmentgirls", "admissionfeesgirls"];
+
+      const transportFields = [      "distance", "distancefromrailway",
+      "mintransportcharge", "maxtransportcharge",]
 const validateFields = () => {
   const newErrors = {};
   requiredFields.forEach((field) => {
     const value = formdata[field];
-
-    if (!value || value.trim() === "") {
+        if ((!value || value.trim() === "") && ((numericFieldsBoys.includes(field) && formdata.accomodationavailableboys === "Yes")
+          || (numericFieldsGirls.includes(field) && formdata.accomodationavailablegirls === "Yes") ||
+        (transportFields.includes(field) && formdata.transportfacility === "Yes"))
+        ) {
       newErrors[field] = "This field is required";
-      return; 
-    }
+      return; }
 
-    if (["collegenameWithdistrict", "chairman", "principalname", "district", "taluk", "constituency", "nearestrailway"].includes(field) &&/\d/.test(value)) {
+    if (["collegenameWithdistrict", "principalname", "district", "taluk", "constituency", "nearestrailway"].includes(field) &&/\d/.test(value)) {
       newErrors[field] = "Only letters are allowed";
     }
-    const telephone=["chairmancontact", "principalcontact"];
+    const telephone=["principalcontact"];
     if(telephone.includes(field)&&isNaN(value)){
       newErrors[field]="Only numbers are allowed";
     }
-    else if(telephone.includes(field) &&!/^\d{10}$/.test(value)) {
+    else if(telephone.includes(field) &&!/^[0-9]{8,12}$/.test(value)) {
       newErrors[field] = "Enter a valid 10-digit phone number";
     }
-    if("collegephone".includes(field) && !/^\d{3}-\d{8}$/.test(value)){
+    if(field === "collegephone" && !/^[0-9]{3}-[0-9]{3,10}$/.test(value)){
       newErrors[field] = "Enter a valid phone number";
     }
-    // if (field === "collegeemail" && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
-    //   newErrors[field] = "Invalid email format";
-    // }
+    if (field === "collegeemail" && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+      newErrors[field] = "Invalid email format";
+    }
     if (field === "pincode" && !/^\d{6}$/.test(value)) {
       newErrors[field] = "Enter a valid 6-digit pincode";
     }
-    const numericFields = [
-      "distance", "distancefromrailway",
-      "mintransportcharge", "maxtransportcharge",
-      "messbillboys", "roomrentboys", "electricityboys", "cautiondepositboys", "establishmentboys", "admissionfeesboys",
-      "messbillgirls", "roomrentgirls", "electricitygirls", "cautiondepositgirls", "establishmentgirls", "admissionfeesgirls"];
-    if (numericFields.includes(field) && isNaN(value)) {
-      newErrors[field] = "Only numbers are allowed";
+
+      if(transportFields.includes(field) && !/^[0-9]{1,4}$/.test(value) && formdata.transportfacility === "Yes"){
+        newErrors[field] = "Enter a valid value";
+      }
+      if((field === "distance" || field === "distancefromrailway") && (value<1 || value >100)){
+        newErrors[field] = "Enter a value Greater than 0 and less than 100";
+      }
+      if(formdata.mintransportcharge > formdata.maxtransportcharge){
+        newErrors["mintransportcharge"] = "Enter a valid minimum transport charge";
+        newErrors["maxtransportcharge"] = "Enter a valid maximum transport charge";
+      }
+    if (numericFieldsBoys.includes(field) && !/^[0-9][0-9]{1,4}$/.test(value) && formdata.accomodationavailableboys === "Yes") {
+      newErrors[field] = "Enter a valid Positive Number";
     }
     else if(field==="collegecode" && value.length!==1&&value.length!==4){
       newErrors[field]="College code must be 1 or 4";
     }
-    if(field === "bankaccountno" && !/^\d{6,14}$/.test(value)){
-      newErrors[field] = "invalid account no";
+    if(field === "bankaccountno" && (!/^[1-9][0-9]{6,14}$/.test(value) && !value === "NIL" && !value === "nil")){
+      newErrors[field] = "Invalid account no";
+    }
+    if(numericFieldsGirls.includes(field) && !/^[0-9][0-9]{1,4}$/.test(value) && formdata.accomodationavailablegirls === "Yes"){
+      newErrors[field] = "Enter a valid Positive Number";
     }
   });
   setError(newErrors);
@@ -79,13 +96,14 @@ const validateFields = () => {
     return true;
   }
   else{
+    // console.log(error);
     return false;
   }
 };
 const handleChange =(e)=>{
       const{name,value}=e.target;
       // console.log(formdata.minoritystatus);
-      console.log('hi')
+      // console.log('hi')
        setFormdata((prev)=>({
         ...prev,
         [name]:value,
@@ -94,7 +112,27 @@ const handleChange =(e)=>{
       setError((prevErrors) => {
     const updatedErrors = { ...prevErrors };
     if(name === "transportfacility" && value === "No"){
-      const fields = []
+      setFormdata((prev)=>({...prev,["nearestrailway"]:"NIL"}));
+      transportFields.forEach((field)=>{
+        setFormdata((prev)=>({...prev,[field]:'0'}));
+        setchangedFields((prev)=>({...prev,[field]:'0'}));
+    })
+    console.log(formdata);
+    }
+    if(name === "accomodationavailableboys" && value === "No"){
+      console.log('boys');
+      numericFieldsBoys.forEach((field)=>{
+        setFormdata((prev)=>({...prev,[field]:'0'}));
+        setchangedFields((prev)=>({...prev,[field]:'0'}));
+      })
+      // console.log('boys'+changedFields);
+    }
+    if(name === "accomodationavailablegirls" && value === "No"){
+      numericFieldsGirls.forEach((field)=>{
+        setFormdata((prev)=>({...prev,[field]:'0'}));
+        setchangedFields((prev)=>({...prev,[field]:'0'}));
+      })
+      // console.log(formdata);
     }
 
     if (updatedErrors[name]) {
@@ -102,37 +140,45 @@ const handleChange =(e)=>{
       if (value.trim() === "") {
         isValid = false;
       }
-          if("collegephone".includes(name) && !/^\d{3}-\d{8}$/.test(value)){
+          if(name === "collegephone" && !/^[0-9]{3,8}$/.test(value)){
       isValid = false;
     }
-      if(["collegenameWithdistrict", "chairman", "principalname", "district", "taluk", "constituency", "nearestrailway"].includes(name) &&/\d/.test(value)){
+      if(["collegenameWithdistrict", "principalname", "district", "taluk", "constituency", "nearestrailway"].includes(name) &&/\d/.test(value)){
         isValid = false;
       }
-      const telephone = ["chairmancontact", "principalcontact"];
+      const telephone = ["principalcontact"];
       if (telephone.includes(name)) {
-        if (isNaN(value) || !/^\d{10}$/.test(value)) {
+        if (!/^[0-9]{8,12}$/.test(value)) {
           isValid = false;
         }
       }
       if (name === "collegeemail" && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
         isValid = false;
       }
-      if (name === "pincode" && !/^\d{6}$/.test(value)) {
+      if (name === "pincode" && !/^[1-9][0-9]{6}$/.test(value)) {
         isValid = false;
       }
-      const numericFields = [
-        "collegecode", "distance", "distancefromrailway",
-        "mintransportcharge", "maxtransportcharge",
-        "messbillboys", "roomrentboys", "electricityboys", "cautiondepositboys", "establishmentboys", "admissionfeesboys",
-        "messbillgirls", "roomrentgirls", "electricitygirls", "cautiondepositgirls", "establishmentgirls", "admissionfeesgirls"
-      ];
-      if(numericFields.includes(name) && isNaN(value)) {
+
+      if(transportFields.includes(name) && !/^[0-9]{1,4}$/.test(value) && formdata.transportfacility === "Yes"){
+        isValid = false;
+     }
+      if((name === "distance" || name === "distancefromrailway") && (value<1 && value >100)){
         isValid = false;
       }
+      if(formdata.mintransportcharge > formdata.maxtransportcharge){
+        isValid = false;
+      }
+      if(numericFieldsBoys.includes(name) && !/^[1-9][0-9]{1,4}$/.test(value) && formdata.accomodationavailableboys === "Yes") {
+        isValid = false;
+      }
+      if(numericFieldsGirls.includes(name) && !/^[1-9][0-9]{1,4}$/.test(value) && formdata.accomodationavailablegirls === "Yes") {
+        isValid = false;
+      }
+
       if (name === "collegecode" && !(value.length === 1 || value.length === 4)) {
         isValid = false;
       }
-    if(name === "bankaccountno" && !/^\d{6,14}$/.test(value)){
+    if(name === "bankaccountno" && !/^[1-9][0-9]{6,14}$/.test(value)){
       isValid = false;
     }
 
@@ -166,7 +212,7 @@ const handleChange =(e)=>{
             setFormdata(res.data.data);
           }
           }
-          console.log(res);
+          // console.log(res);
           // if (res.status===200) {
           //   setFormdata(res.data.data);
           // }
@@ -179,6 +225,7 @@ const handleChange =(e)=>{
     const handleconfirmAlert=async()=>{
 
       setShowAlert(false);
+      console.log(changedFields);
       try{
         if(Object.keys(changedFields).length===0){
           setShowAlert(true);
@@ -230,6 +277,7 @@ const handleChange =(e)=>{
     const handleSubmit = (e) => {
       // e.preventDefault();
       const isValid=validateFields()
+      // console.log(isValid)
       if(isValid){
         setShowAlert(true);
         setAlertMessage("Are you sure to submit");
@@ -243,7 +291,7 @@ const handleChange =(e)=>{
         setAlertStage('validation')
       }
     };
-    console.log(formdata);
+    // console.log(formdata);
   return (
     <div className="collegewholediv">
       <div className='dropdown'>
@@ -348,7 +396,7 @@ const handleChange =(e)=>{
                   <Inputfield eltname={"maxtransportcharge"} type={"text"} label={"Max Transport Charge (Rs/Year)"} id={"maxtransportcharge"} htmlfor={"maxtransportcharge"} classname={"field-block"} error={error["maxtransportcharge"]} onchange={handleChange} value={formdata?.maxtransportcharge||""} disabled={formdata?.transportfacility !== "No"?false:true}/>
                   </div>
                 <div className='field-row'>
-                  <Inputfield eltname={"distance"} type={"text"} label={"Distance in KM's"} id={"distance"} htmlfor={"distance"} classname={"field-block"} error={error["distance"]} onchange={handleChange} value={formdata?.distance||""}/>
+                  <Inputfield eltname={"distance"} type={"text"} label={"Distance in KM's"} id={"distance"} htmlfor={"distance"} classname={"field-block"} error={error["distance"]} onchange={handleChange} value={formdata?.distance||""} disabled={formdata?.transportfacility !== "No"?false:true}/>
                   <Inputfield eltname={"nearestrailway"} type={"text"} label={"Nearest Railway Station"} id={"nearestrailway"} htmlfor={"nearestrailway"} classname={"field-block"} error={error["nearestrailway"]} onchange={handleChange} value={formdata?.nearestrailway||""} disabled={formdata?.transportfacility !== "No"?false:true}/>
               </div>
               <div className="field-row-single">
@@ -369,7 +417,7 @@ const handleChange =(e)=>{
               </div>
 
               <div className='field-row'>
-              <Inputfield eltname={"typeofmessboys"} type={"radio"} radiolabel={"Type of Mess"} classname={"field-block"} options={[{ label: "Veg", value: "Veg" }, { label: "Non Veg", value: "Non Veg" }, { label: "Both", value: "Both" }]} error={error["typeofmessboys"]} onchange={handleChange} value={formdata?.typeofmessboys||""} disabled={formdata?.accomodationavailableboys !=="No"?false:true}/>
+              {formdata?.accomodationavailableboys !=="No" && <Inputfield eltname={"typeofmessboys"} type={"radio"} radiolabel={"Type of Mess"} classname={"field-block"} options={[{ label: "Veg", value: "Veg" }, { label: "Non Veg", value: "Non Veg" }, { label: "Both", value: "Both" }]} error={error["typeofmessboys"]} onchange={handleChange} value={formdata?.typeofmessboys||""}/>}
               <Inputfield eltname={"messbillboys"} type={"text"} label={"Mess Bill (Rs/Month)"} id={"messbillboys"} htmlfor={"messbillboys"} classname={"field-block"} error={error["messbillboys"]} onchange={handleChange} value={formdata?.messbillboys||""} disabled={formdata?.accomodationavailableboys !=="No"?false:true}/>
               </div>
               <div className='field-row'>
@@ -399,7 +447,7 @@ const handleChange =(e)=>{
               </div>
 
               <div className='field-row'>
-              <Inputfield eltname={"typeofmessgirls"} type={"radio"} radiolabel={"Type of Mess"} classname={"field-block"} options={[{ label: "Veg", value: "Veg" }, { label: "Non Veg", value: "Non Veg" }, { label: "Both", value: "Both" }]} error={error["typeofmessgirls"]} onchange={handleChange} value={formdata?.typeofmessgirls||""} disabled={formdata?.accomodationavailablegirls !=="No"?false:true}/>
+              {formdata?.accomodationavailablegirls !== "No" && <Inputfield eltname={"typeofmessgirls"} type={"radio"} radiolabel={"Type of Mess"} classname={"field-block"} options={[{ label: "Veg", value: "Veg" }, { label: "Non Veg", value: "Non Veg" }, { label: "Both", value: "Both" }]} error={error["typeofmessgirls"]} onchange={handleChange} value={formdata?.typeofmessgirls||""} disabled={formdata?.accomodationavailablegirls !=="No"?false:true}/>}
               <Inputfield eltname={"messbillgirls"} type={"text"} label={"Mess Bill (Rs/Month)"} id={"messbillgirls"} htmlfor={"messbillgirls"} classname={"field-block"} error={error["messbillgirls"]} onchange={handleChange} value={formdata?.messbillgirls||""} disabled={formdata?.accomodationavailablegirls !=="No"?false:true}/>
               </div>
 

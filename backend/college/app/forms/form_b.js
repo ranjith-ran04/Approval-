@@ -217,7 +217,7 @@ async function formb(req, res) {
           { key: "SNO", value: index + 1 },
           { key: "APP_NO", value: student.appln_no },
           { key: "REG_NO", value: student.reg_no },
-          { key: "QUOTA", value: student.category === "GOVERNMENT"?"GOVT":"MANG" },
+          { key: "QUOTA", value: student.category === "GOVERNMENT"?"GOVT":"MANT" },
           { key: "NAME", value: student.name },
           { key: "NAT", value: student.nat },
           { key: "COM", value: student.com },
