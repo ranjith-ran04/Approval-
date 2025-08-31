@@ -115,8 +115,7 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
       case "OC": // Only Others for Open Category
       default: // Only Others when nothing matches
         casteListModule = [{ code: "others", name: "" }];
-        setCastes(casteListModule);
-        return;
+        break;
     }
     setCastes(casteListModule);
   };
@@ -160,7 +159,7 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
       });
       setCertificates(merged);
       // // console.log(merged);
-      // console.log(student[0].community);
+      console.log(student[0].community);
       // console.log(studentData.maths_studied);
       await caste_drop(student[0].community);
       // console.log(student[0].religion);
@@ -824,7 +823,7 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
             />
           </div>
           <div className="field-row">
-            {studentData.religion && <Inputfield
+            <Inputfield
               eltname={"religion"}
               type={"dropdown"}
               label={"Religion"}
@@ -838,9 +837,9 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
                 { label: "Christian", key: "Christian", value: "Christian" },
                 { label: "Others", key : "Others", value: "Others" },
               ]}
-              value={studentData.religion}
+              value={studentData?.religion || ""}
               error={error["religion"]}
-            />}
+            />
             {(studentData.religion === "Hindu" ||
               studentData.religion === "Christian") && (
               <Inputfield
@@ -1001,7 +1000,7 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
         <fieldset className="collegefieldset">
           <legend className="collegelegend">ACADEMIC DETAILS</legend>
           <div className="field-row">
-            {studentData.qualifying_exam && <Inputfield
+             <Inputfield
               eltname={"qualifying_exam"}
               type={"dropdown"}
               label={"Qualifying Examination"}
@@ -1012,11 +1011,11 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
                 { label: "Others", key: "OTHERS", value: "OTHERS" },
               ]}
               id={"QualifyingExam"}
-              value={studentData.qualifying_exam}
+              value={studentData?.qualifying_exam || ""}
               htmlfor={"QualifyingExam"}
               onChange={handleChange}
               error={error.qualifying_exam}
-            />}
+            />
             <Inputfield
               eltname={"year_of_passing"}
               type={"dropdown"}
@@ -1042,7 +1041,7 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
               onChange={handleChange}
               error={error.univ_reg_no}
             />
-            {studentData.name_of_board && <Inputfield
+            <Inputfield
               eltname={"name_of_board"}
               type={"dropdown"}
               label={"Board of Examination"}
@@ -1057,10 +1056,10 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
                 // { label: "UIO", key: "UIO", value: "UIO" },
                 { label: "Others", key: "Others", value: "OTHERS" },
               ]}
-              value={studentData.name_of_board}
+              value={studentData?.name_of_board || ""}
               onChange={handleChange}
               error={error.name_of_board}
-            />}
+            />
           </div>
           <div className="field-row">
             <Inputfield
@@ -1483,18 +1482,18 @@ const CategorySection = ({ studentData, handleChange, error, clicked }) => {
           { label: "NRI", value: "NRI" },
         ];
 
-  return (<>
-    {studentData.catogory && <Inputfield
+  return (
+     <Inputfield
       label={"CATEGORY"}
       id={"CATEGORY"}
       eltname={"catogory"}
       type={"dropdown"}
       htmlfor={"CATEGORY"}
       options={options}
-      value={studentData.catogory}
+      value={studentData?.catogory || ""}
       onChange={handleChange}
       error={error["CATEGORY"]}
-    />}</>
+    />
   );
 };
 
