@@ -17,6 +17,10 @@ const Inputfield = ({
 }) => {
   const handleChange = onchange;
   // console.log(value, eltname);
+  if(eltname === "maths_studied" ){
+    console.log(value);
+    console.log(options);
+  }
   // console.log();
   // console.log(typeof onChange);
   if (type === "radio") {
@@ -32,7 +36,7 @@ const Inputfield = ({
                 disabled={disabled}
                 value={option.value}
                 {...(value !== undefined
-                  ? { checked: value === option.value }
+                  ? { checked: value == option.value }
                   : {})}
                 {...(onchange
                   ? { onChange: handleChange }

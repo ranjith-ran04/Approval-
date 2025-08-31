@@ -32,7 +32,7 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
     "a_no",
     "catogory",
     "name",
-    "dob",
+    // "dob",
     // "files",
     "gender",
     "mobile",
@@ -197,6 +197,10 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
 
     const booleanFields = ["fg", "maths_studied"];
     const newErrors = {};
+    if(!studentData["dob"]  ||
+        studentData["dob"] === ""){
+      newErrors["dob"] = "This field is required";
+    }
     requiredFields.forEach((field) => {
       const value = studentData[field];
       if (
@@ -668,6 +672,7 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
           delete updatedErrors[name];
         }
       }
+      console.log(studentData.maths_studied);
 
       return updatedErrors;
     });
@@ -722,7 +727,7 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
           label={"Application Number"}
           type={"text"}
           placeholder={"Application Number"}
-          onChange={handleChange}
+          onchange={handleChange}
           value={appln_no}
           disabled={true}
         />
@@ -759,7 +764,7 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
               classname={"field-block"}
               value={studentData.name}
               error={error["name"]}
-              onChange={handleChange}
+              onchange={handleChange}
             />
             <Inputfield
               label={"Date of Birth"}
@@ -779,7 +784,7 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
               type={"radio"}
               radiolabel={"Gender :"}
               classname={"field-block"}
-              onChange={handleChange}
+              onchange={handleChange}
               options={[
                 { label: "Male", value: "Male" },
                 { label: "Female", value: "Female" },
@@ -794,7 +799,7 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
               label={"Mobile"}
               classname={"field-block"}
               id={"mobile"}
-              onChange={handleChange}
+              onchange={handleChange}
               htmlfor={"mobile"}
               value={studentData.mobile}
               error={error["mobile"]}
@@ -806,7 +811,7 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
               type={"text"}
               label={"Email"}
               classname={"field-block"}
-              onChange={handleChange}
+              onchange={handleChange}
               id={"email"}
               htmlfor={"email"}
               value={studentData.email}
@@ -818,7 +823,7 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
               label={"Aadhar No"}
               classname={"field-block"}
               id={"Aadhar"}
-              onChange={handleChange}
+              onchange={handleChange}
               htmlfor={"Aadhar"}
               value={studentData.aadharno}
               error={error["aadharno"]}
@@ -832,7 +837,7 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
               eltname={"nationality"}
               type={"radio"}
               radiolabel={"Nationality :"}
-              onChange={handleChange}
+              onchange={handleChange}
               classname={"field-block"}
               options={[
                 { label: "Indian", value: "Indian" },
@@ -848,9 +853,10 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
               eltname={"nativity"}
               type={"radio"}
               radiolabel={"Nativity :"}
-              onChange={(e) => {
+              onchange={(e) => {
                 const value = e.target.value;
                 console.log("Nativity changed to:", value);
+
 
                 if (value === "TN") {
                   // Tamil Nadu → auto-set state, district remains selectable
@@ -902,7 +908,7 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
               type={"dropdown"}
               label={"Religion"}
               classname={"field-block"}
-              onChange={handleChange}
+              onchange={handleChange}
               id={"Religion"}
               htmlfor={"Religion"}
               options={[
@@ -932,7 +938,7 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
                   { label: "SCA", key: "SCA", value: "SCA" },
                   { label: "DNC", key: "DNC", value: "DNC" },
                 ]}
-                onChange={handleChange}
+                onchange={handleChange}
                 value={studentData.community}
                 error={error["community"]}
               />
@@ -949,7 +955,7 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
                   { label: "OC", key: "OC", value: "OC" },
                   { label: "BCM", key: "BCM", value: "BCM" },
                 ]}
-                onChange={handleChange}
+                onchange={handleChange}
                 value={studentData.community}
                 error={error["community"]}
               />
@@ -968,7 +974,7 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
                 key: c.code,
                 value: c.code,
               }))}
-              onChange={handleChange}
+              onchange={handleChange}
               value={matchedCaste ? matchedCaste.code : ""}
               error={error["caste_name"]}
             />}
@@ -994,7 +1000,7 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
               id={"ParentOccupation"}
               htmlfor={"ParentOccupation"}
               value={studentData.parent_occupation}
-              onChange={handleChange}
+              onchange={handleChange}
               error={error["parent_occupation"]}
             />
           </div>
@@ -1006,19 +1012,19 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
               label={"State"}
               htmlfor={"state"}
               options={
-                studentData.nativity === "OTHERS"
-                  ? states.filter((s) => s.value !== "TAMILNADU")
-                  : [{ label: "Tamil Nadu", value: "TAMILNADU" }]
+                studentData.nativity === "Others"
+                  ? states.filter((s) => s.value !== "Tamilnadu")
+                  : [{ label: "Tamil Nadu", value: "Tamilnadu" }]
               }
-              onChange={(e) => handleDistrict(e)}
+              onchange={(e) => handleDistrict(e)}
               classname={"field-block"}
-              value={studentData.state}
+              value={studentData.nativity !== "Others"?"Tamilnadu":studentData.state}
               error={error["state"]}
-              disabled={studentData.nativity === "TN"}
+              disabled={studentData.nativity === "Tamilnadu"}
             />
 
             {/* District Dropdown (only for Tamil Nadu) */}
-            {studentData.nativity === "TN" && (
+            {studentData.nativity === "Tamilnadu" && (
               <Inputfield
                 eltname={"district"}
                 type={"dropdown"}
@@ -1026,7 +1032,7 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
                 label={"District"}
                 htmlfor={"district"}
                 options={tamilnaduDistricts}
-                onChange={(e)=>handleDistrict(e)}
+                onchange={(e)=>handleDistrict(e)}
                 classname={"field-block"}
                 value={studentData.district}
                 error={error["district"]}
@@ -1047,7 +1053,7 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
               id={"studied in TN"}
               htmlfor={"studied in TN"}
               value={studentData.hsc_tn}
-              onChange={handleChange}
+              onchange={handleChange}
               error={error.hsc_tn}
             />
           </div>
@@ -1068,7 +1074,7 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
               id={"QualifyingExam"}
               value={studentData?.qualifying_exam || ""}
               htmlfor={"QualifyingExam"}
-              onChange={handleChange}
+              onchange={handleChange}
               error={error.qualifying_exam}
             />
             <Inputfield
@@ -1080,7 +1086,7 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
               htmlfor={"YearOfPassing"}
               options={Yearlist}
               value={studentData.year_of_passing}
-              onChange={handleChange}
+              onchange={handleChange}
               error={error.year_of_passing}
             />
           </div>
@@ -1093,7 +1099,7 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
               id={"UnivRegNum"}
               htmlfor={"UnivRegNum"}
               value={studentData.univ_reg_no}
-              onChange={handleChange}
+              onchange={handleChange}
               error={error.univ_reg_no}
             />
             <Inputfield
@@ -1112,7 +1118,7 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
                 { label: "Others", key: "Others", value: "OTHERS" },
               ]}
               value={studentData?.name_of_board || ""}
-              onChange={handleChange}
+              onchange={handleChange}
               error={error.name_of_board}
             />
           </div>
@@ -1125,7 +1131,7 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
               // htmlfor="course_type"
               radiolabel={"Course Type"}
               classname={"field-block"}
-              // onChange={handleChange}
+              // onchange={handleChange}
               options={[
                 { label: "Regular", key: "Regular", value: "DIP-Regular" },
                 { label: "Lateral", key: "Lateral", value: "DIP-Lateral" },
@@ -1159,7 +1165,7 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
               id={"QualifyingExam"}
               value={studentData.hsc_group}
               htmlfor={"QualifyingExam"}
-              onChange={handleChange}
+              onchange={handleChange}
               error={error.hsc_group}
             />
           </div>
@@ -1176,7 +1182,7 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
               id="mathsstudied"
               htmlfor="mathsstudied"
               value={studentData.maths_studied}
-              onChange={handleChange}
+              onchange={handleChange}
               error={error["mathsstudied"]}
               disabled={[
                 "DIP-Regular",
@@ -1202,7 +1208,7 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
               id={"AnnualIncome"}
               htmlfor={"AnnualIncome"}
               value={studentData.annual_income}
-              onChange={handleChange}
+              onchange={handleChange}
               error={error.annual_income}
             />
             <Inputfield
@@ -1217,7 +1223,7 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
               id={"FirstGraduate"}
               htmlfor={"FirstGraduate"}
               value={studentData.fg}
-              onChange={handleChange}
+              onchange={handleChange}
               error={error.fg}
             />
           </div>
@@ -1233,7 +1239,7 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
               id={"AICTE Tuition Fee"}
               htmlfor={"AICTE Tuition Fee"}
               value={studentData.aicte_tfw}
-              onChange={handleChange}
+              onchange={handleChange}
               error={error.aicte_tfw}
             />
             <Inputfield
@@ -1249,7 +1255,7 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
               id={"PMS"}
               htmlfor={"PMS"}
               value={studentData.pms}
-              onChange={handleChange}
+              onchange={handleChange}
               error={error.pms}
             />
           </div> */}
@@ -1262,7 +1268,7 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
               id={"FGDistrict"}
               htmlfor={"FGDistrict"}
               options={tamilnaduDistricts}
-              onChange={handleChange}
+              onchange={handleChange}
               value={studentData.fg_district}
               error={error["FG Cert Issued District"]}
               disabled={studentData.fg === 0}
@@ -1275,7 +1281,7 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
               id={"FGCertificateNumber"}
               htmlfor={"FGCertificateNumber"}
               value={studentData.fg_no}
-              onChange={handleChange}
+              onchange={handleChange}
               error={error["FG Certificate Number"]}
               disabled={studentData.fg === 0}
             />
@@ -1289,7 +1295,7 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
               id={"fg fees"}
               htmlfor={"fg fees"}
               value={studentData.Amount}
-              onChange={handleChange}
+              onchange={handleChange}
               error={error["fg fees"]}
               disabled={studentData.fg === 0}
             />
@@ -1359,7 +1365,7 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
                   id={`sem${sem}max`}
                   htmlfor={`sem${sem}max`}
                   value={studentData[`max_${sem}`]}
-                  onChange={handleChange}
+                  onchange={handleChange}
                   error={error[`sem${sem}max`]}
                 />,
                 <Inputfield
@@ -1372,7 +1378,7 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
                   id={`sem${sem}obt`}
                   htmlfor={`sem${sem}obt`}
                   value={studentData[`obt_${sem}`]}
-                  onChange={handleChange}
+                  onchange={handleChange}
                   error={error[`sem${sem}obt`]}
                 />,
               ]);
