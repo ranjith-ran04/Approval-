@@ -153,6 +153,8 @@ async function editDiscontinuedStudent(req, res) {
   }
 }
 
+
+
 async function deleteStudent(req, res) {
   try {
     const collegeCode = req.user.counsellingCode;
