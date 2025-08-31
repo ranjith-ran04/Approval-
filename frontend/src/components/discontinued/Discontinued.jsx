@@ -306,7 +306,7 @@ const Discontinued = ({ admin, supp }) => {
               eltname={"appln_no"}
               type={"text"}
               placeholder={"Application Number"}
-              onChange={handleChange}
+              onchange={handleChange}
               value={appln_no}
               disabled={!add}
             />
@@ -338,7 +338,7 @@ const Discontinued = ({ admin, supp }) => {
                   value={studentData.NAME}
                   // error={error["candidatename"]}
                   required={true}
-                  onChange={handleChange}
+                  onchange={handleChange}
                 />
               </div>
               <div className="field-row">
@@ -346,7 +346,7 @@ const Discontinued = ({ admin, supp }) => {
                   eltname={"APPROVE_STATE"}
                   type={"radio"}
                   radiolabel={"Whether Approved By Dote ?"}
-                  onChange={handleChange}
+                  onchange={handleChange}
                   classname={"field-block"}
                   options={[
                     { label: "Yes", value: 1 },
@@ -362,7 +362,7 @@ const Discontinued = ({ admin, supp }) => {
                   eltname={"TC_STATE"}
                   type={"radio"}
                   radiolabel={"Whether TC issued ?"}
-                  onChange={handleChange}
+                  onchange={handleChange}
                   classname={"field-block"}
                   options={[
                     { label: "Yes", value: 1 },

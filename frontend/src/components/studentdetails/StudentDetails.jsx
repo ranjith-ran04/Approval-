@@ -69,6 +69,7 @@ function StudentDetails({ admin, supp }) {
     if (branch === "") {
       hideLoader();
       setClicked(0);
+      setAdd(false);
       setStudents([]);
       return;
     }
@@ -189,7 +190,7 @@ function StudentDetails({ admin, supp }) {
           />
         </div>
       )}
-      {add && (
+      {(add && selected !== "")&& (
         <div ref={addRef}>
           <AddInput
             add={setAdd}
