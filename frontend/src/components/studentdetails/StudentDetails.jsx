@@ -7,6 +7,7 @@ import "../college/CollegeInfo.css";
 import Button from "../../widgets/button/Button.jsx";
 import AddInput from '../../widgets/addinput/Input.jsx';
 import { useLoader } from "../../context/LoaderContext.jsx";
+import {useNavigate} from 'react-router-dom';
 
 function StudentDetails({admin,supp}) {
   const { showLoader, hideLoader} = useLoader();
@@ -19,6 +20,8 @@ function StudentDetails({admin,supp}) {
   const formRef = useRef(null);
   const addRef = useRef(null);
   const collegeCode = 5901;
+  const navigate = useNavigate();
+  
   async function handleFetch() {
     showLoader();
     try {
@@ -36,6 +39,7 @@ function StudentDetails({admin,supp}) {
       }
     } catch (error) {
       // console.log(error);
+      navigate('/')
     } finally {
       hideLoader();
     }

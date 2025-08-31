@@ -1,14 +1,17 @@
 import { host, adminhost } from "../../constants/backendpath";
 import axios from "axios";
 
+
 const handleForm = async (
+  navigate,
   endpoint,
   admin,
   collegeCode,
   list,
   approved,
   supp,
-  data
+  data,
+ 
 ) => {
   try {
     var res;
@@ -56,6 +59,9 @@ const handleForm = async (
   } catch (error) {
     if (error.response.status === 404) {
       alert("No details found");
+    }
+    if(error.response.status === 401){
+      navigate('/')
     }
     // console.log("error failed to send request", error);
   }

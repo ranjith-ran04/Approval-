@@ -10,13 +10,14 @@ const Inputfield = ({
   radiolabel,
   options = [],
   error,
-  onChange,
+  onchange,
   disabled,
   value,
   placeholder,
 }) => {
-  const handleChange = onChange;
-
+  const handleChange = onchange;
+  // console.log(value, eltname);
+  // console.log(typeof onchange);
   if (type === "radio") {
     return (
       <div className={classname}>
@@ -29,16 +30,16 @@ const Inputfield = ({
                 name={eltname}
                 disabled={disabled}
                 value={option.value}
-                // only set checked if value is explicitly provided (controlled)
-                {...(value !== undefined
-                  ? { checked: value === option.value }
-                  : {})}
-                // only attach onChange if provided; if checked is present but no onChange, make it explicit readOnly
-                {...(onChange
-                  ? { onChange: handleChange }
-                  : value !== undefined
-                  ? { readOnly: true } // suppress warning if someone passed value but forgot onChange
-                  : {})}
+                // {...(value !== undefined
+                //   ? { checked: value === option.value }
+                //   : {})}
+                // {...(onChange
+                //   ? { onChange: handleChange }
+                //   : value !== undefined
+                //   ? { readOnly: true }
+                //   : {})}
+                checked={value === option.value}
+                onChange={(e)=>onchange(e)}
               />
               {option.label}
             </label>
@@ -60,7 +61,7 @@ const Inputfield = ({
             name={eltname}
             disabled={disabled}
             placeholder={placeholder}
-            {...(onChange
+            {...(onchange
               ? {
                   value: value !== undefined ? value : "",
                   onChange: handleChange,
@@ -82,7 +83,7 @@ const Inputfield = ({
             id={id}
             name={eltname}
             disabled={disabled}
-            {...(onChange
+            {...(onchange
               ? {
                   value: value !== undefined ? value : "",
                   onChange: handleChange,

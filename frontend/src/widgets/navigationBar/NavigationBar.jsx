@@ -26,6 +26,7 @@ function NavigationBar({
         } else {
           Navigate("/");
           sessionStorage.setItem("notesShown", "");
+          localStorage.setItem("current",0);
         }
       }
     } catch (error) {
@@ -52,7 +53,7 @@ function NavigationBar({
       <div
         id="logo"
         onClick={() => {
-          login ? (login = true) : setCurrent(0);
+          login ? setCurrent(0) : (login = false) ;
         }}
       ></div>
       <div id="center">

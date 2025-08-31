@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { host } from "../../constants/backendpath";
 import { useLoader } from "../../context/LoaderContext";
+import {useNavigate} from 'react-router-dom';
 
 function Branch({ setCurrent, setState }) {
   const { showLoader, hideLoader } = useLoader();
@@ -14,6 +15,8 @@ function Branch({ setCurrent, setState }) {
   const [alertType, setAlertType] = useState("");
   const [alertMessage, setAlertMessage] = useState("");
   const [showIndex, setShowIndex] = useState(null);
+  
+  const navigate = useNavigate();
 
   const handleCancel = (index) => {
     setShowIndex(index);
@@ -35,12 +38,14 @@ function Branch({ setCurrent, setState }) {
       showLoader();
       try {
         const res = await axios.get(`${host}branch`, { withCredentials: true });
+        if(res.status === 200){
         setBranchData(res.data);
-        setError(false);
+        setError(false);}
       } catch (err) {
         console.error("Fetching data failed", err);
         setBranchData([]);
         setError(true);
+        navigate('/');
       } finally {
         hideLoader();
       }

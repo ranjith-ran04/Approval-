@@ -5,6 +5,7 @@ import Button from "../../widgets/button/Button";
 import Inputfield from "../../widgets/college/Inputfield";
 import { useLoader } from "../../context/LoaderContext";
 import Alert from "../../widgets/alert/Alert";
+import {useNavigate} from 'react-router-dom';
 
 const Discontinued = ({ admin, supp }) => {
   const [selected, setSelected] = useState("");
@@ -26,6 +27,7 @@ const Discontinued = ({ admin, supp }) => {
   const [alertMessage, setAlertMessage] = useState("");
   const [alertOkAction, setAlertOkAction] = useState(() => () => {});
   const [alertCancelAction, setAlertCancelAction] = useState(() => () => {});
+  const navigate = useNavigate();
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -160,8 +162,10 @@ const Discontinued = ({ admin, supp }) => {
       }
     } catch (error) {
       // console.log(error);
+      navigate('/');
     } finally {
         hideLoader();
+      
     }
   }
 
