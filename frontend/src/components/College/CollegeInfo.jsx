@@ -53,7 +53,10 @@ const validateFields = () => {
       newErrors[field] = "This field is required";
       return; }
 
-    if (["collegenameWithdistrict", "principalname", "district", "taluk", "constituency", "nearestrailway"].includes(field) &&/\d/.test(value)) {
+    if (["collegenameWithdistrict", "principalname", "district", "taluk", "constituency"].includes(field) &&/\d/.test(value)) {
+      newErrors[field] = "Only letters are allowed";
+    }
+    if(field === "nearstrailway" && formdata.transportfacility !== "No" && /\d/.test(value)){
       newErrors[field] = "Only letters are allowed";
     }
     const telephone=["principalcontact"];
@@ -76,10 +79,10 @@ const validateFields = () => {
       if(transportFields.includes(field) && !/^[0-9]{1,4}$/.test(value) && formdata.transportfacility === "Yes"){
         newErrors[field] = "Enter a valid value";
       }
-      if((field === "distance" || field === "distancefromrailway") && (value<1 || value >100)){
+      if((field === "distance" || field === "distancefromrailway") && (value<1 || value >100) && formdata.transportfacility === "Yes"){
         newErrors[field] = "Enter a value Greater than 0 and less than 100";
       }
-      if(formdata.mintransportcharge > formdata.maxtransportcharge){
+      if(formdata.mintransportcharge > formdata.maxtransportcharge && formdata.transportfacility === "Yes"){
         newErrors["mintransportcharge"] = "Enter a valid minimum transport charge";
         newErrors["maxtransportcharge"] = "Enter a valid maximum transport charge";
       }
@@ -116,29 +119,30 @@ const handleChange =(e)=>{
       setchangedFields((prev)=>({...prev,[name]:value}));
       setError((prevErrors) => {
     const updatedErrors = { ...prevErrors };
-    if(name === "transportfacility" && value === "No"){
-      setFormdata((prev)=>({...prev,["nearestrailway"]:"NIL"}));
-      transportFields.forEach((field)=>{
-        setFormdata((prev)=>({...prev,[field]:'0'}));
-        setchangedFields((prev)=>({...prev,[field]:'0'}));
-    })
-    console.log(formdata);
-    }
-    if(name === "accomodationavailableboys" && value === "No"){
-      console.log('boys');
-      numericFieldsBoys.forEach((field)=>{
-        setFormdata((prev)=>({...prev,[field]:'0'}));
-        setchangedFields((prev)=>({...prev,[field]:'0'}));
-      })
-      // console.log('boys'+changedFields);
-    }
-    if(name === "accomodationavailablegirls" && value === "No"){
-      numericFieldsGirls.forEach((field)=>{
-        setFormdata((prev)=>({...prev,[field]:'0'}));
-        setchangedFields((prev)=>({...prev,[field]:'0'}));
-      })
-      // console.log(formdata);
-    }
+  let updates = { [name]: value };
+
+  if (name === "accomodationavailableboys" && value === "No") {
+    let zeroFields = {};
+    numericFieldsBoys.forEach((field) => (zeroFields[field] = "0"));
+    updates = { ...updates, ...zeroFields };
+  }
+
+  if (name === "accomodationavailablegirls" && value === "No") {
+    let zeroFields = {};
+    numericFieldsGirls.forEach((field) => (zeroFields[field] = "0"));
+    updates = { ...updates, ...zeroFields };
+  }
+
+  if (name === "transportfacility" && value === "No") {
+        let zeroFields = {};
+    transportFields.forEach((field) => (zeroFields[field] = "0"));
+    updates = { ...updates, ...zeroFields};
+    updates ={...updates, nearestrailway:"NIL"}
+  }
+
+  // ✅ Apply all updates at once
+  setFormdata((prev) => ({ ...prev, ...updates }));
+  setchangedFields((prev) => ({ ...prev, ...updates }));
 
     if (updatedErrors[name]) {
       let isValid = true;
@@ -234,7 +238,7 @@ const handleChange =(e)=>{
     const handleconfirmAlert=async()=>{
 
       setShowAlert(false);
-      console.log(changedFields);
+      // console.log(changedFields);
       try{
         if(Object.keys(changedFields).length===0){
           setShowAlert(true);

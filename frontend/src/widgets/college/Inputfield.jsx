@@ -16,7 +16,7 @@ const Inputfield = ({
   placeholder,
 }) => {
   const handleChange = onchange;
-  console.log(value, eltname);
+  // console.log(value, eltname);
   // console.log();
   // console.log(typeof onchange);
   if (type === "radio") {
