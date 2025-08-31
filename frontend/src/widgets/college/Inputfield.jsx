@@ -16,7 +16,8 @@ const Inputfield = ({
   placeholder,
 }) => {
   const handleChange = onchange;
-  // console.log(value, eltname);
+  console.log(value, eltname);
+  // console.log();
   // console.log(typeof onchange);
   if (type === "radio") {
     return (
@@ -30,16 +31,16 @@ const Inputfield = ({
                 name={eltname}
                 disabled={disabled}
                 value={option.value}
-                // {...(value !== undefined
-                //   ? { checked: value === option.value }
-                //   : {})}
-                // {...(onChange
-                //   ? { onChange: handleChange }
-                //   : value !== undefined
-                //   ? { readOnly: true }
-                //   : {})}
-                checked={value === option.value}
-                onChange={(e)=>onchange(e)}
+                {...(value !== undefined
+                  ? { checked: value === option.value }
+                  : {})}
+                {...(onchange
+                  ? { onChange: handleChange }
+                  : value !== undefined
+                  ? { readOnly: true }
+                  : {})}
+                // checked={value === option.value}
+                // onChange={(e)=>onchange(e)}
               />
               {option.label}
             </label>

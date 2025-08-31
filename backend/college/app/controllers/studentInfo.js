@@ -62,6 +62,7 @@ async function student(req, res) {
         fileUrl: file?.url || null,
       };
     });
+    console.log(student);
     res.status(200).send({ student, certificates: certificatesList });
   } catch (err) {
     return res.status(500).json({ err: "Query error", sqlErr: err.message });

@@ -137,6 +137,7 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
         setStudentData({});
         return;
       }
+      // console.log(student[0]);
       setStudentData(student[0]);
       // // console.log(certificates);
       // console.log("Student raw:", student[0]);
@@ -527,16 +528,19 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
   };
   // Extract just the code from backend value
   const casteCodeFromBackend = studentData.caste_name;
+  console.log(studentData.caste_name);
   // console.log(casteCodeFromBackend);
 
   // Find matching caste in JSON
   const matchedCaste = caste.find((c) => c.code === casteCodeFromBackend);
+  console.log(matchedCaste);
   // console.log(matchedCaste);
 
   // Build the value in CODE-NAME format from JSON
   const selectedValue = matchedCaste
     ? `${matchedCaste.code}-${matchedCaste.name}`
     : "";
+    console.log(selectedValue);
   const handleChange = async (e) => {
     const { name, value } = e.target;
     // alert(value)

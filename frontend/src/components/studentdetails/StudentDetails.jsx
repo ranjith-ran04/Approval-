@@ -63,6 +63,7 @@ function StudentDetails({admin,supp}) {
     showLoader();
     setSelected(branch);
     if (branch === "") {
+      hideLoader();
       setClicked(0);
       setStudents([]);
       return;

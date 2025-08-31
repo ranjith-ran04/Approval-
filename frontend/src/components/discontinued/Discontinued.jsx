@@ -177,6 +177,7 @@ const Discontinued = ({ admin, supp }) => {
         if (branch === "") {
             setClicked(0);
             setStudents([]);
+            hideLoader();
             return;
         }
         try {
@@ -257,7 +258,7 @@ const Discontinued = ({ admin, supp }) => {
                 }}></Button>)}
             </div>
             {
-                !add && (
+                (!add && selected !== "") && (
                     <div className="student-table">
                         <div className="student-row">
                             <div className="student-header sno">S.No</div>
