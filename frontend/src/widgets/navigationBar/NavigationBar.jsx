@@ -53,7 +53,7 @@ function NavigationBar({
       <div
         id="logo"
         onClick={() => {
-          setCurrent(0);
+          login ? setCurrent(0) : (login = false) ;
         }}
       ></div>
       <div id="center">

@@ -5,6 +5,7 @@ import Button from '../../widgets/button/Button';
 import Alert from '../../widgets/alert/Alert';
 import Inputfield from '../../widgets/college/Inputfield';
 import {adminhost, host} from '../../../src/constants/backendpath';
+import {useNavigate} from 'react-router-dom';
 
 const CollegeInfo = ({admin}) => {
   const[selectedSection,setSelectedSection]=useState('All')
@@ -14,7 +15,9 @@ const CollegeInfo = ({admin}) => {
   const[formdata,setFormdata]=useState({})
   const[error,setError]=useState({})
   const[alertStage,setAlertStage]=useState('');
-  const[changedFields,setchangedFields]=useState({})
+  const[changedFields,setchangedFields]=useState({});
+
+  const navigate = useNavigate();
   
 
 const requiredFields = ["principalname","principalcontact","address","taluk","district","constituency","pincode","collegephone","collegeemail","websitecollege","antiraggingNo","bankaccountno","bankname","minoritystatus", "autonomousstatus","distance","nearestrailway","distancefromrailway","transportfacility","transport","mintransportcharge","maxtransportcharge","accomodationavailableboys","hostelstaytypeboys","typeofmessboys","messbillboys","roomrentboys","electricityboys","cautiondepositboys",
@@ -218,6 +221,7 @@ const handleChange =(e)=>{
           // }
         } catch (err) {
             console.log(err);
+            navigate('/')
         }
     };
     fetchCollegeData();

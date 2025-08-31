@@ -36,6 +36,7 @@ Tamilnadu Lateral Entry Direct Second Year B.E/B.Tech., Admissions Approval-2025
           setCurrent={setCurrent}
           admin={false}
           style={{ height: "70px" }}
+          login={logged}
         />
 
         <div className="dashboard-body" ref={scrollRef}>

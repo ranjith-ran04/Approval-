@@ -5,6 +5,7 @@ import handleForm from "../sidebar/pdfApi";
 import Alert from "../alert/Alert";
 import { host } from "../../constants/backendpath";
 import axios from "axios";
+import {useNavigate} from 'react-router-dom';
 
 function Sidebar({ setCurrent, admin ,current }) {
   const [submitted, setSubmitted] = useState(false);
@@ -13,6 +14,7 @@ function Sidebar({ setCurrent, admin ,current }) {
   const [alertType, setAlertType] = useState("");
   const [alertMessage, setAlertMessage] = useState("");
   const [alertOkAction, setAlertOkAction] = useState(() => () => {});
+  const navigate = useNavigate();
 
   const handlecloseAlert = () => {
     setShowAlert(false);
@@ -94,37 +96,37 @@ function Sidebar({ setCurrent, admin ,current }) {
       id: 5,
       iconId: "formAIcon",
       label: "Form A",
-      action: () => handleForm("forma"),
+      action: () => handleForm(navigate,"forma"),
     },
     {
       id: 6,
       iconId: "formBIcon",
       label: "Form B",
-      action: () => handleForm("formb"),
+      action: () => handleForm(navigate,"formb"),
     },
     {
       id: 7,
       iconId: "formCIcon",
       label: "Form C",
-      action: () => handleForm("formc"),
+      action: () => handleForm(navigate,"formc"),
     },
     {
       id: 8,
       iconId: "formDIcon",
       label: "Form D",
-      action: () => handleForm("formd"),
+      action: () => handleForm(navigate,"formd"),
     },
     {
       id: 9,
       iconId: "formFGIcon",
       label: "Form FG",
-      action: () => handleForm("formfg"),
+      action: () => handleForm(navigate,"formfg"),
     },
     {
       id: 10,
       iconId: "formLEAIcon",
       label: "Form LEA2025",
-      action: () => handleForm("formlea"),
+      action: () => handleForm(navigate,"formlea"),
     },
     {
       id: 11,
@@ -132,6 +134,7 @@ function Sidebar({ setCurrent, admin ,current }) {
       label: "Approved Details",
       action: () =>
         handleForm(
+          navigate,
           "formApprv",
           undefined,
           undefined,
@@ -147,6 +150,7 @@ function Sidebar({ setCurrent, admin ,current }) {
       label: "Not Approved Details",
       action: () =>
         handleForm(
+          navigate,
           "formApprv",
           undefined,
           undefined,

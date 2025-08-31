@@ -6,6 +6,7 @@ import StudentForm from "./StudentForm.jsx";
 import "../college/CollegeInfo.css";
 import Button from "../../widgets/button/Button.jsx";
 import AddInput from '../../widgets/addinput/Input.jsx';
+import {useNavigate} from 'react-router-dom';
 
 function StudentDetails({admin,supp}) {
   const [selected, setSelected] = useState("");
@@ -17,6 +18,8 @@ function StudentDetails({admin,supp}) {
   const formRef = useRef(null);
   const addRef = useRef(null);
   const collegeCode = 5901;
+  const navigate = useNavigate();
+  
   async function handleFetch() {
     try {
       var result;
@@ -33,6 +36,7 @@ function StudentDetails({admin,supp}) {
       }
     } catch (error) {
       // console.log(error);
+      navigate('/')
     }
   }
   useEffect(() => {
