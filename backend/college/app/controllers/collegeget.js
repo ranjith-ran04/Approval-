@@ -24,7 +24,7 @@ async function collegeget(req,res){
         return res.status(404).json({message:"Collegecode not found"})
      }
     }
-    console.log(collegecode);
+    // console.log(collegecode);
     const query=`select * from college_info where c_code=${collegecode};`
 
     // const collegename=collegenames.get(collegecode);
@@ -43,7 +43,7 @@ async function collegeget(req,res){
                 }
             }
         }
-        console.log(sendingdata)
+        // console.log(sendingdata)
         return res.status(200).json({data:sendingdata})
     }catch(err){
         console.log(err);
