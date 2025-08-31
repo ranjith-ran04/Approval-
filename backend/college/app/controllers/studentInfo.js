@@ -62,7 +62,7 @@ async function student(req, res) {
         fileUrl: file?.url || null,
       };
     });
-    console.log(student);
+    // console.log(student);
     res.status(200).send({ student, certificates: certificatesList });
   } catch (err) {
     return res.status(500).json({ err: "Query error", sqlErr: err.message });
@@ -77,7 +77,7 @@ async function dicontinuedStudent(req, res) {
     if (!collegeCode) {
       return res.status(400).json({ err: "collegeCode is required" });
     }
-    const stdQuery = `select NAME,CAST(APPROVE_STATE AS CHAR) as APPROVE_STATE, CAST(TC_STATE AS CHAR) as TC_STATE  from discontinued_info where collcode =? and reg_no = ?`;
+    const stdQuery = `select NAME,APPROVE_STATE, TC_STATE  from discontinued_info where collcode =? and reg_no = ?`;
     const result = await db.query(stdQuery, [collegeCode, appln_no]);
     res.status(200).send(result);
   } catch (err) {

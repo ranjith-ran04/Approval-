@@ -90,7 +90,7 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
   };
 
   const caste_drop = async (community) => {
-    console.log(community);
+    // console.log(community);
 
     let casteListModule = [];
     switch (community) {
@@ -163,7 +163,7 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
       // console.log(student[0].community);
       // console.log(studentData.maths_studied);
       await caste_drop(student[0].community);
-      console.log(student[0].religion);
+      // console.log(student[0].religion);
       
     } catch (err) {
       // console.log(err);
@@ -270,7 +270,7 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
       }
     });
     setError(newErrors);
-    console.log(newErrors);
+    // console.log(newErrors);
 
     if (Object.keys(newErrors).length === 0) {
       return true;
@@ -278,7 +278,7 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
       return false;
     }
   };
-  console.log(studentData.religion);
+  // console.log(studentData.religion);
   
   const handleAddStudent = () => {
     const noerrors = validateFields();
@@ -533,17 +533,17 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
   // Extract just the code from backend value
   const casteCodeFromBackend = studentData.caste_name;
   // console.log(studentData.caste_name);
-  console.log(casteCodeFromBackend);
+  // console.log(casteCodeFromBackend);
 
   // Find matching caste in JSON
   const matchedCaste = caste.find((c) => c.code === casteCodeFromBackend);
-  console.log(matchedCaste);
+  // console.log(matchedCaste);
 
   // Build the value in CODE-NAME format from JSON
   const selectedValue = matchedCaste
     ? `${matchedCaste.code}-${matchedCaste.name}`
     : "";
-    console.log(selectedValue);
+    // console.log(selectedValue); 
   const handleChange = async (e) => {
     const { name, value } = e.target;
     // alert(value)

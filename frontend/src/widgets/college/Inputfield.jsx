@@ -10,15 +10,15 @@ const Inputfield = ({
   radiolabel,
   options = [],
   error,
-  onchange,
+  onChange,
   disabled,
   value,
   placeholder,
 }) => {
-  const handleChange = onchange;
+  const handleChange = onChange;
   // console.log(value, eltname);
   // console.log();
-  // console.log(typeof onchange);
+  // console.log(typeof onChange);
   if (type === "radio") {
     return (
       <div className={classname}>
@@ -34,13 +34,13 @@ const Inputfield = ({
                 {...(value !== undefined
                   ? { checked: value === option.value }
                   : {})}
-                {...(onchange
+                {...(onChange
                   ? { onChange: handleChange }
                   : value !== undefined
                   ? { readOnly: true }
                   : {})}
                 // checked={value === option.value}
-                // onChange={(e)=>onchange(e)}
+                // onChange={(e)=>onChange(e)}
               />
               {option.label}
             </label>
@@ -62,7 +62,7 @@ const Inputfield = ({
             name={eltname}
             disabled={disabled}
             placeholder={placeholder}
-            {...(onchange
+            {...(onChange
               ? {
                   value: value !== undefined ? value : "",
                   onChange: handleChange,
@@ -84,7 +84,7 @@ const Inputfield = ({
             id={id}
             name={eltname}
             disabled={disabled}
-            {...(onchange
+            {...(onChange
               ? {
                   value: value !== undefined ? value : "",
                   onChange: handleChange,
