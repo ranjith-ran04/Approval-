@@ -280,7 +280,7 @@ const handleChange =(e)=>{
       }
       }
       catch(error){
-        console.log(error)
+        // console.log(error)
         setShowAlert(true);
         setAlertMessage("Unable to connnect to server...")
         setAlertStage('error')

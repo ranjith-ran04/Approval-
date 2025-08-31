@@ -46,7 +46,7 @@ async function collegeget(req,res){
         // console.log(sendingdata)
         return res.status(200).json({data:sendingdata})
     }catch(err){
-        console.log(err);
+        // console.log(err);
         return res.status(500).json({message:"query error",err})
     }
 }

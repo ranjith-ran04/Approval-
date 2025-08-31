@@ -31,11 +31,11 @@ if (!collegecode) {
 
     // console.log(collegecode);
     const data = req.body.changedFields;
-    console.log(data);
+    // console.log(data);
     if (!data || Object.keys(data).length === 0) {
         return res.status(400).json({ success: false, message: "No data provided" });
     } 
-    console.log("hi")
+    // console.log("hi")
     const dbData = {};
     for (const [field, value] of Object.entries(data)) {
         const column = fieldToColumnMap[field];
