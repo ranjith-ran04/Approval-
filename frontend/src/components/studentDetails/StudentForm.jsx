@@ -163,6 +163,8 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
       // console.log(student[0].community);
       // console.log(studentData.maths_studied);
       await caste_drop(student[0].community);
+      console.log(student[0].religion);
+      
     } catch (err) {
       // console.log(err);
     } finally {
@@ -276,6 +278,8 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
       return false;
     }
   };
+  console.log(studentData.religion);
+  
   const handleAddStudent = () => {
     const noerrors = validateFields();
     if (noerrors) {
@@ -528,13 +532,12 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
   };
   // Extract just the code from backend value
   const casteCodeFromBackend = studentData.caste_name;
-  console.log(studentData.caste_name);
-  // console.log(casteCodeFromBackend);
+  // console.log(studentData.caste_name);
+  console.log(casteCodeFromBackend);
 
   // Find matching caste in JSON
   const matchedCaste = caste.find((c) => c.code === casteCodeFromBackend);
   console.log(matchedCaste);
-  // console.log(matchedCaste);
 
   // Build the value in CODE-NAME format from JSON
   const selectedValue = matchedCaste
@@ -821,7 +824,7 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
             />
           </div>
           <div className="field-row">
-            <Inputfield
+            {studentData.religion && <Inputfield
               eltname={"religion"}
               type={"dropdown"}
               label={"Religion"}
@@ -833,11 +836,11 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
                 { label: "Hindu", key: "Hindu", value: "Hindu" },
                 { label: "Muslim", key: "Muslim", value: "Muslim" },
                 { label: "Christian", key: "Christian", value: "Christian" },
-                { label: "Others", value: "Others" },
+                { label: "Others", key : "Others", value: "Others" },
               ]}
               value={studentData.religion}
               error={error["religion"]}
-            />
+            />}
             {(studentData.religion === "Hindu" ||
               studentData.religion === "Christian") && (
               <Inputfield
@@ -880,7 +883,7 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
             )}
           </div>
           <div className="field-row">
-            <Inputfield
+            {caste.length > 0 &&<Inputfield
               eltname={"caste_name"}
               type={"dropdown"}
               label={"Caste Name"}
@@ -889,13 +892,13 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
               htmlfor={"CasteName"}
               options={caste.map((c) => ({
                 label: `${c.code}-${c.name}`,
-                key: `${c.code}-${c.name}`,
-                value: `${c.code}-${c.name}`,
+                key: c.code,
+                value: c.code,
               }))}
               onChange={handleChange}
-              value={selectedValue}
+              value={matchedCaste ? matchedCaste.code : ""}
               error={error["caste_name"]}
-            />
+            />}
             <Inputfield
               eltname={"parent_occupation"}
               type={"dropdown"}
@@ -998,7 +1001,7 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
         <fieldset className="collegefieldset">
           <legend className="collegelegend">ACADEMIC DETAILS</legend>
           <div className="field-row">
-            <Inputfield
+            {studentData.qualifying_exam && <Inputfield
               eltname={"qualifying_exam"}
               type={"dropdown"}
               label={"Qualifying Examination"}
@@ -1013,7 +1016,7 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
               htmlfor={"QualifyingExam"}
               onChange={handleChange}
               error={error.qualifying_exam}
-            />
+            />}
             <Inputfield
               eltname={"year_of_passing"}
               type={"dropdown"}
@@ -1039,7 +1042,7 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
               onChange={handleChange}
               error={error.univ_reg_no}
             />
-            <Inputfield
+            {studentData.name_of_board && <Inputfield
               eltname={"name_of_board"}
               type={"dropdown"}
               label={"Board of Examination"}
@@ -1057,7 +1060,7 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
               value={studentData.name_of_board}
               onChange={handleChange}
               error={error.name_of_board}
-            />
+            />}
           </div>
           <div className="field-row">
             <Inputfield
@@ -1480,8 +1483,8 @@ const CategorySection = ({ studentData, handleChange, error, clicked }) => {
           { label: "NRI", value: "NRI" },
         ];
 
-  return (
-    <Inputfield
+  return (<>
+    {studentData.catogory && <Inputfield
       label={"CATEGORY"}
       id={"CATEGORY"}
       eltname={"catogory"}
@@ -1491,7 +1494,7 @@ const CategorySection = ({ studentData, handleChange, error, clicked }) => {
       value={studentData.catogory}
       onChange={handleChange}
       error={error["CATEGORY"]}
-    />
+    />}</>
   );
 };
 
