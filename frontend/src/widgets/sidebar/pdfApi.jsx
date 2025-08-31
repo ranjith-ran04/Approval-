@@ -3,6 +3,8 @@ import axios from "axios";
 
 
 const handleForm = async (
+  showLoader,
+  hideLoader,
   navigate,
   endpoint,
   admin,
@@ -14,6 +16,7 @@ const handleForm = async (
  
 ) => {
   try {
+    showLoader();
     var res;
     // alert(endpoint)
     if (endpoint == "formApprv") {
@@ -64,6 +67,9 @@ const handleForm = async (
       navigate('/')
     }
     // console.log("error failed to send request", error);
+  }
+  finally{
+    hideLoader();
   }
 };
 

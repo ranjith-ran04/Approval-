@@ -9,11 +9,8 @@ import { host, adminhost } from "../../constants/backendpath";
 import { useLoader } from "../../context/LoaderContext";
 
 const LoginForm = ({ admin }) => {
-<<<<<<< HEAD
   const { showLoader, hideLoader} = useLoader();
-=======
   localStorage.setItem("current",0);
->>>>>>> thamarai
   const [formData, setFormData] = useState({ regNo: "", pwd: "" });
   const [focusedField, setFocusedField] = useState(null);
   const [showAlert, setShowAlert] = useState(false);

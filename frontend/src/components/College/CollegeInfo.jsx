@@ -1,24 +1,3 @@
-<<<<<<< HEAD
-import { useEffect, useState } from "react";
-import "./CollegeInfo.css";
-import axios from "axios";
-import Button from "../../widgets/button/Button";
-import Alert from "../../widgets/alert/Alert";
-import Inputfield from "../../widgets/college/Inputfield";
-import { adminhost, host } from "../../constants/backendpath";
-import { useLoader } from "../../context/LoaderContext";
-
-const CollegeInfo = ({ admin, collegeCode }) => {
-  const { showLoader, hideLoader } = useLoader();
-  const [selectedSection, setSelectedSection] = useState("All");
-  const [showAlert, setShowAlert] = useState(false);
-  const [alertType, setAlertType] = useState("");
-  const [alertMessage, setAlertMessage] = useState("");
-  const [formdata, setFormdata] = useState({});
-  const [error, setError] = useState({});
-  const [alertStage, setAlertStage] = useState("");
-  const [changedFields, setchangedFields] = useState({});
-=======
 import { useEffect, useState } from 'react'
 import './CollegeInfo.css'
 import axios from 'axios';
@@ -27,8 +6,10 @@ import Alert from '../../widgets/alert/Alert';
 import Inputfield from '../../widgets/college/Inputfield';
 import {adminhost, host} from '../../../src/constants/backendpath';
 import {useNavigate} from 'react-router-dom';
+import { useLoader } from "../../context/LoaderContext";
 
 const CollegeInfo = ({admin}) => {
+  const{showLoader ,hideLoader} = useLoader();
   const[selectedSection,setSelectedSection]=useState('All')
   const[showAlert, setShowAlert] = useState(false);
   const[alertType,setAlertType]=useState('');
@@ -37,7 +18,6 @@ const CollegeInfo = ({admin}) => {
   const[error,setError]=useState({})
   const[alertStage,setAlertStage]=useState('');
   const[changedFields,setchangedFields]=useState({});
->>>>>>> thamarai
 
   const navigate = useNavigate();
   
@@ -177,51 +157,8 @@ const handleChange =(e)=>{
           isValid = false;
         }
       }
-<<<<<<< HEAD
-
-      return updatedErrors;
-    });
-  };
-  const handleCloseAlert = () => {
-    setShowAlert(false);
-    setAlertStage("");
-  };
-
-  useEffect(() => {
-    const fetchCollegeData = async () => {
-      showLoader();
-      try {
-        var res;
-        if (admin) {
-          let collegecode = collegeCode;
-          const res = await axios.post(
-            `${adminhost}collegeadmin`,
-            { collegecode: collegecode },
-            { withCredentials: true }
-          );
-          if (res.status === 200) {
-            setFormdata(res.data.data);
-          }
-        } else {
-          const res = await axios.get(`${host}collegeinfo`, {
-            withCredentials: true,
-          });
-          if (res.status === 200) {
-            setFormdata(res.data.data);
-          }
-        }
-        // console.log(res);
-        // if (res.status===200) {
-        //   setFormdata(res.data.data);
-        // }
-      } catch (err) {
-        // console.log(err);
-      } finally {
-        hideLoader();
-=======
       if (name === "collegeemail" && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
         isValid = false;
->>>>>>> thamarai
       }
       if (name === "pincode" && !/^[1-9][0-9]{6}$/.test(value)) {
         isValid = false;
@@ -267,7 +204,7 @@ const handleChange =(e)=>{
     const fetchCollegeData=async() => {
       const collegecode=5901;
         try {
-          var res;
+          showLoader();
           if(admin){
           const res=await axios.post(`${adminhost}collegeadmin`,{collegecode:collegecode},{withCredentials:true});
           if(res.status===200){
@@ -288,31 +225,11 @@ const handleChange =(e)=>{
             console.log(err);
             navigate('/')
         }
+        finally{
+          hideLoader();
+        }
     };
     fetchCollegeData();
-<<<<<<< HEAD
-  }, []);
-  const handleconfirmAlert = async () => {
-    setShowAlert(false);
-    showLoader();
-    try {
-      if (Object.keys(changedFields).length === 0) {
-        setShowAlert(true);
-        setAlertMessage("Your details are already saved.");
-        setAlertStage("success");
-        setAlertType("success");
-        return;
-      }
-      var response;
-      var collegecode = 1;
-      if (admin) {
-        response = await axios.put(
-          `${adminhost}collegeadmin`,
-          { collegecode: collegecode, changedFields: changedFields },
-          { withCredentials: true }
-        );
-        if (response.status === 200) {
-=======
 }, []); 
     const handleconfirmAlert=async()=>{
 
@@ -331,7 +248,6 @@ const handleChange =(e)=>{
         if(admin){
           response=await axios.put(`${adminhost}collegeadmin`,{collegecode:collegecode,changedFields:changedFields},{withCredentials:true});
           if(response.status===200){
->>>>>>> thamarai
           setchangedFields({});
           setFormdata((prevData) => ({
           ...prevData,
@@ -358,34 +274,6 @@ const handleChange =(e)=>{
         setAlertMessage('Your Details are saved');
         setAlertType('success');
       }
-<<<<<<< HEAD
-    } catch (error) {
-      // console.log(error)
-      setShowAlert(true);
-      setAlertMessage("Unable to connnect to server...");
-      setAlertStage("error");
-      setAlertType("error");
-    } finally {
-      hideLoader();
-    }
-  };
-  const handleSubmit = (e) => {
-    // e.preventDefault();
-    const isValid = validateFields();
-    if (isValid) {
-      setShowAlert(true);
-      setAlertMessage("Are you sure to submit");
-      setAlertType("warning");
-      setAlertStage("confirm");
-    } else {
-      setShowAlert(true);
-      setAlertMessage("Please Fill All Fields!");
-      setAlertType("warning");
-      setAlertStage("validation");
-    }
-  };
-
-=======
       }
       catch(error){
         console.log(error)
@@ -413,7 +301,6 @@ const handleChange =(e)=>{
       }
     };
     // console.log(formdata);
->>>>>>> thamarai
   return (
     <div className="collegewholediv">
       <div className='dropdown'>

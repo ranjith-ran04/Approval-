@@ -3,8 +3,10 @@ import { useState,useEffect } from "react";
 import axios from "axios";
 import { host } from "../../constants/backendpath";
 import { useNavigate} from "react-router-dom";
+import { useLoader } from "../../context/LoaderContext";
 
 function Home() {
+  const{showLoader ,hideLoader} = useLoader();
   const navigate = useNavigate();
     const [details, setDetails] = useState({
       taluk: "",
@@ -17,6 +19,7 @@ function Home() {
     });
     async function fetch() {
     try {
+      showLoader();
       const res = await axios.get(`${host}home`, {
         withCredentials: true,
       });
@@ -26,6 +29,9 @@ function Home() {
       }
     } catch (error) {
       navigate("/");
+    }
+    finally{
+      hideLoader();
     }
   }
   useEffect(() => {
