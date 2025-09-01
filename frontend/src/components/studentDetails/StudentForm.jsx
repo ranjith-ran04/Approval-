@@ -374,13 +374,11 @@ const handleUpdate = async () => {
 
     const updatedData = { ...changedFields };
 
-    // ✅ use helper for visible semester fields
     const visibleFields = getVisibleSemesterFields(
       studentData.hsc_group,
       semesterRange
     );
 
-    // ✅ we still need to ensure all 8 semesters are covered
     const allSemesterNums = Array.from({ length: 8 }, (_, i) => i + 1);
 
     allSemesterNums.forEach((sem) => {
@@ -388,16 +386,13 @@ const handleUpdate = async () => {
         const key = `${prefix}${sem}`;
 
         if (!visibleFields.includes(key)) {
-          // hidden semester → force to 0
           updatedData[key] = 0;
         } else if (!(key in updatedData)) {
-          // visible semester but not changed → keep original or 0
           updatedData[key] = studentData[key] || 0;
         }
       });
     });
 
-    // ✅ validate with visible fields
     if (!validateFields(visibleFields)) {
       setShowAlert(true);
       setAlertStage("warning");
