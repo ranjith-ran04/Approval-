@@ -32,7 +32,7 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
     "a_no",
     "catogory",
     "name",
-    // "dob",
+    "dob",
     // "files",
     "gender",
     "mobile",
@@ -44,7 +44,7 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
     "community",
     "caste_name",
     "parent_occupation",
-    "state",
+    // "state",
     // "district",
     // "otherStateName",
     "hsc_tn",
@@ -53,11 +53,9 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
     "univ_reg_no",
     "name_of_board",
     "hsc_group",
-    "maths_studied",
+    // "maths_studied",
     "annual_income",
     "fg",
-    "aicte_tfw",
-    "pms",
     // "fg_district",
     // "fg_no",
     // "Amount",
@@ -186,7 +184,7 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
       "parent_occupation",
       "state",
       "district",
-      "otherStateName",
+      // "otherStateName",
       "name_of_board",
       "fg_district",
       "remarks",
@@ -774,7 +772,7 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
               htmlfor={"dob"}
               classname={"field-block"}
               value={studentData.dob}
-              onChange={handleChange}
+              onchange={handleChange}
               error={error["dob"]}
             />
           </div>
@@ -1552,7 +1550,7 @@ const CategorySection = ({ studentData, handleChange, error, clicked }) => {
       htmlfor={"CATEGORY"}
       options={options}
       value={studentData?.catogory || ""}
-      onChange={handleChange}
+      onchange={handleChange}
       error={error["CATEGORY"]}
     />
   );
