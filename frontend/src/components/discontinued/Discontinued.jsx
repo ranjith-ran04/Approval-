@@ -239,8 +239,10 @@ const Discontinued = ({ admin, supp }) => {
 
                 }}></Button>)}
             </div>
+            
             {
-                !add && (
+                !add && selected!="" &&(
+                    
                     <div className="student-table">
                         <div className="student-row">
                             <div className="student-header sno">S.No</div>
