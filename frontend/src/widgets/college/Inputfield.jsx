@@ -22,7 +22,7 @@ const Inputfield = ({
     console.log(options);
   }
   // console.log();
-  // console.log(typeof onchange);
+  // console.log(typeof onChange);
   if (type === "radio") {
     return (
       <div className={classname}>
@@ -39,12 +39,12 @@ const Inputfield = ({
                   ? { checked: value == option.value }
                   : {})}
                 {...(onchange
-                  ? { onchange: handleChange }
+                  ? { onChange: handleChange }
                   : value !== undefined
                   ? { readOnly: true }
                   : {})}
                 // checked={value === option.value}
-                // onchange={(e)=>onchange(e)}
+                // onChange={(e)=>onChange(e)}
               />
               {option.label}
             </label>
@@ -69,7 +69,7 @@ const Inputfield = ({
             {...(onchange
               ? {
                   value: value !== undefined ? value : "",
-                  onchange: handleChange,
+                  onChange: handleChange,
                 }
               : { defaultValue: value !== undefined ? value : "" })}
           />
@@ -91,7 +91,7 @@ const Inputfield = ({
             {...(onchange
               ? {
                   value: value !== undefined ? value : "",
-                  onchange: handleChange,
+                  onChange: handleChange,
                 }
               : { defaultValue: value !== undefined ? value : "" })}
           >
