@@ -12,6 +12,7 @@ import ScrollToTop from "./widgets/scrollToTop/ScrollToTop.jsx";
 import { useNavigate, useLocation } from "react-router-dom";
 import StudentDetails from "./components/studentDetails/StudentDetails.jsx";
 import Discontinued from "./components/discontinued/Discontinued.jsx";
+import Reminder from "./widgets/reminder/Onemin.jsx";
 
 function Dashboard() {
   const [current, setCurrent] = useState(Number(localStorage.getItem("current") || 0));
@@ -54,6 +55,7 @@ Tamilnadu Lateral Entry Direct Second Year B.E/B.Tech., Admissions Approval-2025
             {current === 5 && <StudentDetails />}
             {current === 6 && <Discontinued />}
             <ScrollToTop scrollRef={scrollRef} />
+            {/* <Reminder /> */}
           </>
         </div>
       </div>
