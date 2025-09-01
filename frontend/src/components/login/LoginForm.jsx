@@ -6,8 +6,11 @@ import NavigationBar from "../../widgets/navigationBar/NavigationBar";
 import Alert from "../../widgets/alert/Alert";
 import axios from "axios";
 import { host, adminhost } from "../../constants/backendpath";
+import { useLoader } from "../../context/LoaderContext";
 
 const LoginForm = ({ admin }) => {
+  const { showLoader, hideLoader} = useLoader();
+  localStorage.setItem("current",0);
   const [formData, setFormData] = useState({ regNo: "", pwd: "" });
   const [focusedField, setFocusedField] = useState(null);
   const [showAlert, setShowAlert] = useState(false);
@@ -17,7 +20,7 @@ const LoginForm = ({ admin }) => {
   const [touched, setTouched] = useState({});
   const [changed, setChanged] = useState(0);
   const [loginStatus, setLoginStatus] = useState(null);
-  const [showPassword, setShowPassword] = useState(false)
+  const [showPassword, setShowPassword] = useState(false);
 
   const navigate = useNavigate();
   const fieldsOrder = ["regNo", "pwd"];
@@ -27,6 +30,7 @@ const LoginForm = ({ admin }) => {
   }, [formData, touched]);
   useEffect(() => {
     async function fetchLogin() {
+      showLoader();
       try {
         const res = await axios.get(`${admin ? adminhost : host}login`, {
           withCredentials: true,
@@ -43,6 +47,8 @@ const LoginForm = ({ admin }) => {
         }
       } catch (error) {
         console.warn(error);
+      } finally {
+        hideLoader();
       }
     }
     fetchLogin();
@@ -54,6 +60,7 @@ const LoginForm = ({ admin }) => {
     setErrors(validationErrors);
 
     if (Object.keys(validationErrors).length === 0) {
+      showLoader();
       try {
         const response = await axios.post(
           `${admin ? adminhost : host}login`,
@@ -75,6 +82,8 @@ const LoginForm = ({ admin }) => {
         setAlertType("error");
         setAlertMessage(error.response?.data?.message || "Login failed");
         setShowAlert(true);
+      } finally {
+        hideLoader();
       }
     }
   };

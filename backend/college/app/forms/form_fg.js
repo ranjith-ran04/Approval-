@@ -84,6 +84,7 @@ const formfg = async (req, res) => {
 
     let currentBranch = null;
     let count = 1;
+    if(results.length != 0){
 
     results.forEach((row) => {
       const isNewBranch = currentBranch !== row.branch_name;
@@ -169,9 +170,17 @@ const formfg = async (req, res) => {
     if (remainingHeight < extraSpaceNeeded) {
       doc.addPage();
     }
-    // always run footer at the very end (like form A)
+    footer("FG", doc, c_code, freezed);
+    }else {
+    // doc.moveDown();
+    doc
+      .font(arialBold)
+      .fontSize(15)
+      .text("NO STUDENT FOUND",0,120,{ align: "center" });
     footer("FG", doc, c_code, freezed);
 
+  }
+    // always run footer at the very end (like form A)
     doc.end();
   } catch (err) {
     console.error(err);

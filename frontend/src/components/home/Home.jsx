@@ -1,9 +1,42 @@
 import "./home.css";
-import { useState, useEffect } from "react";
+import { useState,useEffect } from "react";
+import axios from "axios";
+import { host } from "../../constants/backendpath";
+import { useNavigate} from "react-router-dom";
+import { useLoader } from "../../context/LoaderContext";
 
-function Home({ details }) {
-  // // console.log(details);
-
+function Home() {
+  const{showLoader ,hideLoader} = useLoader();
+  const navigate = useNavigate();
+    const [details, setDetails] = useState({
+      taluk: "",
+      district: "",
+      constituency: "",
+      pincode: "",
+      chairman: "",
+      principalName: "",
+      collegeContact: "",
+    });
+    async function fetch() {
+    try {
+      showLoader();
+      const res = await axios.get(`${host}home`, {
+        withCredentials: true,
+      });
+      if (res.status === 200) {
+        // console.log('dashboard',res.data);
+        setDetails(res.data[0]);
+      }
+    } catch (error) {
+      navigate("/");
+    }
+    finally{
+      hideLoader();
+    }
+  }
+  useEffect(() => {
+    fetch();
+  }, []);
   return (
     <div className="container">
       <h2 className="homeheading">{`${details.collegeCode || "unknownCode"} - ${

@@ -13,6 +13,7 @@ async function branch(req, res) {
     const [result] = await db.query(selectQuery, [collegeCode]);
     
     res.status(200).send(result);
+    // console.log(result);
   } catch (err) {
     res.status(500).json({ err: "Query error", sqlErr: err.message });
   }
