@@ -22,7 +22,35 @@ const CollegeInfo = ({admin}) => {
   const navigate = useNavigate();
   
 
-const requiredFields = ["principalname","principalcontact","address","taluk","district","constituency","pincode","collegephone","collegeemail","websitecollege","antiraggingNo","bankaccountno","bankname","minoritystatus", "autonomousstatus","distance","nearestrailway","distancefromrailway","transportfacility","transport","mintransportcharge","maxtransportcharge","accomodationavailableboys","hostelstaytypeboys","typeofmessboys","messbillboys","roomrentboys","electricityboys","cautiondepositboys",
+const requiredFields = ["principalname",
+  "principalcontact",
+  "address",
+  "taluk",
+  "district",
+  "constituency",
+  "pincode",
+  "collegephone",
+  "collegeemail",
+  "websitecollege",
+  "antiraggingNo",
+  "bankaccountno",
+  "bankname",
+  "minoritystatus",
+   "autonomousstatus",
+   "distance",
+   "nearestrailway",
+   "distancefromrailway",
+   "transportfacility",
+   "transport",
+   "mintransportcharge",
+   "maxtransportcharge",
+   "accomodationavailableboys",
+   "hostelstaytypeboys",
+   "typeofmessboys",
+   "messbillboys",
+   "roomrentboys",
+   "electricityboys",
+   "cautiondepositboys",
   "establishmentboys",
   "admissionfeesboys",
   "accomodationavailablegirls",
@@ -48,9 +76,9 @@ const validateFields = () => {
     const value = formdata[field];
         if ((!value || value.trim() === "") && ((numericFieldsBoys.includes(field) && formdata.accomodationavailableboys === "Yes")
           || (numericFieldsGirls.includes(field) && formdata.accomodationavailablegirls === "Yes") ||
-        (transportFields.includes(field) && formdata.transportfacility === "Yes"))
-        ) {
-      newErrors[field] = "This field is required";
+        (transportFields.includes(field) && formdata.transportfacility === "Yes")||(numericFieldsBoys.includes(field)&& numericFieldsGirls.includes(field)
+      &&transportFields.includes(field) && formdata.accomodationavailableboys==="No" && formdata.accomodationavailablegirls==="No"&& formdata.transportfacility==="No"))) {
+      newErrors[field] = "This field is required";  
       return; }
 
     if (["collegenameWithdistrict", "principalname", "district", "taluk", "constituency"].includes(field) &&/\d/.test(value)) {

@@ -44,7 +44,7 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
     "community",
     "caste_name",
     "parent_occupation",
-    "state",
+    // "state",
     // "district",
     // "otherStateName",
     "hsc_tn",
@@ -52,7 +52,7 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
     "year_of_passing",
     "univ_reg_no",
     "name_of_board",
-    "hsc_group",
+    // "hsc_group",
     "maths_studied",
     "annual_income",
     "fg",
@@ -179,118 +179,143 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
     setShowAlert(false);
     // setAlertStage('')
   };
-  const validateFields = () => {
-    const letterfields = [
-      "name",
-      "religion",
-      "parent_occupation",
-      "state",
-      "district",
-      "otherStateName",
-      "name_of_board",
-      "fg_district",
-      "remarks",
-    ];
+const validateFields = () => {
+  const letterfields = [
+    "name",
+    "religion",
+    "parent_occupation",
+    "state",
+    "district",
+    "otherStateName",
+    "name_of_board",
+    "fg_district",
+    "remarks",
+  ];
 
-    if (studentData["fg"] == 1)
-      requiredFields.push("fg_no", "fg_district", "Amount");
+  const booleanFields = ["fg", "maths_studied"];
+  const newErrors = {};
 
-    const booleanFields = ["fg", "maths_studied"];
-    const newErrors = {};
-    if(!studentData["dob"]  ||
-        studentData["dob"] === ""){
-      newErrors["dob"] = "This field is required";
-    }
-    requiredFields.forEach((field) => {
-      const value = studentData[field];
-      if (
-        (!value && !booleanFields.includes(field)) ||
-        studentData[field] === ""
-      ) {
-        newErrors[field] = "This field is required";
-      } else {
-        if (letterfields.includes(field) && /\d/.test(value)) {
-          newErrors[field] = "Only letters are allowed";
-        } else if (letterfields.includes(field) && /[!@#$%]/.test(value)) {
-          newErrors[field] = "Special characters not allowed";
-        }
-        if (field === "email" && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
-          newErrors[field] = "Enter correct email format";
-        }
-        if (field === "mobile" && isNaN(value)) {
-          newErrors[field] = "Only numbers are allowed";
-        } else if (field === "mobile" && !/^\d{10}$/.test(value)) {
-          newErrors[field] = "Enter 10 digit valid mobile number";
-        }
-        const numericFields = [
-          "aadharno",
-          "annual_income",
-          "max_1",
-          "obt_1",
-          "max_2",
-          "obt_2",
-          "max_3",
-          "obt_3",
-          "max_4",
-          "obt_4",
-          "max_5",
-          "obt_5",
-          "max_6",
-          "obt_6",
-          "max_7",
-          "obt_7",
-          "max_8",
-          "obt_8",
-        ];
-        if (numericFields.includes(field) && isNaN(value)) {
-          newErrors[field] = "Only digits are allowed";
-        } else if (numericFields.includes(field) && value < 0) {
-          newErrors[field] = "Negative numbers not allowed";
-        }
-        const maxObtPairs = [
-          ["max_1", "obt_1"],
-          ["max_2", "obt_2"],
-          ["max_3", "obt_3"],
-          ["max_4", "obt_4"],
-          ["max_5", "obt_5"],
-          ["max_6", "obt_6"],
-          ["max_7", "obt_7"],
-          ["max_8", "obt_8"],
-        ];
-        maxObtPairs.forEach(([maxField, obtField]) => {
-          const maxVal = parseFloat(studentData[maxField]);
-          const obtVal = parseFloat(studentData[obtField]);
+  // Build required fields dynamically (start with only the always-required ones)
+  let dynamicRequiredFields = [
+    "name",
+    "catogory",
+    "religion",
+    "parent_occupation",
+    "aadharno",
+    "annual_income",
+    "mobile",
+    "email",
+    "dob",
+  ];
 
-          // alert(maxVal,obtVal)
+  // Nativity-based validation
+  if (studentData["nativity"] === "TamilNadu") {
+    dynamicRequiredFields.push("district");
+  } else if (studentData["nativity"] === "Others") {
+    dynamicRequiredFields.push("state");
+  }
 
-          if (!isNaN(maxVal) && !isNaN(obtVal)) {
-            if (maxVal < obtVal) {
-              newErrors[maxField] =
-                "Maximum marks should be greater than or equal to obtained marks";
-            }
-          }
-        });
-      }
-    });
-    setError(newErrors);
-    // console.log(newErrors);
+  // Course type validation
+  if (studentData["course_type"] === "Bsc") {
+    dynamicRequiredFields.push("maths_studied");
+  }
 
-    if (Object.keys(newErrors).length === 0) {
-      return true;
+  // First Graduate validation
+  if (studentData["fg"] == 1) {
+    dynamicRequiredFields.push("fg_no", "fg_district", "Amount");
+  }
+
+  // Iterate over dynamic required fields
+  dynamicRequiredFields.forEach((field) => {
+    const value = studentData[field];
+
+    if ((!value && !booleanFields.includes(field)) || studentData[field] === "") {
+      newErrors[field] = "This field is required";
     } else {
-      return false;
+      // Letter only fields
+      if (letterfields.includes(field) && /\d/.test(value)) {
+        newErrors[field] = "Only letters are allowed";
+      } else if (letterfields.includes(field) && /[!@#$%]/.test(value)) {
+        newErrors[field] = "Special characters not allowed";
+      }
+
+      // Email validation
+      if (field === "email" && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+        newErrors[field] = "Enter correct email format";
+      }
+
+      // Mobile validation
+      if (field === "mobile" && isNaN(value)) {
+        newErrors[field] = "Only numbers are allowed";
+      } else if (field === "mobile" && !/^\d{10}$/.test(value)) {
+        newErrors[field] = "Enter 10 digit valid mobile number";
+      }
+
+      // Numeric fields validation
+      const numericFields = [
+        "aadharno",
+        "annual_income",
+        "max_1", "obt_1",
+        "max_2", "obt_2",
+        "max_3", "obt_3",
+        "max_4", "obt_4",
+        "max_5", "obt_5",
+        "max_6", "obt_6",
+        "max_7", "obt_7",
+        "max_8", "obt_8",
+      ];
+      if (numericFields.includes(field) && isNaN(value)) {
+        newErrors[field] = "Only digits are allowed";
+      } else if (numericFields.includes(field) && value < 0) {
+        newErrors[field] = "Negative numbers not allowed";
+      }
+
+      // Max vs Obtained check
+      const maxObtPairs = [
+        ["max_1", "obt_1"],
+        ["max_2", "obt_2"],
+        ["max_3", "obt_3"],
+        ["max_4", "obt_4"],
+        ["max_5", "obt_5"],
+        ["max_6", "obt_6"],
+        ["max_7", "obt_7"],
+        ["max_8", "obt_8"],
+      ];
+      maxObtPairs.forEach(([maxField, obtField]) => {
+        const maxVal = parseFloat(studentData[maxField]);
+        const obtVal = parseFloat(studentData[obtField]);
+
+        if (!isNaN(maxVal) && !isNaN(obtVal)) {
+          if (maxVal < obtVal) {
+            newErrors[maxField] =
+              "Maximum marks should be greater than or equal to obtained marks";
+          }
+        }
+      });
     }
-  };
+  });
+
+  setError(newErrors);
+
+  return Object.keys(newErrors).length === 0;
+};
+
   // console.log(studentData.religion);
   
   const handleAddStudent = () => {
     const noerrors = validateFields();
+    console.log(noerrors);
     if (noerrors) {
       setShowAlert(true);
       setAlertStage("confirm");
       setAlertMessage("Confirm to Add");
       setAlertType("warning");
-      setAlertOkAction(() => () => {
+     setAlertOkAction(() => async () => {
+        await axios.post(
+          `${host}studentadd`,
+          { appln_no: appln_no,bcode:b_code,studentData:studentData },
+          { withCredentials: true }
+        );
         setShowAlert(true);
         setAlertMessage("Updated Successfully");
         setAlertStage("success");
@@ -774,7 +799,7 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
               htmlfor={"dob"}
               classname={"field-block"}
               value={studentData.dob}
-              onChange={handleChange}
+              onchange={handleChange}
               error={error["dob"]}
             />
           </div>
@@ -1546,14 +1571,14 @@ const CategorySection = ({ studentData, handleChange, error, clicked }) => {
   return (
      <Inputfield
       label={"CATEGORY"}
-      id={"CATEGORY"}
+      id={"catogory"}
       eltname={"catogory"}
       type={"dropdown"}
-      htmlfor={"CATEGORY"}
+      htmlfor={"catogory"}
       options={options}
-      value={studentData?.catogory || ""}
-      onChange={handleChange}
-      error={error["CATEGORY"]}
+      value={studentData.catogory || ""}
+      onchange={handleChange}
+      error={error["catogory"]}
     />
   );
 };
