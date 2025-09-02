@@ -12,6 +12,9 @@ import ScrollToTop from "./widgets/scrollToTop/ScrollToTop.jsx";
 import { useNavigate, useLocation } from "react-router-dom";
 import StudentDetails from "./components/studentDetails/StudentDetails.jsx";
 import Discontinued from "./components/discontinued/Discontinued.jsx";
+import Reminder from "./widgets/reminder/Onemin.jsx";
+import axios from "axios";
+import { host } from "./constants/backendpath.js";
 
 function Dashboard() {
   const [current, setCurrent] = useState(Number(localStorage.getItem("current") || 0));
@@ -19,9 +22,27 @@ function Dashboard() {
   const scrollRef = useRef();
   const location = useLocation();
   const logged = location.state?.logged || false;
+  const Navigate = useNavigate();
+
     useEffect(()=>{
     localStorage.setItem("current",current)
   },[current]);
+    const handleLogOut = async (admin) => {
+    try {
+      const res = await axios.get(`${host}logout`, { withCredentials: true });
+      if (res.status === 200) {
+        if (admin) {
+          Navigate("/admin/login");
+        } else {
+          Navigate("/");
+          sessionStorage.setItem("notesShown", "");
+          localStorage.setItem("current",0);
+        }
+      }
+    } catch (error) {
+      // console.log(error);
+    }
+  };
 
   return logged ? (
     <div className="dashboard">
@@ -37,6 +58,7 @@ Tamilnadu Lateral Entry Direct Second Year B.E/B.Tech., Admissions Approval-2025
           admin={false}
           style={{ height: "70px" }}
           login={logged}
+          handleLogOut={handleLogOut}
         />
 
         <div className="dashboard-body" ref={scrollRef}>
@@ -54,6 +76,7 @@ Tamilnadu Lateral Entry Direct Second Year B.E/B.Tech., Admissions Approval-2025
             {current === 5 && <StudentDetails />}
             {current === 6 && <Discontinued />}
             <ScrollToTop scrollRef={scrollRef} />
+            <Reminder handleLogOut={handleLogOut} admin={false} />
           </>
         </div>
       </div>

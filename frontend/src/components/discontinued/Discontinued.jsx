@@ -377,8 +377,8 @@ const Discontinued = ({ admin, supp }) => {
               </div>
             </fieldset>
             <div id="studentbutton">
-              <Button name={"UPDATE"} onClick={confirmUpdate} />
-              <Button name={"DELETE"} onClick={confirmDelete} />
+              <Button name={add?"ADD":"UPDATE"} onClick={confirmUpdate} />
+              {!add && <Button name={"DELETE"} onClick={confirmDelete} />}
             </div>
           </div>
         </div>
