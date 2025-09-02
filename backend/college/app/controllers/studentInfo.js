@@ -254,6 +254,7 @@ async function addStudentinfo(req, res) {
     const values = Object.values(insertData);
 
     const placeholders = keys.map(() => "?").join(", ");
+    console.log(placeholders);
     const insertQuery = `INSERT INTO student_info (${keys.join(
       ", "
     )}) VALUES (${placeholders})`;
