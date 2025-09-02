@@ -138,7 +138,15 @@ const validateFields = () => {
       }
     } catch (error) {
       if(error.reponse?.status === 401) navigate('/')
-        else{
+        else if(error.response?.status === 404){
+            setShowAlert(true);
+            setAlertStage('sucess');
+      setAlertMessage("Student not Found");
+      setAlertType("error");
+      setAlertOkAction(() => () => {
+        setShowAlert(false);
+      });
+        }else{
       setShowAlert(true);
       setAlertMessage("Unable to delete kindly try again...");
       setAlertType("error");
@@ -438,8 +446,8 @@ const validateFields = () => {
               </div>
             </fieldset>
             <div id="studentbutton">
-              <Button name={"UPDATE"} onClick={handleUpdate} />
-              <Button name={"DELETE"} onClick={confirmDelete} />
+              <Button name={add?"ADD":"UPDATE"} onClick={handleUpdate} />
+              {!add  && <Button name={"DELETE"} onClick={confirmDelete} />}
             </div>
           </div>
         </div>
