@@ -23,7 +23,7 @@ async function collegeBranchFetch(req, res) {
     result.map((item) => {
       branch.push(`${branchMap.get(item.b_code)}-${item.b_code}`);
     });
-    // // console.log(branch);
+    console.log(branch);
     res.status(200).send(branch);
   } catch (err) {
     return res.status(500).json({ msg: "error in query" });
