@@ -77,6 +77,16 @@ async function dicontinuedStudent(req, res) {
     if (!collegeCode) {
       return res.status(400).json({ err: "collegeCode is required" });
     }
+    // const [[checkStudent]] = await db.query(
+    //   "SELECT COUNT(*) as count FROM student_info WHERE a_no = ? AND c_code = ?",
+    //   [appln_no, collegeCode]
+    // );
+
+    // if (checkStudent.count === 0) {
+    //   return res
+    //     .status(404)
+    //     .json({ err: "Application number not found in student_info" });
+    // }
     const stdQuery = `select NAME,APPROVE_STATE, TC_STATE  from discontinued_info where collcode =? and reg_no = ?`;
     const result = await db.query(stdQuery, [collegeCode, appln_no]);
     res.status(200).send(result);
@@ -139,14 +149,35 @@ async function editDiscontinuedStudent(req, res) {
         .status(400)
         .json({ err: "collegeCode and application number is required" });
     }
-    const [[count]] = await db.query("SELECT count(*) as count from discontinued_info where reg_no = ?", a_no);
-    // console.log(count);
-    
-    const values = count.count == 1 ? [NAME, APPROVE_STATE, TC_STATE, a_no] : [a_no, collegeCode, branch, NAME, APPROVE_STATE, TC_STATE];
-    const editQuery = count.count == 1 ?
-      `update discontinued_info set NAME = ? ,APPROVE_STATE =? ,TC_STATE = ?  where reg_no=?`
-      : `insert into discontinued_info(reg_no,collcode,branch,name,approve_state,tc_state) values(?,?,?,?,?,?)`;
-    await db.query(editQuery, values);
+
+    const [checkStudent] = await db.query(
+      "SELECT COUNT(*) as count FROM student_info WHERE a_no = ? AND b_code = ? AND c_code = ?",
+      [a_no, branch, collegeCode]
+    );
+
+    if (checkStudent[0].count === 0) {
+      return res.status(404).json({ msg: "Student not found in student_info" });
+    }
+
+    const [checkDiscontinued] = await db.query(
+      "SELECT COUNT(*) as count FROM discontinued_info WHERE reg_no = ?",
+      [a_no]
+    );
+
+    let query, values;
+
+    if (checkDiscontinued[0].count === 1) {
+      query = `UPDATE discontinued_info 
+               SET NAME = ?, APPROVE_STATE = ?, TC_STATE = ? 
+               WHERE reg_no = ? AND collcode = ? AND branch = ?`;
+      values = [NAME, APPROVE_STATE, TC_STATE, a_no, collegeCode, branch];
+    } else {
+      query = `INSERT INTO discontinued_info 
+               (reg_no, collcode, branch, name, approve_state, tc_state) 
+               VALUES (?, ?, ?, ?, ?, ?)`;
+      values = [a_no, collegeCode, branch, NAME, APPROVE_STATE, TC_STATE];
+    }
+    await db.query(query, values);
     res.status(200).json({ msg: "Student details updated successfully." });
   } catch (err) {
     return res.status(500).json({ err: "Query error", sqlErr: err.message });
