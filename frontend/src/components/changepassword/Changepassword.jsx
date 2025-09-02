@@ -71,12 +71,13 @@ function Changepassword() {
           setShowAlert(true);
         }
       } catch (error) {
-        // console.log(error);
+        if(error.response?.status === 401) navigate('/');
+        else{
         setAlertType("error");
         setAlertMessage(
           error.response?.data?.message || "Password change failed"
         );
-        setShowAlert(true);
+        setShowAlert(true);}
       } finally {
         hideLoader();
       }

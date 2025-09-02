@@ -8,6 +8,7 @@ import tamilnaduDistricts from "../../constants/Tndistricts";
 import { host } from "../../constants/backendpath";
 import { useLoader } from "../../context/LoaderContext";
 import states from "../../constants/states";
+import {useNavigate} from 'react-router-dom';
 
 const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
   // // console.log(clicked);
@@ -29,6 +30,7 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
   const [alertOkAction, setAlertOkAction] = useState(() => () => {});
   const [error, setError] = useState({});
   const [certificates, setCertificates] = useState([]);
+  const navigate = useNavigate();
   const requiredFields = [
     "a_no",
     "catogory",
@@ -160,12 +162,13 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
       });
       setCertificates(merged);
       // // console.log(merged);
-      console.log(student[0].community);
+      // console.log(student[0].community);
       // console.log(studentData.maths_studied);
       await caste_drop(student[0].community);
       // console.log(student[0].religion);
       
     } catch (err) {
+      if(err.response?.status === 401) navigate('/')
       // console.log(err);
     } finally {
       hideLoader();
@@ -238,7 +241,7 @@ const validateFields = () => {
     dynamicRequiredFields.push("fg_no", "fg_district", "Amount");
   }
 
-  console.log(dynamicRequiredFields);
+  // console.log(dynamicRequiredFields);
   // Iterate over dynamic required fields
   dynamicRequiredFields.forEach((field) => {
     const value = studentData[field];
@@ -308,7 +311,7 @@ const validateFields = () => {
       });
     }
   });
-  console.log(newErrors);
+  // console.log(newErrors);
   setError(newErrors);
 
   return Object.keys(newErrors).length === 0;
@@ -328,8 +331,29 @@ const validateFields = () => {
 };
 
   const handleAddStudent = () => {
+    const updatedData = { ...studentData };
+
+    const visibleFields = getVisibleSemesterFields(
+      studentData.hsc_group,
+      semesterRange
+    );
+
+    const allSemesterNums = Array.from({ length: 8 }, (_, i) => i + 1);
+
+    allSemesterNums.forEach((sem) => {
+      ["max_", "obt_"].forEach((prefix) => {
+        const key = `${prefix}${sem}`;
+
+        if (!visibleFields.includes(key)) {
+          updatedData[key] = 0;
+        } else if (!(key in updatedData)) {
+          updatedData[key] = studentData[key] || 0;
+        }
+      });
+    });
+
     const noerrors = validateFields();
-    console.log(noerrors);
+    // console.log(noerrors);
     if (noerrors) {
       setShowAlert(true);
       setAlertStage("confirm");
@@ -337,9 +361,10 @@ const validateFields = () => {
       setAlertType("warning");
 
      setAlertOkAction(() => async () => {
-        await axios.post(
+      try{  
+      await axios.post(
           `${host}studentadd`,
-          { appln_no: appln_no,b_code:b_code,studentData:studentData},
+          { appln_no: appln_no,b_code:b_code,studentData:updatedData},
           { withCredentials: true }
         );  
         setShowAlert(true);
@@ -349,8 +374,12 @@ const validateFields = () => {
         setAlertOkAction(() => () => {
           setShowAlert(false);
         });
-      });
-    } else {
+      }catch(err){
+        if(err.response?.status === 401) navigate('/')
+      }
+    })
+    }
+     else {
       setShowAlert(true);
       setAlertStage("success");
       setAlertMessage("You have errors");
@@ -407,7 +436,7 @@ const handleUpdate = async () => {
     setAlertMessage("Confirm to update");
     setAlertType("warning");
     setAlertOkAction(() => async () => {
-      await axios.put(
+      try{await axios.put(
         `${host}student`,
         { changedFields: updatedData, appln_no },
         { withCredentials: true }
@@ -419,14 +448,16 @@ const handleUpdate = async () => {
       setAlertStage("success");
       setAlertType("success");
       setAlertOkAction(() => () => setShowAlert(false));
-    });
+  }catch(err){
+    if(err.response?.status === 401) navigate('/')
+  }});
   } catch (error) {
     setShowAlert(true);
     setAlertMessage("Unable to update kindly try again...");
     setAlertStage("error");
     setAlertType("error");
-    setAlertOkAction(() => () => setShowAlert(false));
-  } finally {
+    setAlertOkAction(() => () => setShowAlert(false));}
+   finally {
     hideLoader();
   }
 };
@@ -459,6 +490,8 @@ const handleStuDelete = async () => {
         });
       }
     } catch (error) {
+      if(error.response?.status === 401) navigate('/')
+        else{
       setShowAlert(true);
       setAlertMessage("Unable to delete kindly try again...");
       setAlertStage("error");
@@ -466,7 +499,7 @@ const handleStuDelete = async () => {
       setAlertOkAction(() => () => {
         setShowAlert(false);
       });
-    } finally {
+    }} finally {
       hideLoader();
     }
   });
@@ -507,8 +540,9 @@ const handleStuDelete = async () => {
       });
     } catch (err) {
       // console.log("Upload Failed!", err);
-
       let msg = "Upload Failed!";
+      if(err.response?.status === 401) navigate('/')
+        else{
       if (err.response?.data) {
         if (typeof err.response.data === "string") {
           msg = err.response.data;
@@ -541,7 +575,7 @@ const handleStuDelete = async () => {
           setShowAlert(false);
         });
       }
-    } finally {
+    }} finally {
       hideLoader();
     }
   };
@@ -578,13 +612,15 @@ const handleStuDelete = async () => {
         }
       });
     } catch (err) {
+      if(err.response?.status === 401) navigate('/')
+        else{
       console.error("Delete File Failed", err);
       setAlertType("error");
       setAlertStage("error");
       setAlertMessage("Failed to Delete File!");
       setAlertOkAction(() => () => {
         setShowAlert(false);
-      });
+      });}
     } finally {
       hideLoader();
     }
@@ -605,7 +641,7 @@ const handleStuDelete = async () => {
     // console.log(selectedValue); 
   const handleChange = async (e) => {
     const { name, value } = e.target;
-    console.log(value)
+    // console.log(value)
     // alert(value)
     // For caste_name, you might want to store only the code in backend format
     let updatedValue = value;
@@ -728,7 +764,7 @@ const handleStuDelete = async () => {
           delete updatedErrors[name];
         }
       }
-      console.log(studentData.maths_studied);
+      // console.log(studentData.maths_studied);
 
       return updatedErrors;
     });
@@ -766,7 +802,7 @@ const handleStuDelete = async () => {
     setStudentData(newStudentData);
   }, [studentData.hsc_group]);
   function handleDistrict (e){
-    console.log(e);
+    // console.log(e);
          setStudentData((prev) => ({
                   ...prev,
                   state: e.target.value,
@@ -911,7 +947,7 @@ const handleStuDelete = async () => {
               radiolabel={"Nativity :"}
               onchange={(e) => {
                 const value = e.target.value;
-                console.log("Nativity changed to:", value);
+                // console.log("Nativity changed to:", value);
 
 
                 if (value === "TN") {
@@ -1025,7 +1061,10 @@ const handleStuDelete = async () => {
               classname={"field-block"}
               id={"CasteName"}
               htmlfor={"CasteName"}
-              options={caste.map((c) => ({
+              options={studentData.community === "OC"?[{
+                label: "others",
+                value: "others"
+              }]:caste.map((c) => ({
                 label: `${c.code}-${c.name}`,
                 key: c.code,
                 value: c.code,

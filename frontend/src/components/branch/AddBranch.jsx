@@ -4,12 +4,14 @@ import { host } from "../../constants/backendpath";
 import Alert from "../../widgets/alert/Alert";
 import { useState } from "react";
 import { useLoader } from "../../context/LoaderContext";
+import {useNavigate} from 'react-router-dom';
 
 function AddBranch({ setCurrent }) {
   const {showLoader, hideLoader} = useLoader();
   const [showAlert, setShowAlert] = useState(false);
   const [alertType, setAlertType] = useState("");
   const [alertMessage, setAlertMessage] = useState("");
+  const navigate = useNavigate();
 
   const handleCloseAlert = () => {
     setShowAlert(false);
@@ -40,7 +42,10 @@ function AddBranch({ setCurrent }) {
       if (err.response?.status === 409) {
         setAlertType("warning");
         setAlertMessage("Branch Already exists!");
-      } else {
+      }else if(err.response?.status === 401){
+        navigate('/');
+      } 
+      else {
         setAlertType("error");
         setAlertMessage("Server error. Please try again later.");
       }

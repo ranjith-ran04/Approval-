@@ -42,10 +42,12 @@ function Branch({ setCurrent, setState }) {
         setBranchData(res.data);
         setError(false);}
       } catch (err) {
+        if(err.status === 401){
+          navigate('/');
+        }else{
         console.error("Fetching data failed", err);
         setBranchData([]);
-        setError(true);
-        navigate('/');
+        setError(true);}
       } finally {
         hideLoader();
       }
@@ -68,11 +70,13 @@ function Branch({ setCurrent, setState }) {
         setShowAlert(true);
       }
     } catch (err) {
+      if(err.response?.status === 401) navigate('/');
+      else{
       console.error("Delete Failed", err);
       setAlertType("error");
       setAlertStage("error");
       setAlertMessage("Failed to Delete Branch!");
-      setShowAlert(true);
+      setShowAlert(true);}
     }finally{
       hideLoader();
     }

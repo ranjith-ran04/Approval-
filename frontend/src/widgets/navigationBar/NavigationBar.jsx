@@ -14,14 +14,17 @@ function NavigationBar({
 }) {
   const [visible, setVisible] = useState(false);
   const Navigate = useNavigate();
+  // console.log(admin);
 
   const handleClicks = () => {
+    // console.log('hello')
     if (!bool) {
       setVisible(!visible);
     } else {
       setVisible(false);
     }
     if (admin) {
+      // console.log('hi');
       handleLogOut(admin);
     }
   };
@@ -54,7 +57,7 @@ function NavigationBar({
             <div className="item" onClick={() => Navigate("/changePassword")}>
               Change Password
             </div>
-            <div className="item" onClick={handleLogOut(admin)}>
+            <div className="item" onClick={()=>handleLogOut(admin)}>
               Logout
             </div>
           </div>

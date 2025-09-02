@@ -18,8 +18,8 @@ const Inputfield = ({
   const handleChange = onchange;
   // console.log(value, eltname);
   if(eltname === "maths_studied" ){
-    console.log(value);
-    console.log(options);
+    // console.log(value);
+    // console.log(options);
   }
   // console.log();
   // console.log(typeof onChange);

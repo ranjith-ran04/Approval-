@@ -101,7 +101,8 @@ const Discontinued = ({ admin, supp }) => {
         setAlertCancelAction(null);
       }
     } catch (error) {
-      console.warn(error);
+      if(error.reponse?.status === 401) navigate('/')
+        else{
       setShowAlert(true);
       setAlertMessage("Unable to connnect to server...");
       setAlertType("error");
@@ -109,7 +110,7 @@ const Discontinued = ({ admin, supp }) => {
         setShowAlert(false);
       });
       setAlertCancelAction(null);
-    } finally {
+    }} finally {
       hideLoader();
     }
   };
@@ -133,7 +134,8 @@ const Discontinued = ({ admin, supp }) => {
       deleteOne(appln_no);
       // }
     } catch (error) {
-      // console.log(error);
+      if(error.response?.status === 401) navigate('/')
+        else{
       setShowAlert(true);
       setAlertMessage("Unable to connnect to server...");
       setAlertType("error");
@@ -141,7 +143,7 @@ const Discontinued = ({ admin, supp }) => {
         setShowAlert(false);
       });
       setAlertCancelAction(null);
-    } finally {
+    }} finally {
       hideLoader();
     }
   };
@@ -198,6 +200,7 @@ const Discontinued = ({ admin, supp }) => {
         setStudents(result.data);
       }
     } catch (error) {
+      if(error.response?.status === 401) navigate('/')
       console.warn(error);
     } finally {
       hideLoader();
@@ -225,6 +228,7 @@ const Discontinued = ({ admin, supp }) => {
       // // console.log(result.data?.[0]?.[0]);
       setStudentData(raw);
     } catch (err) {
+      if(err.response?.status === 401) navigate('/')
       // console.log(err);
     } finally {
       hideLoader();
