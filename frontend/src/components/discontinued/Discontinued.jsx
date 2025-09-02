@@ -134,7 +134,6 @@ const validateFields = () => {
         setAlertOkAction(() => () => {
           setShowAlert(false);
         });
-        setAlertCancelAction(null)
       }
     } catch (error) {
       if(error.reponse?.status === 401) navigate('/')
