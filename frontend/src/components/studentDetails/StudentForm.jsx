@@ -351,7 +351,6 @@ const validateFields = () => {
         }
       });
     });
-
     const noerrors = validateFields();
     // console.log(noerrors);
     if (noerrors) {
