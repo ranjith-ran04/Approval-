@@ -1060,7 +1060,7 @@ const handleStuDelete = async () => {
               error={error["parent_occupation"]}
             />
           </div>
-          <div className="field-row">
+          {studentData.nativity && (<div className="field-row">
             <Inputfield
               eltname={"state"}
               type={"dropdown"}
@@ -1070,17 +1070,16 @@ const handleStuDelete = async () => {
               options={
                 studentData.nativity === "Others"
                   ? states.filter((s) => s.value !== "Tamilnadu")
-                  : [{ label: "Tamil Nadu", value: "Tamilnadu" }]
+                  : [{ label: "Tamilnadu", value: "Tamilnadu" }]
               }
               onchange={(e) => handleDistrict(e)}
               classname={"field-block"}
               value={studentData.nativity !== "Others"?"Tamilnadu":studentData.state}
               error={error["state"]}
-              disabled={studentData.nativity === "Tamilnadu"}
+              disabled={studentData.nativity === "TN"}
             />
 
-            {/* District Dropdown (only for Tamil Nadu) */}
-            {studentData.nativity === "Tamilnadu" && (
+            {studentData.nativity === "TN" && (
               <Inputfield
                 eltname={"district"}
                 type={"dropdown"}
@@ -1095,7 +1094,7 @@ const handleStuDelete = async () => {
               />
             )}
 
-          </div>
+          </div>)}
           <div className="field-row">
             <Inputfield
               eltname={"hsc_tn"}

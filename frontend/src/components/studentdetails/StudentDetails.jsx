@@ -66,11 +66,11 @@ function StudentDetails({ admin, supp }) {
   async function handleSelect(branch) {
     showLoader();
     setSelected(branch);
+    setAdd(false);
+    setClicked(0);
+    setStudents([]);
     if (branch === "") {
       hideLoader();
-      setClicked(0);
-      setAdd(false);
-      setStudents([]);
       return;
     }
     try {
