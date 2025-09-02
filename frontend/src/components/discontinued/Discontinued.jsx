@@ -14,6 +14,7 @@ const Discontinued = ({ admin, supp }) => {
   const [appln_no, setAppln_no] = useState(0);
   const [add, setAdd] = useState("");
   const [branch, setBranch] = useState([]);
+  const[error,setError]=useState({});
   const [studentData, setStudentData] = useState({
     NAME: "",
     APPROVE_STATE: "0",
@@ -21,13 +22,36 @@ const Discontinued = ({ admin, supp }) => {
   });
   const { showLoader, hideLoader } = useLoader();
   const collegeCode = 5901;
+  const [alertStage, setAlertStage] = useState("");
 
   const [showAlert, setShowAlert] = useState(false);
   const [alertType, setAlertType] = useState("");
   const [alertMessage, setAlertMessage] = useState("");
   const [alertOkAction, setAlertOkAction] = useState(() => () => {});
   const [alertCancelAction, setAlertCancelAction] = useState(() => () => {});
+  
   const navigate = useNavigate();
+
+  // const requiredFields=["appln_no","NAME","TC_STATE","APPROVE_STATE"];
+  const requiredFields = ["appln_no", "NAME", "TC_STATE", "APPROVE_STATE"];
+
+const validateFields = () => {
+  const newErrors = {};
+
+  requiredFields.forEach((field) => {
+    const value = field === "appln_no" ? appln_no : studentData[field];
+    if (value === undefined || value === null || value === "") {
+      newErrors[field] = "This field is required";
+    }
+    if (field==="NAME" && /\d/.test(value)) {
+        newErrors[field] = "Only letters are allowed";
+      }
+
+  });
+
+  setError(newErrors);
+  return Object.keys(newErrors).length === 0;
+};
 
   const handleChange = (e) => {
     const { name, value, type } = e.target;
@@ -40,6 +64,7 @@ const Discontinued = ({ admin, supp }) => {
       ...prev,
       [name]: type === "radio" ? Number(value) : value, // force numbers for radios
     }));
+    console.log(studentData);
   };
 
   const handlecloseAlert = () => {
@@ -67,50 +92,71 @@ const Discontinued = ({ admin, supp }) => {
     setShowAlert(true);
     setAlertMessage("Confirm to update");
     setAlertType("warning");
+    setAlertStage("confirm")
     setAlertOkAction(() => handleUpdate);
-    setAlertCancelAction(() => () => setShowAlert(false));
   };
 
   const confirmDelete = async () => {
     setShowAlert(true);
     setAlertMessage("Confirm to delete");
+    setAlertStage("confirm")
     setAlertType("warning");
     setAlertOkAction(() => handleDelete);
-    setAlertCancelAction(() => () => setShowAlert(false));
   };
 
   const handleUpdate = async () => {
-    showLoader();
-    try {
-      const response = await axios.put(
-        `${host}discontinued-student`,
-        { appln_no, studentData, selected },
-        {
-          withCredentials: true,
-        }
-      );
+    // showLoader();
+    const noErrors=validateFields();
 
+    if(noErrors){
+      console.log(noErrors)
+      setShowAlert(true);
+      setAlertMessage("Confirm to update");
+      setAlertType("warning");
+      setAlertStage("confirm")
+      setAlertOkAction(() => async () => {
+        showLoader();
+        try {
+        const response = await axios.put(
+            `${host}discontinued-student`,
+            { appln_no, studentData, selected },
+            {
+              withCredentials: true,
+            }
+          );
+  
+          
       if (response.status === 200) {
         setShowAlert(true);
         setAlertMessage("Updated Successfully");
+        setAlertStage("success");
         setAlertType("success");
         setAlertOkAction(() => () => {
           setShowAlert(false);
-          handleSelect("");
         });
-        setAlertCancelAction(null);
+        setAlertCancelAction(null)
       }
     } catch (error) {
-      console.warn(error);
       setShowAlert(true);
-      setAlertMessage("Unable to connnect to server...");
+      setAlertMessage("Unable to delete kindly try again...");
       setAlertType("error");
       setAlertOkAction(() => () => {
         setShowAlert(false);
       });
-      setAlertCancelAction(null);
     } finally {
       hideLoader();
+    }
+  });
+    }
+    else{
+      setShowAlert(true);
+      setAlertMessage("Please fill all fields");
+      setAlertStage("error");
+      setAlertType("warning");
+      setAlertOkAction(() => () => {
+        setShowAlert(false);
+      });
+      setAlertCancelAction(null);
     }
   };
 
@@ -121,26 +167,33 @@ const Discontinued = ({ admin, supp }) => {
         data: { appln_no },
         withCredentials: true,
       });
-      // if (response.status === 200) {
+      if (response.status === 200) {
       setShowAlert(true);
       setAlertMessage("deleted Successfully");
       setAlertType("success");
       setAlertOkAction(() => () => {
         setShowAlert(false);
       });
-      setAlertCancelAction(null);
       setAppln_no(0);
-      deleteOne(appln_no);
+      deleteOne(appln_no);}
+      else{
+      setShowAlert(true);
+      setAlertMessage("Failed to delete");
+      setAlertType("success");
+      setAlertOkAction(() => () => {
+        setShowAlert(false);
+      });
+      }
       // }
     } catch (error) {
       // console.log(error);
       setShowAlert(true);
       setAlertMessage("Unable to connnect to server...");
       setAlertType("error");
+      setAlertStage("success")
       setAlertOkAction(() => () => {
         setShowAlert(false);
       });
-      setAlertCancelAction(null);
     } finally {
       hideLoader();
     }
@@ -300,7 +353,7 @@ const Discontinued = ({ admin, supp }) => {
       )}
 
       {(appln_no != 0 || add) && (
-        <div>
+        <div> 
           <div id="appln_no" style={{ display: "flex", gap: "8%" }}>
             <Inputfield
               eltname={"appln_no"}
@@ -309,6 +362,7 @@ const Discontinued = ({ admin, supp }) => {
               onchange={handleChange}
               value={appln_no}
               disabled={!add}
+              error={error["appln_no"]}
             />
             <div style={{ marginTop: "20px" }}>
               <Button
@@ -336,7 +390,7 @@ const Discontinued = ({ admin, supp }) => {
                   htmlfor={"candidatename"}
                   classname={"field-block"}
                   value={studentData.NAME}
-                  // error={error["candidatename"]}
+                  error={error["NAME"]}
                   required={true}
                   onchange={handleChange}
                 />
@@ -356,7 +410,7 @@ const Discontinued = ({ admin, supp }) => {
                   htmlfor={"appr-dote"}
                   required={true}
                   value={Number(studentData.APPROVE_STATE)}
-                  // error={error["Nationality"]}
+                  error={error["APPROVE_STATE"]}
                 />
                 <Inputfield
                   eltname={"TC_STATE"}
@@ -372,12 +426,12 @@ const Discontinued = ({ admin, supp }) => {
                   htmlfor={"tc-issued"}
                   required={true}
                   value={Number(studentData.TC_STATE)}
-                  // error={error["Nationality"]}
+                  error={error["TC_STATE"]}
                 />
               </div>
             </fieldset>
             <div id="studentbutton">
-              <Button name={"UPDATE"} onClick={confirmUpdate} />
+              <Button name={"UPDATE"} onClick={handleUpdate} />
               <Button name={"DELETE"} onClick={confirmDelete} />
             </div>
           </div>
@@ -388,7 +442,7 @@ const Discontinued = ({ admin, supp }) => {
         message={alertMessage}
         show={showAlert}
         okbutton={alertOkAction}
-        cancelbutton={alertCancelAction}
+        cancelbutton={alertStage === "confirm" ? handlecloseAlert : null}
       />
     </div>
   );

@@ -328,6 +328,26 @@ const validateFields = () => {
 };
 
   const handleAddStudent = () => {
+     const updatedData = { ...studentData };
+
+    const visibleFields = getVisibleSemesterFields(
+      studentData.hsc_group,
+      semesterRange
+    );
+
+    const allSemesterNums = Array.from({ length: 8 }, (_, i) => i + 1);
+
+    allSemesterNums.forEach((sem) => {
+      ["max_", "obt_"].forEach((prefix) => {
+        const key = `${prefix}${sem}`;
+
+        if (!visibleFields.includes(key)) {
+          updatedData[key] = 0;
+        } else if (!(key in updatedData)) {
+          updatedData[key] = studentData[key] || 0;
+        }
+      });
+    });
     const noerrors = validateFields();
     console.log(noerrors);
     if (noerrors) {
@@ -339,7 +359,7 @@ const validateFields = () => {
      setAlertOkAction(() => async () => {
         await axios.post(
           `${host}studentadd`,
-          { appln_no: appln_no,b_code:b_code,studentData:studentData},
+          { appln_no: appln_no,b_code:b_code,studentData:updatedData},
           { withCredentials: true }
         );  
         setShowAlert(true);
