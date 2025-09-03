@@ -131,9 +131,11 @@ const validateFields = () => {
       }
     }
 
-    if (formdata.transportfacility === "Yes" && formdata.mintransportcharge > formdata.maxtransportcharge) {
+    if (formdata.transportfacility === "Yes" && Number(formdata.mintransportcharge) > Number(formdata.maxtransportcharge)) {
+      console.log(formdata.mintransportcharge);
+      console.log(formdata.maxtransportcharge);
       newErrors["mintransportcharge"] = "Enter a valid minimum transport charge";
-      newErrors["maxtransportcharge"] = "Enter a valid maximum transport charge";
+      newErrors["maxtransportcharge"]="Enter a valid maximum transport charge";
     }
 
     if (numericFieldsBoys.includes(field) && formdata.accomodationavailableboys === "Yes") {
@@ -208,6 +210,7 @@ const handleChange = (e) => {
     ) {
       isValid = false;
     }
+    
 
     if (name === "collegephone" && !/^[0-9]{10,12}$/.test(trimmedValue)) {
       isValid = false;
@@ -235,10 +238,10 @@ const handleChange = (e) => {
       }
     }
 
-    if (formdata.transportfacility === "Yes" && Number(formdata.mintransportcharge) > Number(formdata.maxtransportcharge)) {
-      updatedErrors["mintransportcharge"] = "Enter a valid minimum transport charge";
-      updatedErrors["maxtransportcharge"] = "Enter a valid maximum transport charge";
-    }
+    if (transportFields.includes(name)&&formdata.transportfacility === "Yes" ){
+      if(Number(formdata.mintransportcharge) > Number(formdata.maxtransportcharge)) {
+        isValid=false;
+    }}
 
     if (numericFieldsBoys.includes(name) && formdata.accomodationavailableboys === "Yes") {
       if (!/^[0-9]{1,5}$/.test(trimmedValue)) {
@@ -251,7 +254,6 @@ const handleChange = (e) => {
         isValid = false;
       }
     }
-
     if (name === "collegecode" && !(trimmedValue.length === 1 || trimmedValue.length === 4)) {
       isValid = false;
     }
@@ -376,7 +378,7 @@ const handleChange = (e) => {
       }
       else{
         setShowAlert(true);
-        setAlertMessage("Please Fill All Fields!");
+        setAlertMessage("Please Fill All details correctly!");
         setAlertType('warning');
         setAlertStage('validation')
       }
