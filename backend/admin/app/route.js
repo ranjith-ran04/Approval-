@@ -10,6 +10,7 @@ const collegeget = require("../../college/app/controllers/collegeget");
 const collegeinfo = require("../../college/app/controllers/collegeinfo");
 const principal_approved = require("./forms/principal_approved");
 const principal_notapproved = require("./forms/principal_notapproved");
+const {noteOrderPending} = require("./forms/noteOrderPending");
 
 router.post('/login',login);
 router.get('/login',verifyjwt,fetchlogin);
@@ -22,6 +23,7 @@ router.post('/collegeadmin',verifyjwt,collegeget);
 router.put('/collegeadmin',verifyjwt,collegeinfo);
 router.post('/principal-approved',principal_approved);
 router.post('/principal-notapproved',principal_notapproved);
+router.post('/noteOrderPending',verifyjwt,noteOrderPending);
 
 
 
