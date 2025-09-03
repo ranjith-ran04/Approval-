@@ -194,84 +194,88 @@ const handleChange = (e) => {
   setFormdata((prev) => ({ ...prev, ...updates }));
   setchangedFields((prev) => ({ ...prev, ...updates }));
 
-  setError((prevErrors) => {
-    const updatedErrors = { ...prevErrors };
+setError((prevErrors) => {
+  const updatedErrors = { ...prevErrors };
+  const mergedData = { ...formdata, ...updates }; 
 
-    let isValid = true;
-    const trimmedValue = value?.toString().trim() || "";
+  let isValid = true;
+  const trimmedValue = value?.toString().trim() || "";
 
-    if (!trimmedValue) {
+  if (!trimmedValue) {
+    isValid = false;
+  }
+
+  if (
+    ["collegenameWithdistrict", "principalname", "district", "taluk", "constituency", "nearestrailway"].includes(name) &&
+    /\d/.test(trimmedValue)
+  ) {
+    isValid = false;
+  }
+
+  if (name === "collegephone" && !/^[0-9]{10,12}$/.test(trimmedValue)) {
+    isValid = false;
+  }
+
+  if (name === "principalcontact" && !/^[0-9]{10,12}$/.test(trimmedValue)) {
+    isValid = false;
+  }
+
+  if (name === "collegeemail" && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedValue)) {
+    isValid = false;
+  }
+
+  if (name === "pincode" && !/^\d{6}$/.test(trimmedValue)) {
+    isValid = false;
+  }
+
+  if (transportFields.includes(name) && mergedData.transportfacility === "Yes") {
+    if (!/^[0-9]{1,6}$/.test(trimmedValue)) {
+      isValid = false;
+    }
+
+    if ((name === "distance" || name === "distancefromrailway") &&
+        (Number(trimmedValue) < 1 || Number(trimmedValue) > 100)) {
       isValid = false;
     }
 
     if (
-      ["collegenameWithdistrict", "principalname", "district", "taluk", "constituency", "nearestrailway"].includes(name) &&
-      /\d/.test(trimmedValue)
+      Number(mergedData.mintransportcharge) > Number(mergedData.maxtransportcharge)
     ) {
       isValid = false;
     }
-    
+  }
 
-    if (name === "collegephone" && !/^[0-9]{10,12}$/.test(trimmedValue)) {
+  if (numericFieldsBoys.includes(name) && mergedData.accomodationavailableboys === "Yes") {
+    if (!/^[0-9]{1,5}$/.test(trimmedValue)) {
       isValid = false;
     }
+  }
 
-    if (name === "principalcontact" && !/^[0-9]{10,12}$/.test(trimmedValue)) {
+  if (numericFieldsGirls.includes(name) && mergedData.accomodationavailablegirls === "Yes") {
+    if (!/^[0-9]{1,5}$/.test(trimmedValue)) {
       isValid = false;
     }
+  }
 
-    if (name === "collegeemail" && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedValue)) {
+  if (name === "collegecode" && !(trimmedValue.length === 1 || trimmedValue.length === 4)) {
+    isValid = false;
+  }
+
+  if (name === "bankaccountno") {
+    if (trimmedValue.toUpperCase() !== "NIL" && !/^[1-9][0-9]{6,14}$/.test(trimmedValue)) {
       isValid = false;
     }
+  }
 
-    if (name === "pincode" && !/^\d{6}$/.test(trimmedValue)) {
-      isValid = false;
-    }
+  if (isValid) {
+    delete updatedErrors[name];
+  } else {
+    updatedErrors[name] = "Invalid value";
+  }
 
-    if (transportFields.includes(name) && formdata.transportfacility === "Yes") {
-      if (!/^[0-9]{1,4}$/.test(trimmedValue)) {
-        isValid = false;
-      }
-      if ((name === "distance" || name === "distancefromrailway") &&
-          (Number(trimmedValue) < 1 || Number(trimmedValue) > 100)) {
-        isValid = false;
-      }
-    }
+  return updatedErrors;
+});
 
-    if (transportFields.includes(name)&&formdata.transportfacility === "Yes" ){
-      if(Number(formdata.mintransportcharge) > Number(formdata.maxtransportcharge)) {
-        isValid=false;
-    }}
-
-    if (numericFieldsBoys.includes(name) && formdata.accomodationavailableboys === "Yes") {
-      if (!/^[0-9]{1,5}$/.test(trimmedValue)) {
-        isValid = false;
-      }
-    }
-
-    if (numericFieldsGirls.includes(name) && formdata.accomodationavailablegirls === "Yes") {
-      if (!/^[0-9]{1,5}$/.test(trimmedValue)) {
-        isValid = false;
-      }
-    }
-    if (name === "collegecode" && !(trimmedValue.length === 1 || trimmedValue.length === 4)) {
-      isValid = false;
-    }
-
-    if (name === "bankaccountno") {
-      if (trimmedValue.toUpperCase() !== "NIL" && !/^[1-9][0-9]{6,14}$/.test(trimmedValue)) {
-        isValid = false;
-      }
-    }
-
-    if (isValid) {
-      delete updatedErrors[name];
-    } else {
-      updatedErrors[name] = "Invalid value";
-    }
-
-    return updatedErrors;
-  });
 };
 
     const handleCloseAlert = () => {
