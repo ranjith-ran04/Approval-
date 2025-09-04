@@ -381,7 +381,7 @@ const validateFields = () => {
      else {
       setShowAlert(true);
       setAlertStage("success");
-      setAlertMessage("You have errors");
+      setAlertMessage("Please fill all details correctly!");
       setAlertType("warning");
       setAlertOkAction(() => () => {
         setShowAlert(false);

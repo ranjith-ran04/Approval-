@@ -5,11 +5,11 @@ import handleForm from "../sidebar/pdfApi";
 import Alert from "../alert/Alert";
 import { host } from "../../constants/backendpath";
 import axios from "axios";
-import {useNavigate} from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 import { useLoader } from "../../context/LoaderContext";
 
-function Sidebar({ setCurrent, admin ,current }) {
-  const {showLoader,hideLoader} = useLoader();
+function Sidebar({ setCurrent, admin, current }) {
+  const { showLoader, hideLoader } = useLoader();
   const [submitted, setSubmitted] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
   const [alertStage, setAlertStage] = useState("");
@@ -48,23 +48,34 @@ function Sidebar({ setCurrent, admin ,current }) {
     setAlertStage("confirm");
     setAlertType("warning");
 
-    setAlertOkAction(() => async () => {
-      try {
-        await axios.post(`${host}submit`, {}, { withCredentials: true });
-
-        setSubmitted(true);
-        setCurrent(0);
-        setAlertMessage("Submitted Successfully!");
-        setAlertStage("success");
-        setAlertType("success");
-        setAlertOkAction(() => () => setShowAlert(false));
-      } catch (err) {
-        console.error("Submit failed : ", err);
-        setAlertMessage("Failed to Submit. Try again.");
-        setAlertStage("error");
-        setAlertType("error");
-        setAlertOkAction(() => () => setShowAlert(false));
-      }
+    setAlertOkAction(() => () => {
+      setShowAlert(true);
+      setAlertMessage("You Cannot Edit after this");
+      setAlertStage("confirm");
+      setAlertType("warning");
+      setAlertOkAction(() => () => {
+        setShowAlert(true);
+        setAlertMessage("Are you sure ! You Cannot Edit after this submit!!!");
+        setAlertStage("confirm");
+        setAlertType("warning");
+        setAlertOkAction(() => async () => {
+          try {
+            await axios.post(`${host}submit`, {}, { withCredentials: true });
+            setSubmitted(true);
+            setCurrent(0);
+            setAlertMessage("Submitted Successfully!");
+            setAlertStage("success");
+            setAlertType("success");
+            setAlertOkAction(() => () => setShowAlert(false));
+          } catch (err) {
+            console.error("Submit failed : ", err);
+            setAlertMessage("Failed to Submit. Try again.");
+            setAlertStage("error");
+            setAlertType("error");
+            setAlertOkAction(() => () => setShowAlert(false));
+          }
+        });
+      });
     });
   };
 
@@ -98,37 +109,37 @@ function Sidebar({ setCurrent, admin ,current }) {
       id: 5,
       iconId: "formAIcon",
       label: "Form A",
-      action: () => handleForm(showLoader,hideLoader,navigate,"forma"),
+      action: () => handleForm(showLoader, hideLoader, navigate, "forma"),
     },
     {
       id: 6,
       iconId: "formBIcon",
       label: "Form B",
-      action: () => handleForm(showLoader,hideLoader,navigate,"formb"),
+      action: () => handleForm(showLoader, hideLoader, navigate, "formb"),
     },
     {
       id: 7,
       iconId: "formCIcon",
       label: "Form C",
-      action: () => handleForm(showLoader,hideLoader,navigate,"formc"),
+      action: () => handleForm(showLoader, hideLoader, navigate, "formc"),
     },
     {
       id: 8,
       iconId: "formDIcon",
       label: "Form D",
-      action: () => handleForm(showLoader,hideLoader,navigate,"formd"),
+      action: () => handleForm(showLoader, hideLoader, navigate, "formd"),
     },
     {
       id: 9,
       iconId: "formFGIcon",
       label: "Form FG",
-      action: () => handleForm(showLoader,hideLoader,navigate,"formfg"),
+      action: () => handleForm(showLoader, hideLoader, navigate, "formfg"),
     },
     {
       id: 10,
       iconId: "formLEAIcon",
       label: "Form LEA2025",
-      action: () => handleForm(showLoader,hideLoader,navigate,"formlea"),
+      action: () => handleForm(showLoader, hideLoader, navigate, "formlea"),
     },
     {
       id: 11,
@@ -136,7 +147,9 @@ function Sidebar({ setCurrent, admin ,current }) {
       label: "Approved Details",
       action: () =>
         handleForm(
-          showLoader,hideLoader,navigate,
+          showLoader,
+          hideLoader,
+          navigate,
           "formApprv",
           undefined,
           undefined,
@@ -152,7 +165,9 @@ function Sidebar({ setCurrent, admin ,current }) {
       label: "Not Approved Details",
       action: () =>
         handleForm(
-          showLoader,hideLoader,navigate,
+          showLoader,
+          hideLoader,
+          navigate,
           "formApprv",
           undefined,
           undefined,
@@ -335,21 +350,20 @@ function Sidebar({ setCurrent, admin ,current }) {
   ];
 
   const [collapsed, setCollapsed] = useState(false);
-const getActiveIdFromCurrent = (currentVal) => {
-  if (currentVal === 5) return 3;
-  if (currentVal === 6) return 4;
-  if (currentVal === 3 || currentVal === 4) return 2;
-  return currentVal;
-};
+  const getActiveIdFromCurrent = (currentVal) => {
+    if (currentVal === 5) return 3;
+    if (currentVal === 6) return 4;
+    if (currentVal === 3 || currentVal === 4) return 2;
+    return currentVal;
+  };
 
-const [activeAdminId, setActiveAdminId] = useState(
-  getActiveIdFromCurrent(Number(localStorage.getItem("current")) || 0)
-);
+  const [activeAdminId, setActiveAdminId] = useState(
+    getActiveIdFromCurrent(Number(localStorage.getItem("current")) || 0)
+  );
 
-useEffect(() => {
-  setActiveAdminId(getActiveIdFromCurrent(Number(current)));
-}, [current]);
-
+  useEffect(() => {
+    setActiveAdminId(getActiveIdFromCurrent(Number(current)));
+  }, [current]);
 
   const toggleSidebar = () => setCollapsed((prev) => !prev);
 
@@ -357,7 +371,7 @@ useEffect(() => {
     if (!admin && submitted) {
       if (index < 1) setActiveAdminId(index);
       if (action) action();
-    }else if(!admin) {
+    } else if (!admin) {
       if (index < 5) setActiveAdminId(index);
       if (action) action();
     }

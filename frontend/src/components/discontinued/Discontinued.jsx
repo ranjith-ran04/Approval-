@@ -180,6 +180,7 @@ const validateFields = () => {
       });
       if (response.status === 200) {
       setShowAlert(true);
+      setAlertStage("success")
       setAlertMessage("deleted Successfully");
       setAlertType("success");
       setAlertOkAction(() => () => {
