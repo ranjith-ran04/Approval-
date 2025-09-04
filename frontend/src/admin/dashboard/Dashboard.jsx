@@ -91,7 +91,7 @@ function Dashboard() {
 
   return logged ? (
     <div className="dashboard">
-      <Sidebar setCurrent={setCurrent} admin={true} />
+      {isSubmit && <Sidebar setCurrent={setCurrent} admin={true} />}
       <div className="dashone">
         <NavigationBar
           text={`GOVERNMENT OF TAMILNADU
@@ -105,7 +105,7 @@ Tamilnadu Lateral Entry Direct Second Year B.E/B.Tech.,Approval-2025`}
         />
 
         <div className="dashboard-body" ref={scrollRef}>
-          <div className="dashboard-box">
+          { current === 0 && (<div className="dashboard-box">
             <div className="collgroup collgroup-inline">
               <label htmlFor="collcode" className="collcode">
                 College Code
@@ -119,7 +119,7 @@ Tamilnadu Lateral Entry Direct Second Year B.E/B.Tech.,Approval-2025`}
                 onKeyDown={handleKey}
                 onChange={(e) => setCollegeCode(e.target.value)}
               />
-              <button className="collbut" onSubmit={fetch}>
+              <button className="collbut" onClick={fetch}>
                 Enter
               </button>
             </div>
@@ -208,7 +208,8 @@ Tamilnadu Lateral Entry Direct Second Year B.E/B.Tech.,Approval-2025`}
                 </div>
               </>
             )}
-          </div>
+          </div>)
+          }
           {isSubmit && (
             <>
               {isSubmit && current === 0 && (
