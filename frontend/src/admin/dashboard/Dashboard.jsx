@@ -3,7 +3,7 @@ import NavigationBar from "../../widgets/navigationBar/NavigationBar.jsx";
 import Sidebar from "../../widgets/sidebar/Sidebar.jsx";
 import { useState, useRef, useEffect } from "react";
 import axios from "axios";
-import { adminhost } from "../../constants/backendpath.js";
+import { adminhost,host} from "../../constants/backendpath.js";
 import { useNavigate, useLocation } from "react-router-dom";
 import StudentDetails from "../../components/studentDetails/StudentDetails.jsx";
 import ScrollToTop from "../../widgets/scrollToTop/ScrollToTop.jsx";
@@ -24,6 +24,7 @@ function Dashboard() {
 
   const navigate = useNavigate();
   async function fetch() {
+    setIsSubmit(true);
     try {
       const res = await axios.post(
         `${adminhost}home`,
@@ -88,10 +89,27 @@ function Dashboard() {
   }, [current]);
 
   // console.log(supp);
+    const handleLogOut = async (admin) => {
+      console.log('hi')
+    try {
+      const res = await axios.get(`${host}logout`, { withCredentials: true });
+      if (res.status === 200) {
+        if (admin) {
+          navigate("/admin/login");
+        } else {
+          navigate("/");
+          sessionStorage.setItem("notesShown", "");
+          localStorage.setItem("current",0);
+        }
+      }
+    } catch (error) {
+      // console.log(error);
+    }
+  };
 
   return logged ? (
     <div className="dashboard">
-      <Sidebar setCurrent={setCurrent} admin={true} />
+      {isSubmit && <Sidebar setCurrent={setCurrent} admin={true} />}
       <div className="dashone">
         <NavigationBar
           text={`GOVERNMENT OF TAMILNADU
@@ -102,10 +120,12 @@ Tamilnadu Lateral Entry Direct Second Year B.E/B.Tech.,Approval-2025`}
           setCurrent={setCurrent}
           admin={true}
           style={{ height: "40px" }}
+          login={logged}
+          handleLogOut={handleLogOut}
         />
 
         <div className="dashboard-body" ref={scrollRef}>
-          <div className="dashboard-box">
+          { current === 0 && (<div className="dashboard-box">
             <div className="collgroup collgroup-inline">
               <label htmlFor="collcode" className="collcode">
                 College Code
@@ -119,7 +139,7 @@ Tamilnadu Lateral Entry Direct Second Year B.E/B.Tech.,Approval-2025`}
                 onKeyDown={handleKey}
                 onChange={(e) => setCollegeCode(e.target.value)}
               />
-              <button className="collbut" onSubmit={fetch}>
+              <button className="collbut" onClick={fetch}>
                 Enter
               </button>
             </div>
@@ -208,7 +228,8 @@ Tamilnadu Lateral Entry Direct Second Year B.E/B.Tech.,Approval-2025`}
                 </div>
               </>
             )}
-          </div>
+          </div>)
+          }
           {isSubmit && (
             <>
               {isSubmit && current === 0 && (

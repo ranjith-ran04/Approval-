@@ -194,31 +194,31 @@ function Sidebar({ setCurrent, admin, current }) {
       id: 2,
       label: "Form A",
       iconId: "formIcon",
-      action: () => handleForm("forma", true, collegeCode),
+      action: () => handleForm(showLoader,hideLoader,navigate,"forma", true, collegeCode),
     },
     {
       id: 3,
       label: "Form B",
       iconId: "formIcon",
-      action: () => handleForm("formb", true, collegeCode),
+      action: () => handleForm(showLoader,hideLoader,navigate,"formb", true, collegeCode),
     },
     {
       id: 4,
       label: "Form C",
       iconId: "formIcon",
-      action: () => handleForm("formc", true, collegeCode),
+      action: () => handleForm(showLoader,hideLoader,navigate,"formc", true, collegeCode),
     },
     {
       id: 5,
       label: "Form D",
       iconId: "formIcon",
-      action: () => handleForm("formd", true, collegeCode),
+      action: () => handleForm(showLoader,hideLoader,navigate,"formd", true, collegeCode),
     },
     {
       id: 6,
       label: "Form FG",
       iconId: "formIcon",
-      action: () => handleForm("formfg", true, collegeCode),
+      action: () => handleForm(showLoader,hideLoader,navigate,"formfg", true, collegeCode),
     },
     { id: 7, label: "Abstract Form", iconId: "formIcon" },
     { id: 8, label: "Note Order", iconId: "formIcon" },
@@ -228,13 +228,14 @@ function Sidebar({ setCurrent, admin, current }) {
     {
       id: 12,
       label: "Principal-Approved",
-      action: () => handleForm("principal-approved", admin, collegeCode, true),
+      iconId: "formIcon" ,
+      action: () => handleForm(showLoader,hideLoader,navigate,"principal-approved", admin,collegeCode,true),
     },
     {
       id: 13,
       label: "Principal-Not Approved",
-      action: () =>
-        handleForm("principal-notapproved", admin, collegeCode, true),
+      iconId: "formIcon" ,
+      action: () => handleForm(showLoader,hideLoader,navigate,"principal-notapproved", admin,collegeCode,true),
     },
   ];
 
@@ -244,7 +245,7 @@ function Sidebar({ setCurrent, admin, current }) {
       label: "OC/BCM/BC/MBC/DNC",
       iconId: "formIcon",
       action: () =>
-        handleForm(
+        handleForm(showLoader,hideLoader,navigate,
           "fg_form",
           true,
           collegeCode,
@@ -257,13 +258,13 @@ function Sidebar({ setCurrent, admin, current }) {
       label: "SC/SCA",
       iconId: "formIcon",
       action: () =>
-        handleForm("fg_form", true, collegeCode, ["sc", "sca"], true),
+        handleForm(showLoader,hideLoader,navigate,"fg_form", true, collegeCode, ["sc", "sca"], true),
     },
     {
       id: 16,
       label: "ST",
       iconId: "formIcon",
-      action: () => handleForm("fg_form", true, collegeCode, ["st"], true),
+      action: () => handleForm(showLoader,hideLoader,navigate,"fg_form", true, collegeCode, ["st"], true),
     },
   ];
 
@@ -273,7 +274,7 @@ function Sidebar({ setCurrent, admin, current }) {
       label: "OC/BCM/BC/MBC/DNC",
       iconId: "formIcon",
       action: () =>
-        handleForm(
+        handleForm(showLoader,hideLoader,navigate,
           "fg_form",
           true,
           collegeCode,
@@ -286,13 +287,13 @@ function Sidebar({ setCurrent, admin, current }) {
       label: "SC/SCA",
       iconId: "formIcon",
       action: () =>
-        handleForm("fg_form", true, collegeCode, ["sc", "sca"], false),
+        handleForm(showLoader,hideLoader,navigate,"fg_form", true, collegeCode, ["sc", "sca"], false),
     },
     {
       id: 19,
       label: "ST",
       iconId: "formIcon",
-      action: () => handleForm("fg_form", true, collegeCode, ["st"], false),
+      action: () => handleForm(showLoader,hideLoader,navigate,"fg_form", true, collegeCode, ["st"], false),
     },
   ];
 
@@ -313,7 +314,7 @@ function Sidebar({ setCurrent, admin, current }) {
       label: "OC/BCM/BC/MBC/DNC",
       iconId: "formIcon",
       action: () =>
-        handleForm(
+        handleForm(showLoader,hideLoader,navigate,
           "fg_form",
           true,
           collegeCode,
@@ -327,14 +328,14 @@ function Sidebar({ setCurrent, admin, current }) {
       label: "SC/SCA",
       iconId: "formIcon",
       action: () =>
-        handleForm("fg_form", true, collegeCode, ["sc", "sca"], true, true),
+        handleForm(showLoader,hideLoader,navigate,"fg_form", true, collegeCode, ["sc", "sca"], true, true),
     },
     {
       id: 24,
       label: "ST",
       iconId: "formIcon",
       action: () =>
-        handleForm("fg_form", true, collegeCode, ["st"], true, true),
+        handleForm(showLoader,hideLoader,navigate,"fg_form", true, collegeCode, ["st"], true, true),
     },
   ];
 
@@ -464,7 +465,7 @@ function Sidebar({ setCurrent, admin, current }) {
               <div id="buttonDiv">
                 <Button
                   name="College Details Pdf"
-                  onClick={() => handleForm("collegeDetails", true, 5901, true)}
+                  onClick={() => handleForm(showLoader,hideLoader,"collegeDetails", true, 5901, true)}
                 />
               </div>
             </>
