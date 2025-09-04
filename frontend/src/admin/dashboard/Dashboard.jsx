@@ -90,6 +90,7 @@ function Dashboard() {
 
   // console.log(supp);
     const handleLogOut = async (admin) => {
+      console.log('hi')
     try {
       const res = await axios.get(`${host}logout`, { withCredentials: true });
       if (res.status === 200) {
