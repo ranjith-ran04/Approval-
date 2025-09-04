@@ -186,7 +186,7 @@ async function formc(req, res) {
     }
 
     const counts = {};
-    for (const c of communities) counts[c] = { MALE: 0, FEMALE: 0 };
+    for (const c of communities) counts[c] = { Male: 0, Female: 0 };
 
     stuRows.forEach((r) => {
       if (counts[r.community]) {
@@ -196,11 +196,11 @@ async function formc(req, res) {
 
     const row = [slno++, b.branch_name, b.approved_in_take];
     for (const c of communities) {
-      row.push(counts[c].MALE || 0, counts[c].FEMALE || 0);
+      row.push(counts[c].Male || 0, counts[c].Female || 0);
     }
 
     const total = communities.reduce(
-      (sum, c) => sum + (counts[c].MALE || 0) + (counts[c].FEMALE || 0),
+      (sum, c) => sum + (counts[c].Male || 0) + (counts[c].Female || 0),
       0
     );
     row.push(total);
