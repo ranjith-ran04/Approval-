@@ -157,7 +157,7 @@ const validateFields = () => {
     if (field === "bankaccountno") {
       if (
         value.toUpperCase() !== "NIL" &&
-        !/^[1-9][0-9]{6,14}$/.test(value)
+        !/^[1-9][0-9]{6,16}$/.test(value)
       ) {
         newErrors[field] = "Invalid account number";
       }
@@ -170,33 +170,35 @@ const validateFields = () => {
 
 const handleChange = (e) => {
   const { name, value } = e.target;
-
   let updates = { [name]: value };
+
+setError((prevErrors) => {
+  var updatedErrors = { ...prevErrors };
+  const mergedData = { ...formdata, ...updates };
 
   if (name === "accomodationavailableboys" && value === "No") {
     let zeroFields = {};
     numericFieldsBoys.forEach((field) => (zeroFields[field] = "0"));
     updates = { ...updates, ...zeroFields };
+    numericFieldsBoys.forEach((field)=>updatedErrors = {...updatedErrors,[field]:""});
   }
 
   if (name === "accomodationavailablegirls" && value === "No") {
     let zeroFields = {};
     numericFieldsGirls.forEach((field) => (zeroFields[field] = "0"));
     updates = { ...updates, ...zeroFields };
+    numericFieldsGirls.forEach((field)=>updatedErrors = {...updatedErrors,[field]:""});
   }
 
   if (name === "transportfacility" && value === "No") {
     let zeroFields = {};
     transportFields.forEach((field) => (zeroFields[field] = "0"));
     updates = { ...updates, ...zeroFields, nearestrailway: "NIL" };
+    transportFields.forEach((field)=>updatedErrors = {...updatedErrors,[field]:""});
   }
 
   setFormdata((prev) => ({ ...prev, ...updates }));
-  setchangedFields((prev) => ({ ...prev, ...updates }));
-
-setError((prevErrors) => {
-  const updatedErrors = { ...prevErrors };
-  const mergedData = { ...formdata, ...updates }; 
+  setchangedFields((prev) => ({ ...prev, ...updates })); 
 
   let isValid = true;
   const trimmedValue = value?.toString().trim() || "";
@@ -243,6 +245,10 @@ setError((prevErrors) => {
     ) {
       isValid = false;
     }
+    else{
+      updatedErrors['mintransportcharge'] = "";
+      updatedErrors['maxtransportcharge'] = "";
+    }
   }
 
   if (numericFieldsBoys.includes(name) && mergedData.accomodationavailableboys === "Yes") {
@@ -262,7 +268,7 @@ setError((prevErrors) => {
   }
 
   if (name === "bankaccountno") {
-    if (trimmedValue.toUpperCase() !== "NIL" && !/^[1-9][0-9]{6,14}$/.test(trimmedValue)) {
+    if (trimmedValue.toUpperCase() !== "NIL" && !/^[1-9][0-9]{6,16}$/.test(trimmedValue)) {
       isValid = false;
     }
   }
