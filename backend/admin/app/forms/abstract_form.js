@@ -11,7 +11,6 @@ const abs_form = async(req,) => {
 
 
   try {
-    
     // 1. College info
     const collegeInfo = await db.query(
       "SELECT c_code, name_of_college, letter_no,dated FROM college_info WHERE c_code = ?",

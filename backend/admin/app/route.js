@@ -10,6 +10,8 @@ const collegeget = require("../../college/app/controllers/collegeget");
 const collegeinfo = require("../../college/app/controllers/collegeinfo");
 const principal_approved = require("./forms/principal_approved");
 const principal_notapproved = require("./forms/principal_notapproved");
+const princ_let = require("./forms/principal_letter");
+const abs_form = require("./forms/abstract_form");
 
 router.post('/login',login);
 router.get('/login',verifyjwt,fetchlogin);
@@ -22,7 +24,8 @@ router.post('/collegeadmin',verifyjwt,collegeget);
 router.put('/collegeadmin',verifyjwt,collegeinfo);
 router.post('/principal-approved',principal_approved);
 router.post('/principal-notapproved',principal_notapproved);
-
+router.post('/principal_letter',verifyjwt, princ_let);
+router.post('./abstract_form',verifyjwt, abs_form);
 
 
 module.exports = router;

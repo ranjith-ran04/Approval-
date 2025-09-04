@@ -220,11 +220,11 @@ function Sidebar({ setCurrent, admin, current }) {
       iconId: "formIcon",
       action: () => handleForm(showLoader,hideLoader,navigate,"formfg", true, collegeCode),
     },
-    { id: 7, label: "Abstract Form", iconId: "formIcon" },
+    { id: 7, label: "Abstract Form", iconId: "formIcon" ,action: () => handleForm(showLoader, hideLoader,navigate,"abstract_form",admin,collegeCode)},
     { id: 8, label: "Note Order", iconId: "formIcon" },
     { id: 9, label: "Note Order-Approved", iconId: "formIcon" },
     { id: 10, label: "Note Order-Approved/Pending", iconId: "formIcon" },
-    { id: 11, label: "Principal/Letter", iconId: "formIcon" },
+    { id: 11, label: "Principal/Letter", iconId: "formIcon" , action: () => handleForm(showLoader, hideLoader, navigate, "principal_letter", admin,collegeCode )},
     {
       id: 12,
       label: "Principal-Approved",
