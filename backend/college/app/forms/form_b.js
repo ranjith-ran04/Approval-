@@ -21,7 +21,7 @@ async function formb(req, res) {
   const query = `SELECT( (obt_1 + obt_2 + obt_3 + obt_4 + obt_5 + obt_6 + obt_7 + obt_8)/ 
       (max_1 + max_2 + max_3 + max_4 + max_5 + max_6 + max_7 + max_8)) 
       * 100 AS average, si.b_code AS branch, si.a_no AS appln_no, si.univ_reg_no AS reg_no, 
-    si.name AS name,si.catogory as category, si.nationality AS nat, si.community AS com, 
+    si.name AS name,si.catogory as category, si.nativity AS nat, si.community AS com, 
     si.name_of_board AS board, si.obt_1, si.max_1, si.obt_2, si.max_2, si.obt_3, si.max_3, si.obt_4, 
     si.max_4, si.obt_5, si.max_5, si.obt_6, si.max_6, si.obt_7, si.max_7, si.obt_8, si.max_8, si.fg AS fg,
     si.aicte_tfw AS afw FROM student_info si WHERE si.c_code = ?;`;
@@ -167,6 +167,7 @@ async function formb(req, res) {
   }
 
   Object.entries(studentsByBranch).forEach(([branchCodeKey, students]) => {
+    // console.log(students);
     const branchName = branchCode.get(branchCodeKey) || "Unknown Branch";
     if (
       doc.y + doc.heightOfString(branchName) >
@@ -206,7 +207,7 @@ async function formb(req, res) {
           width: columnWidths.BOARD - 4,
           align: "center",
         }) + 10;
-        let natHeight = doc.heightOfString(student.nat.toString(), {
+        let natHeight = doc.heightOfString(student.nat?student.nat.toString():'-', {
           width: columnWidths.BOARD - 4,
           align: "center",
         }) + 15;
@@ -223,18 +224,17 @@ async function formb(req, res) {
         tableheader();
         y = doc.y + 5;
       }
-
+// console.log('hi')
       const fields = [
         { key: "SNO", value: index + 1 },
-        { key: "APP_NO", value: student.appln_no },
-        { key: "REG_NO", value: student.reg_no },
-        { key: "QUOTA", value: student.category === "GOVERNMENT" ? "GOVT" : "MANT" },
-        { key: "NAME", value: student.name },
-        { key: "NAT", value: student.nat },
-        { key: "COM", value: student.com },
-        { key: "BOARD", value: student.board },
+        { key: "APP_NO", value: student.appln_no || "-"},
+        { key: "REG_NO", value: student.reg_no || "-" },
+        { key: "QUOTA", value: student.category === "GOVERNMENT" ? "GOVT" : "MANT" || "-" },
+        { key: "NAME", value: student.name || "-"},
+        { key: "NAT", value: !student.nat?"-":student.nat},
+        { key: "COM", value: student.com || "-"},
+        { key: "BOARD", value: student.board || "-"},
       ];
-
       fields.forEach((item) => {
         drawCell(
           String(item.value),
