@@ -8,6 +8,7 @@ import tamilnaduDistricts from "../../constants/Tndistricts";
 import { host } from "../../constants/backendpath";
 import { useLoader } from "../../context/LoaderContext";
 import states from "../../constants/states";
+import {useNavigate} from 'react-router-dom';
 
 const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
   // // console.log(clicked);
@@ -20,6 +21,7 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
     nativity: "",
   });
 
+  const [input,setInput]=useState([]);
   const [caste, setCastes] = useState([]);
   const [showAlert, setShowAlert] = useState(false);
   const [alertStage, setAlertStage] = useState("");
@@ -28,6 +30,7 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
   const [alertOkAction, setAlertOkAction] = useState(() => () => {});
   const [error, setError] = useState({});
   const [certificates, setCertificates] = useState([]);
+  const navigate = useNavigate();
   const requiredFields = [
     "a_no",
     "catogory",
@@ -44,7 +47,7 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
     "community",
     "caste_name",
     "parent_occupation",
-    "state",
+    // "state",
     // "district",
     // "otherStateName",
     "hsc_tn",
@@ -52,7 +55,7 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
     "year_of_passing",
     "univ_reg_no",
     "name_of_board",
-    "hsc_group",
+    // "hsc_group",
     "maths_studied",
     "annual_income",
     "fg",
@@ -159,12 +162,13 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
       });
       setCertificates(merged);
       // // console.log(merged);
-      console.log(student[0].community);
+      // console.log(student[0].community);
       // console.log(studentData.maths_studied);
       await caste_drop(student[0].community);
       // console.log(student[0].religion);
       
     } catch (err) {
+      if(err.response?.status === 401) navigate('/')
       // console.log(err);
     } finally {
       hideLoader();
@@ -179,118 +183,189 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
     setShowAlert(false);
     // setAlertStage('')
   };
-  const validateFields = () => {
-    const letterfields = [
-      "name",
-      "religion",
-      "parent_occupation",
-      "state",
-      "district",
-      "otherStateName",
-      "name_of_board",
-      "fg_district",
-      "remarks",
-    ];
+const validateFields = () => {
+  const visibleFields = getVisibleSemesterFields(studentData.hsc_group, semesterRange);
 
-    if (studentData["fg"] == 1)
-      requiredFields.push("fg_no", "fg_district", "Amount");
+  const letterfields = [
+    "name",
+    "religion",
+    "parent_occupation",
+    "state",
+    "district",
+    "otherStateName",
+    "name_of_board",
+    "fg_district",
+    "remarks",
+  ];
+  const booleanFields = ["fg", "maths_studied"];
+  const newErrors = {};
 
-    const booleanFields = ["fg", "maths_studied"];
-    const newErrors = {};
-    if(!studentData["dob"]  ||
-        studentData["dob"] === ""){
-      newErrors["dob"] = "This field is required";
-    }
-    requiredFields.forEach((field) => {
-      const value = studentData[field];
-      if (
-        (!value && !booleanFields.includes(field)) ||
-        studentData[field] === ""
-      ) {
-        newErrors[field] = "This field is required";
-      } else {
-        if (letterfields.includes(field) && /\d/.test(value)) {
-          newErrors[field] = "Only letters are allowed";
-        } else if (letterfields.includes(field) && /[!@#$%]/.test(value)) {
-          newErrors[field] = "Special characters not allowed";
-        }
-        if (field === "email" && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
-          newErrors[field] = "Enter correct email format";
-        }
-        if (field === "mobile" && isNaN(value)) {
-          newErrors[field] = "Only numbers are allowed";
-        } else if (field === "mobile" && !/^\d{10}$/.test(value)) {
-          newErrors[field] = "Enter 10 digit valid mobile number";
-        }
-        const numericFields = [
-          "aadharno",
-          "annual_income",
-          "max_1",
-          "obt_1",
-          "max_2",
-          "obt_2",
-          "max_3",
-          "obt_3",
-          "max_4",
-          "obt_4",
-          "max_5",
-          "obt_5",
-          "max_6",
-          "obt_6",
-          "max_7",
-          "obt_7",
-          "max_8",
-          "obt_8",
-        ];
-        if (numericFields.includes(field) && isNaN(value)) {
-          newErrors[field] = "Only digits are allowed";
-        } else if (numericFields.includes(field) && value < 0) {
-          newErrors[field] = "Negative numbers not allowed";
-        }
-        const maxObtPairs = [
-          ["max_1", "obt_1"],
-          ["max_2", "obt_2"],
-          ["max_3", "obt_3"],
-          ["max_4", "obt_4"],
-          ["max_5", "obt_5"],
-          ["max_6", "obt_6"],
-          ["max_7", "obt_7"],
-          ["max_8", "obt_8"],
-        ];
-        maxObtPairs.forEach(([maxField, obtField]) => {
-          const maxVal = parseFloat(studentData[maxField]);
-          const obtVal = parseFloat(studentData[obtField]);
+  // Build required fields dynamically (start with only the always-required ones)
+  let dynamicRequiredFields = [
+    "name",
+    "catogory",
+    "religion",
+    "gender",
+    "nationality",
+    "nativity",
+    "parent_occupation",
+    "aadharno",
+    "religion",
+    "community",
+    "caste_name",
+    "qualifying_exam",
+    "year_of_passing",
+    "univ_reg_no",
+    "hsc_tn",
+    "annual_income",
+    "mobile",
+    "email",
+    "dob",
+    ...visibleFields
+  ];
+  // dynamicRequiredFields.push(.keys);
+  // Nativity-based validation
+  if (studentData["nativity"] === "TamilNadu") {
+    dynamicRequiredFields.push("district");
+  } else if (studentData["nativity"] === "Others") {
+    dynamicRequiredFields.push("state");
+  }
 
-          // alert(maxVal,obtVal)
+  // Course type validation
+  if (studentData["course_type"] === "Bsc") {
+    dynamicRequiredFields.push("maths_studied");
+  }
 
-          if (!isNaN(maxVal) && !isNaN(obtVal)) {
-            if (maxVal < obtVal) {
-              newErrors[maxField] =
-                "Maximum marks should be greater than or equal to obtained marks";
-            }
-          }
-        });
-      }
-    });
-    setError(newErrors);
-    // console.log(newErrors);
+  // First Graduate validation
+  if (studentData["fg"] == 1) {
+    dynamicRequiredFields.push("fg_no", "fg_district", "Amount");
+  }
 
-    if (Object.keys(newErrors).length === 0) {
-      return true;
+  // console.log(dynamicRequiredFields);
+  // Iterate over dynamic required fields
+  dynamicRequiredFields.forEach((field) => {
+    const value = studentData[field];
+
+    if ((!value && !booleanFields.includes(field))) {
+      newErrors[field] = "This field is required";
     } else {
-      return false;
+      // Letter only fields
+      if (letterfields.includes(field) && /\d/.test(value)) {
+        newErrors[field] = "Only letters are allowed";
+      } else if (letterfields.includes(field) && /[!@#$%]/.test(value)) {
+        newErrors[field] = "Special characters not allowed";
+      }
+
+      // Email validation
+      if (field === "email" && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+        newErrors[field] = "Enter correct email format";
+      }
+
+      // Mobile validation
+      if (field === "mobile" && isNaN(value)) {
+        newErrors[field] = "Only numbers are allowed";
+      } else if (field === "mobile" && !/^\d{10}$/.test(value)) {
+        newErrors[field] = "Enter 10 digit valid mobile number";
+      }
+
+      // Numeric fields validation
+      const numericFields = [
+        "aadharno",
+        "annual_income",
+        "max_1", "obt_1",
+        "max_2", "obt_2",
+        "max_3", "obt_3",
+        "max_4", "obt_4",
+        "max_5", "obt_5",
+        "max_6", "obt_6",
+        "max_7", "obt_7",
+        "max_8", "obt_8",
+      ];
+      if (numericFields.includes(field) && isNaN(value)) {
+        newErrors[field] = "Only digits are allowed";
+      } else if (numericFields.includes(field) && value < 0) {
+        newErrors[field] = "Negative numbers not allowed";
+      }
+
+      // Max vs Obtained check
+      const maxObtPairs = [
+        ["max_1", "obt_1"],
+        ["max_2", "obt_2"],
+        ["max_3", "obt_3"],
+        ["max_4", "obt_4"],
+        ["max_5", "obt_5"],
+        ["max_6", "obt_6"],
+        ["max_7", "obt_7"],
+        ["max_8", "obt_8"],
+      ];
+      maxObtPairs.forEach(([maxField, obtField]) => {
+        const maxVal = parseFloat(studentData[maxField]);
+        const obtVal = parseFloat(studentData[obtField]);
+
+        if (!isNaN(maxVal) && !isNaN(obtVal)) {
+          if (maxVal < obtVal) {
+            newErrors[maxField] =
+              "Maximum marks should be greater than or equal to obtained marks";
+          }
+        }
+      });
     }
-  };
+  });
+  // console.log(newErrors);
+  setError(newErrors);
+
+  return Object.keys(newErrors).length === 0;
+};
+
   // console.log(studentData.religion);
-  
+
+  const getVisibleSemesterFields = (hsc_group, semesterRange) => {
+  const range = semesterRange[hsc_group] || { start: 0, end: -1 };
+
+  const semesters = Array.from(
+    { length: range.end - range.start + 1 },
+    (_, i) => range.start + i
+  );
+
+  return semesters.flatMap((sem) => [`max_${sem}`, `obt_${sem}`]);
+};
+
   const handleAddStudent = () => {
+    const updatedData = { ...studentData };
+
+    const visibleFields = getVisibleSemesterFields(
+      studentData.hsc_group,
+      semesterRange
+    );
+
+    const allSemesterNums = Array.from({ length: 8 }, (_, i) => i + 1);
+
+    allSemesterNums.forEach((sem) => {
+      ["max_", "obt_"].forEach((prefix) => {
+        const key = `${prefix}${sem}`;
+
+        if (!visibleFields.includes(key)) {
+          updatedData[key] = 0;
+        } else if (!(key in updatedData)) {
+          updatedData[key] = studentData[key] || 0;
+        }
+      });
+    });
     const noerrors = validateFields();
+    // console.log(noerrors);
     if (noerrors) {
       setShowAlert(true);
       setAlertStage("confirm");
       setAlertMessage("Confirm to Add");
       setAlertType("warning");
-      setAlertOkAction(() => () => {
+
+     setAlertOkAction(() => async () => {
+      try{  
+      await axios.post(
+          `${host}studentadd`,
+          { appln_no: appln_no,b_code:b_code,studentData:updatedData},
+          { withCredentials: true }
+        );  
         setShowAlert(true);
         setAlertMessage("Updated Successfully");
         setAlertStage("success");
@@ -298,8 +373,12 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
         setAlertOkAction(() => () => {
           setShowAlert(false);
         });
-      });
-    } else {
+      }catch(err){
+        if(err.response?.status === 401) navigate('/')
+      }
+    })
+    }
+     else {
       setShowAlert(true);
       setAlertStage("success");
       setAlertMessage("You have errors");
@@ -309,102 +388,109 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
       });
     }
   };
-  const handleUpdate = async () => {
-    setShowAlert(false);
-    showLoader();
-    try {
-      if (Object.keys(changedFields).length === 0) {
-        setShowAlert(true);
-        setAlertMessage("No Changes detected.");
-        setAlertType("warning");
-        setAlertOkAction(() => () => setShowAlert(false));
-        return;
-      }
-
-      const range = semesterRange[studentData.hsc_group] || {
-        start: 0,
-        end: -1,
-      };
-      const updatedData = { ...changedFields };
-
-      const allSemesterNums = Array.from({ length: 8 }, (_, i) => i + 1);
-
-      allSemesterNums.forEach((sem) => {
-        ["max_", "obt_"].forEach((prefix) => {
-          const key = `${prefix}${sem}`;
-          if (sem < range.start || sem > range.end) {
-            updatedData[key] = 0;
-          } else if (!(key in updatedData)) {
-            updatedData[key] = studentData[key] || 0;
-          }
-        });
-      });
-
-      if (!validateFields()) {
-        setShowAlert(true);
-        setAlertStage("warning");
-        setAlertMessage("Please fill the details correctly!");
-        setAlertType("warning");
-        setAlertOkAction(() => () => setShowAlert(false));
-        return;
-      }
+const handleUpdate = async () => {
+  setShowAlert(false);
+  showLoader();
+  try {
+    if (Object.keys(changedFields).length === 0) {
       setShowAlert(true);
-      setAlertStage("confirm");
-      setAlertMessage("Confirm to update");
+      setAlertMessage("No Changes detected.");
       setAlertType("warning");
-      setAlertOkAction(() => async () => {
-        await axios.put(
-          `${host}student`,
-          { changedFields: updatedData, appln_no },
-          { withCredentials: true }
-        );
-
-        setchangedFields({});
-        setShowAlert(true);
-        setAlertMessage("Updated Successfully");
-        setAlertStage("success");
-        setAlertType("success");
-        setAlertOkAction(() => () => setShowAlert(false));
-      });
-    } catch (error) {
-      setShowAlert(true);
-      setAlertMessage("Unable to update kindly try again...");
-      setAlertStage("error");
-      setAlertType("error");
       setAlertOkAction(() => () => setShowAlert(false));
-    } finally {
-      hideLoader();
+      return;
     }
-  };
 
-  const handleStuDelete = async () => {
-    setShowAlert(false);
+    const updatedData = { ...changedFields };
+
+    const visibleFields = getVisibleSemesterFields(
+      studentData.hsc_group,
+      semesterRange
+    );
+
+    const allSemesterNums = Array.from({ length: 8 }, (_, i) => i + 1);
+
+    allSemesterNums.forEach((sem) => {
+      ["max_", "obt_"].forEach((prefix) => {
+        const key = `${prefix}${sem}`;
+
+        if (!visibleFields.includes(key)) {
+          updatedData[key] = 0;
+        } else if (!(key in updatedData)) {
+          updatedData[key] = studentData[key] || 0;
+        }
+      });
+    });
+
+    if (!validateFields(visibleFields)) {
+      setShowAlert(true);
+      setAlertStage("warning");
+      setAlertMessage("Please fill the details correctly!");
+      setAlertType("warning");
+      setAlertOkAction(() => () => setShowAlert(false));
+      return;
+    }
+
+    setShowAlert(true);
+    setAlertStage("confirm");
+    setAlertMessage("Confirm to update");
+    setAlertType("warning");
+    setAlertOkAction(() => async () => {
+      try{await axios.put(
+        `${host}student`,
+        { changedFields: updatedData, appln_no },
+        { withCredentials: true }
+      );
+
+      setchangedFields({});
+      setShowAlert(true);
+      setAlertMessage("Updated Successfully");
+      setAlertStage("success");
+      setAlertType("success");
+      setAlertOkAction(() => () => setShowAlert(false));
+  }catch(err){
+    if(err.response?.status === 401) navigate('/')
+  }});
+  } catch (error) {
+    setShowAlert(true);
+    setAlertMessage("Unable to update kindly try again...");
+    setAlertStage("error");
+    setAlertType("error");
+    setAlertOkAction(() => () => setShowAlert(false));}
+   finally {
+    hideLoader();
+  }
+};
+
+
+const handleStuDelete = async () => {
+  setShowAlert(true);
+  setAlertStage("confirm");
+  setAlertMessage("Confirm to Delete");
+  setAlertType("warning");
+
+  setAlertOkAction(() => async () => {
     showLoader();
     try {
       const response = await axios.delete(`${host}student`, {
         data: { changedFields, appln_no },
         withCredentials: true,
       });
+
       if (response.status === 200) {
         setShowAlert(true);
-        setAlertStage("confirm");
-        setAlertMessage("Confirm to Delete");
-        setAlertType("warning");
+        setAlertMessage("Deleted Successfully");
+        setAlertStage("success");
+        setAlertType("success");
         setAlertOkAction(() => () => {
-          setShowAlert(true);
-          setAlertMessage("Deleted Successfully");
-          setAlertStage("success");
-          setAlertType("success");
-          setAlertOkAction(() => () => {
-            setShowAlert(false);
-            if (index) {
-              index(appln_no);
-            }
-          });
+          setShowAlert(false);
+          if (index) {
+            index(appln_no);
+          }
         });
       }
     } catch (error) {
-      // console.log(error);
+      if(error.response?.status === 401) navigate('/')
+        else{
       setShowAlert(true);
       setAlertMessage("Unable to delete kindly try again...");
       setAlertStage("error");
@@ -412,10 +498,12 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
       setAlertOkAction(() => () => {
         setShowAlert(false);
       });
-    } finally {
+    }} finally {
       hideLoader();
     }
-  };
+  });
+};
+
 
   const handleFileChange = async (e, key) => {
     setShowAlert(false);
@@ -451,8 +539,9 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
       });
     } catch (err) {
       // console.log("Upload Failed!", err);
-
       let msg = "Upload Failed!";
+      if(err.response?.status === 401) navigate('/')
+        else{
       if (err.response?.data) {
         if (typeof err.response.data === "string") {
           msg = err.response.data;
@@ -485,7 +574,7 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
           setShowAlert(false);
         });
       }
-    } finally {
+    }} finally {
       hideLoader();
     }
   };
@@ -522,13 +611,15 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
         }
       });
     } catch (err) {
+      if(err.response?.status === 401) navigate('/')
+        else{
       console.error("Delete File Failed", err);
       setAlertType("error");
       setAlertStage("error");
       setAlertMessage("Failed to Delete File!");
       setAlertOkAction(() => () => {
         setShowAlert(false);
-      });
+      });}
     } finally {
       hideLoader();
     }
@@ -549,7 +640,7 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
     // console.log(selectedValue); 
   const handleChange = async (e) => {
     const { name, value } = e.target;
-    console.log(value)
+    // console.log(value)
     // alert(value)
     // For caste_name, you might want to store only the code in backend format
     let updatedValue = value;
@@ -672,7 +763,7 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
           delete updatedErrors[name];
         }
       }
-      console.log(studentData.maths_studied);
+      // console.log(studentData.maths_studied);
 
       return updatedErrors;
     });
@@ -710,7 +801,7 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
     setStudentData(newStudentData);
   }, [studentData.hsc_group]);
   function handleDistrict (e){
-    console.log(e);
+    // console.log(e);
          setStudentData((prev) => ({
                   ...prev,
                   state: e.target.value,
@@ -774,7 +865,7 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
               htmlfor={"dob"}
               classname={"field-block"}
               value={studentData.dob}
-              onChange={handleChange}
+              onchange={handleChange}
               error={error["dob"]}
             />
           </div>
@@ -855,7 +946,7 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
               radiolabel={"Nativity :"}
               onchange={(e) => {
                 const value = e.target.value;
-                console.log("Nativity changed to:", value);
+                // console.log("Nativity changed to:", value);
 
 
                 if (value === "TN") {
@@ -891,7 +982,7 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
                 }
               }}
               options={[
-                { label: "Tamilnadu", value: "Tamilnadu" },
+                { label: "Tamilnadu", value: "TN" },
                 { label: "Others", value: "Others" },
               ]}
               classname={"field-block"}
@@ -969,7 +1060,10 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
               classname={"field-block"}
               id={"CasteName"}
               htmlfor={"CasteName"}
-              options={caste.map((c) => ({
+              options={studentData.community === "OC"?[{
+                label: "others",
+                value: "others"
+              }]:caste.map((c) => ({
                 label: `${c.code}-${c.name}`,
                 key: c.code,
                 value: c.code,
@@ -1004,7 +1098,7 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
               error={error["parent_occupation"]}
             />
           </div>
-          <div className="field-row">
+          {studentData.nativity && (<div className="field-row">
             <Inputfield
               eltname={"state"}
               type={"dropdown"}
@@ -1014,17 +1108,16 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
               options={
                 studentData.nativity === "Others"
                   ? states.filter((s) => s.value !== "Tamilnadu")
-                  : [{ label: "Tamil Nadu", value: "Tamilnadu" }]
+                  : [{ label: "Tamilnadu", value: "Tamilnadu" }]
               }
               onchange={(e) => handleDistrict(e)}
               classname={"field-block"}
               value={studentData.nativity !== "Others"?"Tamilnadu":studentData.state}
               error={error["state"]}
-              disabled={studentData.nativity === "Tamilnadu"}
+              disabled={studentData.nativity === "TN"}
             />
 
-            {/* District Dropdown (only for Tamil Nadu) */}
-            {studentData.nativity === "Tamilnadu" && (
+            {studentData.nativity === "TN" && (
               <Inputfield
                 eltname={"district"}
                 type={"dropdown"}
@@ -1039,7 +1132,7 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
               />
             )}
 
-          </div>
+          </div>)}
           <div className="field-row">
             <Inputfield
               eltname={"hsc_tn"}
@@ -1270,7 +1363,7 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
               options={tamilnaduDistricts}
               onchange={handleChange}
               value={studentData.fg_district}
-              error={error["FG Cert Issued District"]}
+              error={error["fg_district"]}
               disabled={studentData.fg === 0}
             />
             <Inputfield
@@ -1302,101 +1395,71 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
           </div>
         </fieldset>
         <fieldset className="collegefieldset">
-          <legend className="collegelegend">MARK DETAILS</legend>
-          {/* <h3
-            style={{
-              display: "inline-block",
-              marginLeft: "20px",
-              marginBottom: "10px",
-            }}
-          >
-            MAXIMUM MARKS
-          </h3>
-          <h3
-            style={{
-              display: "inline-block",
-              marginLeft: "420px",
-              marginBottom: "10px",
-            }}
-          >
-            OBTAINED MARKS
-          </h3> */}
-          {/* {studentData.hsc_group=='Regular'(
-            
-          )} */}
-          <h3
-            style={{
-              display: "inline-block",
-              marginLeft: "20px",
-              marginBottom: "10px",
-            }}
-          >
-            MAXIMUM MARKS
-          </h3>
-          <h3
-            style={{
-              display: "inline-block",
-              marginLeft: "420px",
-              marginBottom: "10px",
-            }}
-          >
-            OBTAINED MARKS
-          </h3>
-          <div className="field-container">
-            {(() => {
-              const range = semesterRange[studentData.hsc_group] || {
-                start: 0,
-                end: -1,
-              };
+         
+  <legend className="collegelegend">MARK DETAILS</legend>
 
-              const semesters = Array.from(
-                { length: range.end - range.start + 1 },
-                (_, i) => range.start + i
-              );
+  <h3
+    style={{
+      display: "inline-block",
+      marginLeft: "20px",
+      marginBottom: "10px",
+    }}
+  >
+    MAXIMUM MARKS
+  </h3>
+  <h3
+    style={{
+      display: "inline-block",
+      marginLeft: "420px",
+      marginBottom: "10px",
+    }}
+  >
+    OBTAINED MARKS
+  </h3>
 
-              const allInputs = semesters.flatMap((sem) => [
-                <Inputfield
-                  key={`max_${sem}`}
-                  eltname={`max_${sem}`}
-                  placeholder={"Maximum Marks"}
-                  type={"text"}
-                  label={`SEMESTER ${sem}`}
-                  classname={"field-block"}
-                  id={`sem${sem}max`}
-                  htmlfor={`sem${sem}max`}
-                  value={studentData[`max_${sem}`]}
-                  onchange={handleChange}
-                  error={error[`sem${sem}max`]}
-                />,
-                <Inputfield
-                  key={`obt_${sem}`}
-                  eltname={`obt_${sem}`}
-                  placeholder={"Obtained Marks"}
-                  type={"text"}
-                  label={`SEMESTER ${sem}`}
-                  classname={"field-block"}
-                  id={`sem${sem}obt`}
-                  htmlfor={`sem${sem}obt`}
-                  value={studentData[`obt_${sem}`]}
-                  onchange={handleChange}
-                  error={error[`sem${sem}obt`]}
-                />,
-              ]);
+  <div className="field-container">
+    {(() => {
+      const visibleFields = getVisibleSemesterFields(
+        studentData.hsc_group,
+        semesterRange
+      );
 
-              const groupedRows = [];
-              for (let i = 0; i < allInputs.length; i += 2) {
-                groupedRows.push(
-                  <div className="field-row" key={i}>
-                    {allInputs[i]}
-                    {allInputs[i + 1]}
-                  </div>
-                );
-              }
+      const allInputs = visibleFields.map((fieldName) => {
+        const [type, sem] = fieldName.split("_"); 
+        return (
+          <Inputfield
+            key={fieldName}
+            eltname={fieldName}
+            placeholder={type === "max" ? "Maximum Marks" : "Obtained Marks"}
+            type="text"
+            label={`SEMESTER ${sem}`}
+            classname="field-block"
+            id={`sem${sem}${type}`}
+            htmlfor={`sem${sem}${type}`}
+            value={studentData[fieldName]}
+            onchange={handleChange}
+            error={error[fieldName]}
+          />
+        );
+      });
 
-              return groupedRows;
-            })()}
+      // group inputs into rows of [max, obt]
+      const groupedRows = [];
+      for (let i = 0; i < allInputs.length; i += 2) {
+        groupedRows.push(
+          <div className="field-row" key={i}>
+            {allInputs[i]}
+            {allInputs[i + 1]}
           </div>
-        </fieldset>
+        );
+      }
+
+      return groupedRows;
+    })()}
+  </div>
+</fieldset>
+
+
         <div>
           <fieldset className="collegefieldset">
             <h3 className="fileinstruction">
@@ -1546,14 +1609,14 @@ const CategorySection = ({ studentData, handleChange, error, clicked }) => {
   return (
      <Inputfield
       label={"CATEGORY"}
-      id={"CATEGORY"}
+      id={"catogory"}
       eltname={"catogory"}
       type={"dropdown"}
-      htmlfor={"CATEGORY"}
+      htmlfor={"catogory"}
       options={options}
-      value={studentData?.catogory || ""}
-      onChange={handleChange}
-      error={error["CATEGORY"]}
+      value={studentData.catogory || ""}
+      onchange={handleChange}
+      error={error["catogory"]}
     />
   );
 };

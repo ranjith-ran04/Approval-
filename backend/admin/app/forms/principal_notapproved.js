@@ -141,7 +141,6 @@ async function principal_notapproved(req, res) {
     return rowHeight1 + rowHeight2;
 }
 
-
     function getRowHeight(rowData) {
         doc.font('Arial').fontSize(9);
         let maxH = 0;

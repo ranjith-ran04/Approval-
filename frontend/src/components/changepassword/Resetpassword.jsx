@@ -42,11 +42,13 @@ function Resetpassword() {
           setShowAlert(true);
         }
       } catch (error) {
+        if(error.response?.status === 401) navigate('/')
+          else{
         setAlertType("error");
         setAlertMessage(
           error.response?.data?.message || "Password reset failed"
         );
-        setShowAlert(true);
+        setShowAlert(true);}
       } finally {
         hideLoader();
       }

@@ -4,18 +4,17 @@ import Button from "../button/Button";
 import { host } from "../../constants/backendpath";
 import axios from "axios";
 import Alert from "../alert/Alert";
+import { useNavigate } from "react-router-dom";
 
 const Input = ({ add, clicked, click, appln_no, collegeCode, branchCode }) => {
   const [input, setInput] = useState("");
   const [touched, setTouched] = useState(false);
   const [visibleIndexes, setVisibleIndexes] = useState([]);
-  const [count, setCount] = useState(null); // ✅ start with null (loading)
-
-  // ✅ Get effective college code (from localStorage if exists)
+  const [count, setCount] = useState(null);
+  const navigate = useNavigate();
   const savedCollegeCode = localStorage.getItem("collegeCode");
   const effectiveCollegeCode = savedCollegeCode || collegeCode;
 
-  // 🔹 Fetch count from backend on mount
   useEffect(() => {
     const fetchCount = async () => {
       try {
@@ -32,8 +31,10 @@ const Input = ({ add, clicked, click, appln_no, collegeCode, branchCode }) => {
           setCount(0);
         }
       } catch (err) {
+        if(err.response?.status === 401) navigate('/')
+          else{
         console.error("Fetch error:", err);
-        setCount(0);
+        setCount(0);}
       }
     };
 
@@ -42,7 +43,6 @@ const Input = ({ add, clicked, click, appln_no, collegeCode, branchCode }) => {
     }
   }, [effectiveCollegeCode, branchCode]);
 
-  // ✅ Expected appln number (preview)
   const expectedAppln =
     count !== null
       ? `${effectiveCollegeCode}${branchCode}25${String(count + 1).padStart(
@@ -125,6 +125,7 @@ const Input = ({ add, clicked, click, appln_no, collegeCode, branchCode }) => {
         });
       }
     } catch (err) {
+      if(err.response?.status === 401) navigate('/')
       // console.log(err);
     }
   }

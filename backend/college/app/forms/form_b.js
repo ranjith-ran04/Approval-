@@ -263,7 +263,7 @@ async function formb(req, res) {
       });
 
       drawCell(
-        String(student.average.slice(0, 4)),
+        String(student.average).slice(0, 5),
         x,
         y,
         columnWidths.PERCENT,

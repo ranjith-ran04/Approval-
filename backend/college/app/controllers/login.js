@@ -26,13 +26,13 @@ const login = async (req, res) => {
       const token = jwt.sign(
         { counsellingCode: user.c_code },
         process.env.JWT_SECRET,
-        { expiresIn: "10m" }
+        { expiresIn: "30m" }
       );
 
       res.cookie("token", token, {
         httpOnly: true,
         secure: false,
-        maxAge: 10 * 60 * 1000,
+        maxAge: 30 * 60 * 1000,
       });
 
       return res.status(200).json({ changed: 2 });
@@ -44,13 +44,13 @@ const login = async (req, res) => {
     const token = jwt.sign(
       { counsellingCode: user.c_code },
       process.env.JWT_SECRET,
-      { expiresIn: "1h" }
+      { expiresIn: "30m" }
     );
 
     res.cookie("token", token, {
       httpOnly: true,
       secure: false,
-      maxAge: 60 * 60 * 1000,
+      maxAge: 30 * 60 * 1000,
     });
 
     return res.status(200).json({ changed: user.changed });

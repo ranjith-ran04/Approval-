@@ -227,10 +227,14 @@ async function deleteDiscontinuedStudent(req, res) {
 async function addStudentinfo(req, res) {
   try {
     const collegeCode = req.user.counsellingCode;
-    const appln_no = req.body.app_no;
+    const appln_no = req.body.appln_no;
     const b_code = req.body.b_code;
     const studentData = req.body.studentData;
-
+    
+    // console.log(collegeCode);
+    // console.log(appln_no)
+    // console.log(studentData);
+    // console.log(b_code);
     if (!collegeCode || !appln_no || !studentData || !b_code) {
       return res
         .status(400)

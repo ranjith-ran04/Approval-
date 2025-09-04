@@ -1,8 +1,6 @@
 import { useState } from "react";
 import "./navigationBar.css";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import { host } from "../../constants/backendpath";
+import {useNavigate} from 'react-router-dom';
 
 function NavigationBar({
   text,
@@ -12,36 +10,22 @@ function NavigationBar({
   login,
   admin,
   style,
+  handleLogOut,
 }) {
   const [visible, setVisible] = useState(false);
-
   const Navigate = useNavigate();
-
-  const handleLogOut = async () => {
-    try {
-      const res = await axios.get(`${host}logout`, { withCredentials: true });
-      if (res.status === 200) {
-        if (admin) {
-          Navigate("/admin/login");
-        } else {
-          Navigate("/");
-          sessionStorage.setItem("notesShown", "");
-          localStorage.setItem("current",0);
-        }
-      }
-    } catch (error) {
-      // console.log(error);
-    }
-  };
+  // console.log(admin);
 
   const handleClicks = () => {
+    // console.log('hello')
     if (!bool) {
       setVisible(!visible);
     } else {
       setVisible(false);
     }
     if (admin) {
-      handleLogOut();
+      // console.log('hi');
+      handleLogOut(admin);
     }
   };
 
@@ -53,7 +37,7 @@ function NavigationBar({
       <div
         id="logo"
         onClick={() => {
-          login ? setCurrent(0) : (login = false) ;
+          login ? setCurrent(0) : (login = false);
         }}
       ></div>
       <div id="center">
@@ -73,7 +57,7 @@ function NavigationBar({
             <div className="item" onClick={() => Navigate("/changePassword")}>
               Change Password
             </div>
-            <div className="item" onClick={handleLogOut}>
+            <div className="item" onClick={()=>handleLogOut(admin)}>
               Logout
             </div>
           </div>

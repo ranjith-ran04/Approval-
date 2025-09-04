@@ -5,7 +5,7 @@ import { host } from "../../constants/backendpath.js";
 import StudentForm from "./StudentForm.jsx";
 import "../college/CollegeInfo.css";
 import Button from "../../widgets/button/Button.jsx";
-import AddInput from "../../widgets/addinput/Input.jsx";
+import AddInput from "../../widgets/addinput/input.jsx";
 import { useLoader } from "../../context/LoaderContext.jsx";
 import { useNavigate } from "react-router-dom";
 
@@ -38,7 +38,7 @@ function StudentDetails({ admin, supp }) {
         });
       }
       if (result.status === 200) {
-        // // console.log(result.data);
+        console.log(result.data);
         setBranch(result.data);
       }
     } catch (error) {
@@ -66,11 +66,11 @@ function StudentDetails({ admin, supp }) {
   async function handleSelect(branch) {
     showLoader();
     setSelected(branch);
+    setAdd(false);
+    setClicked(0);
+    setStudents([]);
     if (branch === "") {
       hideLoader();
-      setClicked(0);
-      setAdd(false);
-      setStudents([]);
       return;
     }
     try {
@@ -89,6 +89,7 @@ function StudentDetails({ admin, supp }) {
       }
     } catch (error) {
       // console.log(error);
+      if(error.response?.status === 401) navigate('/');
     } finally {
       hideLoader();
     }
@@ -106,6 +107,7 @@ function StudentDetails({ admin, supp }) {
     setClicked(0);
   };
   // // console.log(students);
+
   return (
     <div className="student-container">
       <div className="head-studentdropdown">
@@ -178,7 +180,7 @@ function StudentDetails({ admin, supp }) {
           )}
         </div>
       )}
-
+      
       {clicked > 0 && (
         <div ref={formRef}>
           <StudentForm

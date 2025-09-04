@@ -309,7 +309,7 @@ function BranchForm({
 
               <div className="nba-label-group">
                 <label className="form-label">NBA Status</label>
-                <label className="form-label">Amount</label>
+                <label className="form-label">Tuition Fees</label>
               </div>
               <div className="nba-row">
                 <div className="radio-err">
@@ -353,11 +353,11 @@ function BranchForm({
                   <span className="branch-error">{errors.amount}</span>
                 )}
               </div>
-              <label className="form-label">Accreditation Upto</label>
+              <label className="form-label">Accreditation Upto(Year)</label>
               <input
                 className="branchforminput"
                 name="accredition_valid_upto"
-                placeholder="Accreditation Upto"
+                placeholder="Year (eg.,2025)"
                 value={accto}
                 onChange={(e) => setAccto(e.target.value)}
                 disabled={nbaValue !== "yes"}

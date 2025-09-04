@@ -22,7 +22,35 @@ const CollegeInfo = ({admin}) => {
   const navigate = useNavigate();
   
 
-const requiredFields = ["principalname","principalcontact","address","taluk","district","constituency","pincode","collegephone","collegeemail","websitecollege","antiraggingNo","bankaccountno","bankname","minoritystatus", "autonomousstatus","distance","nearestrailway","distancefromrailway","transportfacility","transport","mintransportcharge","maxtransportcharge","accomodationavailableboys","hostelstaytypeboys","typeofmessboys","messbillboys","roomrentboys","electricityboys","cautiondepositboys",
+const requiredFields = ["principalname",
+  "principalcontact",
+  "address",
+  "taluk",
+  "district",
+  "constituency",
+  "pincode",
+  "collegephone",
+  "collegeemail",
+  "websitecollege",
+  "antiraggingNo",
+  "bankaccountno",
+  "bankname",
+  "minoritystatus",
+   "autonomousstatus",
+   "distance",
+   "nearestrailway",
+   "distancefromrailway",
+   "transportfacility",
+   "transport",
+   "mintransportcharge",
+   "maxtransportcharge",
+   "accomodationavailableboys",
+   "hostelstaytypeboys",
+   "typeofmessboys",
+   "messbillboys",
+   "roomrentboys",
+   "electricityboys",
+   "cautiondepositboys",
   "establishmentboys",
   "admissionfeesboys",
   "accomodationavailablegirls",
@@ -64,7 +92,6 @@ const validateFields = () => {
       }
     }
 
-    // ✅ Only letters allowed for these fields
     if (
       ["collegenameWithdistrict", "principalname", "district", "taluk", "constituency"].includes(field) &&
       /\d/.test(value)
@@ -72,12 +99,10 @@ const validateFields = () => {
       newErrors[field] = "Only letters are allowed";
     }
 
-    // ✅ Nearest railway check
     if (field === "nearestrailway" && formdata.transportfacility !== "No" && /\d/.test(value)) {
       newErrors[field] = "Only letters are allowed";
     }
 
-    // ✅ Phone validations
     if (field === "principalcontact") {
       if (isNaN(value)) {
         newErrors[field] = "Only numbers are allowed";
@@ -89,19 +114,16 @@ const validateFields = () => {
       newErrors[field] = "Enter a valid phone number";
     }
 
-    // ✅ Email
     if (field === "collegeemail" && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
       newErrors[field] = "Invalid email format";
     }
 
-    // ✅ Pincode
     if (field === "pincode" && !/^\d{6}$/.test(value)) {
       newErrors[field] = "Enter a valid 6-digit pincode";
     }
 
-    // ✅ Transport numeric values
     if (transportFields.includes(field) && formdata.transportfacility === "Yes") {
-      if (!/^[0-9]{1,4}$/.test(value)) {
+      if (!/^[0-9]{1,6}$/.test(value)) {
         newErrors[field] = "Enter a valid value";
       }
       if ((field === "distance" || field === "distancefromrailway") && (value < 1 || value > 100)) {
@@ -109,32 +131,37 @@ const validateFields = () => {
       }
     }
 
-    // ✅ Transport charge logic
-    if (formdata.transportfacility === "Yes" && formdata.mintransportcharge > formdata.maxtransportcharge) {
-      newErrors["mintransportcharge"] = "Enter a valid minimum transport charge";
-      newErrors["maxtransportcharge"] = "Enter a valid maximum transport charge";
-    }
+    if (formdata.transportfacility === "Yes") {
+  const minVal =
+    name === "mintransportcharge" ? Number(value) : Number(formdata.mintransportcharge);
+  const maxVal =
+    name === "maxtransportcharge" ? Number(value) : Number(formdata.maxtransportcharge);
 
-    // ✅ Numeric validations for boys hostel
+  if (minVal > maxVal) {
+    updatedErrors["mintransportcharge"] = "Enter a valid minimum transport charge";
+    updatedErrors["maxtransportcharge"] = "Enter a valid maximum transport charge";
+  } else {
+    delete updatedErrors["mintransportcharge"];
+    delete updatedErrors["maxtransportcharge"];
+  }
+}
+
     if (numericFieldsBoys.includes(field) && formdata.accomodationavailableboys === "Yes") {
       if (!/^[0-9]{1,5}$/.test(value)) {
         newErrors[field] = "Enter a valid Positive Number";
       }
     }
 
-    // ✅ Numeric validations for girls hostel
     if (numericFieldsGirls.includes(field) && formdata.accomodationavailablegirls === "Yes") {
       if (!/^[0-9]{1,5}$/.test(value)) {
         newErrors[field] = "Enter a valid Positive Number";
       }
     }
 
-    // ✅ College code
     if (field === "collegecode" && value.length !== 1 && value.length !== 4) {
       newErrors[field] = "College code must be 1 or 4";
     }
 
-    // ✅ Bank account
     if (field === "bankaccountno") {
       if (
         value.toUpperCase() !== "NIL" &&
@@ -152,7 +179,6 @@ const validateFields = () => {
 const handleChange = (e) => {
   const { name, value } = e.target;
 
-  // Prepare updates (for special "No" cases)
   let updates = { [name]: value };
 
   if (name === "accomodationavailableboys" && value === "No") {
@@ -173,24 +199,19 @@ const handleChange = (e) => {
     updates = { ...updates, ...zeroFields, nearestrailway: "NIL" };
   }
 
-  // ✅ Apply updates
   setFormdata((prev) => ({ ...prev, ...updates }));
   setchangedFields((prev) => ({ ...prev, ...updates }));
 
-  // ✅ Update errors inline
   setError((prevErrors) => {
     const updatedErrors = { ...prevErrors };
 
-    // Run checks only for the changed field
     let isValid = true;
     const trimmedValue = value?.toString().trim() || "";
 
-    // Required field check
     if (!trimmedValue) {
       isValid = false;
     }
 
-    // Letter-only fields
     if (
       ["collegenameWithdistrict", "principalname", "district", "taluk", "constituency", "nearestrailway"].includes(name) &&
       /\d/.test(trimmedValue)
@@ -198,27 +219,22 @@ const handleChange = (e) => {
       isValid = false;
     }
 
-    // College phone
     if (name === "collegephone" && !/^[0-9]{10,12}$/.test(trimmedValue)) {
       isValid = false;
     }
 
-    // Principal contact
     if (name === "principalcontact" && !/^[0-9]{10,12}$/.test(trimmedValue)) {
       isValid = false;
     }
 
-    // Email
     if (name === "collegeemail" && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedValue)) {
       isValid = false;
     }
 
-    // Pincode
     if (name === "pincode" && !/^\d{6}$/.test(trimmedValue)) {
       isValid = false;
     }
 
-    // Transport fields
     if (transportFields.includes(name) && formdata.transportfacility === "Yes") {
       if (!/^[0-9]{1,4}$/.test(trimmedValue)) {
         isValid = false;
@@ -229,39 +245,33 @@ const handleChange = (e) => {
       }
     }
 
-    // Transport charge comparison
     if (formdata.transportfacility === "Yes" && Number(formdata.mintransportcharge) > Number(formdata.maxtransportcharge)) {
       updatedErrors["mintransportcharge"] = "Enter a valid minimum transport charge";
       updatedErrors["maxtransportcharge"] = "Enter a valid maximum transport charge";
     }
 
-    // Numeric boys
     if (numericFieldsBoys.includes(name) && formdata.accomodationavailableboys === "Yes") {
       if (!/^[0-9]{1,5}$/.test(trimmedValue)) {
         isValid = false;
       }
     }
 
-    // Numeric girls
     if (numericFieldsGirls.includes(name) && formdata.accomodationavailablegirls === "Yes") {
       if (!/^[0-9]{1,5}$/.test(trimmedValue)) {
         isValid = false;
       }
     }
 
-    // College code
     if (name === "collegecode" && !(trimmedValue.length === 1 || trimmedValue.length === 4)) {
       isValid = false;
     }
 
-    // Bank account (accepts NIL)
     if (name === "bankaccountno") {
       if (trimmedValue.toUpperCase() !== "NIL" && !/^[1-9][0-9]{6,14}$/.test(trimmedValue)) {
         isValid = false;
       }
     }
 
-    // ✅ Update errors object
     if (isValid) {
       delete updatedErrors[name];
     } else {
@@ -336,7 +346,8 @@ const handleChange = (e) => {
           setAlertStage('success');
           setAlertMessage('Your Details are saved');
           setAlertType('success');
-        }else{   
+        }
+        else{   
          response=await axios.put(`${host}collegeinfo`,{changedFields:changedFields},{withCredentials:true});
          if(response.status===200){
           // setchangedFields({});
@@ -354,10 +365,13 @@ const handleChange = (e) => {
       }
       catch(error){
         // console.log(error)
+        if(error.response?.status === 401){
+          navigate('/')
+        }else{
         setShowAlert(true);
         setAlertMessage("Unable to connnect to server...")
         setAlertStage('error')
-        setAlertType('error');
+        setAlertType('error');}
       }
     };
     const handleSubmit = (e) => {
