@@ -465,7 +465,7 @@ function Sidebar({ setCurrent, admin, current }) {
               <div id="buttonDiv">
                 <Button
                   name="College Details Pdf"
-                  onClick={() => handleForm("collegeDetails", true, 5901, true)}
+                  onClick={() => handleForm(showLoader,hideLoader,"collegeDetails", true, 5901, true)}
                 />
               </div>
             </>

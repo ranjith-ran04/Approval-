@@ -33,10 +33,12 @@ const tamilnaduDistricts = [
   { label: "Thoothukudi", value: "THOOTHUKUDI" },
   { label: "Tirunelveli", value: "TIRUNELVELI" },
   { label: "Tiruppur", value: "TIRUPPUR" },
+   {label:"Thenkasi",value:"THENKASI"},
   { label: "Vellore", value: "VELLORE" },
   { label: "Villupuram", value: "VILLUPURAM" },
   { label: "Virudhunagar", value: "VIRUDHUNAGAR" },
   { label: "Others", value: "OTHERS" },
+  
 ];
 
 export default tamilnaduDistricts;
