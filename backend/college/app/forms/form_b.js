@@ -194,20 +194,20 @@ async function formb(req, res) {
     let y = doc.y + 5;
     students.forEach((student, index) => {
       let rowHeight =
-        doc.heightOfString(student.name.toString(), {
+        doc.heightOfString(String(student.name || "-"), {
           width: columnWidths.NAME - 4,
           align: "center",
         }) + 10;
       let boardHeight =
-        doc.heightOfString(student.board.toString(), {
+        doc.heightOfString((student.board || "-"), {
           width: columnWidths.BOARD - 4,
           align: "center",
         }) + 10;
-        let appHeight =  doc.heightOfString(student.appln_no.toString(), {
+        let appHeight =  doc.heightOfString((student.appln_no || "-"), {
           width: columnWidths.BOARD - 4,
           align: "center",
         }) + 10;
-        let natHeight = doc.heightOfString(student.nat?student.nat.toString():'-', {
+        let natHeight = doc.heightOfString(String(student.nat || "-"), {
           width: columnWidths.BOARD - 4,
           align: "center",
         }) + 15;
