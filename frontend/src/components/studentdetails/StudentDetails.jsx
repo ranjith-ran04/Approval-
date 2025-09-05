@@ -189,6 +189,7 @@ function StudentDetails({ admin, supp }) {
             b_code={selected}
             index={deleteOne}
             clicked={clicked}
+            setStudents={setStudents}
           />
         </div>
       )}

@@ -10,7 +10,7 @@ import { useLoader } from "../../context/LoaderContext";
 import states from "../../constants/states";
 import {useNavigate} from 'react-router-dom';
 
-const Addstudent = ({ handleClear, appln_no, b_code, index, clicked }) => {
+const Addstudent = ({ handleClear, appln_no, b_code, index, clicked ,setStudents }) => {
   // // console.log(clicked);
   const { showLoader, hideLoader } = useLoader();
   const [pendingDeleteIndex, setPendingDeleteIndex] = useState(null);
@@ -372,6 +372,8 @@ const validateFields = () => {
         setAlertType("success");
         setAlertOkAction(() => () => {
           setShowAlert(false);
+              handleClear();
+              setStudents((prev) => [...prev,{app_no:appln_no,name:studentData.name}])
         });
       }catch(err){
         if(err.response?.status === 401) navigate('/')
