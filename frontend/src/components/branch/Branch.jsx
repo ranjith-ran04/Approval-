@@ -148,7 +148,7 @@ function Branch({ setCurrent, setState }) {
                 <div>{branch.transfered_to}</div>
                 <div>{branch.LAP}</div>
                 <div>{displayval(branch.year_of_start)}</div>
-                <div>{branch.accredition_valid_upto}</div>
+                <div>{displayval(branch.accredition_valid_upto)}</div>
                 <div>{branch.NBA_2020 === 1 ? "YES" : "NO"}</div>
                 <div>
                   <button
