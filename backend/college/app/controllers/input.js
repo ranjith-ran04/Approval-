@@ -7,15 +7,17 @@ const student_count = async (req, res) => {
 
   try {
     const [rows] = await db.query(
-      `SELECT COUNT(*) as cnt 
+      `SELECT substring((select a_no  as cnt 
        FROM student_info 
        WHERE c_code = ? 
-         AND b_code = ? 
-         AND CATOGORY != 'GOVERNMENT'`,
+		 AND b_code = ?
+         AND CATOGORY != 'GOVERNMENT'
+         order by a_no desc limit 1), -3) as str`,
       [c_code, b_code]
     );
+    console.log(rows[0]);
 
-    res.status(200).json({ count: rows[0].cnt, collegeCode: c_code });
+    res.status(200).json({ count: Number(rows[0].str), collegeCode: c_code });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Database error" });

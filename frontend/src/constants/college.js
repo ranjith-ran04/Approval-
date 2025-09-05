@@ -71,7 +71,7 @@ const map=new Map(
 [ "1216" ,"Saveetha Engineering College (Autonomous), Thandalam, Sriperumpudur Taluk, Kancheepuram District 602105"],
 [ "1217" ,"Sree Sastha Institute of Engineering and Technology, Chembarambakkam, Chennai 600103"],
 [ "1218" ,"Sri Muthukumaran Institute of Technology, Near Mangadu, Chennai 600069"],
-[ "1219" ,"Sri Venkateswara College of Engineering (Autonomous), Post Bag No.1, Chennai-Bengaluru High Road, Pennalur, Irungattukottai S.O., Sriperumbudur Taluk, Kancheepuram District 602105Sri Venkateswara College of Engineering (Autonomous), Post Bag No.1, Chennai-Bengaluru High Road, Pennalur, Irungattukottai S.O., Sriperumbudur Taluk, Kancheepuram District 602105"],
+[ "1219" ,"Sri Venkateswara College of Engineering (Autonomous), Post Bag No.1, Chennai-Bengaluru High Road, Pennalur, Irungattukottai S.O., Sriperumbudur Taluk, Kancheepuram District 602105"],
 [ "1221" ,"Jaya College of Engineering and Technology, Parivakkam, Poonamallee, Chennai 600056"],
 [ "1222" ,"P B College of Engineering, Irungkattukottai, Sriperumpudur Taluk, Kancheepuram District 602117"],
 [ "1225" ,"Loyola Institute of Technology, Mevaloorkuppam, B Village, Palanchoor, Nazarethpet Post, Chennai 600123"],

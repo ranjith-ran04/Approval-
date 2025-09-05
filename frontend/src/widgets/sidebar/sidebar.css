@@ -121,6 +121,9 @@
   background-position: center;
   flex-shrink: 0;
 }
+#formIcon{
+  background-image: url("../../../public//assets/formIcon.svg");
+}
 
 #homeIcon {
   background-image: url("../../../public/assets/home.svg");
