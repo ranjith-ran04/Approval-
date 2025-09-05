@@ -1,6 +1,7 @@
 const college = require("../json/college");
 
 function header(c, doc, collegeCode, freezed) {
+  console.log(collegeCode);
   const collegeName = college.get(collegeCode.toString()) || "Unknown College";
 
   doc.moveDown();

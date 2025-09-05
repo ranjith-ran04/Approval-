@@ -109,6 +109,9 @@ const Addstudent = ({ handleClear, appln_no, b_code, index, clicked ,setStudents
       case "SCA":
         casteListModule = (await import("../../constants/sca.json")).default;
         break;
+      case "DNC":
+        casteListModule = (await import("../../constants/dnc.json")).default;
+        break;
       case "ST":
         casteListModule = (await import("../../constants/st.json")).default;
         break;

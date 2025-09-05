@@ -106,6 +106,7 @@ const map=new Map(
 [ "1334" ,"ARS College of Engineering, Maraimalai Nagar Post, Chengalpattu District 603209"],
 [ "1339" ,"Mahalakshmi Tech Campus No.1, Bharathiar Street Prashanthi Nagar, Chromepet ,Chennai 600044"],
 [ "1335" ,"Sri Krishna Institute of Technology, Panapakkam, Padappai,  Chennai 601301"],
+[ "1339" ,"Mahalakshmi Tech Campus No.1, Bharathiar Street Prashanthi Nagar, Chromepet ,Chennai 600044"],
 [ "1399" ,"Chennai Institute of Technology (Autonomous),  Puduper Village  Nandambakkam Post  Kundrathur  Chennai 600069"],
 [ "1401" ,"Adhiparasakthi Engineering College, Melmaruvathur, Chengalpattu District 603319"],
 [ "1402" ,"Annai Teresa College of Engineering, Thirunavalur, Kallakkurichi District 607204"],

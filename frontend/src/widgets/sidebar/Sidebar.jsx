@@ -223,7 +223,7 @@ function Sidebar({ setCurrent, admin, current }) {
     { id: 7, label: "Abstract Form", iconId: "formIcon" },
     { id: 8, label: "Note Order", iconId: "formIcon" },
     { id: 9, label: "Note Order-Approved", iconId: "formIcon" },
-    { id: 10, label: "Note Order-Approved/Pending", iconId: "formIcon" },
+    { id: 10, label: "Note Order-Approved/Pending", iconId: "formIcon", action: () => handleForm(showLoader,hideLoader,navigate,"noteOrderPending",true, collegeCode,true)},
     { id: 11, label: "Principal/Letter", iconId: "formIcon" },
     {
       id: 12,
